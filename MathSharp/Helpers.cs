@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics;
+﻿using System.Numerics;
+using System.Runtime.Intrinsics;
 
 namespace MathSharp
 {
@@ -20,5 +21,17 @@ namespace MathSharp
         public static float Y(Vector128<float> vector) => vector.GetElement(1);
         public static float Z(Vector128<float> vector) => vector.GetElement(2);
         public static float W(Vector128<float> vector) => vector.GetElement(3);
+
+        public static bool AreEqual(Vector4 left, Vector128<float> right)
+            => left.X == X(right) && left.Y == Y(right) && left.Z == Z(right) && left.W == W(right);
+
+        public static bool AreEqual(Vector3 left, Vector128<float> right)
+            => left.X == X(right) && left.Y == Y(right) && left.Z == Z(right);
+
+        public static bool AreEqual(Vector2 left, Vector128<float> right)
+            => left.X == X(right) && left.Y == Y(right);
+
+        public static bool AreEqual(float left, Vector128<float> right)
+            => left == X(right);
     }
 }

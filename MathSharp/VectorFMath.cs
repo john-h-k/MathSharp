@@ -16,7 +16,7 @@ namespace MathSharp
     using VectorFParam7_ = Vector128<float>;
 
 
-    public static unsafe partial class VectorFMath
+    public static unsafe class VectorFMath
     {
         public static readonly bool IsHardwareAccelerated = Sse.IsSupported;
 

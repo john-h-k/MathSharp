@@ -6,7 +6,19 @@ namespace MathSharp.Interactive
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(IsAligned());
+        }
+
+        public static unsafe bool IsAligned()
+        {
+            byte x;
+            byte y;
+            MatrixF matrix;
+
+            x = 11;
+            y = 11;
+
+            return ((ulong)&matrix) % 16 == 0 && (ulong)&x > (ulong)&matrix && Math.Abs(&x - &y) == 1;
         }
     }
 }
