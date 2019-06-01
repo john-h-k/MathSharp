@@ -2,7 +2,7 @@
 using System.Runtime.Intrinsics;
 using MathSharp.Attributes;
 
-namespace MathSharp
+namespace MathSharp.Matrix
 { 
     using VectorF = Vector128<float>;
 

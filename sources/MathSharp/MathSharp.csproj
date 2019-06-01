@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="obj\Debug\netcoreapp3.0\" />
+    <Folder Include="Vector\VectorD\" />
+  </ItemGroup>
+
 </Project>

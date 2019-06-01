@@ -105,21 +105,13 @@ namespace MathSharp
             System.Runtime.Intrinsics.X86.Avx2.IsSupported;
 #endif
 
-        public static bool Avx22 =>
+        public static bool Avx =>
 #if !AVX
             false;
 #else
             System.Runtime.Intrinsics.X86.Avx.IsSupported;
 #endif
 
-        public static bool Avx
-        {
-#if TEST
-            get; set;
-#else
-            get => System.Runtime.Intrinsics.X86.Avx.IsSupported;
-#endif
-        }
 
         public static bool Sse42 =>
 #if !SSE42
