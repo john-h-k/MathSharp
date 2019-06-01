@@ -47,11 +47,12 @@
 
   <!-- Default settings that are otherwise undefined -->
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)TerraFX.snk</AssemblyOriginatorKeyFile>
-    <Copyright>Copyright © John Kelly and Contributors</Copyright>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)MathSharp.snk</AssemblyOriginatorKeyFile>
+    <Copyright>Copyright ï¿½ John Kelly and Contributors</Copyright>
     <Description>A high speed vector maths library</Description>
     <Features>strict</Features>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)TerraFX.snk</AssemblyOriginatorKeyFile>
     <HighEntropyVA>true</HighEntropyVA>
     <LangVersion>preview</LangVersion>
     <NeutralLanguage>en-GB</NeutralLanguage>
@@ -66,6 +67,7 @@
     </RestoreSources>
     <UseSharedCompilation>true</UseSharedCompilation>
   </PropertyGroup>
+
 
   <!-- Package references which are consumed by all projects -->
   <ItemGroup>

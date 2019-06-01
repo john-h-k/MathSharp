@@ -1,16 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <NoWarn>1573;1591;$(NoWarn)</NoWarn>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile />
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MathSharp\MathSharp.csproj" />
+    <ProjectReference Include="..\..\sources\MathSharp\MathSharp.csproj" />
   </ItemGroup>
 
 </Project>

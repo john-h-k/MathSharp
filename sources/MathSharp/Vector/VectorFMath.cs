@@ -15,23 +15,33 @@ namespace MathSharp
     using VectorFParam5_6 = Vector128<float>;
     using VectorFParam7_ = Vector128<float>;
 
+    using VectorFThin = Vector64<float>;
+    using VectorFWide = Vector256<float>;
 
+    /// <summary>
+    /// A class containing loading, storing, arithmetic, bitwise, and vector math operations
+    /// for <see cref="VectorF"/> and <see cref="VectorFWide"/> types
+    /// </summary>
     public static unsafe class VectorFMath
     {
-        public static readonly bool IsHardwareAccelerated = Sse.IsSupported;
+        /// <summary>
+        /// Gets a value that indicates whether vector math is accelerated using hardware-specific intrinsic instructions
+        /// </summary>
+        /// <returns><code>true</code> if hardware acceleration occurs, else, <code>false</code></returns>
+        public static readonly bool IsHardwareAccelerated = IntrinsicSupport.Sse;
 
         private const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
 
         #region Loads
 
-        // TODO all the code here already exists as Create... methods in Vector128 - should be cleaned up to just use that
+        // TODO all the code here already exists as Create'yyy' methods in Vector128 - should be cleaned up to just use that
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static VectorF Load(this Vector4 vector)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.LoadVector128((float*)&vector);
             }
@@ -48,7 +58,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Load(this Vector3 vector)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 // Construct 3 separate vectors, each with the first element being the value
                 // and the rest being 0
@@ -73,11 +83,44 @@ namespace MathSharp
             }
         }
 
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static VectorF Load(this Vector3 vector, float scalarW)
+        {
+            if (IntrinsicSupport.Sse)
+            {
+                // Construct 3 separate vectors, each with the first element being the value
+                // and the rest being 0
+                VectorF lo = Vector128.CreateScalarUnsafe(vector.X);
+                VectorF midLo = Vector128.CreateScalarUnsafe(vector.Y);
+                VectorF midHi = Vector128.CreateScalarUnsafe(vector.Z);
+                VectorF hi = Vector128.CreateScalarUnsafe(scalarW);
+
+                // Construct a vector of (lo, midLo, ?, ?) and (midHi, hi, ?, ?)
+                VectorF loMid = Sse.UnpackLow(lo, midLo);
+                VectorF hiMid = Sse.UnpackLow(midHi, hi);
+
+                // Move the low elements of hiMid to high elements of lowMid
+                // resulting in (lo, midLo, midHi, hi)
+                return Sse.MoveLowToHigh(loMid, hiMid);
+
+                // TODO minimise reg usage
+            }
+
+            return LoadSoftware(vector);
+
+            static VectorF LoadSoftware(Vector3 vector, float scalarW)
+            {
+                return Vector128.Create(vector.X, vector.Y, vector.Z, scalarW);
+            }
+        }
+
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static VectorF Load(this Vector2 vector)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 // Construct 2 separate vectors, each having the first element being the value
                 // and the rest being 0
@@ -100,7 +143,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF LoadBroadcast(this Vector2 vector)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 // Construct 2 separate vectors, each having the first element being the value
                 // and the rest being undefined (because we fill them later)
@@ -125,7 +168,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF LoadScalar(this float scalar)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.LoadScalarVector128(&scalar);
             }
@@ -137,19 +180,19 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF LoadScalarBroadcast(this float scalar)
         {
-            if (Avx2.IsSupported)
+            if (IntrinsicSupport.Avx2)
             {
                 // Intrinsic, which is a nop if 'scalar' is already in a XMM reg
                 VectorF load = Vector128.CreateScalarUnsafe(scalar);
                 return Avx2.BroadcastScalarToVector128(load);
             }
-            else if (Avx.IsSupported)
+            else if (IntrinsicSupport.Avx)
             {
                 // Intrinsic, which is a nop if 'scalar' is already in a XMM reg
                 VectorF load = Vector128.CreateScalarUnsafe(scalar);
                 return Avx.Permute(load, 0b_0000_0000);
             }
-            else if (Sse.IsSupported)
+            else if (IntrinsicSupport.Sse)
             {
                 // TODO investigate eliding redundant init of upper 3 elements from LoadScalarVector128
                 VectorF lo = Sse.LoadScalarVector128(&scalar);
@@ -171,7 +214,7 @@ namespace MathSharp
 
         public static void Store(this VectorF vector, out Vector4 destination)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 fixed (float* pDest = &destination.X)
                 {
@@ -189,7 +232,7 @@ namespace MathSharp
 
         public static void Store(this VectorF vector, out Vector3 destination)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 VectorF hiBroadcast = Sse.Shuffle(vector, vector, Shuffle(2, 2, 2, 2));
                 fixed (float* pDest = &destination.X)
@@ -209,7 +252,7 @@ namespace MathSharp
 
         public static void Store(this VectorF vector, out Vector2 destination)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 fixed (float* pDest = &destination.X)
                 {
@@ -227,7 +270,7 @@ namespace MathSharp
 
         public static void Store(this VectorF vector, out float destination)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 fixed (float* pDest = &destination)
                 {
@@ -251,7 +294,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Abs(VectorFParam1_3 vector)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 VectorF zero = VectorF.Zero;
                 zero = Sse.Subtract(zero, vector); // This gets the inverted results of all elements
@@ -275,7 +318,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF HorizontalAdd(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse3.IsSupported)
+            if (IntrinsicSupport.Sse3)
             {
                 return Sse3.HorizontalAdd(left, right);
             }
@@ -297,7 +340,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Add(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.Add(left, right);
             }
@@ -319,7 +362,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Subtract(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.Subtract(left, right);
             }
@@ -341,7 +384,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Multiply(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.Multiply(left, right);
             }
@@ -363,7 +406,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Divide(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.Divide(dividend, divisor);
             }
@@ -385,7 +428,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Sqrt(VectorFParam1_3 vector)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.Sqrt(vector);
             }
@@ -411,7 +454,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Or(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.Or(left, right);
             }
@@ -448,7 +491,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF And(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.And(left, right);
             }
@@ -485,7 +528,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Xor(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.Xor(left, right);
             }
@@ -522,7 +565,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Not(VectorFParam1_3 vector)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 VectorF mask = Vector128.Create(-1, -1, -1, -1).AsSingle();
                 return Sse.AndNot(vector, mask);
@@ -555,7 +598,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF AndNot(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 return Sse.AndNot(left, right);
             }
@@ -577,7 +620,7 @@ namespace MathSharp
         public static VectorF Vector3DotProduct(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
+            if (IntrinsicSupport.Sse41)
             {
                 // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_0111_1111;
@@ -586,7 +629,7 @@ namespace MathSharp
             // We can use SSE to vectorize the multiplication
             // There are different fastest methods to sum the resultant vector
             // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
+            else if (IntrinsicSupport.Sse3)
             {
                 VectorF mul = Multiply(left, right);
 
@@ -597,11 +640,11 @@ namespace MathSharp
                 result = HorizontalAdd(result, result);
                 return HorizontalAdd(result, result);
             }
-            else if (Sse.IsSupported)
+            else if (IntrinsicSupport.Sse)
             {
                 //VectorF mul = Multiply(left, right);
 
-                // TODO
+                throw new NotImplementedException();
             }
 
             return Vector3DotProductSoftware(left, right);
@@ -618,15 +661,15 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Vector4DotProduct(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse41.IsSupported)
+            if (IntrinsicSupport.Sse41)
             {
                 // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_1111_1111;
                 return Sse41.DotProduct(left, right, control);
             }
-            else if (Sse3.IsSupported)
+            else if (IntrinsicSupport.Sse3)
             {
-                // TODO
+                throw new NotImplementedException();
             }
 
             return Vector4DotProductSoftware(left, right);
@@ -648,7 +691,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static VectorF Vector3CrossProduct(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (Sse.IsSupported)
+            if (IntrinsicSupport.Sse)
             {
                 #region Comments
 
@@ -677,8 +720,8 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                VectorF leftHandSide1 = Sse.Shuffle(left, left, Helpers.Shuffle(3, 0, 2, 1));
-                VectorF rightHandSide1 = Sse.Shuffle(right, right, Helpers.Shuffle(3, 1, 0, 2));
+                VectorF leftHandSide1 = Sse.Shuffle(left, left, Shuffle(3, 0, 2, 1));
+                VectorF rightHandSide1 = Sse.Shuffle(right, right, Shuffle(3, 1, 0, 2));
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
@@ -686,8 +729,8 @@ namespace MathSharp
                  */
 
 
-                VectorF leftHandSide2 = Sse.Shuffle(left, left, Helpers.Shuffle(3, 1, 0, 2));
-                VectorF rightHandSide2 = Sse.Shuffle(right, right, Helpers.Shuffle(3, 0, 2, 1));
+                VectorF leftHandSide2 = Sse.Shuffle(left, left, Shuffle(3, 1, 0, 2));
+                VectorF rightHandSide2 = Sse.Shuffle(right, right, Shuffle(3, 0, 2, 1));
 
                 VectorF mul1 = Multiply(leftHandSide1, rightHandSide1);
 
@@ -705,10 +748,8 @@ namespace MathSharp
             static VectorF Vector3CrossProductSoftware(VectorFParam1_3 left, VectorFParam1_3 right)
             {
                 /* Cross product of A(x, y, z, _) and B(x, y, z, _) is
-                 *                    0  1  2  3        0  1  2  3
                  *
                  * '(X = (Ay * Bz) - (Az * By), Y = (Az * Bx) - (Ax * Bz), Z = (Ax * By) - (Ay * Bx)'
-                 *           1           2              1           2              1            2
                  */
 
                 return Vector128.Create(
@@ -726,6 +767,8 @@ namespace MathSharp
         {
             throw new NotImplementedException();
             // hardware
+
+            return Vector4CrossProductSoftware(one, two, three);
 
             static VectorF Vector4CrossProductSoftware(VectorFParam1_3 one, VectorFParam1_3 two, VectorFParam1_3 three)
             {

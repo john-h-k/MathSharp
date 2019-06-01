@@ -7,6 +7,7 @@ namespace MathSharp
     using VectorF = Vector128<float>;
 
     [Hva]
+    [Aligned(16)]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public struct MatrixF
     {
