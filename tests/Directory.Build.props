@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" IsImplicitlyDefined="true" />
-    <PackageReference Include="xUnit" IsImplicitlyDefined="true" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" IsImplicitlyDefined="true"/>
+    <PackageReference Include="xunit" IsImplicitlyDefined="true" />
+    <PackageReference Include="xunit.runner.visualstudio" IsImplicitlyDefined="true"/>
   </ItemGroup>
 
 </Project>

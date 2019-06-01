@@ -768,7 +768,7 @@ namespace MathSharp
             throw new NotImplementedException();
             // hardware
 
-            //return Vector4CrossProductSoftware(one, two, three);
+            return Vector4CrossProductSoftware(one, two, three);
 
             static VectorF Vector4CrossProductSoftware(VectorFParam1_3 one, VectorFParam1_3 two, VectorFParam1_3 three)
             {
