@@ -52,7 +52,7 @@
     <Description>A high speed vector maths library</Description>
     <Features>strict</Features>
     <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)TerraFX.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)MathSharp.snk</AssemblyOriginatorKeyFile>
     <HighEntropyVA>true</HighEntropyVA>
     <LangVersion>preview</LangVersion>
     <NeutralLanguage>en-GB</NeutralLanguage>

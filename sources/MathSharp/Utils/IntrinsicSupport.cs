@@ -1,6 +1,5 @@
 ﻿#if NETCOREAPP3_0
 
-#define AVX512
 #define AVX2
 #define AVX
 #define SSE42_X64
@@ -27,8 +26,6 @@
 #define PCLMULQDQ
 
 #define AES
-
-#define NEON
 
 #elif NETPLATFORMEXTENSIONS2_1
 
