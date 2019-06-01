@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+###############################################################################
+# Set explicit file behavior to:
+#   treat as binary
+###############################################################################
+*.snk       binary

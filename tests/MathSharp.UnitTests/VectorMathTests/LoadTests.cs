@@ -18,7 +18,7 @@ namespace MathSharp.Tests.VectorMathTests
         }
 
         [Fact]
-        public Vector128<float> Load_StackVector4_Passes()
+        public Vector128<float> Load_StackVector4_Passes2()
         {
             var vector = new Vector4();
 
