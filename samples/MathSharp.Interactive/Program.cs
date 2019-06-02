@@ -8,7 +8,7 @@ using System.Runtime.Intrinsics.X86;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using MathSharp.Matrix;
-using MathSharp.VectorF;
+using static MathSharp.VectorF;
 using MathSharp.VectorFloat;
 using OpenTK;
 using OpenTK.Platform.Windows;
@@ -118,7 +118,7 @@ namespace MathSharp.Interactive
             JohnVector x = _value;
             for (var i = 0; i < _iter; i++)
             {
-                x = VectorOperations.Normalize3D(x);
+                x = VectorMaths.Normalize3D(x);
             }
 
             return x;
@@ -130,7 +130,7 @@ namespace MathSharp.Interactive
             JohnVector x = _value;
             for (var i = 0; i < _iter; i++)
             {
-                x = VectorOperations.Normalize3D_NewTest(x);
+                x = VectorMaths.Normalize3D_NewTest(x);
             }
 
             return x;
@@ -187,11 +187,11 @@ namespace MathSharp.Interactive
         //    vector = Sse.Divide(vector, len);
         //    vector = Sse.Multiply(vector, vector);
         //    return vector;
-        //    //vector = VectorOperations.Normalize3D(vector);
+        //    //vector = VectorMaths.Normalize3D(vector);
         //    //vector = Arithmetic.Subtract(vector, vector);
-        //    //vector = VectorOperations.Normalize3D(vector);
-        //    //vector = Arithmetic.Multiply(vector, VectorOperations.DotProduct3D(vector, vector));
-        //    //vector = Arithmetic.Multiply(vector, VectorOperations.CrossProduct3D(vector, vector));
+        //    //vector = VectorMaths.Normalize3D(vector);
+        //    //vector = Arithmetic.Multiply(vector, VectorMaths.DotProduct3D(vector, vector));
+        //    //vector = Arithmetic.Multiply(vector, VectorMaths.CrossProduct3D(vector, vector));
         //}
 
         //[Benchmark]
@@ -203,11 +203,11 @@ namespace MathSharp.Interactive
         //    vector = Sse.Divide(vector, len);
         //    vector = Sse.Multiply(vector, vector);
         //    return vector;
-        //    //vector = VectorOperations.Normalize3D(vector);
+        //    //vector = VectorMaths.Normalize3D(vector);
         //    //vector = Arithmetic.Subtract(vector, vector);
-        //    //vector = VectorOperations.Normalize3D(vector);
-        //    //vector = Arithmetic.Multiply(vector, VectorOperations.DotProduct3D(vector, vector));
-        //    //vector = Arithmetic.Multiply(vector, VectorOperations.CrossProduct3D(vector, vector));
+        //    //vector = VectorMaths.Normalize3D(vector);
+        //    //vector = Arithmetic.Multiply(vector, VectorMaths.DotProduct3D(vector, vector));
+        //    //vector = Arithmetic.Multiply(vector, VectorMaths.CrossProduct3D(vector, vector));
         //}
 
         //[Benchmark]
@@ -215,12 +215,12 @@ namespace MathSharp.Interactive
         //{
         //    JohnVector vector = Vector128.Create(1f, 2f, 4f, 3434f);
         //    // No software fallback needed, these methods cover it
-        //    return VectorOperations.Normalize3D_NewTest(vector);
-        //    //vector = VectorOperations.Normalize3D(vector);
+        //    return VectorMaths.Normalize3D_NewTest(vector);
+        //    //vector = VectorMaths.Normalize3D(vector);
         //    //vector = Arithmetic.Subtract(vector, vector);
-        //    //vector = VectorOperations.Normalize3D(vector);
-        //    //vector = Arithmetic.Multiply(vector, VectorOperations.DotProduct3D(vector, vector));
-        //    //vector = Arithmetic.Multiply(vector, VectorOperations.CrossProduct3D(vector, vector));
+        //    //vector = VectorMaths.Normalize3D(vector);
+        //    //vector = Arithmetic.Multiply(vector, VectorMaths.DotProduct3D(vector, vector));
+        //    //vector = Arithmetic.Multiply(vector, VectorMaths.CrossProduct3D(vector, vector));
         //}
 
         public struct FourFloatBlock
@@ -316,7 +316,7 @@ namespace MathSharp.Interactive
             for (var i = 0; i < Count; i++)
             {
                 JohnVector vector = JohnVectorsSrc![i];
-                // vector = VectorOperations.Normalize3D(vector);
+                // vector = VectorMaths.Normalize3D(vector);
             }
         }
 

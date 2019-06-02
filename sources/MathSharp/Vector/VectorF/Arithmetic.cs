@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
-using MathSharp.VectorF;
+using static MathSharp.VectorF;
 using static MathSharp.VectorFloat.SoftwareFallbacks;
 
 namespace MathSharp.VectorFloat
@@ -21,11 +21,11 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Abs(VectorFParam1_3 vector)
+        public static Vector128<float> Abs(VectorFParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
-                VectorF zero = VectorF.Zero;
+                Vector128<float> zero = Vector128<float>.Zero;
                 zero = Sse.Subtract(zero, vector); // This gets the inverted results of all elements
                 return Sse.Max(zero, vector); // This selects the positive values of the 2 vectors
             }
@@ -35,7 +35,7 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse3)]
         [MethodImpl(MaxOpt)]
-        public static VectorF HorizontalAdd(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> HorizontalAdd(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             if (Sse3.IsSupported)
             {
@@ -49,7 +49,7 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Add(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Add(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -61,11 +61,11 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Add(VectorFParam1_3 vector, float scalar)
+        public static Vector128<float> Add(VectorFParam1_3 vector, float scalar)
         {
             if (Sse.IsSupported)
             {
-                VectorF expand = Vector128.Create(scalar);
+                Vector128<float> expand = Vector128.Create(scalar);
                 return Sse.Add(vector, expand);
             }
 
@@ -74,7 +74,7 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Subtract(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Subtract(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -86,11 +86,11 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Subtract(VectorFParam1_3 vector, float scalar)
+        public static Vector128<float> Subtract(VectorFParam1_3 vector, float scalar)
         {
             if (Sse.IsSupported)
             {
-                VectorF expand = Vector128.Create(scalar);
+                Vector128<float> expand = Vector128.Create(scalar);
                 return Sse.Add(vector, expand);
             }
 
@@ -99,7 +99,7 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Multiply(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Multiply(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -110,7 +110,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Multiply(VectorFParam1_3 left, float scalar)
+        public static Vector128<float> Multiply(VectorFParam1_3 left, float scalar)
         {
             if (Sse.IsSupported)
             {
@@ -121,7 +121,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Divide(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
+        public static Vector128<float> Divide(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
         {
             if (Sse.IsSupported)
             {
@@ -133,11 +133,11 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Divide(VectorFParam1_3 dividend, float scalarDivisor)
+        public static Vector128<float> Divide(VectorFParam1_3 dividend, float scalarDivisor)
         {
             if (Sse.IsSupported)
             {
-                VectorF expand = Vector128.Create(scalarDivisor);
+                Vector128<float> expand = Vector128.Create(scalarDivisor);
                 return Sse.Divide(dividend, expand);
             }
 
@@ -146,7 +146,7 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Sqrt(VectorFParam1_3 vector)
+        public static Vector128<float> Sqrt(VectorFParam1_3 vector)
         {
             if (Sse.IsSupported)
             {

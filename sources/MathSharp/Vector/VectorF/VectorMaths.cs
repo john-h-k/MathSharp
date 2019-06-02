@@ -6,15 +6,13 @@ using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using static MathSharp.Helpers;
 using static MathSharp.VectorFloat.Arithmetic;
-using static MathSharp.VectorFloat.BitOperations;
-using static MathSharp.VectorF.Conversion;
+using static MathSharp.VectorFloat.Conversion;
 using static MathSharp.VectorFloat.SoftwareFallbacks;
 
-namespace MathSharp.VectorF
+namespace MathSharp.VectorFloat
 {
-    using VectorF = Vector128<float>;
-    using VectorFParam1_3 = Vector128<float>;
-    using VectorFWide = Vector256<float>;
+    using Vector4F = Vector128<float>;
+    using Vector4FParam1_3 = Vector128<float>;
     public static class VectorMaths
     {
         private const MethodImplOptions MaxOpt =
@@ -24,7 +22,7 @@ namespace MathSharp.VectorF
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF DotProduct2D(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F DotProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -38,10 +36,10 @@ namespace MathSharp.VectorF
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Sse.Multiply(left, right);
+                Vector4F mul = Sse.Multiply(left, right);
 
                 // Set W and Z to zero
-                VectorF result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskWAndZToZero);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -51,9 +49,9 @@ namespace MathSharp.VectorF
             }
             else if (Sse.IsSupported)
             {
-                VectorF mul = Sse.Multiply(left, right);
+                Vector4F mul = Sse.Multiply(left, right);
 
-                VectorF temp = Sse.Shuffle(mul, mul, Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, Shuffle(1, 1, 1, 1));
 
                 mul = Sse.AddScalar(mul, temp);
 
@@ -67,7 +65,7 @@ namespace MathSharp.VectorF
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF DotProduct3D(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F DotProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -81,10 +79,10 @@ namespace MathSharp.VectorF
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Multiply(left, right);
+                Vector4F mul = Sse.Multiply(left, right);
 
                 // Set W to zero
-                VectorF result = And(mul, MaskWToZero);
+                Vector4F result = Sse.And(mul, MaskWToZero);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = HorizontalAdd(result, result);
@@ -93,11 +91,11 @@ namespace MathSharp.VectorF
             else if (Sse.IsSupported)
             {
                 // Multiply to get the needed values
-                VectorF mul = Multiply(left, right);
+                Vector4F mul = Sse.Multiply(left, right);
 
 
                 // Shuffle around the values and AddScalar them
-                VectorF temp = Sse.Shuffle(mul, mul, Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, Shuffle(2, 1, 2, 1));
 
                 mul = Sse.AddScalar(mul, temp);
 
@@ -113,7 +111,7 @@ namespace MathSharp.VectorF
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF DotProduct4D(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F DotProduct4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -123,14 +121,14 @@ namespace MathSharp.VectorF
             }
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Sse.Multiply(left, right);
+                Vector4F mul = Sse.Multiply(left, right);
                 mul = Sse3.HorizontalAdd(mul, mul);
                 return Sse3.HorizontalAdd(mul, mul);
             }
             else if (Sse.IsSupported)
             {
-                VectorF copy = right;
-                VectorF mul = Sse.Multiply(left, copy);
+                Vector4F copy = right;
+                Vector4F mul = Sse.Multiply(left, copy);
                 copy = Sse.Shuffle(copy, mul, Shuffle(1, 0, 0, 0));
                 copy = Sse.Add(copy, mul);
                 mul = Sse.Shuffle(mul, copy, Shuffle(0, 3, 0, 0));
@@ -142,12 +140,12 @@ namespace MathSharp.VectorF
             return DotProduct4D_Software(left, right);
         }
 
-        private static readonly VectorF MaskWToZero = Vector128.Create(-1, -1, -1, 0).AsSingle();
-        private static readonly VectorF MaskWAndZToZero = Vector128.Create(-1, -1, 0, 0).AsSingle();
+        private static readonly Vector4F MaskWToZero = Vector128.Create(-1, -1, -1, 0).AsSingle();
+        private static readonly Vector4F MaskWAndZToZero = Vector128.Create(-1, -1, 0, 0).AsSingle();
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF CrossProduct2D(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F CrossProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             /* Cross product of A(x, y, _, _) and B(x, y, _, _) is
              * 'E = (Ax * By) - (Ay * Bx)'
@@ -157,14 +155,14 @@ namespace MathSharp.VectorF
             if (Sse.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                VectorF permute = Sse.Shuffle(right, right, Shuffle(0, 1, 0, 1));
+                Vector4F permute = Sse.Shuffle(right, right, Shuffle(0, 1, 0, 1));
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Sse.Multiply(left, right);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                VectorF temp = Sse.Shuffle(permute, permute, Shuffle(1, 0, 0, 0));
+                Vector4F temp = Sse.Shuffle(permute, permute, Shuffle(1, 0, 0, 0));
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Sse.Subtract(permute, temp);
@@ -178,7 +176,7 @@ namespace MathSharp.VectorF
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF CrossProduct3D(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F CrossProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -209,8 +207,8 @@ namespace MathSharp.VectorF
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                VectorF leftHandSide1 = Sse.Shuffle(left, left, Shuffle(3, 0, 2, 1));
-                VectorF rightHandSide1 = Sse.Shuffle(right, right, Shuffle(3, 1, 0, 2));
+                Vector4F leftHandSide1 = Sse.Shuffle(left, left, Shuffle(3, 0, 2, 1));
+                Vector4F rightHandSide1 = Sse.Shuffle(right, right, Shuffle(3, 1, 0, 2));
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
@@ -218,14 +216,14 @@ namespace MathSharp.VectorF
                  */
 
 
-                VectorF leftHandSide2 = Sse.Shuffle(left, left, Shuffle(3, 1, 0, 2));
-                VectorF rightHandSide2 = Sse.Shuffle(right, right, Shuffle(3, 0, 2, 1));
+                Vector4F leftHandSide2 = Sse.Shuffle(left, left, Shuffle(3, 1, 0, 2));
+                Vector4F rightHandSide2 = Sse.Shuffle(right, right, Shuffle(3, 0, 2, 1));
 
-                VectorF mul1 = Sse.Multiply(leftHandSide1, rightHandSide1);
+                Vector4F mul1 = Sse.Multiply(leftHandSide1, rightHandSide1);
 
-                VectorF mul2 = Sse.Multiply(leftHandSide2, rightHandSide2);
+                Vector4F mul2 = Sse.Multiply(leftHandSide2, rightHandSide2);
 
-                VectorF resultNonMaskedW = Sse.Subtract(mul1, mul2);
+                Vector4F resultNonMaskedW = Sse.Subtract(mul1, mul2);
 
                 return Sse.And(resultNonMaskedW, MaskWToZero);
 
@@ -237,7 +235,7 @@ namespace MathSharp.VectorF
 
         // TODO [UsesInstructionSet(InstructionSets.Sse41)]
         [MethodImpl(MaxOpt)]
-        public static VectorF CrossProduct4D(VectorFParam1_3 one, VectorFParam1_3 two, VectorFParam1_3 three)
+        public static Vector4F CrossProduct4D(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
         {
             throw new NotImplementedException();
             // hardware
@@ -246,7 +244,7 @@ namespace MathSharp.VectorF
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Length2D(VectorFParam1_3 vector)
+        public static Vector4F Length2D(Vector4FParam1_3 vector)
         {
             #region Manual Inline
             // SSE4.1 has a native dot product instruction, dpps
@@ -254,7 +252,7 @@ namespace MathSharp.VectorF
             {
                 // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_0011_1111;
-                VectorF dp = Sse41.DotProduct(vector, vector, control);
+                Vector4F dp = Sse41.DotProduct(vector, vector, control);
 
                 return Sse.Sqrt(dp);
             }
@@ -263,23 +261,23 @@ namespace MathSharp.VectorF
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Sse.Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W and Z to zero
-                VectorF result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskWAndZToZero);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
 
                 // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
-                VectorF dp = Sse3.MoveLowAndDuplicate(result);
+                Vector4F dp = Sse3.MoveLowAndDuplicate(result);
                 return Sse.Sqrt(dp);
             }
             else if (Sse.IsSupported)
             {
-                VectorF mul = Sse.Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
-                VectorF temp = Sse.Shuffle(mul, mul, Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, Shuffle(1, 1, 1, 1));
 
                 mul = Sse.AddScalar(mul, temp);
 
@@ -293,7 +291,7 @@ namespace MathSharp.VectorF
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Normalize2D(VectorFParam1_3 vector)
+        public static Vector4F Normalize2D(Vector4FParam1_3 vector)
         {
             #region Manual Inline
             // SSE4.1 has a native dot product instruction, dpps
@@ -301,7 +299,7 @@ namespace MathSharp.VectorF
             {
                 // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_0011_1111;
-                VectorF dp = Sse41.DotProduct(vector, vector, control);
+                Vector4F dp = Sse41.DotProduct(vector, vector, control);
 
                 return Sse.Divide(vector, Sse.Sqrt(dp));
             }
@@ -310,23 +308,23 @@ namespace MathSharp.VectorF
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Sse.Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W and Z to zero
-                VectorF result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskWAndZToZero);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
 
                 // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
-                VectorF dp = Sse3.MoveLowAndDuplicate(result);
+                Vector4F dp = Sse3.MoveLowAndDuplicate(result);
                 return Sse.Divide(vector, Sse.Sqrt(dp));
             }
             else if (Sse.IsSupported)
             {
-                VectorF mul = Sse.Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
-                VectorF temp = Sse.Shuffle(mul, mul, Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, Shuffle(1, 1, 1, 1));
 
                 mul = Sse.AddScalar(mul, temp);
 
@@ -340,7 +338,7 @@ namespace MathSharp.VectorF
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Length3D(VectorFParam1_3 vector)
+        public static Vector4F Length3D(Vector4FParam1_3 vector)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -354,10 +352,10 @@ namespace MathSharp.VectorF
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W to zero
-                VectorF result = And(mul, MaskWToZero);
+                Vector4F result = Sse.And(mul, MaskWToZero);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = HorizontalAdd(result, result);
@@ -366,11 +364,11 @@ namespace MathSharp.VectorF
             else if (Sse.IsSupported)
             {
                 // Multiply to get the needed values
-                VectorF mul = Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
 
                 // Shuffle around the values and AddScalar them
-                VectorF temp = Sse.Shuffle(mul, mul, Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, Shuffle(2, 1, 2, 1));
 
                 mul = Sse.AddScalar(mul, temp);
 
@@ -386,7 +384,7 @@ namespace MathSharp.VectorF
 
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Normalize3D(VectorFParam1_3 vector)
+        public static Vector4F Normalize3D(Vector4FParam1_3 vector)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -400,10 +398,10 @@ namespace MathSharp.VectorF
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W to zero
-                VectorF result = And(mul, MaskWToZero);
+                Vector4F result = Sse.And(mul, MaskWToZero);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = HorizontalAdd(result, result);
@@ -412,11 +410,11 @@ namespace MathSharp.VectorF
             else if (Sse.IsSupported)
             {
                 // Multiply to get the needed values
-                VectorF mul = Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
 
 
                 // Shuffle around the values and AddScalar them
-                VectorF temp = Sse.Shuffle(mul, mul, Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, Shuffle(2, 1, 2, 1));
 
                 mul = Sse.AddScalar(mul, temp);
 
@@ -431,7 +429,7 @@ namespace MathSharp.VectorF
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Length4D(VectorFParam1_3 vector)
+        public static Vector4F Length4D(Vector4FParam1_3 vector)
         {
             if (Sse41.IsSupported)
             {
@@ -441,14 +439,14 @@ namespace MathSharp.VectorF
             }
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Sse.Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
                 mul = Sse3.HorizontalAdd(mul, mul);
                 return Sse.Sqrt(Sse3.HorizontalAdd(mul, mul));
             }
             else if (Sse.IsSupported)
             {
-                VectorF copy = vector;
-                VectorF mul = Sse.Multiply(vector, copy);
+                Vector4F copy = vector;
+                Vector4F mul = Sse.Multiply(vector, copy);
                 copy = Sse.Shuffle(copy, mul, Shuffle(1, 0, 0, 0));
                 copy = Sse.Add(copy, mul);
                 mul = Sse.Shuffle(mul, copy, Shuffle(0, 3, 0, 0));
@@ -461,7 +459,7 @@ namespace MathSharp.VectorF
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Normalize4D(VectorFParam1_3 vector)
+        public static Vector4F Normalize4D(Vector4FParam1_3 vector)
         {
             if (Sse41.IsSupported)
             {
@@ -471,14 +469,14 @@ namespace MathSharp.VectorF
             }
             else if (Sse3.IsSupported)
             {
-                VectorF mul = Sse.Multiply(vector, vector);
+                Vector4F mul = Sse.Multiply(vector, vector);
                 mul = Sse3.HorizontalAdd(mul, mul);
                 return Sse.Divide(vector, Sse.Sqrt(Sse3.HorizontalAdd(mul, mul)));
             }
             else if (Sse.IsSupported)
             {
-                VectorF copy = vector;
-                VectorF mul = Sse.Multiply(vector, copy);
+                Vector4F copy = vector;
+                Vector4F mul = Sse.Multiply(vector, copy);
                 copy = Sse.Shuffle(copy, mul, Shuffle(1, 0, 0, 0));
                 copy = Sse.Add(copy, mul);
                 mul = Sse.Shuffle(mul, copy, Shuffle(0, 3, 0, 0));

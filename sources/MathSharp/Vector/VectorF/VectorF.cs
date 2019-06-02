@@ -1,15 +1,15 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using static MathSharp.VectorFloat.SoftwareFallbacks;
 using MathSharp.Attributes;
+using MathSharp.VectorFloat;
 
-namespace MathSharp.VectorFloat
+namespace MathSharp
 {
-    using VectorF = Vector128<float>;
-    using VectorFParam1_3 = Vector128<float>;
+    using Vector4F = Vector128<float>;
+    using Vector4FParam1_3 = Vector128<float>;
 
-    public static class BitOperations
+    public static partial class VectorF
     {
         private const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
@@ -23,63 +23,63 @@ namespace MathSharp.VectorFloat
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Or(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F Or(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Or(left, right);
             }
 
-            return Or_Software(left, right);
+            return SoftwareFallbacks.Or_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF And(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F And(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.And(left, right);
             }
 
-            return And_Software(left, right);
+            return SoftwareFallbacks.And_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Xor(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F Xor(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Xor(left, right);
             }
 
-            return Xor_Software(left, right);
+            return SoftwareFallbacks.Xor_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Not(VectorFParam1_3 vector)
+        public static Vector4F Not(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
-                VectorF mask = Vector128.Create(-1, -1, -1, -1).AsSingle();
+                Vector4F mask = Vector128.Create(-1, -1, -1, -1).AsSingle();
                 return Sse.AndNot(vector, mask);
             }
 
-            return Not_Software(vector);
+            return SoftwareFallbacks.Not_Software(vector);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF AndNot(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F AndNot(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.AndNot(left, right);
             }
 
-            return AndNot_Software(left, right);
+            return SoftwareFallbacks.AndNot_Software(left, right);
         }
 
         #endregion
