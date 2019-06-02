@@ -3,11 +3,41 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28917.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp", "MathSharp\MathSharp.csproj", "{1959052F-0C5C-49B1-AA18-26EC74C1F228}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp", "sources\MathSharp\MathSharp.csproj", "{1959052F-0C5C-49B1-AA18-26EC74C1F228}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp.Tests", "MathSharp.Tests\MathSharp.Tests.csproj", "{D84D67CB-CF02-4AEA-9F54-17A7F2FE9BDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp.Interactive", "samples\MathSharp.Interactive\MathSharp.Interactive.csproj", "{6183BF41-9E9F-4987-A4D9-6F773D65269D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathSharp.Interactive", "MathSharp.Interactive\MathSharp.Interactive.csproj", "{6183BF41-9E9F-4987-A4D9-6F773D65269D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9A2281C3-DFB9-4E5A-ABF9-7B605E61E0F5}"
+	ProjectSection(SolutionItems) = preProject
+		samples\Directory.Build.props = samples\Directory.Build.props
+		samples\Directory.Build.targets = samples\Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6BBF0A6F-9437-4146-83A9-AD251F6BA375}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		CONTRIBUTING.md = CONTRIBUTING.md
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		LICENSE = LICENSE
+		MathSharp.snk = MathSharp.snk
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sources", "sources", "{9B19E1B6-A3A3-4D4D-AECC-75EFEE60F834}"
+	ProjectSection(SolutionItems) = preProject
+		sources\Directory.Build.props = sources\Directory.Build.props
+		sources\Directory.Build.targets = sources\Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5E19EDF5-B936-4420-B52D-80E9FF8C727C}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+		tests\Directory.Build.targets = tests\Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp.UnitTests", "tests\MathSharp.UnitTests\MathSharp.UnitTests.csproj", "{8FFF4DEA-FF68-4C22-8C53-E911D1B47837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,17 +49,22 @@ Global
 		{1959052F-0C5C-49B1-AA18-26EC74C1F228}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1959052F-0C5C-49B1-AA18-26EC74C1F228}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1959052F-0C5C-49B1-AA18-26EC74C1F228}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D84D67CB-CF02-4AEA-9F54-17A7F2FE9BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D84D67CB-CF02-4AEA-9F54-17A7F2FE9BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D84D67CB-CF02-4AEA-9F54-17A7F2FE9BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D84D67CB-CF02-4AEA-9F54-17A7F2FE9BDC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6183BF41-9E9F-4987-A4D9-6F773D65269D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6183BF41-9E9F-4987-A4D9-6F773D65269D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6183BF41-9E9F-4987-A4D9-6F773D65269D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6183BF41-9E9F-4987-A4D9-6F773D65269D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FFF4DEA-FF68-4C22-8C53-E911D1B47837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FFF4DEA-FF68-4C22-8C53-E911D1B47837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FFF4DEA-FF68-4C22-8C53-E911D1B47837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FFF4DEA-FF68-4C22-8C53-E911D1B47837}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1959052F-0C5C-49B1-AA18-26EC74C1F228} = {9B19E1B6-A3A3-4D4D-AECC-75EFEE60F834}
+		{6183BF41-9E9F-4987-A4D9-6F773D65269D} = {5E19EDF5-B936-4420-B52D-80E9FF8C727C}
+		{8FFF4DEA-FF68-4C22-8C53-E911D1B47837} = {5E19EDF5-B936-4420-B52D-80E9FF8C727C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA9F1574-69B2-4DCE-86ED-8FC0792234C6}

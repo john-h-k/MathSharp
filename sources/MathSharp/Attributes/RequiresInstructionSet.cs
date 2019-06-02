@@ -11,7 +11,7 @@ namespace MathSharp.Attributes
         public RequiresInstructionSetAttribute(params InstructionSets[] instructionSets)
         {
             InstructionSets = instructionSets is null || instructionSets.Length == 0
-                ? instructionSets : new[] { Attributes.InstructionSets.None };
+                ? new[] { Attributes.InstructionSets.None } : instructionSets;
         }
     }
 }
