@@ -94,7 +94,7 @@ namespace MathSharp
 #if !AVX512
             false;
 #else
-    false;
+            false;
 #error AVX512 unsupported at the moment
 #endif
 

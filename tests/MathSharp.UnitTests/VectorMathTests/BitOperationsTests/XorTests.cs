@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Xunit;
-using BitOperations = MathSharp.VectorF.BitOperations;
+using BitOperations = MathSharp.VectorFloat.BitOperations;
 
 namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
 {

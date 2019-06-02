@@ -6,7 +6,7 @@ using MathSharp.VectorF;
 using Microsoft.VisualBasic.CompilerServices;
 using Xunit;
 
-using BitOperations = MathSharp.VectorF.BitOperations;
+using BitOperations = MathSharp.VectorFloat.BitOperations;
 
 namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
 {
@@ -20,7 +20,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             float notZero = Unsafe.As<int, float>(ref m1);
             var expected = new Vector4(notZero);
 
-            vector = VectorF.BitOperations.Not(vector);
+            vector = BitOperations.Not(vector);
 
             Assert.True(AreEqual(expected, vector));
         }
@@ -31,7 +31,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             Vector128<float> vector = Vector128.Create(-1).AsSingle();
             var expected = new Vector4(0f);
 
-            vector = VectorF.BitOperations.Not(vector);
+            vector = BitOperations.Not(vector);
 
             Assert.True(AreEqual(expected, vector));
         }

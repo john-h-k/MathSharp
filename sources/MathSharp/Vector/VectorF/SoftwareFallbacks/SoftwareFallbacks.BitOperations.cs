@@ -4,17 +4,14 @@ using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using static MathSharp.Helpers;
 
-namespace MathSharp.VectorF
+namespace MathSharp.VectorFloat
 {
     using VectorF = Vector128<float>;
     using VectorFParam1_3 = Vector128<float>;
     using VectorFWide = Vector256<float>;
 
-    public static class BitOperations
+    internal static unsafe partial class SoftwareFallbacks
     {
-        private const MethodImplOptions MaxOpt =
-            MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
-
         public static readonly Vector128<float> MaskX = Vector128.Create(+0, -1, -1, -1).AsSingle();
         public static readonly Vector128<float> MaskY = Vector128.Create(-1, +0, -1, -1).AsSingle();
         public static readonly Vector128<float> MaskZ = Vector128.Create(-1, -1, +0, -1).AsSingle();
@@ -22,19 +19,9 @@ namespace MathSharp.VectorF
 
         #region Bitwise Operations
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Or(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static VectorF Or_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (IntrinsicSupport.Sse)
-            {
-                return Sse.Or(left, right);
-            }
-
-            return SoftwareFallback(left, right);
-
-            static VectorF SoftwareFallback(VectorFParam1_3 left, VectorFParam1_3 right)
-            {
                 float x1 = X(left);
                 float y1 = Y(left);
                 float z1 = Z(left);
@@ -56,22 +43,11 @@ namespace MathSharp.VectorF
                     Unsafe.As<uint, float>(ref orZ),
                     Unsafe.As<uint, float>(ref orW)
                 );
-            }
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF And(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static VectorF And_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (IntrinsicSupport.Sse)
-            {
-                return Sse.And(left, right);
-            }
-
-            return SoftwareFallback(left, right);
-
-            static VectorF SoftwareFallback(VectorFParam1_3 left, VectorFParam1_3 right)
-            {
                 float x1 = X(left);
                 float y1 = Y(left);
                 float z1 = Z(left);
@@ -93,22 +69,11 @@ namespace MathSharp.VectorF
                     Unsafe.As<uint, float>(ref andZ),
                     Unsafe.As<uint, float>(ref andW)
                 );
-            }
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Xor(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static VectorF Xor_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (IntrinsicSupport.Sse)
-            {
-                return Sse.Xor(left, right);
-            }
-
-            return SoftwareFallback(left, right);
-
-            static VectorF SoftwareFallback(VectorFParam1_3 left, VectorFParam1_3 right)
-            {
                 float x1 = X(left);
                 float y1 = Y(left);
                 float z1 = Z(left);
@@ -130,23 +95,11 @@ namespace MathSharp.VectorF
                     Unsafe.As<uint, float>(ref xorZ),
                     Unsafe.As<uint, float>(ref xorW)
                 );
-            }
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF Not(VectorFParam1_3 vector)
+        public static VectorF Not_Software(VectorFParam1_3 vector)
         {
-            if (IntrinsicSupport.Sse)
-            {
-                VectorF mask = Vector128.Create(-1, -1, -1, -1).AsSingle();
-                return Sse.AndNot(vector, mask);
-            }
-
-            return SoftwareFallback(vector);
-
-            static VectorF SoftwareFallback(VectorFParam1_3 vector)
-            {
                 float x = X(vector);
                 float y = Y(vector);
                 float z = Z(vector);
@@ -163,24 +116,12 @@ namespace MathSharp.VectorF
                     Unsafe.As<uint, float>(ref notZ),
                     Unsafe.As<uint, float>(ref notW)
                 );
-            }
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static VectorF AndNot(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static VectorF AndNot_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-            if (IntrinsicSupport.Sse)
-            {
-                return Sse.AndNot(left, right);
-            }
-
-            return SoftwareFallback(left, right);
-
-            static VectorF SoftwareFallback(VectorFParam1_3 left, VectorFParam1_3 right)
-            {
-                return And(Not(left), right);
-            }
+                return And_Software(Not_Software(left), right);
         }
 
         #endregion

@@ -5,7 +5,7 @@ using System.Runtime.Intrinsics;
 using MathSharp.VectorF;
 using static MathSharp.Helpers;
 using Xunit;
-using BitOperations = MathSharp.VectorF.BitOperations;
+using BitOperations = MathSharp.VectorFloat.BitOperations;
 
 namespace MathSharp.UnitTests.VectorMathTests
 {

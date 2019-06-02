@@ -4,6 +4,7 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using static MathSharp.Helpers;
+using BitOperations = MathSharp.VectorFloat.BitOperations;
 
 namespace MathSharp.VectorF
 {
@@ -24,7 +25,7 @@ namespace MathSharp.VectorF
         [MethodImpl(MaxOpt)]
         public static VectorF Load(this Vector4 vector)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 return Sse.LoadVector128((float*)&vector);
             }
@@ -41,7 +42,7 @@ namespace MathSharp.VectorF
         [MethodImpl(MaxOpt)]
         public static VectorF Load(this Vector3 vector)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 // Construct 3 separate vectors, each with the first element being the value
                 // and the rest being undefined (shown as ?)
@@ -67,12 +68,11 @@ namespace MathSharp.VectorF
             }
         }
 
-
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static VectorF Load(this Vector3 vector, float scalarW)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 // Construct 3 separate vectors, each with the first element being the value
                 // and the rest being 0
@@ -81,7 +81,7 @@ namespace MathSharp.VectorF
                 VectorF midHi = Vector128.CreateScalarUnsafe(vector.Z);
                 VectorF hi = Vector128.CreateScalarUnsafe(scalarW);
 
-                // Construct a vector of (lo, midLo, ?, ?) and (midHi, hi, ?, ?)
+                // Construct a vector of(lo, midLo, ?, ?) and(midHi, hi, ?, ?)
                 VectorF loMid = Sse.UnpackLow(lo, midLo);
                 VectorF hiMid = Sse.UnpackLow(midHi, hi);
 
@@ -104,7 +104,7 @@ namespace MathSharp.VectorF
         [MethodImpl(MaxOpt)]
         public static VectorF Load(this Vector2 vector)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 // Construct 2 separate vectors, each having the first element being the value
                 // and the rest being 0
@@ -127,7 +127,7 @@ namespace MathSharp.VectorF
         [MethodImpl(MaxOpt)]
         public static VectorF LoadBroadcast(this Vector2 vector)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 // Construct 2 separate vectors, each having the first element being the value
                 // and the rest being undefined (because we fill them later)
@@ -152,7 +152,7 @@ namespace MathSharp.VectorF
         [MethodImpl(MaxOpt)]
         public static VectorF LoadScalar(this float scalar)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 return Sse.LoadScalarVector128(&scalar);
             }
@@ -163,7 +163,7 @@ namespace MathSharp.VectorF
         [MethodImpl(MaxOpt)]
         public static VectorF LoadScalarBroadcast(this float scalar)
         {
-            return ScalarToVector(Vector128.CreateScalarUnsafe(scalar));
+            return Vector128.Create(scalar);
         }
 
         #endregion
@@ -172,12 +172,14 @@ namespace MathSharp.VectorF
 
         public static void Store(this VectorF vector, out Vector4 destination)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
-                fixed (float* pDest = &destination.X)
+                fixed (void* pDest = &destination)
                 {
-                    Sse.Store(pDest, vector);
+                    Sse.Store((float*)pDest, vector);
                 }
+
+                return;
             }
 
             SoftwareFallback(vector, out destination);
@@ -190,14 +192,16 @@ namespace MathSharp.VectorF
 
         public static void Store(this VectorF vector, out Vector3 destination)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 VectorF hiBroadcast = Sse.Shuffle(vector, vector, Shuffle(2, 2, 2, 2));
-                fixed (float* pDest = &destination.X)
+                fixed (void* pDest = &destination)
                 {
-                    Sse.StoreLow(pDest, vector);
-                    Sse.StoreScalar(pDest + 3, hiBroadcast);
+                    Sse.StoreLow((float*)pDest, vector);
+                    Sse.StoreScalar((float*)pDest + 3, hiBroadcast);
                 }
+
+                return;
             }
 
             SoftwareFallback(vector, out destination);
@@ -210,12 +214,14 @@ namespace MathSharp.VectorF
 
         public static void Store(this VectorF vector, out Vector2 destination)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
-                fixed (float* pDest = &destination.X)
+                fixed (void* pDest = &destination)
                 {
-                    Sse.StoreLow(pDest, vector);
+                    Sse.StoreLow((float*)pDest, vector);
                 }
+
+                return;
             }
 
             SoftwareFallback(vector, out destination);
@@ -228,12 +234,14 @@ namespace MathSharp.VectorF
 
         public static void Store(this VectorF vector, out float destination)
         {
-            if (IntrinsicSupport.Sse)
+            if (Sse.IsSupported)
             {
                 fixed (float* pDest = &destination)
                 {
                     Sse.StoreScalar(pDest, vector);
                 }
+
+                return;
             }
 
             SoftwareFallback(vector, out destination);
@@ -252,16 +260,16 @@ namespace MathSharp.VectorF
         [MethodImpl(MaxOpt)]
         public static VectorF ScalarToVector(VectorF scalar)
         {
-            if (IntrinsicSupport.Avx2)
+            if (Avx2.IsSupported)
             {
                 // TODO is this path better than Avx path or the same?
                 return Avx2.BroadcastScalarToVector128(scalar);
             }
-            else if (IntrinsicSupport.Avx)
+            else if (Avx.IsSupported)
             {
                 return Avx.Permute(scalar, 0b_0000_0000);
             }
-            else if (IntrinsicSupport.Sse)
+            else if (Sse.IsSupported)
             {
                 return Sse.Shuffle(scalar, scalar, 0b_0000_0000);
             }

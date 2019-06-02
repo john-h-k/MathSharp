@@ -38,7 +38,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Load(this Vector4 vector)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.LoadVector128((float*)&vector);
 //            }
@@ -55,7 +55,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Load(this Vector3 vector)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                // Construct 3 separate vectors, each with the first element being the value
 //                // and the rest being 0
@@ -85,7 +85,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Load(this Vector3 vector, float scalarW)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                // Construct 3 separate vectors, each with the first element being the value
 //                // and the rest being 0
@@ -117,7 +117,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Load(this Vector2 vector)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                // Construct 2 separate vectors, each having the first element being the value
 //                // and the rest being 0
@@ -140,7 +140,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF LoadBroadcast(this Vector2 vector)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                // Construct 2 separate vectors, each having the first element being the value
 //                // and the rest being undefined (because we fill them later)
@@ -165,7 +165,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF LoadScalar(this float scalar)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.LoadScalarVector128(&scalar);
 //            }
@@ -185,7 +185,7 @@ using static MathSharp.Helpers;
 
 //        public static void Store(this VectorF vector, out Vector4 destination)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                fixed (float* pDest = &destination.X)
 //                {
@@ -203,7 +203,7 @@ using static MathSharp.Helpers;
 
 //        public static void Store(this VectorF vector, out Vector3 destination)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                VectorF hiBroadcast = Sse.Shuffle(vector, vector, Shuffle(2, 2, 2, 2));
 //                fixed (float* pDest = &destination.X)
@@ -223,7 +223,7 @@ using static MathSharp.Helpers;
 
 //        public static void Store(this VectorF vector, out Vector2 destination)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                fixed (float* pDest = &destination.X)
 //                {
@@ -241,7 +241,7 @@ using static MathSharp.Helpers;
 
 //        public static void Store(this VectorF vector, out float destination)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                fixed (float* pDest = &destination)
 //                {
@@ -265,16 +265,16 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF ScalarToVector(VectorF scalar)
 //        {
-//            if (IntrinsicSupport.Avx2)
+//            if (Avx2.IsSupported)
 //            {
 //                // TODO is this path better than Avx path or the same?
 //                return Avx2.BroadcastScalarToVector128(scalar);
 //            }
-//            else if (IntrinsicSupport.Avx)
+//            else if (Avx.IsSupported)
 //            {
 //                return Avx.Permute(scalar, 0b_0000_0000);
 //            }
-//            else if (IntrinsicSupport.Sse)
+//            else if (Sse.IsSupported)
 //            {
 //                return Sse.Shuffle(scalar, scalar, 0b_0000_0000);
 //            }
@@ -295,7 +295,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Abs(VectorFParam1_3 vector)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                VectorF zero = VectorF.Zero;
 //                zero = Sse.Subtract(zero, vector); // This gets the inverted results of all elements
@@ -319,7 +319,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF HorizontalAdd(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse3)
+//            if (Sse3.IsSupported)
 //            {
 //                return Sse3.HorizontalAdd(left, right);
 //            }
@@ -341,7 +341,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Add(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.Add(left, right);
 //            }
@@ -363,7 +363,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Add(VectorFParam1_3 vector, float scalar)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                VectorF expand = Vector128.Create(scalar);
 //                return Sse.Add(vector, expand);
@@ -386,7 +386,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Subtract(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.Subtract(left, right);
 //            }
@@ -408,7 +408,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Subtract(VectorFParam1_3 vector, float scalar)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                VectorF expand = Vector128.Create(scalar);
 //                return Sse.Add(vector, expand);
@@ -429,9 +429,9 @@ using static MathSharp.Helpers;
 
 //        [UsesInstructionSet(InstructionSets.Sse)]
 //        [MethodImpl(MaxOpt)]
-//        public static VectorF PerElementMultiply(VectorFParam1_3 left, VectorFParam1_3 right)
+//        public static VectorF Multiply(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.Multiply(left, right);
 //            }
@@ -453,7 +453,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Divide(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.Divide(dividend, divisor);
 //            }
@@ -475,7 +475,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Divide(VectorFParam1_3 dividend, float scalarDivisor)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                VectorF expand = Vector128.Create(scalarDivisor);
 //                return Sse.Divide(dividend, expand);
@@ -498,7 +498,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Sqrt(VectorFParam1_3 vector)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.Sqrt(vector);
 //            }
@@ -524,7 +524,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Or(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.Or(left, right);
 //            }
@@ -561,7 +561,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF And(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.And(left, right);
 //            }
@@ -598,7 +598,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Xor(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.Xor(left, right);
 //            }
@@ -635,7 +635,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF Not(VectorFParam1_3 vector)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                VectorF mask = Vector128.Create(-1, -1, -1, -1).AsSingle();
 //                return Sse.AndNot(vector, mask);
@@ -668,7 +668,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF AndNot(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                return Sse.AndNot(left, right);
 //            }
@@ -690,7 +690,7 @@ using static MathSharp.Helpers;
 //        public static VectorF DotProduct2D(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
 //            // SSE4.1 has a native dot product instruction, dpps
-//            if (IntrinsicSupport.Sse41)
+//            if (Sse41.IsSupported)
 //            {
 //                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
 //                const byte control = 0b_0011_1111;
@@ -699,9 +699,9 @@ using static MathSharp.Helpers;
 //            // We can use SSE to vectorize the multiplication
 //            // There are different fastest methods to sum the resultant vector
 //            // on SSE3 vs SSE1
-//            else if (IntrinsicSupport.Sse3)
+//            else if (Sse3.IsSupported)
 //            {
-//                VectorF mul = PerElementMultiply(left, right);
+//                VectorF mul = Multiply(left, right);
 
 //                // Set W and Z to zero
 //                VectorF result = And(mul, MaskWAndZToZero);
@@ -712,9 +712,9 @@ using static MathSharp.Helpers;
 //                // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
 //                return Sse3.MoveLowAndDuplicate(result);
 //            }
-//            else if (IntrinsicSupport.Sse)
+//            else if (Sse.IsSupported)
 //            {
-//                VectorF mul = PerElementMultiply(left, right);
+//                VectorF mul = Multiply(left, right);
 
 //                mul = HorizontalAdd(mul, mul);
 //                return ScalarToVector(mul);
@@ -724,7 +724,7 @@ using static MathSharp.Helpers;
 
 //            static VectorF SoftwareFallback(VectorFParam1_3 left, VectorFParam1_3 right)
 //            {
-//                VectorF mul = PerElementMultiply(left, right);
+//                VectorF mul = Multiply(left, right);
 //                float result = X(mul) + Y(mul);
 //                return Vector128.Create(result);
 //            }
@@ -735,7 +735,7 @@ using static MathSharp.Helpers;
 //        public static VectorF DotProduct3D(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
 //            // SSE4.1 has a native dot product instruction, dpps
-//            if (IntrinsicSupport.Sse41)
+//            if (Sse41.IsSupported)
 //            {
 //                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
 //                const byte control = 0b_0111_1111;
@@ -744,9 +744,9 @@ using static MathSharp.Helpers;
 //            // We can use SSE to vectorize the multiplication
 //            // There are different fastest methods to sum the resultant vector
 //            // on SSE3 vs SSE1
-//            else if (IntrinsicSupport.Sse3)
+//            else if (Sse3.IsSupported)
 //            {
-//                VectorF mul = PerElementMultiply(left, right);
+//                VectorF mul = Multiply(left, right);
 
 //                // Set W to zero
 //                VectorF result = And(mul, MaskWToZero);
@@ -755,9 +755,9 @@ using static MathSharp.Helpers;
 //                result = HorizontalAdd(result, result);
 //                return HorizontalAdd(result, result);
 //            }
-//            else if (IntrinsicSupport.Sse)
+//            else if (Sse.IsSupported)
 //            {
-//                //VectorF mul = PerElementMultiply(left, right);
+//                //VectorF mul = Multiply(left, right);
 
 //                throw new NotImplementedException();
 //            }
@@ -766,7 +766,7 @@ using static MathSharp.Helpers;
 
 //            static VectorF SoftwareFallback(VectorFParam1_3 left, VectorFParam1_3 right)
 //            {
-//                VectorF mul = PerElementMultiply(left, right);
+//                VectorF mul = Multiply(left, right);
 //                float result = X(mul) + Y(mul) + Z(mul);
 //                return Vector128.Create(result);
 //            }
@@ -776,13 +776,13 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF DotProduct4D(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse41)
+//            if (Sse41.IsSupported)
 //            {
 //                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
 //                const byte control = 0b_1111_1111;
 //                return Sse41.DotProduct(left, right, control);
 //            }
-//            else if (IntrinsicSupport.Sse3)
+//            else if (Sse3.IsSupported)
 //            {
 //                throw new NotImplementedException();
 //            }
@@ -823,7 +823,7 @@ using static MathSharp.Helpers;
 //        [MethodImpl(MaxOpt)]
 //        public static VectorF CrossProduct3D(VectorFParam1_3 left, VectorFParam1_3 right)
 //        {
-//            if (IntrinsicSupport.Sse)
+//            if (Sse.IsSupported)
 //            {
 //                #region Comments
 
@@ -864,9 +864,9 @@ using static MathSharp.Helpers;
 //                VectorF leftHandSide2 = Sse.Shuffle(left, left, Shuffle(3, 1, 0, 2));
 //                VectorF rightHandSide2 = Sse.Shuffle(right, right, Shuffle(3, 0, 2, 1));
 
-//                VectorF mul1 = PerElementMultiply(leftHandSide1, rightHandSide1);
+//                VectorF mul1 = Multiply(leftHandSide1, rightHandSide1);
 
-//                VectorF mul2 = PerElementMultiply(leftHandSide2, rightHandSide2);
+//                VectorF mul2 = Multiply(leftHandSide2, rightHandSide2);
 
 //                VectorF resultNonMaskedW = Subtract(mul1, mul2);
 
