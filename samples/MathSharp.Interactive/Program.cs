@@ -130,7 +130,6 @@ namespace MathSharp.Interactive
             JohnVector x = _value;
             for (var i = 0; i < _iter; i++)
             {
-                x = VectorMaths.Normalize3D_NewTest(x);
             }
 
             return x;
