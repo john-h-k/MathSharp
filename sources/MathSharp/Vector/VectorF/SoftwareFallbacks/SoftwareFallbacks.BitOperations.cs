@@ -1,14 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-using MathSharp.Attributes;
-using static MathSharp.Helpers;
 
-namespace MathSharp.VectorFloat
+namespace MathSharp.SoftwareFallbacks
 {
-    using VectorF = Vector128<float>;
     using VectorFParam1_3 = Vector128<float>;
-    using VectorFWide = Vector256<float>;
 
     internal static unsafe partial class SoftwareFallbacks
     {
@@ -20,17 +15,17 @@ namespace MathSharp.VectorFloat
         #region Bitwise Operations
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Or_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Or_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-                float x1 = X(left);
-                float y1 = Y(left);
-                float z1 = Z(left);
-                float w1 = W(left);
+                float x1 = Helpers.X(left);
+                float y1 = Helpers.Y(left);
+                float z1 = Helpers.Z(left);
+                float w1 = Helpers.W(left);
 
-                float x2 = X(right);
-                float y2 = Y(right);
-                float z2 = Z(right);
-                float w2 = W(right);
+                float x2 = Helpers.X(right);
+                float y2 = Helpers.Y(right);
+                float z2 = Helpers.Z(right);
+                float w2 = Helpers.W(right);
 
                 uint orX = Unsafe.As<float, uint>(ref x1) | Unsafe.As<float, uint>(ref x2);
                 uint orY = Unsafe.As<float, uint>(ref y1) | Unsafe.As<float, uint>(ref y2);
@@ -46,17 +41,17 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF And_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> And_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-                float x1 = X(left);
-                float y1 = Y(left);
-                float z1 = Z(left);
-                float w1 = W(left);
+                float x1 = Helpers.X(left);
+                float y1 = Helpers.Y(left);
+                float z1 = Helpers.Z(left);
+                float w1 = Helpers.W(left);
 
-                float x2 = X(right);
-                float y2 = Y(right);
-                float z2 = Z(right);
-                float w2 = W(right);
+                float x2 = Helpers.X(right);
+                float y2 = Helpers.Y(right);
+                float z2 = Helpers.Z(right);
+                float w2 = Helpers.W(right);
 
                 uint andX = Unsafe.As<float, uint>(ref x1) & Unsafe.As<float, uint>(ref x2);
                 uint andY = Unsafe.As<float, uint>(ref y1) & Unsafe.As<float, uint>(ref y2);
@@ -72,17 +67,17 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Xor_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Xor_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
-                float x1 = X(left);
-                float y1 = Y(left);
-                float z1 = Z(left);
-                float w1 = W(left);
+                float x1 = Helpers.X(left);
+                float y1 = Helpers.Y(left);
+                float z1 = Helpers.Z(left);
+                float w1 = Helpers.W(left);
 
-                float x2 = X(right);
-                float y2 = Y(right);
-                float z2 = Z(right);
-                float w2 = W(right);
+                float x2 = Helpers.X(right);
+                float y2 = Helpers.Y(right);
+                float z2 = Helpers.Z(right);
+                float w2 = Helpers.W(right);
 
                 uint xorX = Unsafe.As<float, uint>(ref x1) ^ Unsafe.As<float, uint>(ref x2);
                 uint xorY = Unsafe.As<float, uint>(ref y1) ^ Unsafe.As<float, uint>(ref y2);
@@ -98,12 +93,12 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Not_Software(VectorFParam1_3 vector)
+        public static Vector128<float> Not_Software(VectorFParam1_3 vector)
         {
-                float x = X(vector);
-                float y = Y(vector);
-                float z = Z(vector);
-                float w = W(vector);
+                float x = Helpers.X(vector);
+                float y = Helpers.Y(vector);
+                float z = Helpers.Z(vector);
+                float w = Helpers.W(vector);
 
                 uint notX = ~Unsafe.As<float, uint>(ref x);
                 uint notY = ~Unsafe.As<float, uint>(ref y);
@@ -119,7 +114,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF AndNot_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> AndNot_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
                 return And_Software(Not_Software(left), right);
         }

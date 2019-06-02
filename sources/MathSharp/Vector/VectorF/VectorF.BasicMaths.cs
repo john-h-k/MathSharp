@@ -1,41 +1,34 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
-using static MathSharp.VectorF;
-using static MathSharp.VectorFloat.SoftwareFallbacks;
 
-namespace MathSharp.VectorFloat
+namespace MathSharp
 {
-    using VectorF = Vector128<float>;
-    using VectorFParam1_3 = Vector128<float>;
+    using Vector4F = Vector128<float>;
+    using Vector4FParam1_3 = Vector128<float>;
 
-    public static class Arithmetic
+    public static partial class VectorF
     {
-        private const MethodImplOptions MaxOpt =
-            MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
-
-        #region Arithmetic
+        #region VectorF
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Abs(VectorFParam1_3 vector)
+        public static Vector4F Abs(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
-                Vector128<float> zero = Vector128<float>.Zero;
+                Vector4F zero = Vector4F.Zero;
                 zero = Sse.Subtract(zero, vector); // This gets the inverted results of all elements
                 return Sse.Max(zero, vector); // This selects the positive values of the 2 vectors
             }
 
-            return Abs_Software(vector);
+            return SoftwareFallbacks.SoftwareFallbacks.Abs_Software(vector);
         }
 
         [UsesInstructionSet(InstructionSets.Sse3)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> HorizontalAdd(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F HorizontalAdd(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse3.IsSupported)
             {
@@ -44,116 +37,116 @@ namespace MathSharp.VectorFloat
 
             // TODO can Sse be used over the software fallback?
 
-            return HorizontalAdd_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.HorizontalAdd_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Add(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F Add(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Add(left, right);
             }
 
-            return Add_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.Add_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Add(VectorFParam1_3 vector, float scalar)
+        public static Vector4F Add(Vector4FParam1_3 vector, float scalar)
         {
             if (Sse.IsSupported)
             {
-                Vector128<float> expand = Vector128.Create(scalar);
+                Vector4F expand = Vector128.Create(scalar);
                 return Sse.Add(vector, expand);
             }
 
-            return Add_Software(vector, scalar);
+            return SoftwareFallbacks.SoftwareFallbacks.Add_Software(vector, scalar);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Subtract(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F Subtract(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Subtract(left, right);
             }
 
-            return Subtract_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.Subtract_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Subtract(VectorFParam1_3 vector, float scalar)
+        public static Vector4F Subtract(Vector4FParam1_3 vector, float scalar)
         {
             if (Sse.IsSupported)
             {
-                Vector128<float> expand = Vector128.Create(scalar);
+                Vector4F expand = Vector128.Create(scalar);
                 return Sse.Add(vector, expand);
             }
 
-            return Subtract_Software(vector, scalar);
+            return SoftwareFallbacks.SoftwareFallbacks.Subtract_Software(vector, scalar);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Multiply(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector4F Multiply(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Multiply(left, right);
             }
 
-            return Multiply_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.Multiply_Software(left, right);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Multiply(VectorFParam1_3 left, float scalar)
+        public static Vector4F Multiply(Vector4FParam1_3 left, float scalar)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Multiply(left, Vector128.Create(scalar));
             }
 
-            return Multiply_Software(left, scalar);
+            return SoftwareFallbacks.SoftwareFallbacks.Multiply_Software(left, scalar);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Divide(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
+        public static Vector4F Divide(Vector4FParam1_3 dividend, Vector4FParam1_3 divisor)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Divide(dividend, divisor);
             }
 
-            return Divide_Software(dividend, divisor);
+            return SoftwareFallbacks.SoftwareFallbacks.Divide_Software(dividend, divisor);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Divide(VectorFParam1_3 dividend, float scalarDivisor)
+        public static Vector4F Divide(Vector4FParam1_3 dividend, float scalarDivisor)
         {
             if (Sse.IsSupported)
             {
-                Vector128<float> expand = Vector128.Create(scalarDivisor);
+                Vector4F expand = Vector128.Create(scalarDivisor);
                 return Sse.Divide(dividend, expand);
             }
 
-            return Divide_Software(dividend, scalarDivisor);
+            return SoftwareFallbacks.SoftwareFallbacks.Divide_Software(dividend, scalarDivisor);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Sqrt(VectorFParam1_3 vector)
+        public static Vector4F Sqrt(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
                 return Sse.Sqrt(vector);
             }
 
-            return Sqrt_Software(vector);
+            return SoftwareFallbacks.SoftwareFallbacks.Sqrt_Software(vector);
         }
 
         #endregion

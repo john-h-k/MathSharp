@@ -9,22 +9,21 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using MathSharp.Matrix;
 using static MathSharp.VectorF;
-using MathSharp.VectorFloat;
 using OpenTK;
 using OpenTK.Platform.Windows;
 
 namespace MathSharp.Interactive
 {
     using JohnVector = Vector128<float>;
-    using JohnVector3 = System.Numerics.Vector3;
-    using OpenTKVector = OpenTK.Vector3;
-    using SysNumVector = System.Numerics.Vector3;
+    using JohnVector3 = System.Numerics.Vector4;
+    using OpenTKVector = OpenTK.Vector4;
+    using SysNumVector = System.Numerics.Vector4;
 
     internal class Program
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<Normalize3DBenchmark>();
+            BenchmarkRunner.Run<MathBenchmark>();
         }
 
         public static unsafe bool IsAligned()
@@ -118,7 +117,7 @@ namespace MathSharp.Interactive
             JohnVector x = _value;
             for (var i = 0; i < _iter; i++)
             {
-                x = VectorMaths.Normalize3D(x);
+                x = VectorF.Normalize3D(x);
             }
 
             return x;
@@ -157,122 +156,71 @@ namespace MathSharp.Interactive
             Trace.Assert(Avx2.IsSupported);
             OpenTkVectorsSrc = new OpenTKVector[Count];
             OpenTkVectorsDest = new OpenTKVector[Count];
-            Array.Fill(OpenTkVectorsSrc, new OpenTKVector(1f, 4f, 9f));
+            Array.Fill(OpenTkVectorsSrc, new OpenTKVector(1f, 4f, 9f, 16f));
 
             SysNumVectorsSrc = new SysNumVector[Count];
             SysNumVectorsDest = new SysNumVector[Count];
-            Array.Fill(SysNumVectorsDest, new SysNumVector(1f, 4f, 9f));
+            Array.Fill(SysNumVectorsDest, new SysNumVector(1f, 4f, 9f, 16f));
 
             JohnVectorsSrc = new JohnVector3[Count];
             JohnVectorsDest = new JohnVector3[Count];
-            Array.Fill(JohnVectorsSrc, new JohnVector3(1f, 6f, 9f));
+            Array.Fill(JohnVectorsSrc, new JohnVector3(1f, 6f, 9f, 16f));
         }
 
-        //[GlobalCleanup]
-        //public void CleanupAndVerify()
-        //{
-        //    for (var i = 0; i < Count; i++)
-        //    {
-        //        // TODO
-        //    }
-        //}
+        /* Benchmark:
+         * * 128 Vector4<float> 's, 
+         * * Then the operations for each element (where A is the vector)
+         *      - a =  Multiply(a, a)
+         *      - a =  Normalize(a)
+         *      - a =  Subtract(a, a)
+         *      - a =  Normalize(a)
+         *      - a =  Multiply(a, DotProduct(a))
+         */
 
-        //[Benchmark]
-        //public JohnVector JohnInline()
-        //{
-        //    JohnVector vector = Vector128.Create(1f, 2f, 4f, 3434f);
-        //    // No software fallback needed, these methods cover it
-        //    JohnVector len = Sse.Sqrt(Sse41.DotProduct(vector, vector, 0x7f));
-        //    vector = Sse.Divide(vector, len);
-        //    vector = Sse.Multiply(vector, vector);
-        //    return vector;
-        //    //vector = VectorMaths.Normalize3D(vector);
-        //    //vector = Arithmetic.Subtract(vector, vector);
-        //    //vector = VectorMaths.Normalize3D(vector);
-        //    //vector = Arithmetic.Multiply(vector, VectorMaths.DotProduct3D(vector, vector));
-        //    //vector = Arithmetic.Multiply(vector, VectorMaths.CrossProduct3D(vector, vector));
-        //}
-
-        //[Benchmark]
-        //public JohnVector JohnNestedMethod()
-        //{
-        //    JohnVector vector = Vector128.Create(1f, 2f, 4f, 3434f);
-        //    // No software fallback needed, these methods cover it
-        //    JohnVector len = Sse.Sqrt(Sse41.DotProduct(vector, vector, 0x7f));
-        //    vector = Sse.Divide(vector, len);
-        //    vector = Sse.Multiply(vector, vector);
-        //    return vector;
-        //    //vector = VectorMaths.Normalize3D(vector);
-        //    //vector = Arithmetic.Subtract(vector, vector);
-        //    //vector = VectorMaths.Normalize3D(vector);
-        //    //vector = Arithmetic.Multiply(vector, VectorMaths.DotProduct3D(vector, vector));
-        //    //vector = Arithmetic.Multiply(vector, VectorMaths.CrossProduct3D(vector, vector));
-        //}
-
-        //[Benchmark]
-        //public JohnVector JohnInlineMethod()
-        //{
-        //    JohnVector vector = Vector128.Create(1f, 2f, 4f, 3434f);
-        //    // No software fallback needed, these methods cover it
-        //    return VectorMaths.Normalize3D_NewTest(vector);
-        //    //vector = VectorMaths.Normalize3D(vector);
-        //    //vector = Arithmetic.Subtract(vector, vector);
-        //    //vector = VectorMaths.Normalize3D(vector);
-        //    //vector = Arithmetic.Multiply(vector, VectorMaths.DotProduct3D(vector, vector));
-        //    //vector = Arithmetic.Multiply(vector, VectorMaths.CrossProduct3D(vector, vector));
-        //}
-
-        public struct FourFloatBlock
-        {
-            public float _1;
-            public float _2;
-            public float _3;
-            public float _4;
-        }
-
-        public struct ThreeFloatBlock
-        {
-            public float _1;
-            public float _2;
-            public float _3;
-            public float _4;
-        }
-
-        public static FourFloatBlock _value4 = new FourFloatBlock {_1 = 1, _2 = 2, _3 = 3, _4 = 0};
-        public static ThreeFloatBlock _value3 = new ThreeFloatBlock { _1 = 1, _2 = 2, _3 = 3};
 
         [Benchmark]
-        public JohnVector John()
+        public void John()
         {
-            JohnVector vector = Unsafe.As<FourFloatBlock, JohnVector>(ref _value4);
-            vector = Arithmetic.Multiply(vector, vector);
-            return vector;
+            for (var i = 0; i < Count; i++)
+            {
+                JohnVector vector = JohnVectorsSrc![i].Load();
+                vector = Multiply(vector, vector);
+                vector = Normalize4D(vector);
+                vector = Subtract(vector, vector);
+                vector = Normalize4D(vector);
+                vector = Multiply(vector, DotProduct4D(vector, vector));
+                vector.Store(out JohnVectorsDest![i]);
+            }
         }
 
         [Benchmark]
-        public OpenTKVector OpenTk()
+        public void OpenTk()
         {
-            var vector = Unsafe.As<FourFloatBlock, OpenTKVector>(ref _value4);
-            vector = OpenTKVector.Multiply(vector, vector);
-            return vector;
-            //vector = OpenTKVector.Normalize(vector);
-            //vector = OpenTKVector.Subtract(vector, vector);
-            //vector = OpenTKVector.Normalize(vector);
-            //vector = OpenTKVector.Multiply(vector, OpenTKVector.Dot(vector, vector));
-            //vector = OpenTKVector.Multiply(vector, OpenTKVector.Cross(vector, vector));
+            for (var i = 0; i < Count; i++)
+            {
+                OpenTKVector vector = OpenTkVectorsSrc![i];
+                vector = OpenTKVector.Multiply(vector, vector);
+                vector = OpenTKVector.Normalize(vector);
+                vector = OpenTKVector.Subtract(vector, vector);
+                vector = OpenTKVector.Normalize(vector);
+                vector = OpenTKVector.Multiply(vector, OpenTKVector.Dot(vector, vector));
+                OpenTkVectorsDest![i] = vector;
+            }
         }
 
         [Benchmark]
-        public SysNumVector SysNum()
+        public void SysNum()
         {
-            var vector = Unsafe.As<FourFloatBlock, SysNumVector>(ref _value4);
-            vector = SysNumVector.Multiply(vector, vector);
-            return vector;
-            //vector = SysNumVector.Normalize(vector);
-            //vector = SysNumVector.Subtract(vector, vector);
-            //vector = SysNumVector.Normalize(vector);
-            //vector = SysNumVector.Multiply(vector, SysNumVector.Dot(vector, vector));
-            //vector = SysNumVector.Multiply(vector, SysNumVector.Cross(vector, vector));
+            for (var i = 0; i < Count; i++)
+            {
+                JohnVector3 vector = SysNumVectorsSrc![i];
+                vector = SysNumVector.Multiply(vector, vector);
+                vector = SysNumVector.Normalize(vector);
+                vector = SysNumVector.Subtract(vector, vector);
+                vector = SysNumVector.Normalize(vector);
+                vector = SysNumVector.Multiply(vector, SysNumVector.Dot(vector, vector));
+                SysNumVectorsDest![i] = vector;
+            }
         }
     }
 
@@ -315,7 +263,7 @@ namespace MathSharp.Interactive
             for (var i = 0; i < Count; i++)
             {
                 JohnVector vector = JohnVectorsSrc![i];
-                // vector = VectorMaths.Normalize3D(vector);
+                // vector = VectorF.Normalize3D(vector);
             }
         }
 

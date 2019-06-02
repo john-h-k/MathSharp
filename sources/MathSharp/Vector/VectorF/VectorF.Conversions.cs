@@ -3,18 +3,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
-using static MathSharp.Helpers;
 
-namespace MathSharp.VectorFloat
+namespace MathSharp
 {
     using Vector4F = Vector128<float>;
-    using Vector4FParam1_3 = Vector128<float>;
 
-    public static unsafe class Conversion
+    public static unsafe partial class VectorF
     {
-        private const MethodImplOptions MaxOpt =
-            MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
-
         #region Loads
 
         // TODO all the code here already exists as Create'yyy' methods in Vector128 - should be cleaned up to just use that
@@ -47,7 +42,7 @@ namespace MathSharp.VectorFloat
                 Vector4F lo = Vector128.CreateScalarUnsafe(vector.X);
                 Vector4F mid = Vector128.CreateScalarUnsafe(vector.Y);
                 Vector4F hi = Vector128.CreateScalarUnsafe(vector.Z);
-                hi = VectorFloat.VectorF.And(hi, VectorFloat.VectorF.MaskW);
+                hi = MathSharp.VectorF.And(hi, MathSharp.VectorF.MaskW);
 
                 // Construct a vector of (lo, mid, ?, ?)
                 Vector4F loMid = Sse.UnpackLow(lo, mid);
@@ -192,7 +187,7 @@ namespace MathSharp.VectorFloat
         {
             if (Sse.IsSupported)
             {
-                Vector4F hiBroadcast = Sse.Shuffle(vector, vector, Shuffle(2, 2, 2, 2));
+                Vector4F hiBroadcast = Sse.Shuffle(vector, vector, Helpers.Shuffle(2, 2, 2, 2));
                 fixed (void* pDest = &destination)
                 {
                     Sse.StoreLow((float*)pDest, vector);
@@ -276,7 +271,7 @@ namespace MathSharp.VectorFloat
 
             static Vector4F SoftwareFallback(Vector4F scalar)
             {
-                return Vector128.Create(X(scalar));
+                return Vector128.Create(Helpers.X(scalar));
             }
 
         }

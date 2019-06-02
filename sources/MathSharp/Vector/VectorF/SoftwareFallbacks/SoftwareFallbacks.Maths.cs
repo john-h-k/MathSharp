@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-using MathSharp.Attributes;
-using MathSharp.VectorF;
 
-namespace MathSharp.VectorFloat
+namespace MathSharp.SoftwareFallbacks
 {
-    using VectorF = Vector128<float>;
     using VectorFParam1_3 = Vector128<float>;
-    using VectorFWide = Vector256<float>;
 
     internal static unsafe partial class SoftwareFallbacks
     {
         private const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
 
-        #region Arithmetic
+        #region VectorF
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Abs_Software(VectorFParam1_3 vector)
+        public static Vector128<float> Abs_Software(VectorFParam1_3 vector)
         {
             return Vector128.Create(
                 MathF.Abs(Helpers.X(vector)),
@@ -30,7 +25,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF HorizontalAdd_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> HorizontalAdd_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.X(left) + Helpers.Y(left),
@@ -41,7 +36,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Add_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Add_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.X(left) + Helpers.X(right),
@@ -52,7 +47,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Add_Software(VectorFParam1_3 vector, float scalar)
+        public static Vector128<float> Add_Software(VectorFParam1_3 vector, float scalar)
         {
             return Vector128.Create(
                 Helpers.X(vector) + scalar,
@@ -63,7 +58,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Subtract_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Subtract_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.X(left) - Helpers.X(right),
@@ -74,7 +69,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Subtract_Software(VectorFParam1_3 vector, float scalar)
+        public static Vector128<float> Subtract_Software(VectorFParam1_3 vector, float scalar)
         {
             return Vector128.Create(
                 Helpers.X(vector) - scalar,
@@ -85,7 +80,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Multiply_Software(VectorFParam1_3 left, VectorFParam1_3 right)
+        public static Vector128<float> Multiply_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.X(left) * Helpers.X(right),
@@ -96,7 +91,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Multiply_Software(VectorFParam1_3 left, float scalar)
+        public static Vector128<float> Multiply_Software(VectorFParam1_3 left, float scalar)
         {
             return Vector128.Create(
                 Helpers.X(left) * scalar,
@@ -107,7 +102,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Divide_Software(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
+        public static Vector128<float> Divide_Software(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
         {
             return Vector128.Create(
                 Helpers.X(dividend) / Helpers.X(divisor),
@@ -118,7 +113,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Divide_Software(VectorFParam1_3 dividend, float scalarDivisor)
+        public static Vector128<float> Divide_Software(VectorFParam1_3 dividend, float scalarDivisor)
         {
             return Vector128.Create(
                 Helpers.X(dividend) / scalarDivisor,
@@ -129,7 +124,7 @@ namespace MathSharp.VectorFloat
         }
 
         [MethodImpl(MaxOpt)]
-        public static VectorF Sqrt_Software(VectorFParam1_3 vector)
+        public static Vector128<float> Sqrt_Software(VectorFParam1_3 vector)
         {
             return Vector128.Create(
                 MathF.Sqrt(Helpers.X(vector)),

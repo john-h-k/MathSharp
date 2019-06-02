@@ -2,7 +2,6 @@
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
-using MathSharp.VectorFloat;
 
 namespace MathSharp
 {
@@ -30,7 +29,7 @@ namespace MathSharp
                 return Sse.Or(left, right);
             }
 
-            return SoftwareFallbacks.Or_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.Or_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -42,7 +41,7 @@ namespace MathSharp
                 return Sse.And(left, right);
             }
 
-            return SoftwareFallbacks.And_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.And_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -54,7 +53,7 @@ namespace MathSharp
                 return Sse.Xor(left, right);
             }
 
-            return SoftwareFallbacks.Xor_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.Xor_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -67,7 +66,7 @@ namespace MathSharp
                 return Sse.AndNot(vector, mask);
             }
 
-            return SoftwareFallbacks.Not_Software(vector);
+            return SoftwareFallbacks.SoftwareFallbacks.Not_Software(vector);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -79,7 +78,7 @@ namespace MathSharp
                 return Sse.AndNot(left, right);
             }
 
-            return SoftwareFallbacks.AndNot_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacks.AndNot_Software(left, right);
         }
 
         #endregion
