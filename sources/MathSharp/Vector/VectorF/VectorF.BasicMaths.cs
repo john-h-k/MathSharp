@@ -23,7 +23,7 @@ namespace MathSharp
                 return Sse.Max(zero, vector); // This selects the positive values of the 2 vectors
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Abs_Software(vector);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Abs_Software(vector);
         }
 
         [UsesInstructionSet(InstructionSets.Sse3)]
@@ -37,7 +37,7 @@ namespace MathSharp
 
             // TODO can Sse be used over the software fallback?
 
-            return SoftwareFallbacks.SoftwareFallbacks.HorizontalAdd_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.HorizontalAdd_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -49,7 +49,7 @@ namespace MathSharp
                 return Sse.Add(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Add_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Add_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -62,7 +62,7 @@ namespace MathSharp
                 return Sse.Add(vector, expand);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Add_Software(vector, scalar);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Add_Software(vector, scalar);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -74,7 +74,7 @@ namespace MathSharp
                 return Sse.Subtract(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Subtract_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Subtract_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -87,7 +87,7 @@ namespace MathSharp
                 return Sse.Add(vector, expand);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Subtract_Software(vector, scalar);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Subtract_Software(vector, scalar);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -99,7 +99,7 @@ namespace MathSharp
                 return Sse.Multiply(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Multiply_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Multiply_Software(left, right);
         }
 
         [MethodImpl(MaxOpt)]
@@ -110,7 +110,7 @@ namespace MathSharp
                 return Sse.Multiply(left, Vector128.Create(scalar));
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Multiply_Software(left, scalar);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Multiply_Software(left, scalar);
         }
 
         [MethodImpl(MaxOpt)]
@@ -121,7 +121,7 @@ namespace MathSharp
                 return Sse.Divide(dividend, divisor);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Divide_Software(dividend, divisor);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Divide_Software(dividend, divisor);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -134,7 +134,7 @@ namespace MathSharp
                 return Sse.Divide(dividend, expand);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Divide_Software(dividend, scalarDivisor);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Divide_Software(dividend, scalarDivisor);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)] [MethodImpl(MaxOpt)]
@@ -146,7 +146,7 @@ namespace MathSharp
                 return Sse.Max(temp, low);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Clamp_Software(vector, low, high);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Clamp_Software(vector, low, high);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -158,7 +158,7 @@ namespace MathSharp
                 return Sse.Sqrt(vector);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Sqrt_Software(vector);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Sqrt_Software(vector);
         }
 
         #endregion

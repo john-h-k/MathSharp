@@ -29,7 +29,7 @@ namespace MathSharp
                 return Sse.Or(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Or_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Or_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -41,7 +41,7 @@ namespace MathSharp
                 return Sse.And(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.And_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.And_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -53,7 +53,7 @@ namespace MathSharp
                 return Sse.Xor(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Xor_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Xor_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -66,7 +66,7 @@ namespace MathSharp
                 return Sse.AndNot(vector, mask);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.Not_Software(vector);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.Not_Software(vector);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -78,7 +78,7 @@ namespace MathSharp
                 return Sse.AndNot(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacks.AndNot_Software(left, right);
+            return SoftwareFallbacks.SoftwareFallbacksVector4F.AndNot_Software(left, right);
         }
 
         #endregion

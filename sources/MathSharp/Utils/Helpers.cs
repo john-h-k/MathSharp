@@ -22,6 +22,14 @@ namespace MathSharp
         public static float Z(Vector128<float> vector) => vector.GetElement(2);
         public static float W(Vector128<float> vector) => vector.GetElement(3);
 
+        public static double X(Vector128<double> vector) => vector.GetElement(0);
+        public static double Y(Vector128<double> vector) => vector.GetElement(1);
+
+        public static double X(Vector256<double> vector) => vector.GetElement(0);
+        public static double Y(Vector256<double> vector) => vector.GetElement(1);
+        public static double Z(Vector256<double> vector) => vector.GetElement(2);
+        public static double W(Vector256<double> vector) => vector.GetElement(3);
+
         public static bool AreEqual(Vector4 left, Vector128<float> right)
             => left.X .Equals(X(right)) && left.Y.Equals(Y(right)) && left.Z.Equals(Z(right)) && left.W.Equals(W(right));
 

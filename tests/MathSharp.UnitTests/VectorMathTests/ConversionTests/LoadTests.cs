@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using System.Runtime.Intrinsics;
-using MathSharp.VectorF;
 using static MathSharp.Helpers;
 using Xunit;
 // ReSharper disable ConvertToConstant.Local

@@ -5,7 +5,7 @@ namespace MathSharp.SoftwareFallbacks
 {
     using VectorFParam1_3 = Vector128<float>;
 
-    internal static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacksVector4F
     {
         #region Vector Maths
 
