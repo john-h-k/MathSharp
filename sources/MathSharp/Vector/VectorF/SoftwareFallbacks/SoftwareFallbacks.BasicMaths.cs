@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+using static MathSharp.Helpers;
 
 namespace MathSharp.SoftwareFallbacks
 {
@@ -17,10 +18,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Abs_Software(VectorFParam1_3 vector)
         {
             return Vector128.Create(
-                MathF.Abs(Helpers.X(vector)),
-                MathF.Abs(Helpers.Y(vector)),
-                MathF.Abs(Helpers.Z(vector)),
-                MathF.Abs(Helpers.W(vector))
+                MathF.Abs(X(vector)),
+                MathF.Abs(Y(vector)),
+                MathF.Abs(Z(vector)),
+                MathF.Abs(W(vector))
             );
         }
 
@@ -28,10 +29,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> HorizontalAdd_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
-                Helpers.X(left) + Helpers.Y(left),
-                Helpers.Z(left) + Helpers.W(left),
-                Helpers.X(right) + Helpers.Y(right),
-                Helpers.Z(right) + Helpers.W(right)
+                X(left) + Y(left),
+                Z(left) + W(left),
+                X(right) + Y(right),
+                Z(right) + W(right)
             );
         }
 
@@ -39,10 +40,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Add_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
-                Helpers.X(left) + Helpers.X(right),
-                Helpers.Y(left) + Helpers.Y(right),
-                Helpers.Z(left) + Helpers.Z(right),
-                Helpers.W(left) + Helpers.W(right)
+                X(left) + X(right),
+                Y(left) + Y(right),
+                Z(left) + Z(right),
+                W(left) + W(right)
             );
         }
 
@@ -50,10 +51,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Add_Software(VectorFParam1_3 vector, float scalar)
         {
             return Vector128.Create(
-                Helpers.X(vector) + scalar,
-                Helpers.Y(vector) + scalar,
-                Helpers.Z(vector) + scalar,
-                Helpers.W(vector) + scalar
+                X(vector) + scalar,
+                Y(vector) + scalar,
+                Z(vector) + scalar,
+                W(vector) + scalar
             );
         }
 
@@ -61,10 +62,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Subtract_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
-                Helpers.X(left) - Helpers.X(right),
-                Helpers.Y(left) - Helpers.Y(right),
-                Helpers.Z(left) - Helpers.Z(right),
-                Helpers.W(left) - Helpers.W(right)
+                X(left) - X(right),
+                Y(left) - Y(right),
+                Z(left) - Z(right),
+                W(left) - W(right)
             );
         }
 
@@ -72,10 +73,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Subtract_Software(VectorFParam1_3 vector, float scalar)
         {
             return Vector128.Create(
-                Helpers.X(vector) - scalar,
-                Helpers.Y(vector) - scalar,
-                Helpers.Z(vector) - scalar,
-                Helpers.W(vector) - scalar
+                X(vector) - scalar,
+                Y(vector) - scalar,
+                Z(vector) - scalar,
+                W(vector) - scalar
             );
         }
 
@@ -83,10 +84,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Multiply_Software(VectorFParam1_3 left, VectorFParam1_3 right)
         {
             return Vector128.Create(
-                Helpers.X(left) * Helpers.X(right),
-                Helpers.Y(left) * Helpers.Y(right),
-                Helpers.Z(left) * Helpers.Z(right),
-                Helpers.W(left) * Helpers.W(right)
+                X(left) * X(right),
+                Y(left) * Y(right),
+                Z(left) * Z(right),
+                W(left) * W(right)
             );
         }
 
@@ -94,10 +95,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Multiply_Software(VectorFParam1_3 left, float scalar)
         {
             return Vector128.Create(
-                Helpers.X(left) * scalar,
-                Helpers.Y(left) * scalar,
-                Helpers.Z(left) * scalar,
-                Helpers.W(left) * scalar
+                X(left) * scalar,
+                Y(left) * scalar,
+                Z(left) * scalar,
+                W(left) * scalar
             );
         }
 
@@ -105,10 +106,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Divide_Software(VectorFParam1_3 dividend, VectorFParam1_3 divisor)
         {
             return Vector128.Create(
-                Helpers.X(dividend) / Helpers.X(divisor),
-                Helpers.Y(dividend) / Helpers.Y(divisor),
-                Helpers.Z(dividend) / Helpers.Z(divisor),
-                Helpers.W(dividend) / Helpers.W(divisor)
+                X(dividend) / X(divisor),
+                Y(dividend) / Y(divisor),
+                Z(dividend) / Z(divisor),
+                W(dividend) / W(divisor)
             );
         }
 
@@ -116,10 +117,21 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Divide_Software(VectorFParam1_3 dividend, float scalarDivisor)
         {
             return Vector128.Create(
-                Helpers.X(dividend) / scalarDivisor,
-                Helpers.Y(dividend) / scalarDivisor,
-                Helpers.Z(dividend) / scalarDivisor,
-                Helpers.W(dividend) / scalarDivisor
+                X(dividend) / scalarDivisor,
+                Y(dividend) / scalarDivisor,
+                Z(dividend) / scalarDivisor,
+                W(dividend) / scalarDivisor
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Clamp_Software(VectorFParam1_3 vector, VectorFParam1_3 low, VectorFParam1_3 high)
+        {
+            return Vector128.Create(
+                Math.Clamp(X(vector), X(low), X(high)),
+                Math.Clamp(Y(vector), Y(low), Y(high)),
+                Math.Clamp(Z(vector), Z(low), Z(high)),
+                Math.Clamp(W(vector), W(low), W(high))
             );
         }
 
@@ -127,10 +139,10 @@ namespace MathSharp.SoftwareFallbacks
         public static Vector128<float> Sqrt_Software(VectorFParam1_3 vector)
         {
             return Vector128.Create(
-                MathF.Sqrt(Helpers.X(vector)),
-                MathF.Sqrt(Helpers.Y(vector)),
-                MathF.Sqrt(Helpers.Z(vector)),
-                MathF.Sqrt(Helpers.W(vector))
+                MathF.Sqrt(X(vector)),
+                MathF.Sqrt(Y(vector)),
+                MathF.Sqrt(Z(vector)),
+                MathF.Sqrt(W(vector))
             );
         }
 

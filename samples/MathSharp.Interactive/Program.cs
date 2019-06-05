@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using BenchmarkDotNet.Attributes;
@@ -17,13 +18,14 @@ namespace MathSharp.Interactive
     using JohnVector = Vector128<float>;
     using JohnVector3 = System.Numerics.Vector4;
     using OpenTKVector = OpenTK.Vector4;
+    using OpenTKVector3 = OpenTK.Vector4;
     using SysNumVector = System.Numerics.Vector4;
 
     internal class Program
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<MathBenchmark>();
+            BenchmarkRunner.Run<VectorisationBenchmark>();
         }
 
         public static unsafe bool IsAligned()
@@ -35,7 +37,7 @@ namespace MathSharp.Interactive
             x = 11;
             y = 11;
 
-            return ((ulong)&matrix) % 16 == 0 && (ulong)&x > (ulong)&matrix && Math.Abs(&x - &y) == 1;
+            return ((ulong) &matrix) % 16 == 0 && (ulong) &x > (ulong) &matrix && Math.Abs(&x - &y) == 1;
         }
     }
 
@@ -66,7 +68,7 @@ namespace MathSharp.Interactive
 
             int mask = Sse.MoveMask(vLeft.AsSingle());
 
-            return mask == -1;
+            return mask == -0b_111_1111_0000_0000_0000_0000_0000_0000;
         }
     }
 
@@ -100,38 +102,6 @@ namespace MathSharp.Interactive
         public bool IntrinsicEquals()
         {
             return Value1.IntrinsicEquality(Value2);
-        }
-    }
-
-    [CoreJob]
-    [RPlotExporter]
-    [RankColumn]
-    public class Normalize3DBenchmark
-    {
-        private readonly Vector128<float> _value = Vector128.Create(1f, 2f, 3f, 4f);
-        private readonly int _iter = 1;
-
-        [Benchmark]
-        public Vector128<float> Normalize_Nested()
-        {
-            JohnVector x = _value;
-            for (var i = 0; i < _iter; i++)
-            {
-                x = VectorF.Normalize3D(x);
-            }
-
-            return x;
-        }
-
-        [Benchmark]
-        public Vector128<float> Normalize_Inline()
-        {
-            JohnVector x = _value;
-            for (var i = 0; i < _iter; i++)
-            {
-            }
-
-            return x;
         }
     }
 
@@ -184,11 +154,19 @@ namespace MathSharp.Interactive
             for (var i = 0; i < Count; i++)
             {
                 JohnVector vector = JohnVectorsSrc![i].Load();
+
                 vector = Multiply(vector, vector);
                 vector = Normalize4D(vector);
                 vector = Subtract(vector, vector);
                 vector = Normalize4D(vector);
                 vector = Multiply(vector, DotProduct4D(vector, vector));
+                vector = DotProduct4D(CrossProduct3D(vector, vector), Abs(vector));
+                for (var j = 0; j < Count / 2; j++)
+                {
+                    vector = Add(vector, vector);
+                    vector = Subtract(vector, vector);
+                }
+
                 vector.Store(out JohnVectorsDest![i]);
             }
         }
@@ -199,11 +177,18 @@ namespace MathSharp.Interactive
             for (var i = 0; i < Count; i++)
             {
                 OpenTKVector vector = OpenTkVectorsSrc![i];
+
                 vector = OpenTKVector.Multiply(vector, vector);
                 vector = OpenTKVector.Normalize(vector);
                 vector = OpenTKVector.Subtract(vector, vector);
                 vector = OpenTKVector.Normalize(vector);
                 vector = OpenTKVector.Multiply(vector, OpenTKVector.Dot(vector, vector));
+                for (var j = 0; j < Count / 2; j++)
+                {
+                    vector = OpenTKVector.Add(vector, vector);
+                    vector = OpenTKVector.Subtract(vector, vector);
+                }
+
                 OpenTkVectorsDest![i] = vector;
             }
         }
@@ -214,11 +199,18 @@ namespace MathSharp.Interactive
             for (var i = 0; i < Count; i++)
             {
                 JohnVector3 vector = SysNumVectorsSrc![i];
+
                 vector = SysNumVector.Multiply(vector, vector);
                 vector = SysNumVector.Normalize(vector);
                 vector = SysNumVector.Subtract(vector, vector);
                 vector = SysNumVector.Normalize(vector);
                 vector = SysNumVector.Multiply(vector, SysNumVector.Dot(vector, vector));
+                for (var j = 0; j < Count / 2; j++)
+                {
+                    vector = SysNumVector.Add(vector, vector);
+                    vector = SysNumVector.Subtract(vector, vector);
+                }
+
                 SysNumVectorsDest![i] = vector;
             }
         }
@@ -227,61 +219,100 @@ namespace MathSharp.Interactive
     [CoreJob]
     [RPlotExporter]
     [RankColumn]
-    public class ExtendedMathBenchmark
+    public unsafe class VectorisationBenchmark
     {
-        private const int Count = 128;
+        private const int Count = 1024;
 
-        public OpenTKVector[]? OpenTkVectorsSrc;
-        public JohnVector[]? JohnVectorsSrc;
-        public SysNumVector[]? SysNumVectorsSrc;
+        private readonly OpenTKVector[] _openTkSrc = new OpenTKVector[Count / sizeof(OpenTKVector)];
+        private readonly OpenTKVector[] _openTkDest = new OpenTKVector[Count / sizeof(OpenTKVector)];
 
-        public OpenTKVector[]? OpenTkVectorsDest;
-        public JohnVector[]? JohnVectorsDest;
-        public SysNumVector[]? SysNumVectorsDest;
+        private readonly Vector256<float>[] _mathSharpSrc = new Vector256<float>[Count / sizeof(Vector256<float>)];
+        private readonly Vector256<float>[] _mathSharpDest = new Vector256<float>[Count / sizeof(Vector256<float>)];
+
 
         [GlobalSetup]
         public void Setup()
         {
+            Span<float> openTkAsFloat = MemoryMarshal.Cast<OpenTKVector, float>(_openTkSrc);
+            Span<float> mathSharpAsFloat = MemoryMarshal.Cast<Vector256<float>, float>(_mathSharpSrc);
 
-            OpenTkVectorsSrc = new OpenTKVector[Count];
-            OpenTkVectorsDest = new OpenTKVector[Count];
-            //Array.Fill(OpenTkVectorsSrc, new OpenTKVector(1, 4, 9, 0));
+            Trace.Assert(openTkAsFloat.Length == mathSharpAsFloat.Length);
 
-            SysNumVectorsSrc = new SysNumVector[Count];
-            SysNumVectorsDest = new SysNumVector[Count];
-            //Array.Fill(SysNumVectorsDest, new SysNumVector(1, 4, 9, 0));
 
-            JohnVectorsSrc = new JohnVector[Count];
-            JohnVectorsDest = new JohnVector[Count];
-            // JohnVector vec = Vector128.Create(1f, 4f, 9f, 0f);
-            // Array.Fill(JohnVectorsSrc, vec);
-        }
-
-        [Benchmark]
-        public void John()
-        {
-            for (var i = 0; i < Count; i++)
+            float f = float.MinValue;
+            for (var i = 0; i < openTkAsFloat.Length; i++)
             {
-                JohnVector vector = JohnVectorsSrc![i];
-                // vector = VectorF.Normalize3D(vector);
+                openTkAsFloat[i] = f;
+                mathSharpAsFloat[i] = f;
+
+                f = f > (float.MaxValue - (float.MaxValue - 1024)) ? float.MinValue : f + 1;
             }
         }
 
         [Benchmark]
+        [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.NoInlining)]
         public void OpenTk()
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = 0; i < Count / sizeof(OpenTKVector); i++)
             {
-                OpenTKVector vector = OpenTkVectorsSrc![i];
+                _openTkDest[i] = _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i];
+                _openTkDest[i] = _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i];
             }
         }
 
         [Benchmark]
-        public void SysNum()
+        [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.NoInlining)]
+        public void MathSharp()
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = 0; i < Count / sizeof(Vector256<float>) / 16; i++)
             {
-                SysNumVector vector = SysNumVectorsSrc![i];
+                _mathSharpDest[i +  0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  0], _mathSharpSrc[i +  0]), _mathSharpSrc[i]), _mathSharpSrc[i +  0]);
+                _mathSharpDest[i +  0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  0], _mathSharpSrc[i +  0]), _mathSharpSrc[i]), _mathSharpSrc[i +  0]);
+
+                _mathSharpDest[i +  1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  1], _mathSharpSrc[i +  1]), _mathSharpSrc[i]), _mathSharpSrc[i +  1]);
+                _mathSharpDest[i +  1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  1], _mathSharpSrc[i +  1]), _mathSharpSrc[i]), _mathSharpSrc[i +  1]);
+
+                _mathSharpDest[i +  2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  2], _mathSharpSrc[i +  2]), _mathSharpSrc[i]), _mathSharpSrc[i +  2]);
+                _mathSharpDest[i +  2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  2], _mathSharpSrc[i +  2]), _mathSharpSrc[i]), _mathSharpSrc[i +  2]);
+
+                _mathSharpDest[i +  3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  3], _mathSharpSrc[i +  3]), _mathSharpSrc[i]), _mathSharpSrc[i +  3]);
+                _mathSharpDest[i +  3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  3], _mathSharpSrc[i +  3]), _mathSharpSrc[i]), _mathSharpSrc[i +  3]);
+
+                _mathSharpDest[i +  4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  4], _mathSharpSrc[i +  4]), _mathSharpSrc[i]), _mathSharpSrc[i +  4]);
+                _mathSharpDest[i +  4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  4], _mathSharpSrc[i +  4]), _mathSharpSrc[i]), _mathSharpSrc[i +  4]);
+
+                _mathSharpDest[i +  5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  5], _mathSharpSrc[i +  5]), _mathSharpSrc[i]), _mathSharpSrc[i +  5]);
+                _mathSharpDest[i +  5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  5], _mathSharpSrc[i +  5]), _mathSharpSrc[i]), _mathSharpSrc[i +  5]);
+
+                _mathSharpDest[i +  6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  6], _mathSharpSrc[i +  6]), _mathSharpSrc[i]), _mathSharpSrc[i +  6]);
+                _mathSharpDest[i +  6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  6], _mathSharpSrc[i +  6]), _mathSharpSrc[i]), _mathSharpSrc[i +  6]);
+
+                _mathSharpDest[i +  7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  7], _mathSharpSrc[i +  7]), _mathSharpSrc[i]), _mathSharpSrc[i +  7]);
+                _mathSharpDest[i +  7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  7], _mathSharpSrc[i +  7]), _mathSharpSrc[i]), _mathSharpSrc[i +  7]);
+
+                _mathSharpDest[i +  8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  8], _mathSharpSrc[i +  8]), _mathSharpSrc[i]), _mathSharpSrc[i +  8]);
+                _mathSharpDest[i +  8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  8], _mathSharpSrc[i +  8]), _mathSharpSrc[i]), _mathSharpSrc[i +  8]);
+
+                _mathSharpDest[i +  9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  9], _mathSharpSrc[i +  9]), _mathSharpSrc[i]), _mathSharpSrc[i +  9]);
+                _mathSharpDest[i +  9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  9], _mathSharpSrc[i +  9]), _mathSharpSrc[i]), _mathSharpSrc[i +  9]);
+
+                _mathSharpDest[i + 10] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 10], _mathSharpSrc[i + 10]), _mathSharpSrc[i]), _mathSharpSrc[i + 10]);
+                _mathSharpDest[i + 10] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 10], _mathSharpSrc[i + 10]), _mathSharpSrc[i]), _mathSharpSrc[i + 10]);
+
+                _mathSharpDest[i + 11] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 11], _mathSharpSrc[i + 11]), _mathSharpSrc[i]), _mathSharpSrc[i + 11]);
+                _mathSharpDest[i + 11] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 11], _mathSharpSrc[i + 11]), _mathSharpSrc[i]), _mathSharpSrc[i + 11]);
+
+                _mathSharpDest[i + 12] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 12], _mathSharpSrc[i + 12]), _mathSharpSrc[i]), _mathSharpSrc[i + 12]);
+                _mathSharpDest[i + 12] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 12], _mathSharpSrc[i + 12]), _mathSharpSrc[i]), _mathSharpSrc[i + 12]);
+
+                _mathSharpDest[i + 13] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 13], _mathSharpSrc[i + 13]), _mathSharpSrc[i]), _mathSharpSrc[i + 13]);
+                _mathSharpDest[i + 13] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 13], _mathSharpSrc[i + 13]), _mathSharpSrc[i]), _mathSharpSrc[i + 13]);
+
+                _mathSharpDest[i + 14] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 14], _mathSharpSrc[i + 14]), _mathSharpSrc[i]), _mathSharpSrc[i + 14]);
+                _mathSharpDest[i + 14] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 14], _mathSharpSrc[i + 14]), _mathSharpSrc[i]), _mathSharpSrc[i + 14]);
+
+                _mathSharpDest[i + 15] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 15], _mathSharpSrc[i + 15]), _mathSharpSrc[i]), _mathSharpSrc[i + 15]);
+                _mathSharpDest[i + 15] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 15], _mathSharpSrc[i + 15]), _mathSharpSrc[i]), _mathSharpSrc[i + 15]);
             }
         }
     }

@@ -137,6 +137,18 @@ namespace MathSharp
             return SoftwareFallbacks.SoftwareFallbacks.Divide_Software(dividend, scalarDivisor);
         }
 
+        [UsesInstructionSet(InstructionSets.Sse)] [MethodImpl(MaxOpt)]
+        public static Vector4F Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
+        {
+            if (Sse.IsSupported)
+            {
+                Vector4F temp = Sse.Min(vector, high);
+                return Sse.Max(temp, low);
+            }
+
+            return SoftwareFallbacks.SoftwareFallbacks.Clamp_Software(vector, low, high);
+        }
+
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Sqrt(Vector4FParam1_3 vector)
