@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
-using static MathSharp.SoftwareFallbacks.SoftwareFallbacks;
+using static MathSharp.SoftwareFallbacks.SoftwareFallbacksVector4F;
 
 namespace MathSharp
 {
