@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 
 namespace MathSharp
@@ -41,5 +42,15 @@ namespace MathSharp
 
         public static bool AreEqual(float left, Vector128<float> right)
             => left.Equals(X(right));
+
+        public static readonly float NoBitsSetSingle = 0f; 
+        public static readonly float AllBitsSetSingle = Unsafe.As<int, float>(ref Unsafe.AsRef(-1));
+
+        public static readonly double NoBitsSetDouble = 0d;
+        public static readonly double AllBitsSetDouble = Unsafe.As<int, double>(ref Unsafe.AsRef(-1));
+
+        public static float BoolToSimdBoolSingle(bool val) => val ? NoBitsSetSingle : AllBitsSetSingle;
+        public static double BoolToSimdBoolDouble(bool val) => val ? NoBitsSetDouble : AllBitsSetDouble;
+        public static int BoolToSimdBoolInt32(bool val) => val ? -1 : 0;
     }
 }
