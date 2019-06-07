@@ -30,11 +30,10 @@ namespace MathSharp.Interactive
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static byte Shuffle(byte a, byte b, byte c, byte d)
         {
-            return (byte)(
-                (a << 6)
-                | (b << 4)
-                | (c << 2)
-                | d);
+            return (byte)(d 
+                          | (c << 2)
+                          | (b << 4)
+                          | (a << 6));
         }
     }
 
