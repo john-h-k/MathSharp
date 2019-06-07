@@ -3,12 +3,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
+using MathSharp.Utils;
 
 namespace MathSharp
 {
     using Vector4F = Vector128<float>;
 
-    public static unsafe partial class VectorF
+    public static unsafe partial class Vector
     {
         #region Loads
 
@@ -42,7 +43,7 @@ namespace MathSharp
                 Vector4F lo = Vector128.CreateScalarUnsafe(vector.X);
                 Vector4F mid = Vector128.CreateScalarUnsafe(vector.Y);
                 Vector4F hi = Vector128.CreateScalarUnsafe(vector.Z);
-                hi = MathSharp.VectorF.And(hi, MathSharp.VectorF.MaskW);
+                hi = MathSharp.Vector.And(hi, MathSharp.Vector.MaskW);
 
                 // Construct a vector of (lo, mid, ?, ?)
                 Vector4F loMid = Sse.UnpackLow(lo, mid);

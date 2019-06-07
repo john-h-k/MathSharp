@@ -2,14 +2,14 @@
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
-using static MathSharp.SoftwareFallbacks.SoftwareFallbacksVector4F;
+using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
 {
     using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
-    public static partial class VectorF
+    public static partial class Vector
     {
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]

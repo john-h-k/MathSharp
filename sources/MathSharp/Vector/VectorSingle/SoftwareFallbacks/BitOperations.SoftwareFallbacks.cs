@@ -1,11 +1,12 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+using MathSharp.Utils;
 
-namespace MathSharp.SoftwareFallbacks
+namespace MathSharp
 {
     using VectorFParam1_3 = Vector128<float>;
 
-    internal static unsafe partial class SoftwareFallbacksVector4F
+    public static unsafe partial class SoftwareFallbacks
     {
         public static readonly Vector128<float> MaskX = Vector128.Create(+0, -1, -1, -1).AsSingle();
         public static readonly Vector128<float> MaskY = Vector128.Create(-1, +0, -1, -1).AsSingle();

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 
-namespace MathSharp
+namespace MathSharp.Utils
 {
     internal static class Helpers
     {

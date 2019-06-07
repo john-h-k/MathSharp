@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using MathSharp.Utils;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
@@ -17,7 +18,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             Vector128<float> vector = Vector128.Create(0f);
             var expected = new Vector4(0);
 
-            vector = VectorF.Xor(vector, vector);
+            vector = Vector.Xor(vector, vector);
 
             Assert.True(Helpers.AreEqual(expected, vector));
         }
@@ -28,7 +29,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             Vector128<float> vector = Vector128.Create(-1).AsSingle();
             var expected = new Vector4(0);
 
-            vector = VectorF.Xor(vector, vector);
+            vector = Vector.Xor(vector, vector);
 
             Assert.True(Helpers.AreEqual(expected, vector));
         }
@@ -39,7 +40,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             Vector128<float> vector = Vector128.Create(235434f, -123f, 0, float.MaxValue);
             var expected = new Vector4(0);
 
-            vector = VectorF.Xor(vector, vector);
+            vector = Vector.Xor(vector, vector);
 
             Assert.True(Helpers.AreEqual(expected, vector));
         }
@@ -53,7 +54,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             float notZero = Unsafe.As<int, float>(ref m1);
             var expected = new Vector4(notZero);
 
-            Vector128<float> result = VectorF.Xor(allBitsSet, noBitsSet);
+            Vector128<float> result = Vector.Xor(allBitsSet, noBitsSet);
 
             Assert.True(Helpers.AreEqual(expected, result));
         }
@@ -75,7 +76,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             Vector128<float> vector2 = Vector128.Create(val2_1, val2_2, val2_3, val2_4);
             var expected = GetExpectedValue();
 
-            Vector128<float> result = VectorF.Xor(vector1, vector2);
+            Vector128<float> result = Vector.Xor(vector1, vector2);
 
             Assert.True(Helpers.AreEqual(expected, result));
 

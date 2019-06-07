@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using static MathSharp.Helpers;
-using static MathSharp.VectorF;
+using static MathSharp.Utils.Helpers;
+using static MathSharp.Vector;
 using Microsoft.VisualBasic.CompilerServices;
 using Xunit;
 
@@ -18,7 +18,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             float notZero = Unsafe.As<int, float>(ref m1);
             var expected = new Vector4(notZero);
 
-            vector = VectorF.Not(vector);
+            vector = Vector.Not(vector);
 
             Assert.True(AreEqual(expected, vector));
         }
@@ -29,7 +29,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             Vector128<float> vector = Vector128.Create(-1).AsSingle();
             var expected = new Vector4(0f);
 
-            vector = VectorF.Not(vector);
+            vector = Vector.Not(vector);
 
             Assert.True(AreEqual(expected, vector));
         }
@@ -44,7 +44,7 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
             Vector128<float> vector = Vector128.Create(val1, val2, val3, val4);
             var expected = GetExpectedValue();
 
-            vector = VectorF.Not(vector);
+            vector = Vector.Not(vector);
 
             Assert.True(AreEqual(expected, vector));
 

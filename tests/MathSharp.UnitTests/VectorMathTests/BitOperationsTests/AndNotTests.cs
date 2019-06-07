@@ -1,7 +1,8 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using static MathSharp.VectorF;
+using MathSharp.Utils;
+using static MathSharp.Vector;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
