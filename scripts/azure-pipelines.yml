@@ -21,6 +21,7 @@ jobs:
       inputs:
         version: '2.1.300'
     - task: AzurePowerShell@4
+      version: 1.0.1
       displayName: 'Build and test'
       inputs:
         filename: scripts/build.ps1
