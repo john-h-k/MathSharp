@@ -78,7 +78,7 @@
 
 // ReSharper disable All
 
-namespace MathSharp
+namespace MathSharp.Utils
 {
     /// <summary>
     /// Checks whether it is allowed for the program to use certain intrinsic supports

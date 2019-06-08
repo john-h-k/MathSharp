@@ -2,15 +2,16 @@
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
+using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
 {
     using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
-    public static partial class VectorF
+    public static partial class Vector
     {
-        #region VectorF
+        #region Vector
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
@@ -23,7 +24,7 @@ namespace MathSharp
                 return Sse.Max(zero, vector); // This selects the positive values of the 2 vectors
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Abs_Software(vector);
+            return Abs_Software(vector);
         }
 
         [UsesInstructionSet(InstructionSets.Sse3)]
@@ -37,7 +38,7 @@ namespace MathSharp
 
             // TODO can Sse be used over the software fallback?
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.HorizontalAdd_Software(left, right);
+            return HorizontalAdd_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -49,7 +50,7 @@ namespace MathSharp
                 return Sse.Add(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Add_Software(left, right);
+            return Add_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -62,7 +63,7 @@ namespace MathSharp
                 return Sse.Add(vector, expand);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Add_Software(vector, scalar);
+            return Add_Software(vector, scalar);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -74,7 +75,7 @@ namespace MathSharp
                 return Sse.Subtract(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Subtract_Software(left, right);
+            return Subtract_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -87,7 +88,7 @@ namespace MathSharp
                 return Sse.Add(vector, expand);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Subtract_Software(vector, scalar);
+            return Subtract_Software(vector, scalar);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -99,7 +100,7 @@ namespace MathSharp
                 return Sse.Multiply(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Multiply_Software(left, right);
+            return Multiply_Software(left, right);
         }
 
         [MethodImpl(MaxOpt)]
@@ -110,7 +111,7 @@ namespace MathSharp
                 return Sse.Multiply(left, Vector128.Create(scalar));
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Multiply_Software(left, scalar);
+            return Multiply_Software(left, scalar);
         }
 
         [MethodImpl(MaxOpt)]
@@ -121,7 +122,7 @@ namespace MathSharp
                 return Sse.Divide(dividend, divisor);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Divide_Software(dividend, divisor);
+            return Divide_Software(dividend, divisor);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -134,7 +135,7 @@ namespace MathSharp
                 return Sse.Divide(dividend, expand);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Divide_Software(dividend, scalarDivisor);
+            return Divide_Software(dividend, scalarDivisor);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)] [MethodImpl(MaxOpt)]
@@ -146,7 +147,7 @@ namespace MathSharp
                 return Sse.Max(temp, low);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Clamp_Software(vector, low, high);
+            return Clamp_Software(vector, low, high);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -158,7 +159,67 @@ namespace MathSharp
                 return Sse.Sqrt(vector);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Sqrt_Software(vector);
+            return Sqrt_Software(vector);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Max(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Max(left, right);
+            }
+
+            return Max_Software(left, right);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Min(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Min(left, right);
+            }
+
+            return Min_Software(left, right);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Negate2D(Vector4FParam1_3 vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Xor(vector, SignFlip2D);
+            }
+
+            return Negate4D_Software(vector);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Negate3D(Vector4FParam1_3 vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Xor(vector, SignFlip3D);
+            }
+
+            return Negate4D_Software(vector);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Negate4D(Vector4FParam1_3 vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Xor(vector, SignFlip4D);
+            }
+
+            return Negate4D_Software(vector);
         }
 
         #endregion

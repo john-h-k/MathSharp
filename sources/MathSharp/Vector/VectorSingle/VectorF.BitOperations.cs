@@ -8,7 +8,7 @@ namespace MathSharp
     using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
-    public static partial class VectorF
+    public static partial class Vector
     {
         private const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
@@ -17,6 +17,10 @@ namespace MathSharp
         public static readonly Vector128<float> MaskY = Vector128.Create(-1, +0, -1, -1).AsSingle();
         public static readonly Vector128<float> MaskZ = Vector128.Create(-1, -1, +0, -1).AsSingle();
         public static readonly Vector128<float> MaskW = Vector128.Create(-1, -1, -1, +0).AsSingle();
+
+        public static readonly Vector128<float> MaskZW = Vector128.Create(-1, -1, +0, +0).AsSingle();
+
+
 
         #region Bitwise Operations
 
@@ -29,7 +33,7 @@ namespace MathSharp
                 return Sse.Or(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Or_Software(left, right);
+            return SoftwareFallbacks.Or_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -41,7 +45,7 @@ namespace MathSharp
                 return Sse.And(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.And_Software(left, right);
+            return SoftwareFallbacks.And_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -53,7 +57,7 @@ namespace MathSharp
                 return Sse.Xor(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Xor_Software(left, right);
+            return SoftwareFallbacks.Xor_Software(left, right);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -66,7 +70,7 @@ namespace MathSharp
                 return Sse.AndNot(vector, mask);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.Not_Software(vector);
+            return SoftwareFallbacks.Not_Software(vector);
         }
 
         [UsesInstructionSet(InstructionSets.Sse)]
@@ -78,7 +82,7 @@ namespace MathSharp
                 return Sse.AndNot(left, right);
             }
 
-            return SoftwareFallbacks.SoftwareFallbacksVector4F.AndNot_Software(left, right);
+            return SoftwareFallbacks.AndNot_Software(left, right);
         }
 
         #endregion

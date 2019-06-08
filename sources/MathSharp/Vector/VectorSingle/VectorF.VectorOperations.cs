@@ -1,20 +1,24 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
-using static MathSharp.SoftwareFallbacks.SoftwareFallbacksVector4F;
+using MathSharp.Utils;
+using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
 {
     using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
-    public static partial class VectorF
+
+    public static partial class Vector
     {
         #region Vector Maths
 
-        private static readonly Vector4F MaskWAndZToZero = Vector128.Create(-1, -1, 0, 0).AsSingle();
-        private static readonly Vector128<float> MaskWToZero = Vector128.Create(-1, -1, -1, 0).AsSingle();
+        private static readonly Vector128<float> SignFlip2D = Vector128.Create(int.MinValue, int.MinValue, 0, 0).AsSingle();
+        private static readonly Vector128<float> SignFlip3D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
+        private static readonly Vector128<float> SignFlip4D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
 
         #region Normalize
 
@@ -39,7 +43,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskZW);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -86,8 +90,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = VectorF.HorizontalAdd(result, result);
-                return Sse.Divide(vector, Sse.Sqrt(VectorF.HorizontalAdd(result, result)));
+                result = Vector.HorizontalAdd(result, result);
+                return Sse.Divide(vector, Sse.Sqrt(Vector.HorizontalAdd(result, result)));
             }
             else if (Sse.IsSupported)
             {
@@ -165,7 +169,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskZW);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -212,8 +216,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = VectorF.HorizontalAdd(result, result);
-                return Sse.Sqrt(VectorF.HorizontalAdd(result, result));
+                result = Vector.HorizontalAdd(result, result);
+                return Sse.Sqrt(Vector.HorizontalAdd(result, result));
             }
             else if (Sse.IsSupported)
             {
@@ -243,7 +247,7 @@ namespace MathSharp
             {
                 // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_1111_1111;
-                return Sse41.DotProduct(vector, vector, control);
+                return Sse.Sqrt(Sse41.DotProduct(vector, vector, control));
             }
             else if (Sse3.IsSupported)
             {
@@ -312,7 +316,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(left, right);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskZW);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -358,8 +362,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = VectorF.HorizontalAdd(result, result);
-                return VectorF.HorizontalAdd(result, result);
+                result = Vector.HorizontalAdd(result, result);
+                return Vector.HorizontalAdd(result, result);
             }
             else if (Sse.IsSupported)
             {
@@ -543,7 +547,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskZW);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -591,8 +595,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = VectorF.HorizontalAdd(result, result);
-                return Sse.Sqrt(VectorF.HorizontalAdd(result, result));
+                result = Vector.HorizontalAdd(result, result);
+                return Sse.Sqrt(Vector.HorizontalAdd(result, result));
             }
             else if (Sse.IsSupported)
             {
@@ -674,7 +678,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWAndZToZero);
+                Vector4F result = Sse.And(mul, MaskZW);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -721,8 +725,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = VectorF.HorizontalAdd(result, result);
-                return VectorF.HorizontalAdd(result, result);
+                result = Vector.HorizontalAdd(result, result);
+                return Vector.HorizontalAdd(result, result);
             }
             else if (Sse.IsSupported)
             {
@@ -776,6 +780,145 @@ namespace MathSharp
             }
 
             return DistanceSquared4D_Software(left, right);
+        }
+
+        #endregion
+
+        #region Lerp
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Lerp(Vector4FParam1_3 from, Vector4FParam1_3 to, float weight)
+        {
+            Debug.Assert(weight <= 1 && weight >= 0);
+
+
+            if (Sse.IsSupported)
+            {
+                // Lerp (Linear interpolate) interpolates between two values (here, vectors)
+                // The general formula for it is 'from + (to - from) * weight'
+                Vector4F offset = Sse.Subtract(to, from);
+                offset = Sse.Multiply(offset, weight.LoadScalarBroadcast());
+                return Sse.Add(from, offset);
+            }
+
+            return Lerp_Software(from, to, weight);
+        }
+
+        #endregion
+
+        #region Reflect
+
+        public static Vector4F Reflect2D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            // SSE4.1 has a native dot product instruction, dpps
+            if (Sse41.IsSupported)
+            {
+                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
+                const byte control = 0b_0011_1111;
+                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident,  tmp);
+            }
+            // We can use SSE to vectorize the multiplication
+            // There are different fastest methods to sum the resultant vector
+            // on SSE3 vs SSE1
+            else if (Sse3.IsSupported)
+            {
+                Vector4F mul = Sse.Multiply(incident, normal);
+
+                // Set W and Z to zero
+                Vector4F result = Sse.And(mul, MaskZW);
+
+                // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
+                result = Sse3.HorizontalAdd(result, result);
+
+                // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
+                Vector4F tmp = Sse3.MoveLowAndDuplicate(result);
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+            else if (Sse.IsSupported)
+            {
+                Vector4F mul = Sse.Multiply(incident, normal);
+
+                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(1, 1, 1, 1));
+
+                mul = Sse.AddScalar(mul, temp);
+
+                mul = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+
+                mul = Sse.Add(mul, mul);
+                mul = Sse.Multiply(mul, normal);
+                return Sse.Subtract(incident, mul);
+            }
+
+            return Reflect2D_Software(incident, normal);
+        }
+
+        public static Vector4F Reflect3D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            // SSE4.1 has a native dot product instruction, dpps
+            if (Sse41.IsSupported)
+            {
+                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
+                const byte control = 0b_0111_1111;
+                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+            // We can use SSE to vectorize the multiplication
+            // There are different fastest methods to sum the resultant vector
+            // on SSE3 vs SSE1
+            else if (Sse3.IsSupported)
+            {
+                Vector4F mul = Sse.Multiply(incident, normal);
+
+                // Set W to zero
+                Vector4F result = Sse.And(mul, MaskW);
+
+                // Doubly horizontally adding fills the final vector with the sum
+                result = Vector.HorizontalAdd(result, result);
+                Vector4F tmp = Vector.HorizontalAdd(result, result);
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+
+            }
+            else if (Sse.IsSupported)
+            {
+                // Multiply to get the needed values
+                Vector4F mul = Sse.Multiply(incident, normal);
+
+                // Shuffle around the values and AddScalar them
+                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+
+                mul = Sse.AddScalar(mul, temp);
+
+                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+
+                mul = Sse.AddScalar(mul, temp);
+
+                Vector4F tmp = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+
+            return Reflect3D_Software(incident, normal);
+        }
+
+        public static Vector4F Reflect4D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            Vector4F tmp = DotProduct4D_Software(incident, normal);
+            tmp = Multiply_Software(tmp, tmp);
+            tmp = Multiply_Software(tmp, normal);
+            return Subtract_Software(incident, tmp);
         }
 
         #endregion

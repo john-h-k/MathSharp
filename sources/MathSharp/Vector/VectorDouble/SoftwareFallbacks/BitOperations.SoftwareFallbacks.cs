@@ -1,18 +1,14 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+using MathSharp.Utils;
 
-namespace MathSharp.SoftwareFallbacks
+namespace MathSharp
 {
     using Vector4D = Vector256<double>;
     using VectorDParam1_3 = Vector256<double>;
 
-    internal static unsafe partial class SoftwareFallbacksVector4D
+    public static unsafe partial class SoftwareFallbacks
     {
-        public static readonly Vector4D MaskX = Vector256.Create(+0, -1, -1, -1).AsDouble();
-        public static readonly Vector4D MaskY = Vector256.Create(-1, +0, -1, -1).AsDouble();
-        public static readonly Vector4D MaskZ = Vector256.Create(-1, -1, +0, -1).AsDouble();
-        public static readonly Vector4D MaskW = Vector256.Create(-1, -1, -1, +0).AsDouble();
-
         #region Bitwise Operations
 
         [MethodImpl(MaxOpt)]

@@ -1,103 +1,50 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+using MathSharp.Utils;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
 {
     public class OrTests
     {
-        [Fact]
-        public void Or_AllBitsZeroOrWithSelf_ExpectedValueZero()
+        public static readonly float AllBitsSet = Unsafe.As<int, float>(ref Unsafe.AsRef(-1));
+
+        public static IEnumerable<object[]> Data
         {
-            Vector128<float> vector = Vector128.Create(0f);
-            var expected = new Vector4(0);
-
-            vector = VectorF.Or(vector, vector);
-
-            Assert.True(Helpers.AreEqual(expected, vector));
-        }
-
-
-
-        [Fact]
-        public void Or_AllBitsSetOrWithSelf_ExpectedValueAllBitsSet()
-        {
-            Vector128<float> vector = Vector128.Create(-1).AsSingle();
-            int m1 = -1;
-            float notZero = Unsafe.As<int, float>(ref m1);
-            var expected = new Vector4(notZero);
-
-            vector = VectorF.Or(vector, vector);
-
-            Assert.True(Helpers.AreEqual(expected, vector));
-        }
-
-        [Fact]
-        public void Or_MixedBitsSetOrWithSelf_ExpectedValueNoChange()
-        {
-            var val1 = 235434f;
-            var val2 = -123f;
-            var val3 = 0f;
-            var val4 = float.MaxValue;
-            Vector128<float> vector = Vector128.Create(val1, val2, val3, val4);
-            var expected = new Vector4(val1, val2, val3, val4);
-
-            vector = VectorF.Or(vector, vector);
-
-            Assert.True(Helpers.AreEqual(expected, vector));
-        }
-
-        [Fact]
-        public void Or_AllBitsSetWithNoBitsSet_ExpectedValueAllBitsSet()
-        {
-            Vector128<float> allBitsSet = Vector128.Create(-1).AsSingle();
-            Vector128<float> noBitsSet = Vector128.Create(0f);
-            int m1 = -1;
-            float notZero = Unsafe.As<int, float>(ref m1);
-            var expected = new Vector4(notZero);
-
-            Vector128<float> result = VectorF.Or(allBitsSet, noBitsSet);
-
-            Assert.True(Helpers.AreEqual(expected, result));
-        }
-
-        [Fact]
-        public void Or_MixedBitsSetWithMixedBitsSet_ExpectedValueFromField()
-        {
-            float val1_1 = 0;
-            float val1_2 = float.MinValue;
-            float val1_3 = float.PositiveInfinity;
-            float val1_4 = 1414123f;
-
-            float val2_1 = float.NaN;
-            float val2_2 = -0.00000000023434f;
-            float val2_3 = float.NegativeInfinity;
-            float val2_4 = 0;
-
-            Vector128<float> vector1 = Vector128.Create(val1_1, val1_2, val1_3, val1_4);
-            Vector128<float> vector2 = Vector128.Create(val2_1, val2_2, val2_3, val2_4);
-            var expected = GetExpectedValue();
-
-            Vector128<float> result = VectorF.Or(vector1, vector2);
-
-            Assert.True(Helpers.AreEqual(expected, result));
-
-            Vector4 GetExpectedValue()
+            get
             {
-                return new Vector4(
-                    OrF(val1_1, val2_1),
-                    OrF(val1_2, val2_2),
-                    OrF(val1_3, val2_3),
-                    OrF(val1_4, val2_4)
-                );
-            }
+                static float OrF(float a, float b)
+                {
+                    uint or = Unsafe.As<float, uint>(ref a) | Unsafe.As<float, uint>(ref b);
+                    return Unsafe.As<uint, float>(ref or);
+                }
 
-            float OrF(float a, float b)
-            {
-                uint or = Unsafe.As<float, uint>(ref a) | Unsafe.As<float, uint>(ref b);
-                return Unsafe.As<uint, float>(ref or);
+                return new[]
+                {
+                    new object[] { Vector128.Create(0f), Vector128.Create(0f), new Vector4(0f) },
+                    new object[] { Vector128.Create(AllBitsSet), Vector128.Create(AllBitsSet), new Vector4(AllBitsSet) },
+                    new object[] { Vector128.Create(235434f, -123f, 0, float.MaxValue),  Vector128.Create(235434f, -123f, 0, float.MaxValue), new Vector4(235434f, -123f, 0, float.MaxValue) },
+                    new object[]
+                    {
+                        Vector128.Create(0f,  float.MinValue,   float.PositiveInfinity,  1414123f), Vector128.Create(float.NaN, -0.00000000023434f, float.NegativeInfinity, 0),
+                        new Vector4(OrF(0f, float.NaN), OrF(float.MinValue, -0.00000000023434f), OrF(float.PositiveInfinity, float.NegativeInfinity), OrF(1414123f, 0f))
+                    }
+                };
             }
+        }
+
+        [Theory]
+        // TODO wtf
+#pragma warning disable xUnit1019
+        [MemberData(nameof(Data))]
+#pragma warning enable xUnit1019
+        public void Or_Theory(Vector128<float> left, Vector128<float> right, Vector4 expected)
+        {
+            Vector128<float> vector = Vector.Or(left, right);
+
+            Assert.True(Helpers.AreEqual(expected, vector));
         }
     }
 }
