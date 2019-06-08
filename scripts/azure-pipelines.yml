@@ -17,6 +17,9 @@ jobs:
         name: Hosted
         demands: Cmd
     steps:
+    - task: DotNetCoreInstaller@0
+      inputs:
+      version: '2.1.300'
     - task: BatchScript@1
       displayName: 'Build and test'
       inputs:
