@@ -1,8 +1,10 @@
 trigger:
 - master
+- dev
 
 pr:
 - master
+- dev
 
 jobs:
 - job: windows_debug_x86
