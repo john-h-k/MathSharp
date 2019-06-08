@@ -15,6 +15,7 @@ Param(
 
 $RepoRoot = Join-Path -Path $PSScriptRoot -ChildPath ".."
 $solution = Join-Path -Path $RepoRoot -ChildPath "MathSharp.sln"
+$packageproject = [IO.Path]::Combine($RepoRoot, "sources", "MathSharp")
 
 function Write-Help() {
     Write-Host -Object "Switches and options: "
@@ -59,7 +60,7 @@ function Clear-Artifacts() {
 }
 
 function New-NugetPackage() {
-    & dotnet pack -c "$configuration" -v "$verbosity" --no-build --no-restore "$solution" $msbuildargs 
+    & dotnet pack -c "$configuration" -v "$verbosity" --no-build --no-restore "$packageproject" $msbuildargs 
 
     if ($LastExitCode -ne 0) {
         throw "'New-NugetPackage' failed for '$solution'"
