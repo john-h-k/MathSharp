@@ -67,6 +67,7 @@ function New-NugetPackage() {
     }
 }
 
+Write-Output -Object "Build started..."
 try {
     if ($ci) {
         $restore=$true
