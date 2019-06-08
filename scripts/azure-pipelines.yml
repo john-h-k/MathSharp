@@ -21,8 +21,8 @@ jobs:
       inputs:
         version: '2.1.300'
     - task: AzurePowerShell@4
-      version: 1.0.1
       displayName: 'Build and test'
       inputs:
-        filename: scripts/build.ps1
-        arguments: '-configuration Debug -arch x86 -ci'
+        scriptPath: scripts/build.ps1
+        scriptArguments: '-configuration Debug -arch x86 -ci'
+        preferredAzurePowerShellVersion: 1.0.1
