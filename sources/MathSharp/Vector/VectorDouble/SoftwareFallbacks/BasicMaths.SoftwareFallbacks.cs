@@ -2,145 +2,201 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using MathSharp.Utils;
+using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
     using Vector4D = Vector256<double>;
-    using VectorDParam1_3 = Vector256<double>;
+    using Vector4DParam1_3 = Vector256<double>;
 
     public static unsafe partial class SoftwareFallbacks
     {
-        #region VectorD
+        #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Abs_Software(VectorDParam1_3 vector)
+        public static Vector4D Abs_Software(in Vector4DParam1_3 vector)
         {
             return Vector256.Create(
-                Math.Abs(Helpers.X(vector)),
-                Math.Abs(Helpers.Y(vector)),
-                Math.Abs(Helpers.Z(vector)),
-                Math.Abs(Helpers.W(vector))
+                Math.Abs(X(vector)),
+                Math.Abs(Y(vector)),
+                Math.Abs(Z(vector)),
+                Math.Abs(W(vector))
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D HorizontalAdd_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D HorizontalAdd_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             return Vector256.Create(
-                Helpers.X(left) + Helpers.Y(left),
-                Helpers.Z(left) + Helpers.W(left),
-                Helpers.X(right) + Helpers.Y(right),
-                Helpers.Z(right) + Helpers.W(right)
+                X(left) + Y(left),
+                Z(left) + W(left),
+                X(right) + Y(right),
+                Z(right) + W(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Add_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D Add_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             return Vector256.Create(
-                Helpers.X(left) + Helpers.X(right),
-                Helpers.Y(left) + Helpers.Y(right),
-                Helpers.Z(left) + Helpers.Z(right),
-                Helpers.W(left) + Helpers.W(right)
+                X(left) + X(right),
+                Y(left) + Y(right),
+                Z(left) + Z(right),
+                W(left) + W(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Add_Software(VectorDParam1_3 vector, float scalar)
+        public static Vector4D Add_Software(in Vector4DParam1_3 vector, double scalar)
         {
             return Vector256.Create(
-                Helpers.X(vector) + scalar,
-                Helpers.Y(vector) + scalar,
-                Helpers.Z(vector) + scalar,
-                Helpers.W(vector) + scalar
+                X(vector) + scalar,
+                Y(vector) + scalar,
+                Z(vector) + scalar,
+                W(vector) + scalar
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Subtract_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D Subtract_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             return Vector256.Create(
-                Helpers.X(left) - Helpers.X(right),
-                Helpers.Y(left) - Helpers.Y(right),
-                Helpers.Z(left) - Helpers.Z(right),
-                Helpers.W(left) - Helpers.W(right)
+                X(left) - X(right),
+                Y(left) - Y(right),
+                Z(left) - Z(right),
+                W(left) - W(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Subtract_Software(VectorDParam1_3 vector, float scalar)
+        public static Vector4D Subtract_Software(in Vector4DParam1_3 vector, double scalar)
         {
             return Vector256.Create(
-                Helpers.X(vector) - scalar,
-                Helpers.Y(vector) - scalar,
-                Helpers.Z(vector) - scalar,
-                Helpers.W(vector) - scalar
+                X(vector) - scalar,
+                Y(vector) - scalar,
+                Z(vector) - scalar,
+                W(vector) - scalar
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Multiply_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D Multiply_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             return Vector256.Create(
-                Helpers.X(left) * Helpers.X(right),
-                Helpers.Y(left) * Helpers.Y(right),
-                Helpers.Z(left) * Helpers.Z(right),
-                Helpers.W(left) * Helpers.W(right)
+                X(left) * X(right),
+                Y(left) * Y(right),
+                Z(left) * Z(right),
+                W(left) * W(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Multiply_Software(VectorDParam1_3 left, float scalar)
+        public static Vector4D Multiply_Software(in Vector4DParam1_3 left, double scalar)
         {
             return Vector256.Create(
-                Helpers.X(left) * scalar,
-                Helpers.Y(left) * scalar,
-                Helpers.Z(left) * scalar,
-                Helpers.W(left) * scalar
+                X(left) * scalar,
+                Y(left) * scalar,
+                Z(left) * scalar,
+                W(left) * scalar
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Divide_Software(VectorDParam1_3 dividend, VectorDParam1_3 divisor)
+        public static Vector4D Divide_Software(in Vector4DParam1_3 dividend, in Vector4DParam1_3 divisor)
         {
             return Vector256.Create(
-                Helpers.X(dividend) / Helpers.X(divisor),
-                Helpers.Y(dividend) / Helpers.Y(divisor),
-                Helpers.Z(dividend) / Helpers.Z(divisor),
-                Helpers.W(dividend) / Helpers.W(divisor)
+                X(dividend) / X(divisor),
+                Y(dividend) / Y(divisor),
+                Z(dividend) / Z(divisor),
+                W(dividend) / W(divisor)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Divide_Software(VectorDParam1_3 dividend, float scalarDivisor)
+        public static Vector4D Divide_Software(in Vector4DParam1_3 dividend, double scalarDivisor)
         {
             return Vector256.Create(
-                Helpers.X(dividend) / scalarDivisor,
-                Helpers.Y(dividend) / scalarDivisor,
-                Helpers.Z(dividend) / scalarDivisor,
-                Helpers.W(dividend) / scalarDivisor
+                X(dividend) / scalarDivisor,
+                Y(dividend) / scalarDivisor,
+                Z(dividend) / scalarDivisor,
+                W(dividend) / scalarDivisor
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Clamp_Software(VectorDParam1_3 vector, VectorDParam1_3 low, VectorDParam1_3 high)
+        public static Vector4D Clamp_Software(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high)
         {
             return Vector256.Create(
-                Math.Clamp(Helpers.X(vector), Helpers.X(low), Helpers.X(high)),
-                Math.Clamp(Helpers.Y(vector), Helpers.Y(low), Helpers.Y(high)),
-                Math.Clamp(Helpers.Z(vector), Helpers.Z(low), Helpers.Z(high)),
-                Math.Clamp(Helpers.W(vector), Helpers.W(low), Helpers.W(high))
+                Math.Clamp(X(vector), X(low), X(high)),
+                Math.Clamp(Y(vector), Y(low), Y(high)),
+                Math.Clamp(Z(vector), Z(low), Z(high)),
+                Math.Clamp(W(vector), W(low), W(high))
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Sqrt_Software(VectorDParam1_3 vector)
+        public static Vector4D Sqrt_Software(in Vector4DParam1_3 vector)
         {
             return Vector256.Create(
-                Math.Sqrt(Helpers.X(vector)),
-                Math.Sqrt(Helpers.Y(vector)),
-                Math.Sqrt(Helpers.Z(vector)),
-                Math.Sqrt(Helpers.W(vector))
+                Math.Sqrt(X(vector)),
+                Math.Sqrt(Y(vector)),
+                Math.Sqrt(Z(vector)),
+                Math.Sqrt(W(vector))
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Max_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        {
+            return Vector256.Create(
+                Math.Max(X(left), X(right)),
+                Math.Max(Y(left), Y(right)),
+                Math.Max(Z(left), Z(right)),
+                Math.Max(W(left), W(right))
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Min_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        {
+            return Vector256.Create(
+                Math.Min(X(left), X(right)),
+                Math.Min(Y(left), Y(right)),
+                Math.Min(Z(left), Z(right)),
+                Math.Min(W(left), W(right))
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Negate2D_Software(in Vector4DParam1_3 vector)
+        {
+            return Vector256.Create(
+                -X(vector),
+                -Y(vector),
+                +Z(vector),
+                +W(vector)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Negate3D_Software(in Vector4DParam1_3 vector)
+        {
+            return Vector256.Create(
+                -X(vector),
+                -Y(vector),
+                -Z(vector),
+                +W(vector)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Negate4D_Software(in Vector4DParam1_3 vector)
+        {
+            return Vector256.Create(
+                -X(vector),
+                -Y(vector),
+                -Z(vector),
+                -W(vector)
             );
         }
 

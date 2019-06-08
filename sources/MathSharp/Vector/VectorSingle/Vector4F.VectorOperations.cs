@@ -90,8 +90,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = Vector.HorizontalAdd(result, result);
-                return Sse.Divide(vector, Sse.Sqrt(Vector.HorizontalAdd(result, result)));
+                result = Sse3.HorizontalAdd(result, result);
+                return Sse.Divide(vector, Sse.Sqrt(Sse3.HorizontalAdd(result, result)));
             }
             else if (Sse.IsSupported)
             {
@@ -216,8 +216,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = Vector.HorizontalAdd(result, result);
-                return Sse.Sqrt(Vector.HorizontalAdd(result, result));
+                result = Sse3.HorizontalAdd(result, result);
+                return Sse.Sqrt(Sse3.HorizontalAdd(result, result));
             }
             else if (Sse.IsSupported)
             {
@@ -362,8 +362,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = Vector.HorizontalAdd(result, result);
-                return Vector.HorizontalAdd(result, result);
+                result = Sse3.HorizontalAdd(result, result);
+                return Sse3.HorizontalAdd(result, result);
             }
             else if (Sse.IsSupported)
             {
@@ -595,8 +595,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = Vector.HorizontalAdd(result, result);
-                return Sse.Sqrt(Vector.HorizontalAdd(result, result));
+                result = Sse3.HorizontalAdd(result, result);
+                return Sse.Sqrt(Sse3.HorizontalAdd(result, result));
             }
             else if (Sse.IsSupported)
             {
@@ -710,28 +710,34 @@ namespace MathSharp
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
             {
+                Vector4F diff = Sse.Subtract(left, right);
+
                 // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_0111_1111;
-                return Sse41.DotProduct(left, right, control);
+                return Sse41.DotProduct(diff, diff, control);
             }
             // We can use SSE to vectorize the multiplication
             // There are different fastest methods to sum the resultant vector
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector4F diff = Sse.Subtract(left, right);
+
+                Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W to zero
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = Vector.HorizontalAdd(result, result);
-                return Vector.HorizontalAdd(result, result);
+                result = Sse3.HorizontalAdd(result, result);
+                return Sse3.HorizontalAdd(result, result);
             }
             else if (Sse.IsSupported)
             {
+                Vector4F diff = Sse.Subtract(left, right);
+
                 // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Shuffle around the values and AddScalar them
                 Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
@@ -882,8 +888,8 @@ namespace MathSharp
                 Vector4F result = Sse.And(mul, MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
-                result = Vector.HorizontalAdd(result, result);
-                Vector4F tmp = Vector.HorizontalAdd(result, result);
+                result = Sse3.HorizontalAdd(result, result);
+                Vector4F tmp = Sse3.HorizontalAdd(result, result);
                 tmp = Sse.Add(tmp, tmp);
                 tmp = Sse.Multiply(tmp, normal);
                 return Sse.Subtract(incident, tmp);

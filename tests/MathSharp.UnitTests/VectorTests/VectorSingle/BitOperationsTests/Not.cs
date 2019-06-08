@@ -5,7 +5,7 @@ using System.Runtime.Intrinsics;
 using MathSharp.Utils;
 using Xunit;
 
-namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
+namespace MathSharp.UnitTests.VectorTests.VectorSingle.BitOperationsTests
 {
     public class NotTests
     {

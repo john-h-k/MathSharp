@@ -41,9 +41,7 @@ namespace MathSharp.Interactive
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<JitBugBenchmark>();
-
-            JitBugBenchmark.Reflect3DFast(default, default);
+            BenchmarkRunner.Run<PermuteVsDuplicateBenchmark>();
         }
 
         public static unsafe bool IsAligned()
@@ -87,6 +85,27 @@ namespace MathSharp.Interactive
             int mask = Sse.MoveMask(vLeft.AsSingle());
 
             return mask == unchecked((int)0b_1111_1111_0000_0000_0000_0000_0000_0000);
+        }
+    }
+
+    [CoreJob]
+    [RPlotExporter]
+    [RankColumn]
+    [Orderer]
+    public class PermuteVsDuplicateBenchmark
+    {
+        private Vector128<double> _vector;
+
+        [Benchmark]
+        public Vector256<double> Duplicate()
+        {
+            return Vector256.Create(_vector, _vector);
+        }
+
+        [Benchmark]
+        public Vector256<double> Permute()
+        {
+            return Vector256.Create(_vector.ToScalar());
         }
     }
 

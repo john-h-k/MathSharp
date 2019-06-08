@@ -1,10 +1,11 @@
 ﻿using System.Numerics;
 using System.Runtime.Intrinsics;
-using static MathSharp.Utils.Helpers;
+using MathSharp.Utils;
 using Xunit;
+
 // ReSharper disable ConvertToConstant.Local
 
-namespace MathSharp.UnitTests.VectorMathTests
+namespace MathSharp.UnitTests.VectorTests.VectorSingle.ConversionTests
 {
     public class LoadTests
     {
@@ -14,7 +15,7 @@ namespace MathSharp.UnitTests.VectorMathTests
             var vector = new Vector4(1, 2, 3, 4);
 
             Vector128<float> loaded = vector.Load();
-            Assert.True(AreEqual(vector, loaded));
+            Assert.True(Helpers.AreEqual(vector, loaded));
         }
 
         [Fact]
@@ -23,7 +24,7 @@ namespace MathSharp.UnitTests.VectorMathTests
             var vector = new Vector3(1, 2, 3);
 
             Vector128<float> loaded = vector.Load();
-            Assert.True(AreEqual(vector, loaded));
+            Assert.True(Helpers.AreEqual(vector, loaded));
         }
 
         [Fact]
@@ -33,7 +34,7 @@ namespace MathSharp.UnitTests.VectorMathTests
             var scalar = 4324f;
 
             Vector128<float> loaded = vector.Load(scalar);
-            Assert.True(AreEqual(new Vector4(vector, scalar), loaded));
+            Assert.True(Helpers.AreEqual(new Vector4(vector, scalar), loaded));
         }
 
         [Fact]
@@ -42,7 +43,7 @@ namespace MathSharp.UnitTests.VectorMathTests
             var vector = new Vector2(1, 2);
 
             Vector128<float> loaded = vector.Load();
-            Assert.True(AreEqual(vector, loaded));
+            Assert.True(Helpers.AreEqual(vector, loaded));
         }
 
         [Fact]
@@ -51,7 +52,7 @@ namespace MathSharp.UnitTests.VectorMathTests
             var vector = new Vector2(1, 2);
 
             Vector128<float> loaded = vector.LoadBroadcast();
-            Assert.True(AreEqual(new Vector4(vector, vector.X, vector.Y), loaded));
+            Assert.True(Helpers.AreEqual(new Vector4(vector, vector.X, vector.Y), loaded));
         }
 
         [Fact]
@@ -60,7 +61,7 @@ namespace MathSharp.UnitTests.VectorMathTests
             var vector = 55f;
 
             Vector128<float> loaded = vector.LoadScalar();
-            Assert.True(AreEqual(vector, loaded));
+            Assert.True(Helpers.AreEqual(vector, loaded));
         }
 
         [Fact]
@@ -69,7 +70,7 @@ namespace MathSharp.UnitTests.VectorMathTests
             var vector = 55f;
 
             Vector128<float> loaded = vector.LoadScalarBroadcast();
-            Assert.True(AreEqual(new Vector4(vector), loaded));
+            Assert.True(Helpers.AreEqual(new Vector4(vector), loaded));
         }
     }
 }

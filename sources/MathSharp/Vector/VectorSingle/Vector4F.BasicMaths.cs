@@ -162,6 +162,9 @@ namespace MathSharp
             return Sqrt_Software(vector);
         }
 
+        // Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded, and also with +0/-0, where with MathF/Math, +0 is returned over -0,
+        // - here, the second op is returned irrelevant of value if both are +0/-0
+        // TODO We should provide a symmetric alternative to this
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Max(Vector4FParam1_3 left, Vector4FParam1_3 right)
@@ -174,6 +177,7 @@ namespace MathSharp
             return Max_Software(left, right);
         }
 
+        // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Min(Vector4FParam1_3 left, Vector4FParam1_3 right)

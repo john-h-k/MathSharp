@@ -5,14 +5,19 @@ using MathSharp.Utils;
 namespace MathSharp
 {
     using Vector4D = Vector256<double>;
-    using VectorDParam1_3 = Vector256<double>;
+    using Vector4DParam1_3 = Vector256<double>;
 
     public static unsafe partial class SoftwareFallbacks
     {
+        public static readonly Vector256<double> MaskXDouble = Vector256.Create(+0, -1, -1, -1).AsDouble();
+        public static readonly Vector256<double> MaskYDouble = Vector256.Create(-1, +0, -1, -1).AsDouble();
+        public static readonly Vector256<double> MaskZDouble = Vector256.Create(-1, -1, +0, -1).AsDouble();
+        public static readonly Vector256<double> MaskWDouble = Vector256.Create(-1, -1, -1, +0).AsDouble();
+
         #region Bitwise Operations
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Or_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D Or_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
                 double x1 = Helpers.X(left);
                 double y1 = Helpers.Y(left);
@@ -24,21 +29,21 @@ namespace MathSharp
                 double z2 = Helpers.Z(right);
                 double w2 = Helpers.W(right);
 
-                uint orX = Unsafe.As<double, uint>(ref x1) | Unsafe.As<double, uint>(ref x2);
-                uint orY = Unsafe.As<double, uint>(ref y1) | Unsafe.As<double, uint>(ref y2);
-                uint orZ = Unsafe.As<double, uint>(ref z1) | Unsafe.As<double, uint>(ref z2);
-                uint orW = Unsafe.As<double, uint>(ref w1) | Unsafe.As<double, uint>(ref w2);
+                ulong orX = Unsafe.As<double, ulong>(ref x1) | Unsafe.As<double, ulong>(ref x2);
+                ulong orY = Unsafe.As<double, ulong>(ref y1) | Unsafe.As<double, ulong>(ref y2);
+                ulong orZ = Unsafe.As<double, ulong>(ref z1) | Unsafe.As<double, ulong>(ref z2);
+                ulong orW = Unsafe.As<double, ulong>(ref w1) | Unsafe.As<double, ulong>(ref w2);
 
                 return Vector256.Create(
-                    Unsafe.As<uint, double>(ref orX),
-                    Unsafe.As<uint, double>(ref orY),
-                    Unsafe.As<uint, double>(ref orZ),
-                    Unsafe.As<uint, double>(ref orW)
+                    Unsafe.As<ulong, double>(ref orX),
+                    Unsafe.As<ulong, double>(ref orY),
+                    Unsafe.As<ulong, double>(ref orZ),
+                    Unsafe.As<ulong, double>(ref orW)
                 );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D And_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D And_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
                 double x1 = Helpers.X(left);
                 double y1 = Helpers.Y(left);
@@ -50,21 +55,21 @@ namespace MathSharp
                 double z2 = Helpers.Z(right);
                 double w2 = Helpers.W(right);
 
-                uint andX = Unsafe.As<double, uint>(ref x1) & Unsafe.As<double, uint>(ref x2);
-                uint andY = Unsafe.As<double, uint>(ref y1) & Unsafe.As<double, uint>(ref y2);
-                uint andZ = Unsafe.As<double, uint>(ref z1) & Unsafe.As<double, uint>(ref z2);
-                uint andW = Unsafe.As<double, uint>(ref w1) & Unsafe.As<double, uint>(ref w2);
+                ulong andX = Unsafe.As<double, ulong>(ref x1) & Unsafe.As<double, ulong>(ref x2);
+                ulong andY = Unsafe.As<double, ulong>(ref y1) & Unsafe.As<double, ulong>(ref y2);
+                ulong andZ = Unsafe.As<double, ulong>(ref z1) & Unsafe.As<double, ulong>(ref z2);
+                ulong andW = Unsafe.As<double, ulong>(ref w1) & Unsafe.As<double, ulong>(ref w2);
 
                 return Vector256.Create(
-                    Unsafe.As<uint, double>(ref andX),
-                    Unsafe.As<uint, double>(ref andY),
-                    Unsafe.As<uint, double>(ref andZ),
-                    Unsafe.As<uint, double>(ref andW)
+                    Unsafe.As<ulong, double>(ref andX),
+                    Unsafe.As<ulong, double>(ref andY),
+                    Unsafe.As<ulong, double>(ref andZ),
+                    Unsafe.As<ulong, double>(ref andW)
                 );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Xor_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D Xor_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
                 double x1 = Helpers.X(left);
                 double y1 = Helpers.Y(left);
@@ -76,42 +81,42 @@ namespace MathSharp
                 double z2 = Helpers.Z(right);
                 double w2 = Helpers.W(right);
 
-                uint xorX = Unsafe.As<double, uint>(ref x1) ^ Unsafe.As<double, uint>(ref x2);
-                uint xorY = Unsafe.As<double, uint>(ref y1) ^ Unsafe.As<double, uint>(ref y2);
-                uint xorZ = Unsafe.As<double, uint>(ref z1) ^ Unsafe.As<double, uint>(ref z2);
-                uint xorW = Unsafe.As<double, uint>(ref w1) ^ Unsafe.As<double, uint>(ref w2);
+                ulong xorX = Unsafe.As<double, ulong>(ref x1) ^ Unsafe.As<double, ulong>(ref x2);
+                ulong xorY = Unsafe.As<double, ulong>(ref y1) ^ Unsafe.As<double, ulong>(ref y2);
+                ulong xorZ = Unsafe.As<double, ulong>(ref z1) ^ Unsafe.As<double, ulong>(ref z2);
+                ulong xorW = Unsafe.As<double, ulong>(ref w1) ^ Unsafe.As<double, ulong>(ref w2);
 
                 return Vector256.Create(
-                    Unsafe.As<uint, double>(ref xorX),
-                    Unsafe.As<uint, double>(ref xorY),
-                    Unsafe.As<uint, double>(ref xorZ),
-                    Unsafe.As<uint, double>(ref xorW)
+                    Unsafe.As<ulong, double>(ref xorX),
+                    Unsafe.As<ulong, double>(ref xorY),
+                    Unsafe.As<ulong, double>(ref xorZ),
+                    Unsafe.As<ulong, double>(ref xorW)
                 );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Not_Software(VectorDParam1_3 vector)
+        public static Vector4D Not_Software(in Vector4DParam1_3 vector)
         {
                 double x = Helpers.X(vector);
                 double y = Helpers.Y(vector);
                 double z = Helpers.Z(vector);
                 double w = Helpers.W(vector);
 
-                uint notX = ~Unsafe.As<double, uint>(ref x);
-                uint notY = ~Unsafe.As<double, uint>(ref y);
-                uint notZ = ~Unsafe.As<double, uint>(ref z);
-                uint notW = ~Unsafe.As<double, uint>(ref w);
+                ulong notX = ~Unsafe.As<double, ulong>(ref x);
+                ulong notY = ~Unsafe.As<double, ulong>(ref y);
+                ulong notZ = ~Unsafe.As<double, ulong>(ref z);
+                ulong notW = ~Unsafe.As<double, ulong>(ref w);
 
                 return Vector256.Create(
-                    Unsafe.As<uint, double>(ref notX),
-                    Unsafe.As<uint, double>(ref notY),
-                    Unsafe.As<uint, double>(ref notZ),
-                    Unsafe.As<uint, double>(ref notW)
+                    Unsafe.As<ulong, double>(ref notX),
+                    Unsafe.As<ulong, double>(ref notY),
+                    Unsafe.As<ulong, double>(ref notZ),
+                    Unsafe.As<ulong, double>(ref notW)
                 );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D AndNot_Software(VectorDParam1_3 left, VectorDParam1_3 right)
+        public static Vector4D AndNot_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
                 return And_Software(Not_Software(left), right);
         }

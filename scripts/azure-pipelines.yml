@@ -1,26 +1,72 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
-- dev
 
 pr:
 - master
-- dev
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
+- job: windows_debug_x86
+  pool:
+    name: Hosted
+    demands: Cmd
+  steps:
+  - task: BatchScript@1
+    displayName: 'Run scripts/cibuild.cmd'
+    inputs:
+      filename: scripts/cibuild.cmd
+      arguments: '-configuration Debug -architecture x86'
 
-variables:
-  buildConfiguration: 'Release'
+- job: windows_release_x86
+  pool:
+    name: Hosted
+    demands: Cmd
+  steps:
+  - task: BatchScript@1
+    displayName: 'Run scripts/cibuild.cmd'
+    inputs:
+      filename: scripts/cibuild.cmd
+      arguments: '-configuration Release -architecture x86'
 
-steps:
-- task: DotNetCoreInstaller@0
-  inputs:
-    version: '3.0.0'
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test --configuration $(buildConfiguration)
+- job: windows_debug_x64
+  pool:
+    name: Hosted
+    demands: Cmd
+  steps:
+  - task: BatchScript@1
+    displayName: 'Run scripts/cibuild.cmd'
+    inputs:
+      filename: scripts/cibuild.cmd
+      arguments: '-configuration Debug -architecture x64'
+
+- job: windows_release_x64
+  pool:
+    name: Hosted
+    demands: Cmd
+  steps:
+  - task: BatchScript@1
+    displayName: 'Run scripts/cibuild.cmd'
+    inputs:
+      filename: scripts/cibuild.cmd
+      arguments: '-configuration Release -architecture x64'
+
+- job: ubuntu_1604_debug_x64
+  pool:
+    name: Hosted Ubuntu 1604
+  steps:
+  - task: Bash@3
+    displayName: 'Run scripts/cibuild.sh'
+    inputs:
+      targetType: filePath
+      filePath: ./scripts/cibuild.sh
+      arguments: '--configuration Debug --architecture x64'
+
+- job: ubuntu_1604_release_x64
+  pool:
+    name: Hosted Ubuntu 1604
+  steps:
+  - task: Bash@3
+    displayName: 'Run scripts/cibuild.sh'
+    inputs:
+      targetType: filePath
+      filePath: ./scripts/cibuild.sh
+      arguments: '--configuration Release --architecture x64'
