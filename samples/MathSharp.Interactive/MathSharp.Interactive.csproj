@@ -4,6 +4,7 @@
     <NoWarn>1573;1591;$(NoWarn)</NoWarn>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

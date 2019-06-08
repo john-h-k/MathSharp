@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using MathSharp.Utils;
@@ -8,94 +9,42 @@ namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
 {
     public class AndTests
     {
-        [Fact]
-        public void And_AllBitsZeroAndWithSelf_ExpectedValueZero()
+        public static readonly float AllBitsSet = Unsafe.As<int, float>(ref Unsafe.AsRef(-1));
+
+        public static IEnumerable<object[]> Data
         {
-            Vector128<float> vector = Vector128.Create(0f);
-            var expected = new Vector4(0f);
-
-            vector = Vector.And(vector, vector);
-
-            Assert.True(Helpers.AreEqual(expected, vector));
-        }
-
-        [Fact]
-        public void And_AllBitsSetAndWithSelf_ExpectedValueAllBitsSet()
-        {
-            Vector128<float> vector = Vector128.Create(-1).AsSingle();
-            int m1 = -1;
-            float notZero = Unsafe.As<int, float>(ref m1);
-            var expected = new Vector4(notZero);
-
-            vector = Vector.And(vector, vector);
-
-            Assert.True(Helpers.AreEqual(expected, vector));
-        }
-
-        [Fact]
-        public void And_MixedBitsSetAndWithSelf_ExpectedSameValue()
-        {
-            float val1 = 235434f;
-            float val2 = -123f;
-            float val3 = 0;
-            float val4 = float.MaxValue;
-
-            Vector128<float> vector = Vector128.Create(val1, val2, val3, val4);
-            var expected = new Vector4(val1, val2, val3, val4);
-
-            vector = Vector.And(vector, vector);
-
-            Assert.True(Helpers.AreEqual(expected, vector));
-        }
-
-        [Fact]
-        public void And_AllBitsSetAndWithNoBitsSet_ExpectedValueNoBitsSet()
-        {
-            Vector128<float> allBitsSet = Vector128.Create(-1).AsSingle();
-            Vector128<float> noBitsSet = Vector128.Create(0f);
-            var expected = new Vector4(0f);
-
-            Vector128<float> result = Vector.And(allBitsSet, noBitsSet);
-
-            Assert.True(Helpers.AreEqual(expected, result));
-        }
-
-        [Fact]
-        public void And_MixedBitsSetAndWithMixedBitsSet_ExpectedValueFromField()
-        {
-            float val1_1 = 0;
-            float val1_2 = float.MinValue;
-            float val1_3 = float.PositiveInfinity;
-            float val1_4 = 1414123f;
-
-            float val2_1 = float.NaN;
-            float val2_2 = -0.00000000023434f;
-            float val2_3 = float.NegativeInfinity;
-            float val2_4 = 0;
-
-            Vector128<float> vector1 = Vector128.Create(val1_1, val1_2, val1_3, val1_4);
-            Vector128<float> vector2 = Vector128.Create(val2_1, val2_2, val2_3, val2_4);
-            var expected = GetExpectedValue();
-
-            Vector128<float> result = Vector.And(vector1, vector2);
-
-            Assert.True(Helpers.AreEqual(expected, result));
-
-            Vector4 GetExpectedValue()
+            get
             {
-                return new Vector4(
-                    AndF(val1_1, val2_1),
-                    AndF(val1_2, val2_2),
-                    AndF(val1_3, val2_3),
-                    AndF(val1_4, val2_4)
-                );
-            }
+                static float AndF(float a, float b)
+                {
+                    uint and = Unsafe.As<float, uint>(ref a) & Unsafe.As<float, uint>(ref b);
+                    return Unsafe.As<uint, float>(ref and);
+                }
 
-            float AndF(float a, float b)
-            {
-                uint and = Unsafe.As<float, uint>(ref a) & Unsafe.As<float, uint>(ref b);
-                return Unsafe.As<uint, float>(ref and);
+                return new[]
+                {
+                    new object[] { Vector128.Create(0f), Vector128.Create(0f), new Vector4(0f) },
+                    new object[] { Vector128.Create(AllBitsSet), Vector128.Create(AllBitsSet), new Vector4(AllBitsSet) },
+                    new object[] { Vector128.Create(235434f, -123f, 0, float.MaxValue),  Vector128.Create(235434f, -123f, 0, float.MaxValue), new Vector4(235434f, -123f, 0, float.MaxValue) },
+                    new object[]
+                    {
+                        Vector128.Create(0f,  float.MinValue,   float.PositiveInfinity,  1414123f), Vector128.Create(float.NaN, -0.00000000023434f, float.NegativeInfinity, 0),
+                        new Vector4(AndF(0f, float.NaN), AndF(float.MinValue, -0.00000000023434f), AndF(float.PositiveInfinity, float.NegativeInfinity), AndF(1414123f, 0f))
+                    }
+                };
             }
+        }
+
+        [Theory]
+        // TODO wtf
+#pragma warning disable xUnit1019
+        [MemberData(nameof(Data))]
+#pragma warning enable xUnit1019
+        public void And_Theory(Vector128<float> left, Vector128<float> right, Vector4 expected)
+        {
+            Vector128<float> vector = Vector.And(left, right);
+
+            Assert.True(Helpers.AreEqual(expected, vector));
         }
     }
 }

@@ -1,68 +1,45 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using static MathSharp.Utils.Helpers;
-using static MathSharp.Vector;
-using Microsoft.VisualBasic.CompilerServices;
+using MathSharp.Utils;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorMathTests.BitOperationsTests
 {
     public class NotTests
     {
-        [Fact]
-        public void Not_AllBitsZeroNot_ExpectedValueAllBitsSet()
+        public static readonly float AllBitsSet = Unsafe.As<int, float>(ref Unsafe.AsRef(-1));
+
+        public static IEnumerable<object[]> Data
         {
-            Vector128<float> vector = Vector128.Create(0f);
-            int m1 = -1;
-            float notZero = Unsafe.As<int, float>(ref m1);
-            var expected = new Vector4(notZero);
+            get
+            {
+                static float NotF(float a)
+                {
+                    uint not = ~Unsafe.As<float, uint>(ref a);
+                    return Unsafe.As<uint, float>(ref not);
+                }
 
-            vector = Vector.Not(vector);
-
-            Assert.True(AreEqual(expected, vector));
+                return new[]
+                {
+                    new object[] { Vector128.Create(0f), new Vector4(AllBitsSet) },
+                    new object[] { Vector128.Create(AllBitsSet), new Vector4(0f) },
+                    new object[] { Vector128.Create(235434f, -123f, 0, float.MaxValue),  new Vector4(NotF(235434f), NotF(-123f), NotF(0f), NotF(float.MaxValue)) }
+                };
+            }
         }
 
-        [Fact]
-        public void Not_AllBitsSetNot_ExpectedValueAllBitsZero()
+        [Theory]
+        // TODO wtf
+#pragma warning disable xUnit1019
+        [MemberData(nameof(Data))]
+#pragma warning enable xUnit1019
+        public void Not_Theory(Vector128<float> value, Vector4 expected)
         {
-            Vector128<float> vector = Vector128.Create(-1).AsSingle();
-            var expected = new Vector4(0f);
+            Vector128<float> vector = Vector.Not(value);
 
-            vector = Vector.Not(vector);
-
-            Assert.True(AreEqual(expected, vector));
-        }
-
-        [Fact]
-        public void Not_MixedBitsSetNot_ExpectedValueFromField()
-        {
-            var val1 = 235434f;
-            var val2 = -123f;
-            var val3 = 0f;
-            var val4 = float.MaxValue;
-            Vector128<float> vector = Vector128.Create(val1, val2, val3, val4);
-            var expected = GetExpectedValue();
-
-            vector = Vector.Not(vector);
-
-            Assert.True(AreEqual(expected, vector));
-
-            Vector4 GetExpectedValue()
-            {
-                return new Vector4(
-                    NotF(val1),
-                    NotF(val2),
-                    NotF(val3),
-                    NotF(val4)
-                );
-            }
-
-            static float NotF(float value)
-            {
-                int not = ~Unsafe.As<float, int>(ref value);
-                return Unsafe.As<int, float>(ref not);
-            }
+            Assert.True(Helpers.AreEqual(expected, vector));
         }
     }
 }
