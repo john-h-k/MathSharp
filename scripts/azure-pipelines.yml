@@ -6,9 +6,6 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-
 jobs: default
   - job:
     pool:
