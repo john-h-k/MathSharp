@@ -5,9 +5,14 @@
 
 trigger:
 - master
+- dev
 
-jobs: default
-  - job:
+pr:
+- master
+- dev
+
+jobs: 
+  - job: default
     pool:
         name: Hosted
         demands: Cmd
