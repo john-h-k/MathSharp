@@ -1,0 +1,22 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs: default
+  - job:
+    pool:
+        name: Hosted
+        demands: Cmd
+    steps:
+    - task: BatchScript@1
+      displayName: 'Build and test'
+      inputs:
+        filename: scripts/build.ps1
+        arguments: '-configuration Debug -arch x86'
