@@ -1,6 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using MathSharp.Utils;
+using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
@@ -14,7 +16,7 @@ namespace MathSharp
         #region Normalize
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Normalize2D_Software(Vector4DParam1_3 vector)
+        public static Vector4D Normalize2D_Software(in Vector4DParam1_3 vector)
         {
             // No software fallback needed, these methods cover it
             Vector4D magnitude = Length2D_Software(vector);
@@ -24,14 +26,14 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Normalize3D_Software(Vector4DParam1_3 vector)
+        public static Vector4D Normalize3D_Software(in Vector4DParam1_3 vector)
         {
             Vector4D magnitude = Length3D_Software(vector);
             return Divide_Software(vector, magnitude);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Normalize4D_Software(Vector4DParam1_3 vector)
+        public static Vector4D Normalize4D_Software(in Vector4DParam1_3 vector)
         {
             // No software fallback needed, these methods cover it
             Vector4D magnitude = Length4D_Software(vector);
@@ -43,20 +45,20 @@ namespace MathSharp
         #region Length
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Length2D_Software(Vector4DParam1_3 vector)
+        public static Vector4D Length2D_Software(in Vector4DParam1_3 vector)
         {
             return Sqrt_Software(DotProduct2D_Software(vector, vector));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Length3D_Software(Vector4DParam1_3 vector)
+        public static Vector4D Length3D_Software(in Vector4DParam1_3 vector)
         {
             // No software fallback needed, these methods cover it
             return Sqrt_Software(DotProduct3D_Software(vector, vector));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Length4D_Software(Vector4DParam1_3 vector)
+        public static Vector4D Length4D_Software(in Vector4DParam1_3 vector)
         {
             // No software fallback needed, these methods cover it
             return Sqrt_Software(DotProduct4D_Software(vector, vector));
@@ -71,32 +73,32 @@ namespace MathSharp
         #region DotProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D DotProduct2D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D DotProduct2D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             return Vector256.Create(
-                Helpers.X(left) * Helpers.X(right) +
-                +Helpers.Y(left) * Helpers.Y(right)
+                X(left) * X(right) +
+                +Y(left) * Y(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D DotProduct3D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D DotProduct3D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             return Vector256.Create(
-                Helpers.X(left) * Helpers.X(right)
-                + Helpers.Y(left) * Helpers.Y(right)
-                + Helpers.Z(left) * Helpers.Z(right)
+                X(left) * X(right)
+                + Y(left) * Y(right)
+                + Z(left) * Z(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D DotProduct4D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D DotProduct4D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             return Vector256.Create(
-                Helpers.X(left) * Helpers.X(right)
-                + Helpers.Y(left) * Helpers.Y(right)
-                + Helpers.Z(left) * Helpers.Z(right)
-                + Helpers.W(left) * Helpers.W(right)
+                X(left) * X(right)
+                + Y(left) * Y(right)
+                + Z(left) * Z(right)
+                + W(left) * W(right)
             );
         }
 
@@ -105,14 +107,14 @@ namespace MathSharp
         #region CrossProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D CrossProduct2D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D CrossProduct2D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
 
-            return Vector256.Create((Helpers.X(left) * Helpers.Y(right) - Helpers.Y(left) * Helpers.X(right)));
+            return Vector256.Create((X(left) * Y(right) - Y(left) * X(right)));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D CrossProduct3D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D CrossProduct3D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             /* Cross product of A(x, y, z, _) and B(x, y, z, _) is
              *
@@ -120,15 +122,15 @@ namespace MathSharp
              */
 
             return Vector256.Create(
-                Helpers.Y(left) * Helpers.Z(right) - Helpers.Z(left) * Helpers.Y(right),
-                Helpers.Z(left) * Helpers.X(right) - Helpers.X(left) * Helpers.Z(right),
-                Helpers.X(left) * Helpers.Y(right) - Helpers.Y(left) * Helpers.X(right),
+                Y(left) * Z(right) - Z(left) * Y(right),
+                Z(left) * X(right) - X(left) * Z(right),
+                X(left) * Y(right) - Y(left) * X(right),
                 0
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D CrossProduct4D_Software(Vector4DParam1_3 one, Vector4DParam1_3 two, Vector4DParam1_3 three)
+        public static Vector4D CrossProduct4D_Software(in Vector4DParam1_3 one, in Vector4DParam1_3 two, in Vector4DParam1_3 three)
         {
             return Vector256.Create(
                 (two.GetElement(2) * three.GetElement(3) - two.GetElement(3) * three.GetElement(2)) *
@@ -166,7 +168,7 @@ namespace MathSharp
         #region Distance
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Distance2D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D Distance2D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             Vector4DParam1_3 diff = Subtract_Software(left, right);
 
@@ -174,7 +176,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Distance3D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D Distance3D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             Vector4DParam1_3 diff = Subtract_Software(left, right);
 
@@ -182,7 +184,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Distance4D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D Distance4D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             Vector4DParam1_3 diff = Subtract_Software(left, right);
 
@@ -194,7 +196,7 @@ namespace MathSharp
         #region DistanceSquared
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D DistanceSquared2D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D DistanceSquared2D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             Vector4DParam1_3 diff = Subtract_Software(left, right);
 
@@ -202,7 +204,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D DistanceSquared3D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D DistanceSquared3D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             Vector4DParam1_3 diff = Subtract_Software(left, right);
 
@@ -210,11 +212,61 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D DistanceSquared4D_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)
+        public static Vector4D DistanceSquared4D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             Vector4DParam1_3 diff = Subtract_Software(left, right);
 
             return DotProduct4D_Software(diff, diff);
+        }
+
+        #endregion
+
+        #region Lerp
+
+        private static double LerpHelper(double left, double right, double weight)
+        {
+            return left + (right - left) * weight;
+        }
+
+        public static Vector4D Lerp_Software(Vector4D from, Vector4D to, double weight)
+        {
+            return Vector256.Create(
+                LerpHelper(X(from), X(to), weight),
+                LerpHelper(Y(from), Y(to), weight),
+                LerpHelper(Z(from), Z(to), weight),
+                LerpHelper(W(from), W(to), weight)
+            );
+        }
+
+        #endregion
+
+        #region Reflect
+
+        public static Vector4D Reflect2D_Software(in Vector4DParam1_3 incident, in Vector4DParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            Vector4D tmp = DotProduct2D_Software(incident, normal);
+            tmp = Add_Software(tmp, tmp);
+            tmp = Multiply_Software(tmp, normal);
+            return Subtract_Software(incident, tmp);
+        }
+
+        public static Vector4D Reflect3D_Software(in Vector4DParam1_3 incident, in Vector4DParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            Vector4D tmp = DotProduct3D_Software(incident, normal);
+            tmp = Add_Software(tmp, tmp);
+            tmp = Multiply_Software(tmp, normal);
+            return Subtract_Software(incident, tmp);
+        }
+
+        public static Vector4D Reflect4D_Software(in Vector4DParam1_3 incident, in Vector4DParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            Vector4D tmp = DotProduct4D_Software(incident, normal);
+            tmp = Add_Software(tmp, tmp);
+            tmp = Multiply_Software(tmp, normal);
+            return Subtract_Software(incident, tmp);
         }
 
         #endregion

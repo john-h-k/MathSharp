@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 
@@ -17,6 +18,18 @@ namespace MathSharp.Utils
                 | (b << 4)
                 | (c << 2)
                 | d);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static Vector256<double> ToScalarVector256(Vector256<double> vector)
+        {
+            return Vector256.CreateScalar(vector.ToScalar());
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static Vector256<double> DuplicateToVector256(Vector128<double> vector)
+        {
+            return Vector256.Create(vector.ToScalar());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -70,5 +83,31 @@ namespace MathSharp.Utils
         public static double BoolToSimdBoolDouble(bool val) => val ? NoBitsSetDouble : AllBitsSetDouble;
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static int BoolToSimdBoolInt32(bool val) => val ? -1 : 0;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreAllEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)
+        {
+            for (var i = 0; i < 4; i++)
+            {
+                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0
+                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0)
+                    return false;
+            }
+
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreAllNotEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)
+        {
+            for (var i = 0; i < 4; i++)
+            {
+                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0
+                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0)
+                    return false;
+            }
+
+            return true;
+        }
     }
 }
