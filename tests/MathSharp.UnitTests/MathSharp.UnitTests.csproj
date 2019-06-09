@@ -8,6 +8,10 @@
     <NoWarn>1701;1702;xUnit1019</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;xUnit1019</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\sources\MathSharp\MathSharp.csproj" />
   </ItemGroup>
