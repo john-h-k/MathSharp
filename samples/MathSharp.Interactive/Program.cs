@@ -7,9 +7,11 @@ using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Running;
 using MathSharp.Matrix;
-using static MathSharp.VectorF;
+using MathSharp.Utils;
+using static MathSharp.Vector;
 using OpenTK;
 using OpenTK.Platform.Windows;
 
@@ -20,24 +22,38 @@ namespace MathSharp.Interactive
     using OpenTKVector = OpenTK.Vector4;
     using OpenTKVector3 = OpenTK.Vector4;
     using SysNumVector = System.Numerics.Vector4;
+    using Vector4F = Vector128<float>;
+    using Vector4FParam1_3 = Vector128<float>;
+
+    internal class Helpers
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static byte Shuffle(byte a, byte b, byte c, byte d)
+        {
+            return (byte)(d 
+                          | (c << 2)
+                          | (b << 4)
+                          | (a << 6));
+        }
+    }
 
     internal class Program
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<VectorisationBenchmark>();
+            BenchmarkRunner.Run<DotProductV256Benchmark>();
         }
 
         public static unsafe bool IsAligned()
         {
             byte x;
             byte y;
-            MatrixF matrix;
+            MatrixSingle matrix;
 
             x = 11;
             y = 11;
 
-            return ((ulong) &matrix) % 16 == 0 && (ulong) &x > (ulong) &matrix && Math.Abs(&x - &y) == 1;
+            return ((ulong)&matrix) % 16 == 0 && (ulong)&x > (ulong)&matrix && Math.Abs(&x - &y) == 1;
         }
     }
 
@@ -68,7 +84,268 @@ namespace MathSharp.Interactive
 
             int mask = Sse.MoveMask(vLeft.AsSingle());
 
-            return mask == -0b_111_1111_0000_0000_0000_0000_0000_0000;
+            return mask == unchecked((int)0b_1111_1111_0000_0000_0000_0000_0000_0000);
+        }
+    }
+
+    [CoreJob]
+    [RPlotExporter]
+    [RankColumn]
+    [Orderer]
+    public class DotProductV256Benchmark
+    {
+        private Vector256<double> _a, _b;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            _a = Vector256.Create(1f, 2f, 3f, 4f);
+            _a = Vector256.Create(1000f, 2000f, 3000f, 4000f);
+        }
+
+        [Benchmark]
+        public Vector256<double> Hadd_Shuffle_Hadd()
+        {
+            return DoubleHadd(_a, _b);
+        }
+
+        [Benchmark]
+        public Vector256<double> Hadd_Permute2x128_Add()
+        {
+            return Permute(_a, _b);
+        }
+
+        [Benchmark]
+        public Vector256<double> Hadd_Permute4x64_HAdd()
+        {
+            return DoubleHaddPermute(_a, _b);
+        }
+
+        public Vector256<double> Permute(Vector256<double> left, Vector256<double> right)
+        {
+            Vector256<double> mul = Avx.Multiply(left, right);
+
+            // Set W to zero
+            Vector256<double> result = Avx.And(mul, MaskWDouble);
+
+            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+            result = Avx.HorizontalAdd(result, result);
+
+            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+            result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+            // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+            // Set W to zero
+            result = Avx.And(result, MaskWDouble);
+
+            return result;
+        }
+
+        public Vector256<double> DoubleHadd(Vector256<double> left, Vector256<double> right)
+        {
+            Vector256<double> mul = Avx.Multiply(left, right);
+
+            // Set W to zero
+            Vector256<double> result = Avx.And(mul, MaskWDouble);
+
+            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+            result = Avx.HorizontalAdd(result, result);
+
+            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+            result = Avx.Shuffle(result, result, Helpers.Shuffle(3, 1, 2, 0));
+
+            result = Avx.HorizontalAdd(result, result);
+            // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+            // Set W to zero
+            result = Avx.And(result, MaskWDouble);
+
+            return result;
+        }
+
+        public Vector256<double> DoubleHaddPermute(Vector256<double> left, Vector256<double> right)
+        {
+            Vector256<double> mul = Avx.Multiply(left, right);
+
+            // Set W to zero
+            Vector256<double> result = Avx.And(mul, MaskWDouble);
+
+            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+            result = Avx.HorizontalAdd(result, result);
+
+            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+            result = Avx2.Permute4x64(result, Helpers.Shuffle(3, 1, 2, 0));
+
+            result = Avx.HorizontalAdd(result, result);
+            // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+            // Set W to zero
+            result = Avx.And(result, MaskWDouble);
+
+            return result;
+        }
+    }
+
+    [CoreJob]
+    [RPlotExporter]
+    [RankColumn]
+    [Orderer]
+    public class PermuteVsDuplicateBenchmark
+    {
+        private Vector128<double> _vector;
+
+        [Benchmark]
+        public Vector256<double> Duplicate()
+        {
+            return Vector256.Create(_vector, _vector);
+        }
+
+        [Benchmark]
+        public Vector256<double> Permute()
+        {
+            return Vector256.Create(_vector.ToScalar());
+        }
+    }
+
+    [CoreJob]
+    [RPlotExporter]
+    [RankColumn]
+    [Orderer]
+    public class JitBugBenchmark
+    {
+        private Vector128<float> _vector;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            _vector = Vector128.Create(1f, 2f, 3f, 4f);
+            Trace.Assert(Reflect3D(_vector, _vector).Equals(Reflect3DFast(_vector, _vector)));
+            Trace.Assert(Avx2.IsSupported);
+        }
+
+        [Benchmark]
+        public Vector128<float> Normalize()
+        {
+            return NormalizeFast(_vector);
+        }
+
+        [Benchmark]
+        public Vector128<float> Normalize_Preferred()
+        {
+            return Normalize(_vector);
+        }
+
+        [Benchmark]
+        public Vector128<float> Reflect()
+        {
+            return Reflect3DFast(_vector, _vector);
+        }
+
+        [Benchmark]
+        public Vector128<float> Reflect_Preferred()
+        {
+            return Reflect3D(_vector, _vector);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public Vector128<float> Normalize(Vector128<float> vector)
+        {
+            return Divide(vector, Length4D(vector));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public Vector128<float> NormalizeFast(Vector128<float> vector)
+        {
+            if (Sse41.IsSupported)
+            {
+                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
+                const byte control = 0b_1111_1111;
+                return Sse.Divide(vector, Sse.Sqrt(Sse41.DotProduct(vector, vector, control)));
+            }
+            else if (Sse3.IsSupported)
+            {
+                Vector128<float> mul = Sse.Multiply(vector, vector);
+                mul = Sse3.HorizontalAdd(mul, mul);
+                return Sse.Divide(vector, Sse.Sqrt(Sse3.HorizontalAdd(mul, mul)));
+            }
+            else if (Sse.IsSupported)
+            {
+                Vector128<float> copy = vector;
+                Vector128<float> mul = Sse.Multiply(vector, copy);
+                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Add(copy, mul);
+                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.AddScalar(mul, copy);
+
+                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2))));
+            }
+
+            return SoftwareFallbacks.Normalize4D_Software(vector);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static Vector4F Reflect3DFast(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            // SSE4.1 has a native dot product instruction, dpps
+            if (Sse41.IsSupported)
+            {
+                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
+                const byte control = 0b_0111_1111;
+                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+            // We can use SSE to vectorize the multiplication
+            // There are different fastest methods to sum the resultant vector
+            // on SSE3 vs SSE1  
+            else if (Sse3.IsSupported)
+            {
+                Vector4F mul = Sse.Multiply(incident, normal);
+                
+                // Set W to zero
+                Vector4F result = Sse.And(mul, MaskWSingle);
+
+                // Doubly horizontally adding fills the final vector with the sum
+                result = Vector.HorizontalAdd(result, result);
+                Vector4F tmp = Vector.HorizontalAdd(result, result);
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+
+            }
+            else if (Sse.IsSupported)
+            {
+                // Multiply to get the needed values
+                Vector4F mul = Sse.Multiply(incident, normal);
+
+                // Shuffle around the values and AddScalar them
+                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+
+                mul = Sse.AddScalar(mul, temp);
+
+                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+
+                mul = Sse.AddScalar(mul, temp);
+
+                Vector4F tmp = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+
+            return SoftwareFallbacks.Reflect3D_Software(incident, normal);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static Vector4F Reflect3D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        {
+            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
+            JohnVector tmp = DotProduct3D(incident, normal);
+            tmp = Add(tmp, tmp);
+            tmp = Multiply(tmp, normal);
+            return Subtract(incident, tmp);
         }
     }
 
@@ -266,35 +543,35 @@ namespace MathSharp.Interactive
         {
             for (var i = 0; i < Count / sizeof(Vector256<float>) / 16; i++)
             {
-                _mathSharpDest[i +  0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  0], _mathSharpSrc[i +  0]), _mathSharpSrc[i]), _mathSharpSrc[i +  0]);
-                _mathSharpDest[i +  0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  0], _mathSharpSrc[i +  0]), _mathSharpSrc[i]), _mathSharpSrc[i +  0]);
+                _mathSharpDest[i + 0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 0], _mathSharpSrc[i + 0]), _mathSharpSrc[i]), _mathSharpSrc[i + 0]);
+                _mathSharpDest[i + 0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 0], _mathSharpSrc[i + 0]), _mathSharpSrc[i]), _mathSharpSrc[i + 0]);
 
-                _mathSharpDest[i +  1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  1], _mathSharpSrc[i +  1]), _mathSharpSrc[i]), _mathSharpSrc[i +  1]);
-                _mathSharpDest[i +  1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  1], _mathSharpSrc[i +  1]), _mathSharpSrc[i]), _mathSharpSrc[i +  1]);
+                _mathSharpDest[i + 1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 1], _mathSharpSrc[i + 1]), _mathSharpSrc[i]), _mathSharpSrc[i + 1]);
+                _mathSharpDest[i + 1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 1], _mathSharpSrc[i + 1]), _mathSharpSrc[i]), _mathSharpSrc[i + 1]);
 
-                _mathSharpDest[i +  2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  2], _mathSharpSrc[i +  2]), _mathSharpSrc[i]), _mathSharpSrc[i +  2]);
-                _mathSharpDest[i +  2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  2], _mathSharpSrc[i +  2]), _mathSharpSrc[i]), _mathSharpSrc[i +  2]);
+                _mathSharpDest[i + 2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 2], _mathSharpSrc[i + 2]), _mathSharpSrc[i]), _mathSharpSrc[i + 2]);
+                _mathSharpDest[i + 2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 2], _mathSharpSrc[i + 2]), _mathSharpSrc[i]), _mathSharpSrc[i + 2]);
 
-                _mathSharpDest[i +  3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  3], _mathSharpSrc[i +  3]), _mathSharpSrc[i]), _mathSharpSrc[i +  3]);
-                _mathSharpDest[i +  3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  3], _mathSharpSrc[i +  3]), _mathSharpSrc[i]), _mathSharpSrc[i +  3]);
+                _mathSharpDest[i + 3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 3], _mathSharpSrc[i + 3]), _mathSharpSrc[i]), _mathSharpSrc[i + 3]);
+                _mathSharpDest[i + 3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 3], _mathSharpSrc[i + 3]), _mathSharpSrc[i]), _mathSharpSrc[i + 3]);
 
-                _mathSharpDest[i +  4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  4], _mathSharpSrc[i +  4]), _mathSharpSrc[i]), _mathSharpSrc[i +  4]);
-                _mathSharpDest[i +  4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  4], _mathSharpSrc[i +  4]), _mathSharpSrc[i]), _mathSharpSrc[i +  4]);
+                _mathSharpDest[i + 4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 4], _mathSharpSrc[i + 4]), _mathSharpSrc[i]), _mathSharpSrc[i + 4]);
+                _mathSharpDest[i + 4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 4], _mathSharpSrc[i + 4]), _mathSharpSrc[i]), _mathSharpSrc[i + 4]);
 
-                _mathSharpDest[i +  5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  5], _mathSharpSrc[i +  5]), _mathSharpSrc[i]), _mathSharpSrc[i +  5]);
-                _mathSharpDest[i +  5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  5], _mathSharpSrc[i +  5]), _mathSharpSrc[i]), _mathSharpSrc[i +  5]);
+                _mathSharpDest[i + 5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 5], _mathSharpSrc[i + 5]), _mathSharpSrc[i]), _mathSharpSrc[i + 5]);
+                _mathSharpDest[i + 5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 5], _mathSharpSrc[i + 5]), _mathSharpSrc[i]), _mathSharpSrc[i + 5]);
 
-                _mathSharpDest[i +  6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  6], _mathSharpSrc[i +  6]), _mathSharpSrc[i]), _mathSharpSrc[i +  6]);
-                _mathSharpDest[i +  6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  6], _mathSharpSrc[i +  6]), _mathSharpSrc[i]), _mathSharpSrc[i +  6]);
+                _mathSharpDest[i + 6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 6], _mathSharpSrc[i + 6]), _mathSharpSrc[i]), _mathSharpSrc[i + 6]);
+                _mathSharpDest[i + 6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 6], _mathSharpSrc[i + 6]), _mathSharpSrc[i]), _mathSharpSrc[i + 6]);
 
-                _mathSharpDest[i +  7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  7], _mathSharpSrc[i +  7]), _mathSharpSrc[i]), _mathSharpSrc[i +  7]);
-                _mathSharpDest[i +  7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  7], _mathSharpSrc[i +  7]), _mathSharpSrc[i]), _mathSharpSrc[i +  7]);
+                _mathSharpDest[i + 7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 7], _mathSharpSrc[i + 7]), _mathSharpSrc[i]), _mathSharpSrc[i + 7]);
+                _mathSharpDest[i + 7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 7], _mathSharpSrc[i + 7]), _mathSharpSrc[i]), _mathSharpSrc[i + 7]);
 
-                _mathSharpDest[i +  8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  8], _mathSharpSrc[i +  8]), _mathSharpSrc[i]), _mathSharpSrc[i +  8]);
-                _mathSharpDest[i +  8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  8], _mathSharpSrc[i +  8]), _mathSharpSrc[i]), _mathSharpSrc[i +  8]);
+                _mathSharpDest[i + 8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 8], _mathSharpSrc[i + 8]), _mathSharpSrc[i]), _mathSharpSrc[i + 8]);
+                _mathSharpDest[i + 8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 8], _mathSharpSrc[i + 8]), _mathSharpSrc[i]), _mathSharpSrc[i + 8]);
 
-                _mathSharpDest[i +  9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  9], _mathSharpSrc[i +  9]), _mathSharpSrc[i]), _mathSharpSrc[i +  9]);
-                _mathSharpDest[i +  9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i +  9], _mathSharpSrc[i +  9]), _mathSharpSrc[i]), _mathSharpSrc[i +  9]);
+                _mathSharpDest[i + 9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 9], _mathSharpSrc[i + 9]), _mathSharpSrc[i]), _mathSharpSrc[i + 9]);
+                _mathSharpDest[i + 9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 9], _mathSharpSrc[i + 9]), _mathSharpSrc[i]), _mathSharpSrc[i + 9]);
 
                 _mathSharpDest[i + 10] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 10], _mathSharpSrc[i + 10]), _mathSharpSrc[i]), _mathSharpSrc[i + 10]);
                 _mathSharpDest[i + 10] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 10], _mathSharpSrc[i + 10]), _mathSharpSrc[i]), _mathSharpSrc[i + 10]);

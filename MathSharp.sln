@@ -7,22 +7,46 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp", "sources\MathSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp.Interactive", "samples\MathSharp.Interactive\MathSharp.Interactive.csproj", "{6183BF41-9E9F-4987-A4D9-6F773D65269D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{CFFDBEEC-B112-4844-B65B-56A1029CC130}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\azure-pipelines.yml = scripts\azure-pipelines.yml
+		scripts\build.ps1 = scripts\build.ps1
+		scripts\build.sh = scripts\build.sh
+		scripts\cibuild.cmd = scripts\cibuild.cmd
+		scripts\cibuild.sh = scripts\cibuild.sh
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9A2281C3-DFB9-4E5A-ABF9-7B605E61E0F5}"
 	ProjectSection(SolutionItems) = preProject
 		samples\Directory.Build.props = samples\Directory.Build.props
 		samples\Directory.Build.targets = samples\Directory.Build.targets
 	EndProjectSection
 EndProject
+ProjectSection(SolutionItems) = preProject
+		docs\CODE_OF_CONDUCT.md = docs\CODE_OF_CONDUCT.md
+		docs\CODEOWNERS = docs\CODEOWNERS
+		docs\CONTRIBUTING.md = docs\CONTRIBUTING.md
+		docs\ISSUE_TEMPLATE.md = docs\ISSUE_TEMPLATE.md
+		docs\PULL_REQUEST_TEMPLATE.md = docs\PULL_REQUEST_TEMPLATE.md
+		docs\README.md = docs\README.md
+	EndProjectSection
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6BBF0A6F-9437-4146-83A9-AD251F6BA375}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		CONTRIBUTING.md = CONTRIBUTING.md
+		build.cmd = build.cmd
+		build.sh = build.sh
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
-		LICENSE = LICENSE
-		MathSharp.snk = MathSharp.snk
-		README.md = README.md
+		LICENSE.md = LICENSE.md
+		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
+		pack.cmd = pack.cmd
+		pack.sh = pack.sh
+		restore.cmd = restore.cmd
+		restore.sh = restore.sh
+		test.cmd = test.cmd
+		test.sh = test.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sources", "sources", "{9B19E1B6-A3A3-4D4D-AECC-75EFEE60F834}"
