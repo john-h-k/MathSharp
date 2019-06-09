@@ -43,7 +43,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskZW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -87,7 +87,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, MaskW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Sse3.HorizontalAdd(result, result);
@@ -169,7 +169,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskZW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -213,7 +213,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(vector, vector);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, MaskW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Sse3.HorizontalAdd(result, result);
@@ -316,7 +316,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(left, right);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskZW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -359,7 +359,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(left, right);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, MaskW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Sse3.HorizontalAdd(result, result);
@@ -502,7 +502,7 @@ namespace MathSharp
 
                 Vector4F resultNonMaskedW = Sse.Subtract(mul1, mul2);
 
-                return Sse.And(resultNonMaskedW, MaskW);
+                return Sse.And(resultNonMaskedW, MaskWSingle);
 
                 // TODO reuse vectors (minimal register usage) - potentially prevent any stack spilling
             }
@@ -547,7 +547,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskZW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -594,7 +594,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, MaskW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Sse3.HorizontalAdd(result, result);
@@ -681,7 +681,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskZW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -729,7 +729,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, MaskW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Sse3.HorizontalAdd(result, result);
@@ -838,7 +838,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(incident, normal);
 
                 // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskZW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
                 result = Sse3.HorizontalAdd(result, result);
@@ -888,7 +888,7 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(incident, normal);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, MaskW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Sse3.HorizontalAdd(result, result);

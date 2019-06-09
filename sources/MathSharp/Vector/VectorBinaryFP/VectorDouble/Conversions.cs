@@ -43,7 +43,7 @@ namespace MathSharp
         //        Vector4D lo = Vector256.CreateScalarUnsafe(vector.X);
         //        Vector4D mid = Vector256.CreateScalarUnsafe(vector.Y);
         //        Vector4D hi = Vector256.CreateScalarUnsafe(vector.Z);
-        //        hi = MathSharp.Vector.And(hi, MathSharp.Vector.MaskW);
+        //        hi = MathSharp.Vector.And(hi, MathSharp.Vector.MaskWSingle);
 
         //        // Construct a vector of (lo, mid, ?, ?)
         //        Vector4D loMid = Sse.UnpackLow(lo, mid);

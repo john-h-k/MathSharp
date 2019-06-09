@@ -7,20 +7,9 @@ using System.Runtime.Intrinsics;
 
 namespace MathSharp.Utils
 {
-    internal static class Helpers
+    internal static partial class Helpers
     {
-        /// <summary>
-        /// _MM_SHUFFLE equivalent
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static byte Shuffle(byte a, byte b, byte c, byte d)
-        {
-            return (byte)(
-                  (a << 6)
-                | (b << 4)
-                | (c << 2)
-                | d);
-        }
+        
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static Vector256<double> ToScalarVector256(Vector256<double> vector)
@@ -35,27 +24,67 @@ namespace MathSharp.Utils
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static float X(Vector128<float> vector) => vector.GetElement(0);
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static float Y(Vector128<float> vector) => vector.GetElement(1);
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static float Z(Vector128<float> vector) => vector.GetElement(2);
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static float W(Vector128<float> vector) => vector.GetElement(3);
+        public static T X<T>(Vector128<T> vector) where T : struct => vector.GetElement(0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double X(Vector128<double> vector) => vector.GetElement(0);
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double Y(Vector128<double> vector) => vector.GetElement(1);
+        public static T Y<T>(Vector128<T> vector) where T : struct => vector.GetElement(1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double X(Vector256<double> vector) => vector.GetElement(0);
+        public static T Z<T>(Vector128<T> vector) where T : struct => vector.GetElement(2);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double Y(Vector256<double> vector) => vector.GetElement(1);
+        public static T W<T>(Vector128<T> vector) where T : struct => vector.GetElement(3);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double Z(Vector256<double> vector) => vector.GetElement(2);
+        public static T X<T>(Vector256<T> vector) where T : struct => vector.GetElement(0);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double W(Vector256<double> vector) => vector.GetElement(3);
+        public static T Y<T>(Vector256<T> vector) where T : struct => vector.GetElement(1);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static T Z<T>(Vector256<T> vector) where T : struct => vector.GetElement(2);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static T W<T>(Vector256<T> vector) where T : struct => vector.GetElement(3);
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static float Y(Vector128<float> vector) => vector.GetElement(1);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static float Z(Vector128<float> vector) => vector.GetElement(2);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static float W(Vector128<float> vector) => vector.GetElement(3);
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static double X(Vector128<double> vector) => vector.GetElement(0);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static double Y(Vector128<double> vector) => vector.GetElement(1);
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static double X(Vector256<double> vector) => vector.GetElement(0);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static double Y(Vector256<double> vector) => vector.GetElement(1);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static double Z(Vector256<double> vector) => vector.GetElement(2);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static double W(Vector256<double> vector) => vector.GetElement(3);
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static ulong X(Vector256<ulong> vector) => vector.GetElement(0);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static ulong Y(Vector256<ulong> vector) => vector.GetElement(1);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static ulong Z(Vector256<ulong> vector) => vector.GetElement(2);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static ulong W(Vector256<ulong> vector) => vector.GetElement(3);
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static long X(Vector256<long> vector) => vector.GetElement(0);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static long Y(Vector256<long> vector) => vector.GetElement(1);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static long Z(Vector256<long> vector) => vector.GetElement(2);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static long W(Vector256<long> vector) => vector.GetElement(3);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static bool AreEqual(Vector4 left, Vector128<float> right)
@@ -114,42 +143,6 @@ namespace MathSharp.Utils
 
         public static readonly float NoBitsSetSingle = 0f; 
         public static readonly float AllBitsSetSingle = Unsafe.As<int, float>(ref Unsafe.AsRef(-1));
-
-        public static readonly double NoBitsSetDouble = 0d;
-        public static readonly double AllBitsSetDouble = Unsafe.As<int, double>(ref Unsafe.AsRef(-1));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static float BoolToSimdBoolSingle(bool val) => val ? NoBitsSetSingle : AllBitsSetSingle;
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double BoolToSimdBoolDouble(bool val) => val ? NoBitsSetDouble : AllBitsSetDouble;
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static int BoolToSimdBoolInt32(bool val) => val ? -1 : 0;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static bool AreAllEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)
-        {
-            for (var i = 0; i < 4; i++)
-            {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0)
-                    return false;
-            }
-
-            return true;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static bool AreAllNotEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)
-        {
-            for (var i = 0; i < 4; i++)
-            {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0)
-                    return false;
-            }
-
-            return true;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static Vector2 ByValToSlowVector2(Vector128<float> vec)
