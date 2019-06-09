@@ -27,7 +27,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
         {
             Vector128<float> result = Vector.Abs(vector);
 
-            Assert.True(AreEqual(expected, result));
+            Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
     }
 }

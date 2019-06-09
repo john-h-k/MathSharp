@@ -41,7 +41,10 @@ namespace MathSharp.Interactive
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<PermuteVsDuplicateBenchmark>();
+            Vector128<float> v1 = Vector128.Create(1f, 2f, 0f, 0f);
+            Vector128<float> v2 = Vector128.Create(3f, 4f, 0f, 0f);
+
+            Console.WriteLine(Vector.CrossProduct2D(v1, v2));
         }
 
         public static unsafe bool IsAligned()

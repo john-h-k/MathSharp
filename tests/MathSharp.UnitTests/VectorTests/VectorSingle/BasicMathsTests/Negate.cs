@@ -24,7 +24,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
         {
             Vector128<float> result = Vector.Negate4D(vector);
 
-            Assert.True(AreEqual(expected, result));
+            Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
         [Fact]

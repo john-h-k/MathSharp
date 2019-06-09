@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
@@ -71,6 +73,45 @@ namespace MathSharp.Utils
         public static bool AreEqual(float left, Vector128<float> right)
             => left.Equals(X(right));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreApproxEqual(float left, float right, float interval = 0.000000001f)
+        {
+            if (float.IsNaN(left) && float.IsNaN(right))
+                return true;
+
+            return MathF.Abs(left - right) < interval;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreApproxEqual(Vector4 left, Vector128<float> right, float interval = 0.000000001f)
+        {
+            return AreApproxEqual(left.X, X(right), interval)
+                   && AreApproxEqual(left.Y, Y(right), interval)
+                   && AreApproxEqual(left.Z, Z(right), interval)
+                   && AreApproxEqual(left.W, W(right), interval);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreApproxEqual(Vector3 left, Vector128<float> right, float interval = 0.000000001f)
+        {
+            return AreApproxEqual(left.X, X(right), interval)
+                   && AreApproxEqual(left.Y, Y(right), interval)
+                   && AreApproxEqual(left.Z, Z(right), interval);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreApproxEqual(Vector2 left, Vector128<float> right, float interval = 0.000000001f)
+        {
+            return AreApproxEqual(left.X, X(right), interval)
+                   && AreApproxEqual(left.Y, Y(right), interval);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreApproxEqual(float left, Vector128<float> right)
+        {
+            return AreApproxEqual(left, X(right));
+        }
+
         public static readonly float NoBitsSetSingle = 0f; 
         public static readonly float AllBitsSetSingle = Unsafe.As<int, float>(ref Unsafe.AsRef(-1));
 
@@ -108,6 +149,24 @@ namespace MathSharp.Utils
             }
 
             return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static Vector2 ByValToSlowVector2(Vector128<float> vec)
+        {
+            return new Vector2(X(vec), Y(vec));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static Vector3 ByValToSlowVector3(Vector128<float> vec)
+        {
+            return new Vector3(X(vec), Y(vec), Z(vec));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static Vector4 ByValToSlowVector4(Vector128<float> vec)
+        {
+            return new Vector4(X(vec), Y(vec), Z(vec), W(vec));
         }
     }
 }

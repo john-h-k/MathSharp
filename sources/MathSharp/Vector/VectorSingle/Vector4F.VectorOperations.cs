@@ -121,7 +121,7 @@ namespace MathSharp
             {
                 // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_1111_1111;
-                return Sse.Divide(vector, Sse41.DotProduct(vector, vector, control));
+                return Sse.Divide(vector, Sse.Sqrt(Sse41.DotProduct(vector, vector, control)));
             }
             else if (Sse3.IsSupported)
             {
@@ -282,15 +282,15 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F LengthSquared3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F LengthSquared3D(Vector4FParam1_3 vector)
         {
-            return DotProduct3D(left, right);
+            return DotProduct3D(vector, vector);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F LengthSquared4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F LengthSquared4D(Vector4FParam1_3 vector)
         {
-            return DotProduct4D(left, right);
+            return DotProduct4D(vector, vector);
         }
 
         #endregion
@@ -439,7 +439,7 @@ namespace MathSharp
                 permute = Sse.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector4F temp = Sse.Shuffle(permute, permute, Helpers.Shuffle(1, 0, 0, 0));
+                Vector4F temp = Sse.Shuffle(permute, permute, Helpers.Shuffle(0, 0, 0, 1));
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Sse.Subtract(permute, temp);
@@ -580,16 +580,18 @@ namespace MathSharp
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
             {
+                Vector4F diff = Sse.Subtract(left, right);
                 // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
                 const byte control = 0b_0111_1111;
-                return Sse.Sqrt(Sse41.DotProduct(left, right, control));
+                return Sse.Sqrt(Sse41.DotProduct(diff, diff, control));
             }
             // We can use SSE to vectorize the multiplication
             // There are different fastest methods to sum the resultant vector
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector4F diff = Sse.Subtract(left, right);
+                Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Set W to zero
                 Vector4F result = Sse.And(mul, MaskW);
@@ -600,8 +602,9 @@ namespace MathSharp
             }
             else if (Sse.IsSupported)
             {
+                Vector4F diff = Sse.Subtract(left, right);
                 // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Shuffle around the values and AddScalar them
                 Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
@@ -920,11 +923,47 @@ namespace MathSharp
 
         public static Vector4F Reflect4D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
         {
+#warning TODO hardware accelerate ASAP
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector4F tmp = DotProduct4D_Software(incident, normal);
-            tmp = Multiply_Software(tmp, tmp);
-            tmp = Multiply_Software(tmp, normal);
-            return Subtract_Software(incident, tmp);
+            //Vector4F tmp = DotProduct4D_Software(incident, normal);
+            //tmp = Add_Software(tmp, tmp);
+            //tmp = Multiply_Software(tmp, normal);
+            //return Subtract_Software(incident, tmp);
+            if (Sse41.IsSupported)
+            {
+                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
+                const byte control = 0b_1111_1111;
+                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
+
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+            else if (Sse3.IsSupported)
+            {
+                Vector4F mul = Sse.Multiply(incident, normal);
+                mul = Sse3.HorizontalAdd(mul, mul);
+                Vector4F tmp = Sse3.HorizontalAdd(mul, mul);
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+            else if (Sse.IsSupported)
+            {
+                Vector4F copy = normal;
+                Vector4F mul = Sse.Multiply(incident, copy);
+                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Add(copy, mul);
+                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.AddScalar(mul, copy);
+
+                Vector4F tmp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2));
+                tmp = Sse.Add(tmp, tmp);
+                tmp = Sse.Multiply(tmp, normal);
+                return Sse.Subtract(incident, tmp);
+            }
+
+            return Reflect4D_Software(incident, normal);
         }
 
         #endregion
