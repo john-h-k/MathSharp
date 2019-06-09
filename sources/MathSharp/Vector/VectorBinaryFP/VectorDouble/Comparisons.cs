@@ -30,7 +30,7 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                return Avx.Compare(left, right, FloatComparisonMode.OrderedNotEqualNonSignaling);
+                return Avx.Compare(left, right, FloatComparisonMode.UnorderedNotEqualNonSignaling);
             }
 
             return Inequality_Software(left, right);
@@ -42,7 +42,7 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                return Avx.Compare(left, right, FloatComparisonMode.OrderedGreaterThanNonSignaling);
+                return Avx.Compare(left, right, FloatComparisonMode.UnorderedNotLessThanOrEqualNonSignaling);
             }
 
             return GreaterThan_Software(left, right);
@@ -54,7 +54,7 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                return Avx.Compare(left, right, FloatComparisonMode.OrderedLessThanNonSignaling);
+                return Avx.Compare(left, right, FloatComparisonMode.OrderedLessThanSignaling);
             }
 
             return LessThan_Software(left, right);
@@ -66,7 +66,7 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                return Avx.Compare(left, right, FloatComparisonMode.OrderedGreaterThanOrEqualNonSignaling);
+                return Avx.Compare(left, right, FloatComparisonMode.UnorderedNotLessThanSignaling);
             }
 
             return GreaterThanOrEqual_Software(left, right);
@@ -78,7 +78,7 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                return Avx.Compare(left, right, FloatComparisonMode.OrderedLessThanOrEqualNonSignaling);
+                return Avx.Compare(left, right, FloatComparisonMode.OrderedLessThanOrEqualSignaling);
             }
 
             return LessThanOrEqual_Software(left, right);

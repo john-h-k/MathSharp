@@ -65,7 +65,7 @@ namespace MathSharp
         {
             if (Sse.IsSupported)
             {
-                return Sse.CompareGreaterThan(left, right);
+                return Sse.CompareGreaterThanOrEqual(left, right);
             }
 
             return GreaterThanOrEqual_Software(left, right);

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
+using OpenTK;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using MathSharp.Utils;
@@ -44,7 +44,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BitOperationsTests
         {
             Vector128<float> vector = Vector.Xor(left, right);
 
-            Assert.True(Helpers.AreEqual(expected, vector));
+            Assert.True(TestHelpers.AreEqual(expected, vector));
         }
     }
 }

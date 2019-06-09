@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using OpenTK;
 using System.Runtime.Intrinsics;
 using Xunit;
-using static MathSharp.Utils.Helpers;
+using static MathSharp.UnitTests.TestHelpers;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 {
@@ -32,7 +32,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                         {
                             Vector2 v1 = ByValToSlowVector2(((Vector128<float>)set[0]));
                             Vector2 v2 = ByValToSlowVector2(((Vector128<float>)set[1]));
-                            set[2] = Vector2.Reflect(v1, v2);
+                            set[2] = v1 - 2 * Vector2.Dot(v1, v2) * v2;
                             break;
                         }
 
@@ -40,15 +40,15 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                         {
                             Vector3 v1 = ByValToSlowVector3(((Vector128<float>)set[0]));
                             Vector3 v2 = ByValToSlowVector3(((Vector128<float>)set[1]));
-                            set[2] = Vector3.Reflect(v1, v2);
+                            set[2] = v1 - 2 * Vector3.Dot(v1, v2) * v2;
                             break;
                         }
 
                     case VectorDimensions.V4D:
                         {
-                            var v1 = (Vector128<float>)set[0];
-                            var v2 = (Vector128<float>)set[1];
-                            set[2] = ByValToSlowVector4(SoftwareFallbacks.Reflect4D_Software(v1, v2));
+                            Vector4 v1 = ByValToSlowVector4((Vector128<float>)set[0]);
+                            Vector4 v2 = ByValToSlowVector4((Vector128<float>)set[1]);
+                            set[2] = v1 - 2 * Vector4.Dot(v1, v2) * v2;
                             break;
                         }
 

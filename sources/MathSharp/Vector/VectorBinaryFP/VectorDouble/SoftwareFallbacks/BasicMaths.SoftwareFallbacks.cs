@@ -29,8 +29,8 @@ namespace MathSharp
         {
             return Vector256.Create(
                 X(left) + Y(left),
-                Z(left) + W(left),
                 X(right) + Y(right),
+                Z(left) + W(left),
                 Z(right) + W(right)
             );
         }

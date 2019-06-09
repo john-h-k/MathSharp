@@ -6,34 +6,19 @@ using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
 {
-    using Vector4Int32 = Vector128<int>;
-    using Vector4Int32Param1_3 = Vector128<int>;
+    using Vector4UInt32 = Vector128<uint>;
+    using Vector4UInt32Param1_3 = Vector128<uint>;
 
     public static partial class Vector
     {
         #region Vector
-
-        [UsesInstructionSet(InstructionSets.Sse41)]
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Abs(Vector4Int32Param1_3 vector)
-        {
-            if (Sse41.IsSupported)
-            {
-                Vector4Int32 zero = Vector4Int32.Zero;
-                zero = Sse2.Subtract(zero, vector); // This gets the inverted results of all elements
-                return Sse41.Max(zero, vector); // This selects the positive values of the 2 vectors
-            }
-
-            return Abs_Software(vector);
-        }
-
         [UsesInstructionSet(InstructionSets.Ssse3)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 HorizontalAdd(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4UInt32 HorizontalAdd(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
             if (Ssse3.IsSupported)
             {
-                return Ssse3.HorizontalAdd(left, right);
+                return Ssse3.HorizontalAdd(left.AsInt32(), right.AsInt32()).AsUInt32();
             }
 
             // TODO can Sse be used over the software fallback?
@@ -43,7 +28,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse2)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4UInt32 Add(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -55,11 +40,11 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse2)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4UInt32 Add(Vector4UInt32Param1_3 vector, uint scalar)
         {
             if (Sse2.IsSupported)
             {
-                Vector4Int32 expand = Vector128.Create(scalar);
+                Vector4UInt32 expand = Vector128.Create(scalar);
                 return Sse2.Add(vector, expand);
             }
 
@@ -68,7 +53,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse2)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4UInt32 Subtract(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -80,11 +65,11 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse2)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4UInt32 Subtract(Vector4UInt32Param1_3 vector, uint scalar)
         {
             if (Sse2.IsSupported)
             {
-                Vector4Int32 expand = Vector128.Create(scalar);
+                Vector4UInt32 expand = Vector128.Create(scalar);
                 return Sse2.Add(vector, expand);
             }
 
@@ -93,7 +78,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse41)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4UInt32 Multiply(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -110,7 +95,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse41)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply(Vector4Int32Param1_3 left, int scalar)
+        public static Vector4UInt32 Multiply(Vector4UInt32Param1_3 left, uint scalar)
         {
             if (Sse41.IsSupported)
             {
@@ -126,7 +111,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(Vector4Int32Param1_3 dividend, Vector4Int32Param1_3 divisor)
+        public static Vector4UInt32 Divide(Vector4UInt32Param1_3 dividend, Vector4UInt32Param1_3 divisor)
         {
 #warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse2.IsSupported)
@@ -139,7 +124,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(Vector4Int32Param1_3 dividend, int scalarDivisor)
+        public static Vector4UInt32 Divide(Vector4UInt32Param1_3 dividend, uint scalarDivisor)
         {
 #warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse.IsSupported)
@@ -153,11 +138,11 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse41)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Clamp(Vector4Int32Param1_3 vector, Vector4Int32Param1_3 low, Vector4Int32Param1_3 high)
+        public static Vector4UInt32 Clamp(Vector4UInt32Param1_3 vector, Vector4UInt32Param1_3 low, Vector4UInt32Param1_3 high)
         {
             if (Sse41.IsSupported)
             {
-                Vector4Int32 temp = Sse41.Min(vector, high);
+                Vector4UInt32 temp = Sse41.Min(vector, high);
                 return Sse41.Max(temp, low);
             }
 
@@ -166,7 +151,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Sqrt(Vector4Int32Param1_3 vector)
+        public static Vector4UInt32 Sqrt(Vector4UInt32Param1_3 vector)
         {
 #warning No direct hardware acceleration for integer sqrt; research acceleration techniques
             //if (Sse.IsSupported)
@@ -182,7 +167,7 @@ namespace MathSharp
         // TODO We should provide a symmetric alternative to this
         [UsesInstructionSet(InstructionSets.Sse41)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Max(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4UInt32 Max(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -195,7 +180,7 @@ namespace MathSharp
         // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
         [UsesInstructionSet(InstructionSets.Sse41)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Min(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4UInt32 Min(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -204,43 +189,7 @@ namespace MathSharp
 
             return Min_Software(left, right);
         }
-
-        [UsesInstructionSet(InstructionSets.Sse2)]
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate2D(Vector4Int32Param1_3 vector)
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.Xor(vector, SignFlip2D.AsInt32());
-            }
-
-            return Negate4D_Software(vector);
-        }
-
-        [UsesInstructionSet(InstructionSets.Sse2)]
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate3D(Vector4Int32Param1_3 vector)
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.Xor(vector, SignFlip3D.AsInt32());
-            }
-
-            return Negate4D_Software(vector);
-        }
-
-        [UsesInstructionSet(InstructionSets.Sse2)]
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate4D(Vector4Int32Param1_3 vector)
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.Xor(vector, SignFlip4D.AsInt32());
-            }
-
-            return Negate4D_Software(vector);
-        }
-
+        
         #endregion
     }
 }

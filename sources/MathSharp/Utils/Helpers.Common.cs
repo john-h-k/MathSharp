@@ -35,31 +35,5 @@ namespace MathSharp.Utils
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static ulong BoolToSimdBoolUInt64(bool val) => val ? (ulong)long.MaxValue + 1 : 0;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static bool AreAllEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)
-        {
-            for (var i = 0; i < 4; i++)
-            {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0)
-                    return false;
-            }
-
-            return true;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static bool AreAllNotEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)
-        {
-            for (var i = 0; i < 4; i++)
-            {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0)
-                    return false;
-            }
-
-            return true;
-        }
     }
 }

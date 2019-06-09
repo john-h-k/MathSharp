@@ -36,8 +36,6 @@ namespace MathSharp
                 return Avx.HorizontalAdd(left, right);
             }
 
-            // TODO can Avx be used over the software fallback?
-
             return HorizontalAdd_Software(left, right);
         }
 

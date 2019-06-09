@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
+using OpenTK;
 using System.Runtime.Intrinsics;
 using Xunit;
-using static MathSharp.Utils.Helpers;
+using static MathSharp.UnitTests.TestHelpers;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {

@@ -41,10 +41,7 @@ namespace MathSharp.Interactive
     {
         private static void Main(string[] args)
         {
-            Vector128<float> v1 = Vector128.Create(1f, 2f, 0f, 0f);
-            Vector128<float> v2 = Vector128.Create(3f, 4f, 0f, 0f);
-
-            Console.WriteLine(Vector.CrossProduct2D(v1, v2));
+            BenchmarkRunner.Run<DotProductV256Benchmark>();
         }
 
         public static unsafe bool IsAligned()
@@ -88,6 +85,104 @@ namespace MathSharp.Interactive
             int mask = Sse.MoveMask(vLeft.AsSingle());
 
             return mask == unchecked((int)0b_1111_1111_0000_0000_0000_0000_0000_0000);
+        }
+    }
+
+    [CoreJob]
+    [RPlotExporter]
+    [RankColumn]
+    [Orderer]
+    public class DotProductV256Benchmark
+    {
+        private Vector256<double> _a, _b;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            _a = Vector256.Create(1f, 2f, 3f, 4f);
+            _a = Vector256.Create(1000f, 2000f, 3000f, 4000f);
+        }
+
+        [Benchmark]
+        public Vector256<double> Hadd_Shuffle_Hadd()
+        {
+            return DoubleHadd(_a, _b);
+        }
+
+        [Benchmark]
+        public Vector256<double> Hadd_Permute2x128_Add()
+        {
+            return Permute(_a, _b);
+        }
+
+        [Benchmark]
+        public Vector256<double> Hadd_Permute4x64_HAdd()
+        {
+            return DoubleHaddPermute(_a, _b);
+        }
+
+        public Vector256<double> Permute(Vector256<double> left, Vector256<double> right)
+        {
+            Vector256<double> mul = Avx.Multiply(left, right);
+
+            // Set W to zero
+            Vector256<double> result = Avx.And(mul, MaskWDouble);
+
+            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+            result = Avx.HorizontalAdd(result, result);
+
+            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+            result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+            // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+            // Set W to zero
+            result = Avx.And(result, MaskWDouble);
+
+            return result;
+        }
+
+        public Vector256<double> DoubleHadd(Vector256<double> left, Vector256<double> right)
+        {
+            Vector256<double> mul = Avx.Multiply(left, right);
+
+            // Set W to zero
+            Vector256<double> result = Avx.And(mul, MaskWDouble);
+
+            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+            result = Avx.HorizontalAdd(result, result);
+
+            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+            result = Avx.Shuffle(result, result, Helpers.Shuffle(3, 1, 2, 0));
+
+            result = Avx.HorizontalAdd(result, result);
+            // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+            // Set W to zero
+            result = Avx.And(result, MaskWDouble);
+
+            return result;
+        }
+
+        public Vector256<double> DoubleHaddPermute(Vector256<double> left, Vector256<double> right)
+        {
+            Vector256<double> mul = Avx.Multiply(left, right);
+
+            // Set W to zero
+            Vector256<double> result = Avx.And(mul, MaskWDouble);
+
+            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+            result = Avx.HorizontalAdd(result, result);
+
+            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+            result = Avx2.Permute4x64(result, Helpers.Shuffle(3, 1, 2, 0));
+
+            result = Avx.HorizontalAdd(result, result);
+            // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+            // Set W to zero
+            result = Avx.And(result, MaskWDouble);
+
+            return result;
         }
     }
 
@@ -208,9 +303,9 @@ namespace MathSharp.Interactive
             else if (Sse3.IsSupported)
             {
                 Vector4F mul = Sse.Multiply(incident, normal);
-
+                
                 // Set W to zero
-                Vector4F result = Sse.And(mul, MaskW);
+                Vector4F result = Sse.And(mul, MaskWSingle);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Vector.HorizontalAdd(result, result);

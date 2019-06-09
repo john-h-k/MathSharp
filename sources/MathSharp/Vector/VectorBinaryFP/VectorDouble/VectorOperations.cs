@@ -1,11 +1,10 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using MathSharp.Utils;
-using static System.Runtime.Intrinsics.X86.Avx;
 using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
@@ -18,9 +17,9 @@ namespace MathSharp
     {
         #region Vector Maths
 
-        private static readonly Vector256<double> SignFlip2DDouble = Vector256.Create(int.MinValue, int.MinValue, 0, 0).AsDouble();
-        private static readonly Vector256<double> SignFlip3DDouble = Vector256.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsDouble();
-        private static readonly Vector256<double> SignFlip4DDouble = Vector256.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsDouble();
+        private static readonly Vector256<double> SignFlip2DDouble = Vector256.Create(long.MinValue, long.MinValue, 0, 0).AsDouble();
+        private static readonly Vector256<double> SignFlip3DDouble = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, 0).AsDouble();
+        private static readonly Vector256<double> SignFlip4DDouble = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, long.MinValue).AsDouble();
 
         #region Normalize
 
@@ -63,9 +62,12 @@ namespace MathSharp
                 // Set W to zero
                 Vector4D result = Avx.And(mul, MaskWDouble);
 
-                // Doubly horizontally adding fills the final vector with the sum
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
                 result = Avx.HorizontalAdd(result, result);
-                result = Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
 
                 // Dot done
 
@@ -80,10 +82,16 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                Vector4D mul = Avx.Multiply(vector, vector);
-                mul = Avx.HorizontalAdd(mul, mul);
-                mul = Avx.HorizontalAdd(mul, mul);
-                return Avx.Divide(vector, Avx.Sqrt(mul));
+                Vector4D result = Avx.Multiply(vector, vector);
+
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+                result = Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return Avx.Divide(vector, Avx.Sqrt(result));
             }
 
             return Normalize4D_Software(vector);
@@ -132,11 +140,12 @@ namespace MathSharp
                 // Set W to zero
                 Vector4D result = Avx.And(mul, MaskWDouble);
 
-                // Doubly horizontally adding fills the final vector with the sum
-                result = Avx.HorizontalAdd(result, result);
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
                 result = Avx.HorizontalAdd(result, result);
 
-                // Dot done
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
 
                 return Avx.Sqrt(result);
             }
@@ -149,9 +158,16 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                Vector4D mul = Avx.Multiply(vector, vector);
-                mul = Avx.HorizontalAdd(mul, mul);
-                return Avx.Sqrt(Avx.HorizontalAdd(mul, mul));
+                Vector4D result = Avx.Multiply(vector, vector);
+
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+                result = Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return Avx.Sqrt(result);
             }
 
             return Length4D_Software(vector);
@@ -169,15 +185,15 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D LengthSquared3D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D LengthSquared3D(in Vector4DParam1_3 vector)
         {
-            return DotProduct3D(left, right);
+            return DotProduct3D(vector, vector);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D LengthSquared4D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D LengthSquared4D(in Vector4DParam1_3 vector)
         {
-            return DotProduct4D(left, right);
+            return DotProduct4D(vector, vector);
         }
 
         #endregion
@@ -224,9 +240,14 @@ namespace MathSharp
                 // Set W to zero
                 Vector4D result = Avx.And(mul, MaskWDouble);
 
-                // Doubly horizontally adding fills the final vector with the sum
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
                 result = Avx.HorizontalAdd(result, result);
-                return Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return result;
             }
 
             return DotProduct3D_Software(left, right);
@@ -238,9 +259,16 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                Vector4D mul = Avx.Multiply(left, right);
-                mul = Avx.HorizontalAdd(mul, mul);
-                return Avx.HorizontalAdd(mul, mul);
+                Vector256<double> result = Avx.Multiply(left, right);
+
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+                result = Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return result;
             }
 
             return DotProduct4D_Software(left, right);
@@ -259,23 +287,23 @@ namespace MathSharp
              * 'E'. We expand this (like with DotProduct) to the whole vector
              */
 
-            if (IsSupported)
+            if (Avx.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                Vector4D permute = Shuffle(right, right, Helpers.Shuffle(0, 1, 0, 1));
+                Vector4D permute = Avx.Shuffle(right, right, Helpers.Shuffle(0, 1, 0, 1));
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Avx.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector4D temp = Shuffle(permute, permute, Helpers.Shuffle(1, 0, 0, 0));
+                Vector4D temp = Avx.Shuffle(permute, permute, Helpers.Shuffle(0, 0, 0, 1));
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Avx.Subtract(permute, temp);
 
                 // Fill the vector with it (like DotProduct)
-                return Shuffle(permute, permute, Helpers.Shuffle(0, 0, 0, 0));
+                return Avx.Shuffle(permute, permute, Helpers.Shuffle(0, 0, 0, 0));
             }
 
             return CrossProduct2D_Software(left, right);
@@ -285,7 +313,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D CrossProduct3D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
-            if (IsSupported)
+            if (Avx2.IsSupported)
             {
                 #region Comments
 
@@ -314,17 +342,16 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                Vector4D leftHandSide1 = Shuffle(left, left, Helpers.Shuffle(3, 0, 2, 1));
-                Vector4D rightHandSide1 = Shuffle(right, right, Helpers.Shuffle(3, 1, 0, 2));
+                Vector4D leftHandSide1 = Avx2.Permute4x64(left, Helpers.Shuffle(3, 0, 2, 1));
+                Vector4D rightHandSide1 = Avx2.Permute4x64(right, Helpers.Shuffle(3, 1, 0, 2));
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
                  * rhs2 goes from x, y, z, _ to y, z, x, _
                  */
 
-
-                Vector4D leftHandSide2 = Shuffle(left, left, Helpers.Shuffle(3, 1, 0, 2));
-                Vector4D rightHandSide2 = Shuffle(right, right, Helpers.Shuffle(3, 0, 2, 1));
+                Vector4D leftHandSide2 = Avx2.Permute4x64(left, Helpers.Shuffle(3, 1, 0, 2));
+                Vector4D rightHandSide2 = Avx2.Permute4x64(right, Helpers.Shuffle(3, 0, 2, 1));
 
                 Vector4D mul1 = Avx.Multiply(leftHandSide1, rightHandSide1);
 
@@ -391,14 +418,20 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                Vector4D mul = Avx.Multiply(left, right);
+                Vector4D diff = Avx.Subtract(left, right);
+                Vector4D mul = Avx.Multiply(diff, diff);
 
                 // Set W to zero
                 Vector4D result = Avx.And(mul, MaskWDouble);
 
-                // Doubly horizontally adding fills the final vector with the sum
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
                 result = Avx.HorizontalAdd(result, result);
-                return Avx.Sqrt(Avx.HorizontalAdd(result, result));
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return Avx.Sqrt(result);
             }
 
             return Distance3D_Software(left, right);
@@ -410,9 +443,17 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                Vector4D mul = Avx.Multiply(left, right);
-                mul = Avx.HorizontalAdd(mul, mul);
-                return Avx.Sqrt(Avx.HorizontalAdd(mul, mul));
+                Vector4D diff = Avx.Subtract(left, right);
+                Vector256<double> result = Avx.Multiply(diff, diff);
+
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+                result = Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return Avx.Sqrt(result);
             }
 
             return Distance4D_Software(left, right);
@@ -458,14 +499,19 @@ namespace MathSharp
             if (Avx.IsSupported)
             {
                 Vector4D diff = Avx.Subtract(left, right);
-                Vector4D mul = Avx.Multiply(diff, diff);
+                Vector256<double> mul = Avx.Multiply(diff, diff);
 
                 // Set W to zero
-                Vector4D result = Avx.And(mul, MaskWDouble);
+                Vector256<double> result = Avx.And(mul, MaskWDouble);
 
-                // Doubly horizontally adding fills the final vector with the sum
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
                 result = Avx.HorizontalAdd(result, result);
-                return Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return result;
             }
 
             return DistanceSquared3D_Software(left, right);
@@ -478,9 +524,16 @@ namespace MathSharp
             if (Avx.IsSupported)
             {
                 Vector4D diff = Avx.Subtract(left, right);
-                Vector4D mul = Avx.Multiply(diff, diff);
-                mul = Avx.HorizontalAdd(mul, mul);
-                return Avx.Sqrt(Avx.HorizontalAdd(mul, mul));
+                Vector256<double> result  = Avx.Multiply(diff, diff);
+
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+                result = Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+                return result;
             }
 
             return DistanceSquared4D_Software(left, right);
@@ -496,7 +549,7 @@ namespace MathSharp
             Debug.Assert(weight <= 1 && weight >= 0);
 
 
-            if (IsSupported)
+            if (Avx.IsSupported)
             {
                 // Lerp (Linear interpolate) interpolates between two values (here, vectors)
                 // The general formula for it is 'from + (to - from) * weight'
@@ -551,14 +604,17 @@ namespace MathSharp
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             if (Avx.IsSupported)
             {
-                Vector4D mul = Avx.Multiply(incident, normal);
+                Vector256<double> mul = Avx.Multiply(incident, normal);
 
                 // Set W to zero
-                Vector4D result = Avx.And(mul, MaskWDouble);
+                Vector256<double> result = Avx.And(mul, MaskWDouble);
 
-                // Doubly horizontally adding fills the final vector with the sum
+                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
                 result = Avx.HorizontalAdd(result, result);
-                result = Avx.HorizontalAdd(result, result);
+
+                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+                // We switch the 2 halves, and add that to the original, getting the result in all elems
 
                 // Dot done
 
@@ -573,10 +629,18 @@ namespace MathSharp
         public static Vector4D Reflect4D(in Vector4DParam1_3 incident, in Vector4DParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector4D tmp = DotProduct4D_Software(incident, normal);
-            tmp = Multiply_Software(tmp, tmp);
-            tmp = Multiply_Software(tmp, normal);
-            return Subtract_Software(incident, tmp);
+            Vector256<double> result = Avx.Multiply(incident, normal);
+
+            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
+            result = Avx.HorizontalAdd(result, result);
+
+            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
+            result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
+            // We switch the 2 halves, and add that to the original, getting the result in all elems
+
+            result = Avx.Add(result, result);
+            result = Avx.Multiply(result, normal);
+            return Avx.Subtract(incident, result);
         }
 
         #endregion
