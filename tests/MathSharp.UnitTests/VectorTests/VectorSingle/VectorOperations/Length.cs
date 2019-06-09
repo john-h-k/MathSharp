@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using OpenTK;
 using System.Runtime.Intrinsics;
 using Xunit;
-using static MathSharp.Utils.Helpers;
+using static MathSharp.UnitTests.TestHelpers;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 {
@@ -31,7 +31,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                     case VectorDimensions.V2D:
                         {
                             Vector2 v1 = ByValToSlowVector2(((Vector128<float>)set[0]));
-                            float dot = v1.Length();
+                            float dot = v1.Length;
                             set[1] = new Vector2(dot);
                             break;
                         }
@@ -39,7 +39,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                     case VectorDimensions.V3D:
                         {
                             Vector3 v1 = ByValToSlowVector3(((Vector128<float>)set[0]));
-                            float dot = v1.Length();
+                            float dot = v1.Length;
                             set[1] = new Vector3(dot);
                             break;
                         }
@@ -47,7 +47,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                     case VectorDimensions.V4D:
                         {
                             Vector4 v1 = ByValToSlowVector4(((Vector128<float>)set[0]));
-                            float dot = v1.Length();
+                            float dot = v1.Length;
                             set[1] = new Vector4(dot);
                             break;
                         }

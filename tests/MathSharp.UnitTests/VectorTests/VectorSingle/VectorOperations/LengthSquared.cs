@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using OpenTK;
 using System.Runtime.Intrinsics;
 using Xunit;
-using static MathSharp.Utils.Helpers;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 {
@@ -30,24 +29,24 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                 {
                     case VectorDimensions.V2D:
                         {
-                            Vector2 v1 = ByValToSlowVector2(((Vector128<float>)set[0]));
-                            float dot = v1.LengthSquared();
+                            Vector2 v1 = TestHelpers.ByValToSlowVector2(((Vector128<float>)set[0]));
+                            float dot = v1.LengthSquared;
                             set[1] = new Vector2(dot);
                             break;
                         }
 
                     case VectorDimensions.V3D:
                         {
-                            Vector3 v1 = ByValToSlowVector3(((Vector128<float>)set[0]));
-                            float dot = v1.LengthSquared();
+                            Vector3 v1 = TestHelpers.ByValToSlowVector3(((Vector128<float>)set[0]));
+                            float dot = v1.LengthSquared;
                             set[1] = new Vector3(dot);
                             break;
                         }
 
                     case VectorDimensions.V4D:
                         {
-                            Vector4 v1 = ByValToSlowVector4(((Vector128<float>)set[0]));
-                            float dot = v1.LengthSquared();
+                            Vector4 v1 = TestHelpers.ByValToSlowVector4(((Vector128<float>)set[0]));
+                            float dot = v1.LengthSquared;
                             set[1] = new Vector4(dot);
                             break;
                         }
@@ -66,7 +65,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
         {
             Vector128<float> result = Vector.LengthSquared2D(vector);
 
-            Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
+            Assert.True(TestHelpers.AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
         [Theory]
@@ -75,7 +74,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
         {
             Vector128<float> result = Vector.LengthSquared3D(vector);
 
-            Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
+            Assert.True(TestHelpers.AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
         [Theory]
@@ -84,7 +83,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
         {
             Vector128<float> result = Vector.LengthSquared4D(vector);
 
-            Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
+            Assert.True(TestHelpers.AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
     }
 }

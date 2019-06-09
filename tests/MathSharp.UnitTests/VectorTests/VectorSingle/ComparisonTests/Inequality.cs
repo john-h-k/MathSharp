@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Intrinsics;
 using Xunit;
-using static MathSharp.Utils.Helpers;
+using static MathSharp.UnitTests.TestHelpers;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.ComparisonTests
 {
@@ -17,7 +17,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.ComparisonTests
                 new object[]
                 {
                     Vector128.Create(0f, float.MaxValue, float.MinValue, float.PositiveInfinity),
-                    Vector128.Create(float.Epsilon, float.MaxValue - 1000000000000000000000000000000000000f, float.MinValue + 1000000000000000000000000000000000000f, float.NegativeInfinity),
+                    Vector128.Create(float.Epsilon, float.MaxValue - 1E+32f, float.MinValue + 1E+32f, float.NegativeInfinity),
                     new []{ false, false, false, false }
                 }
             };

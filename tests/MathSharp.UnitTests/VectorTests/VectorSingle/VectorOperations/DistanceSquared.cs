@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using OpenTK;
 using System.Runtime.Intrinsics;
 using Xunit;
-using static MathSharp.Utils.Helpers;
+using static MathSharp.UnitTests.TestHelpers;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 {
@@ -50,7 +50,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                         {
                             Vector4 v1 = ByValToSlowVector4(((Vector128<float>)set[0]));
                             Vector4 v2 = ByValToSlowVector4(((Vector128<float>)set[1]));
-                            float dot = Vector4.DistanceSquared(v1, v2);
+                            float dot = (v1 - v2).LengthSquared;
                             set[2] = new Vector4(dot);
                             break;
                         }

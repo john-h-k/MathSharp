@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
+using OpenTK;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
+using static MathSharp.UnitTests.TestHelpers;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.BitOperationsTests
@@ -44,7 +44,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BitOperationsTests
         {
             Vector128<float> vector = Vector.AndNot(left, right);
 
-            Assert.True(Helpers.AreEqual(expected, vector));
+            Assert.True(AreEqual(expected, vector));
         }
     }
 }
