@@ -56,11 +56,11 @@ namespace MathSharp
             {
                 Vector4F mul = Sse.Multiply(vector, vector);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
 
                 return Sse.Divide(vector, Sse.Sqrt(mul));
             }
@@ -100,15 +100,15 @@ namespace MathSharp
 
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0))));
+                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0)));
             }
 
             return Normalize3D_Software(vector);
@@ -133,12 +133,12 @@ namespace MathSharp
             {
                 Vector4F copy = vector;
                 Vector4F mul = Sse.Multiply(vector, copy);
-                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
                 mul = Sse.AddScalar(mul, copy);
 
-                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2))));
+                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2)));
             }
 
             return Normalize4D_Software(vector);
@@ -182,11 +182,11 @@ namespace MathSharp
             {
                 Vector4F mul = Sse.Multiply(vector, vector);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
 
                 return Sse.Sqrt(mul);
             }
@@ -226,15 +226,15 @@ namespace MathSharp
 
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0)));
+                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0));
             }
 
             return Length3D_Software(vector);
@@ -259,12 +259,12 @@ namespace MathSharp
             {
                 Vector4F copy = vector;
                 Vector4F mul = Sse.Multiply(vector, copy);
-                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
                 mul = Sse.AddScalar(mul, copy);
 
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2)));
+                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2));
             }
 
             return Length4D_Software(vector);
@@ -328,11 +328,11 @@ namespace MathSharp
             {
                 Vector4F mul = Sse.Multiply(left, right);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
 
                 return mul;
             }
@@ -371,15 +371,15 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(left, right);
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                return Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
             }
 
             return DotProduct3D_Software(left, right);
@@ -405,12 +405,12 @@ namespace MathSharp
             {
                 Vector4F copy = right;
                 Vector4F mul = Sse.Multiply(left, copy);
-                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
                 mul = Sse.AddScalar(mul, copy);
 
-                return Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2));
+                return Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
             }
 
             return DotProduct4D_Software(left, right);
@@ -432,20 +432,20 @@ namespace MathSharp
             if (Sse.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                Vector4F permute = Sse.Shuffle(right, right, Helpers.Shuffle(0, 1, 0, 1));
+                Vector4F permute = Sse.Shuffle(right, right, ShuffleValues._0_1_0_1);
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Sse.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector4F temp = Sse.Shuffle(permute, permute, Helpers.Shuffle(0, 0, 0, 1));
+                Vector4F temp = Sse.Shuffle(permute, permute, ShuffleValues._0_0_0_1);
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Sse.Subtract(permute, temp);
 
                 // Fill the vector with it (like DotProduct)
-                return Sse.Shuffle(permute, permute, Helpers.Shuffle(0, 0, 0, 0));
+                return Sse.Shuffle(permute, permute, ShuffleValues._0_0_0_0);
             }
 
             return CrossProduct2D_Software(left, right);
@@ -484,8 +484,8 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                Vector4F leftHandSide1 = Sse.Shuffle(left, left, Helpers.Shuffle(3, 0, 2, 1));
-                Vector4F rightHandSide1 = Sse.Shuffle(right, right, Helpers.Shuffle(3, 1, 0, 2));
+                Vector4F leftHandSide1 = Sse.Shuffle(left, left, ShuffleValues._3_0_2_1);
+                Vector4F rightHandSide1 = Sse.Shuffle(right, right, ShuffleValues._3_1_0_2);
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
@@ -493,8 +493,8 @@ namespace MathSharp
                  */
 
 
-                Vector4F leftHandSide2 = Sse.Shuffle(left, left, Helpers.Shuffle(3, 1, 0, 2));
-                Vector4F rightHandSide2 = Sse.Shuffle(right, right, Helpers.Shuffle(3, 0, 2, 1));
+                Vector4F leftHandSide2 = Sse.Shuffle(left, left, ShuffleValues._3_1_0_2);
+                Vector4F rightHandSide2 = Sse.Shuffle(right, right, ShuffleValues._3_0_2_1);
 
                 Vector4F mul1 = Sse.Multiply(leftHandSide1, rightHandSide1);
 
@@ -561,11 +561,11 @@ namespace MathSharp
 
                 Vector4F mul = Sse.Multiply(diff, diff);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
 
                 return Sse.Sqrt(mul);
             }
@@ -607,15 +607,15 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0)));
+                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0));
             }
 
             return Distance3D_Software(left, right);
@@ -644,12 +644,12 @@ namespace MathSharp
                 Vector4F diff = Sse.Subtract(left, right);
                 Vector4F copy = diff;
                 Vector4F mul = Sse.Multiply(diff, copy);
-                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
                 mul = Sse.AddScalar(mul, copy);
 
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2)));
+                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2));
             }
 
             return Distance4D_Software(left, right);
@@ -695,11 +695,11 @@ namespace MathSharp
 
                 Vector4F mul = Sse.Multiply(diff, diff);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
 
                 return mul;
             }
@@ -743,15 +743,15 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(diff, diff);
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                return Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
             }
 
             return DistanceSquared3D_Software(left, right);
@@ -780,12 +780,12 @@ namespace MathSharp
                 Vector4F diff = Sse.Subtract(left, right);
                 Vector4F copy = diff;
                 Vector4F mul = Sse.Multiply(diff, copy);
-                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
                 mul = Sse.AddScalar(mul, copy);
 
-                return Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2));
+                return Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
             }
 
             return DistanceSquared4D_Software(left, right);
@@ -853,11 +853,11 @@ namespace MathSharp
             {
                 Vector4F mul = Sse.Multiply(incident, normal);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(1, 1, 1, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
 
                 mul = Sse.Add(mul, mul);
                 mul = Sse.Multiply(mul, normal);
@@ -904,15 +904,15 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(incident, normal);
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 1, 2, 1));
+                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, Helpers.Shuffle(1, 1, 1, 1));
+                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                Vector4F tmp = Sse.Shuffle(mul, mul, Helpers.Shuffle(0, 0, 0, 0));
+                Vector4F tmp = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
                 tmp = Sse.Add(tmp, tmp);
                 tmp = Sse.Multiply(tmp, normal);
                 return Sse.Subtract(incident, tmp);
@@ -952,12 +952,12 @@ namespace MathSharp
             {
                 Vector4F copy = normal;
                 Vector4F mul = Sse.Multiply(incident, copy);
-                copy = Sse.Shuffle(copy, mul, Helpers.Shuffle(1, 0, 0, 0));
+                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, Helpers.Shuffle(0, 3, 0, 0));
+                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
                 mul = Sse.AddScalar(mul, copy);
 
-                Vector4F tmp = Sse.Shuffle(mul, mul, Helpers.Shuffle(2, 2, 2, 2));
+                Vector4F tmp = Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
                 tmp = Sse.Add(tmp, tmp);
                 tmp = Sse.Multiply(tmp, normal);
                 return Sse.Subtract(incident, tmp);
