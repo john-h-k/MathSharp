@@ -12,6 +12,10 @@ namespace MathSharp
         private const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
 
+        private static readonly Vector128<float> SignFlip2DSingle = Vector128.Create(int.MinValue, int.MinValue, 0, 0).AsSingle();
+        private static readonly Vector128<float> SignFlip3DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
+        private static readonly Vector128<float> SignFlip4DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
+
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right)
@@ -29,6 +33,44 @@ namespace MathSharp
             }
 
             return Add_Software(left, right);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right)
+        {
+            if (Sse.IsSupported)
+            {
+                MatrixSingle result;
+
+                result._v1 = Sse.Subtract(left._v1, right._v1);
+                result._v2 = Sse.Subtract(left._v2, right._v2);
+                result._v3 = Sse.Subtract(left._v3, right._v3);
+                result._v4 = Sse.Subtract(left._v4, right._v4);
+
+                return result;
+            }
+
+            return Subtract_Software(left, right);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static MatrixSingle Negate(in MatrixSingle matrix)
+        {
+            if (Sse.IsSupported)
+            {
+                MatrixSingle result;
+
+                result._v1 = Sse.Xor(matrix._v1, SignFlip4DSingle);
+                result._v2 = Sse.Xor(matrix._v2, SignFlip4DSingle);
+                result._v3 = Sse.Xor(matrix._v3, SignFlip4DSingle);
+                result._v4 = Sse.Xor(matrix._v4, SignFlip4DSingle);
+
+                return result;
+            }
+
+            return Negate_Software(matrix);
         }
 
         [MethodImpl(MaxOpt)]

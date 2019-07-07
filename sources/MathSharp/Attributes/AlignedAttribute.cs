@@ -8,8 +8,6 @@ namespace MathSharp.Attributes
 
         public AlignedAttribute(int alignment)
         {
-            if (alignment < 0)
-                throw new ArgumentOutOfRangeException(nameof(alignment));
             Alignment = alignment;
         }
     }

@@ -16,6 +16,7 @@ namespace MathSharp
     {
         #region Vector Maths
 
+        private static readonly Vector128<float> SignFlip1D = Vector128.Create(int.MinValue, 0, 0, 0).AsSingle();
         private static readonly Vector128<float> SignFlip2D = Vector128.Create(int.MinValue, int.MinValue, 0, 0).AsSingle();
         private static readonly Vector128<float> SignFlip3D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
         private static readonly Vector128<float> SignFlip4D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();

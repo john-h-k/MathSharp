@@ -1,5 +1,4 @@
-﻿using System.IO.Compression;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using static MathSharp.Utils.Helpers;
 
@@ -16,6 +15,28 @@ namespace MathSharp
                 Vector.Add(left._v2, right._v2),
                 Vector.Add(left._v3, right._v3),
                 Vector.Add(left._v4, right._v4)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static MatrixSingle Subtract_Software(in MatrixSingle left, in MatrixSingle right)
+        {
+            return MatrixSingle.Create(
+                Vector.Subtract(left._v1, right._v1),
+                Vector.Subtract(left._v2, right._v2),
+                Vector.Subtract(left._v3, right._v3),
+                Vector.Subtract(left._v4, right._v4)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static MatrixSingle Negate_Software(in MatrixSingle matrix)
+        {
+            return MatrixSingle.Create(
+                Vector.Negate4D(matrix._v1),
+                Vector.Negate4D(matrix._v2),
+                Vector.Negate4D(matrix._v3),
+                Vector.Negate4D(matrix._v4)
             );
         }
 
