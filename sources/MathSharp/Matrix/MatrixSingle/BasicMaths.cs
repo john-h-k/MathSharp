@@ -3,10 +3,12 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using MathSharp.Utils;
+using Microsoft.VisualBasic.CompilerServices;
 using static MathSharp.SoftwareFallbacks;
+using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
-{ 
+{
     public static partial class Matrix
     {
         private const MethodImplOptions MaxOpt =
@@ -16,100 +18,49 @@ namespace MathSharp
         private static readonly Vector128<float> SignFlip3DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
         private static readonly Vector128<float> SignFlip4DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        [UsesInstructionSet(InstructionSets.None)]
         [MethodImpl(MaxOpt)]
-        public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right)
-        {
-            if (Sse.IsSupported)
-            {
-                MatrixSingle result;
-                
-                result._v1 = Sse.Add(left._v1, right._v1);
-                result._v2 = Sse.Add(left._v2, right._v2);
-                result._v3 = Sse.Add(left._v3, right._v3);
-                result._v4 = Sse.Add(left._v4, right._v4);
-
-                return result;
-            }
-
-            return Add_Software(left, right);
-        }
+        public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right) =>
+            new MatrixSingle(
+                Vector.Add(left._v1, right._v1),
+                Vector.Add(left._v2, right._v2),
+                Vector.Add(left._v3, right._v3),
+                Vector.Add(left._v4, right._v4)
+            );
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right)
-        {
-            if (Sse.IsSupported)
-            {
-                MatrixSingle result;
-
-                result._v1 = Sse.Subtract(left._v1, right._v1);
-                result._v2 = Sse.Subtract(left._v2, right._v2);
-                result._v3 = Sse.Subtract(left._v3, right._v3);
-                result._v4 = Sse.Subtract(left._v4, right._v4);
-
-                return result;
-            }
-
-            return Subtract_Software(left, right);
-        }
+        public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right) =>
+            new MatrixSingle(
+                Vector.Subtract(left._v1, right._v1),
+                Vector.Subtract(left._v2, right._v2),
+                Vector.Subtract(left._v3, right._v3),
+                Vector.Subtract(left._v4, right._v4)
+            );
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static MatrixSingle Negate(in MatrixSingle matrix)
-        {
-            if (Sse.IsSupported)
-            {
-                MatrixSingle result;
-
-                result._v1 = Sse.Xor(matrix._v1, SignFlip4DSingle);
-                result._v2 = Sse.Xor(matrix._v2, SignFlip4DSingle);
-                result._v3 = Sse.Xor(matrix._v3, SignFlip4DSingle);
-                result._v4 = Sse.Xor(matrix._v4, SignFlip4DSingle);
-
-                return result;
-            }
-
-            return Negate_Software(matrix);
-        }
+        public static MatrixSingle Negate(in MatrixSingle matrix) =>
+            new MatrixSingle(
+                Vector.Negate4D(matrix._v1),
+                Vector.Negate4D(matrix._v2),
+                Vector.Negate4D(matrix._v3),
+                Vector.Negate4D(matrix._v4)
+            );
 
         [MethodImpl(MaxOpt)]
-        public static MatrixSingle ScalarMultiply(in MatrixSingle left, Vector128<float> vectorOfScalar)
-        {
-            if (Sse.IsSupported)
-            {
-                MatrixSingle result;
-
-                result._v1 = Sse.Multiply(left._v1, vectorOfScalar);
-                result._v2 = Sse.Multiply(left._v2, vectorOfScalar);
-                result._v3 = Sse.Multiply(left._v3, vectorOfScalar);
-                result._v4 = Sse.Multiply(left._v4, vectorOfScalar);
-
-                return result;
-            }
-
-            return ScalarMultiply_Software(left, vectorOfScalar);
-        }
+        public static MatrixSingle ScalarMultiply(in MatrixSingle left, Vector128<float> vectorOfScalar) =>
+            new MatrixSingle(
+                Vector.Multiply(left._v1, vectorOfScalar),
+                Vector.Multiply(left._v2, vectorOfScalar),
+                Vector.Multiply(left._v3, vectorOfScalar),
+                Vector.Multiply(left._v4, vectorOfScalar)
+            );
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static MatrixSingle ScalarMultiply(in MatrixSingle left, float scalar)
-        {
-            if (Sse.IsSupported)
-            {
-                MatrixSingle result;
-
-                Vector128<float> vector = Vector128.Create(scalar);
-                result._v1 = Sse.Multiply(left._v1, vector);
-                result._v2 = Sse.Multiply(left._v2, vector);
-                result._v3 = Sse.Multiply(left._v3, vector);
-                result._v4 = Sse.Multiply(left._v4, vector);
-
-                return result;
-            }
-
-            return ScalarMultiply_Software(left, scalar);
-        }
+        public static MatrixSingle ScalarMultiply(in MatrixSingle left, float scalar) 
+            => ScalarMultiply(left, Vector128.Create(scalar));
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
@@ -170,7 +121,7 @@ namespace MathSharp
 
                 // x1, x2, x3, x4
                 result._v1 = Sse.Shuffle(xAndY1, xAndY2, ShuffleValues._2_0_2_0);
-                
+
                 // y1, y2, y3, y4
                 result._v2 = Sse.Shuffle(xAndY1, xAndY2, ShuffleValues._3_1_3_1);
 
@@ -179,11 +130,19 @@ namespace MathSharp
 
                 // w1, w2, w3, w4
                 result._v4 = Sse.Shuffle(zAndW1, zAndW2, ShuffleValues._3_1_3_1);
-                
+
                 return result;
             }
 
             return Transpose_Software(matrix);
+            
+            static MatrixSingle Transpose_Software(MatrixSingle matrix) =>
+                MatrixSingle.Create(
+                    X(matrix._v1), X(matrix._v2), X(matrix._v3), X(matrix._v4),
+                    Y(matrix._v1), Y(matrix._v2), Y(matrix._v3), Y(matrix._v4),
+                    Z(matrix._v1), Z(matrix._v2), Z(matrix._v3), Z(matrix._v4),
+                    W(matrix._v1), W(matrix._v2), W(matrix._v3), W(matrix._v4)
+                );
         }
     }
 }

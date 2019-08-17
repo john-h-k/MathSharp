@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics.X86;
 using BenchmarkDotNet.Attributes;
 using OpenTK;
 
@@ -41,6 +42,19 @@ namespace MathSharp.Interactive.Benchmarks.MatrixTests.Single
         public MatrixSingle MathSharp()
         {
             return Matrix.Add(_mathSharp1, _mathSharp2);
+        }
+
+        [Benchmark]
+        public MatrixSingle MathSharp_Clean_1()
+        {
+            return Matrix.Add_Clean_1(_mathSharp1, _mathSharp2);
+        }
+
+        [Benchmark]
+        public MatrixSingle MathSharp_Clean_2()
+        {
+            return Matrix.Add_Clean_2(_mathSharp1, _mathSharp2);
+
         }
 
         [Benchmark]
