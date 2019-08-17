@@ -74,6 +74,8 @@ namespace MathSharp.Interactive
     public class DotProductV256Benchmark
     {
         private Vector256<double> _a, _b;
+        private static readonly Vector256<double> MaskWDouble = Vector256.Create(-1, -1, -1, 0).AsDouble();
+
 
         [GlobalSetup]
         public void Setup()
@@ -183,148 +185,6 @@ namespace MathSharp.Interactive
         public Vector256<double> Permute()
         {
             return Vector256.Create(_vector.ToScalar());
-        }
-    }
-
-    [CoreJob]
-    [RPlotExporter]
-    [RankColumn]
-    [Orderer]
-    public class JitBugBenchmark
-    {
-        private Vector128<float> _vector;
-
-        [GlobalSetup]
-        public void Setup()
-        {
-            _vector = Vector128.Create(1f, 2f, 3f, 4f);
-            Trace.Assert(Reflect3D(_vector, _vector).Equals(Reflect3DFast(_vector, _vector)));
-            Trace.Assert(Avx2.IsSupported);
-        }
-
-        [Benchmark]
-        public Vector128<float> Normalize()
-        {
-            return NormalizeFast(_vector);
-        }
-
-        [Benchmark]
-        public Vector128<float> Normalize_Preferred()
-        {
-            return Normalize(_vector);
-        }
-
-        [Benchmark]
-        public Vector128<float> Reflect()
-        {
-            return Reflect3DFast(_vector, _vector);
-        }
-
-        [Benchmark]
-        public Vector128<float> Reflect_Preferred()
-        {
-            return Reflect3D(_vector, _vector);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public Vector128<float> Normalize(Vector128<float> vector)
-        {
-            return Divide(vector, Length4D(vector));
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public Vector128<float> NormalizeFast(Vector128<float> vector)
-        {
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_1111_1111;
-                return Sse.Divide(vector, Sse.Sqrt(Sse41.DotProduct(vector, vector, control)));
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector128<float> mul = Sse.Multiply(vector, vector);
-                mul = Sse3.HorizontalAdd(mul, mul);
-                return Sse.Divide(vector, Sse.Sqrt(Sse3.HorizontalAdd(mul, mul)));
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector128<float> copy = vector;
-                Vector128<float> mul = Sse.Multiply(vector, copy);
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
-                copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
-                mul = Sse.AddScalar(mul, copy);
-
-                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2)));
-            }
-
-            return SoftwareFallbacks.Normalize4D_Software(vector);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector4F Reflect3DFast(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
-        {
-            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0111_1111;
-                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1  
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(incident, normal);
-
-                // Set W to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Doubly horizontally adding fills the final vector with the sum
-                result = Vector.HorizontalAdd(result, result);
-                Vector4F tmp = Vector.HorizontalAdd(result, result);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-
-            }
-            else if (Sse.IsSupported)
-            {
-                // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(incident, normal);
-
-                // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                Vector4F tmp = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-
-            return SoftwareFallbacks.Reflect3D_Software(incident, normal);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector4F Reflect3D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
-        {
-            // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            JohnVector tmp = DotProduct3D(incident, normal);
-            tmp = Add(tmp, tmp);
-            tmp = Multiply(tmp, normal);
-            return Subtract(incident, tmp);
         }
     }
 

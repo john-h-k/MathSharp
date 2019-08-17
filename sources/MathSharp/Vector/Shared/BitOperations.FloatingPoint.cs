@@ -88,7 +88,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Double Or(Vector4DoubleParam1_3 left, Vector4DoubleParam1_3 right)
+        public static Vector4Double Or(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {
             if (Avx.IsSupported)
             {
@@ -100,7 +100,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Double And(Vector4DoubleParam1_3 left, Vector4DoubleParam1_3 right)
+        public static Vector4Double And(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {
             if (Avx.IsSupported)
             {
@@ -112,7 +112,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Double Xor(Vector4DoubleParam1_3 left, Vector4DoubleParam1_3 right)
+        public static Vector4Double Xor(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {
             if (Avx.IsSupported)
             {
@@ -124,7 +124,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Double Not(Vector4DoubleParam1_3 vector)
+        public static Vector4Double Not(in Vector4DoubleParam1_3 vector)
         {
             if (Avx.IsSupported)
             {
@@ -137,7 +137,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Double AndNot(Vector4DoubleParam1_3 left, Vector4DoubleParam1_3 right)
+        public static Vector4Double AndNot(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {
             if (Avx.IsSupported)
             {

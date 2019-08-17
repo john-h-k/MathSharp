@@ -20,82 +20,21 @@ namespace MathSharp
         private static readonly Vector256<double> SignFlip2DDouble = Vector256.Create(long.MinValue, long.MinValue, 0, 0).AsDouble();
         private static readonly Vector256<double> SignFlip3DDouble = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, 0).AsDouble();
         private static readonly Vector256<double> SignFlip4DDouble = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, long.MinValue).AsDouble();
+        private static readonly Vector256<double> MaskWDouble = Vector256.Create(-1, -1, -1, 0).AsDouble();
 
         #region Normalize
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Normalize2D(in Vector4DParam1_3 vector)
-        {
-            // SSE4.1 has a native dot product instruction, dppd
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector2D dp = Sse41.DotProduct(vector.GetLower(), vector.GetLower(), control);
-
-                return Sse2.Divide(vector.GetLower(), Sse2.Sqrt(dp)).ToVector256();
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector2D tmp = Sse2.Multiply(vector.GetLower(), vector.GetLower());
-                return Sse2.Divide(vector.GetLower(), Sse2.Sqrt(Sse3.HorizontalAdd(tmp, tmp))).ToVector256();
-            }
-            else if (Sse2.IsSupported)
-            {
-                Vector2D tmp = Sse2.Multiply(vector.GetLower(), vector.GetLower());
-                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues._0_1_0_1);
-                return Sse2.Divide(vector.GetLower(), Sse2.Sqrt(Sse2.Add(tmp, shuf))).ToVector256();
-            }
-
-            return Normalize2D_Software(vector);
-        }
+            => Divide(vector, Length2D(vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Normalize3D(in Vector4DParam1_3 vector)
-        {
-            // We can use AVX to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            if (Avx.IsSupported)
-            {
-                Vector4D mul = Avx.Multiply(vector, vector);
-
-                // Set W to zero
-                Vector4D result = Avx.And(mul, MaskWDouble);
-
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                // Dot done
-
-                return Avx.Divide(vector, Avx.Sqrt(result));
-            }
-
-            return Normalize3D_Software(vector);
-        }
+            => Divide(vector, Length3D(vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Normalize4D(in Vector4DParam1_3 vector)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D result = Avx.Multiply(vector, vector);
-
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                return Avx.Divide(vector, Avx.Sqrt(result));
-            }
-
-            return Normalize4D_Software(vector);
-        }
+            => Divide(vector, Length4D(vector));
 
         #endregion
 
@@ -103,98 +42,31 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Length2D(in Vector4DParam1_3 vector)
-        {
-            // SSE4.1 has a native dot product instruction, dppd
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector2D dp = Sse41.DotProduct(vector.GetLower(), vector.GetLower(), control);
-
-                return Helpers.DuplicateToVector256(Sse2.Sqrt(dp));
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector2D tmp = Sse2.Multiply(vector.GetLower(), vector.GetLower());
-                return Helpers.DuplicateToVector256(Sse2.Sqrt(Sse3.HorizontalAdd(tmp, tmp)));
-            }
-            else if (Sse2.IsSupported)
-            {
-                Vector2D tmp = Sse2.Multiply(vector.GetLower(), vector.GetLower());
-                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues._0_1_0_1);
-                return Helpers.DuplicateToVector256(Sse2.Sqrt(Sse2.Add(tmp, shuf)));
-            }
-
-            return Length2D_Software(vector);
-        }
+            => Sqrt(DotProduct2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Length3D(in Vector4DParam1_3 vector)
-        {
-            // We can use AVX to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            if (Avx.IsSupported)
-            {
-                Vector4D mul = Avx.Multiply(vector, vector);
-
-                // Set W to zero
-                Vector4D result = Avx.And(mul, MaskWDouble);
-
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                return Avx.Sqrt(result);
-            }
-
-            return Length3D_Software(vector);
-        }
+            => Sqrt(DotProduct3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Length4D(in Vector4DParam1_3 vector)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D result = Avx.Multiply(vector, vector);
-
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                return Avx.Sqrt(result);
-            }
-
-            return Length4D_Software(vector);
-        }
+            => Sqrt(DotProduct4D(vector, vector));
 
         #endregion
 
         #region LengthSquared
 
-        // TODO investigate codegen for LengthSquared_D as there have been inlining codegen issues before
         [MethodImpl(MaxOpt)]
         public static Vector4D LengthSquared2D(in Vector4DParam1_3 vector)
-        {
-            return DotProduct2D(vector, vector);
-        }
+            => DotProduct2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
         public static Vector4D LengthSquared3D(in Vector4DParam1_3 vector)
-        {
-            return DotProduct3D(vector, vector);
-        }
+            => DotProduct3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
         public static Vector4D LengthSquared4D(in Vector4DParam1_3 vector)
-        {
-            return DotProduct4D(vector, vector);
-        }
+            => DotProduct4D(vector, vector);
 
         #endregion
 
@@ -384,80 +256,18 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance2D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
-        {
-            // SSE4.1 has a native dot product instruction, dppd
-            if (Sse41.IsSupported)
-            {
-                Vector2D diff = Sse2.Subtract(left.GetLower(), right.GetLower());
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector2D dp = Sse41.DotProduct(diff, diff, control);
+            => Length2D(Subtract(left, right));
 
-                return Helpers.DuplicateToVector256(Sse2.Sqrt(dp));
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector2D diff = Sse2.Subtract(left.GetLower(), right.GetLower());
-                Vector2D tmp = Sse2.Multiply(diff, diff);
-                return Helpers.DuplicateToVector256(Sse2.Sqrt(Sse3.HorizontalAdd(tmp, tmp)));
-            }
-            else if (Sse2.IsSupported)
-            {
-                Vector2D tmp = Sse2.Subtract(left.GetLower(), right.GetLower());
-                tmp = Sse2.Multiply(tmp, tmp);
-                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues._0_1_0_1);
-                return Helpers.DuplicateToVector256(Sse2.Sqrt(Sse2.Add(tmp, shuf)));
-            }
-
-            return Distance2D_Software(left, right);
-        }
-
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Avx | InstructionSets.Sse)]
+        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance3D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D diff = Avx.Subtract(left, right);
-                Vector4D mul = Avx.Multiply(diff, diff);
+            => Length3D(Subtract(left, right));
 
-                // Set W to zero
-                Vector4D result = Avx.And(mul, MaskWDouble);
 
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                return Avx.Sqrt(result);
-            }
-
-            return Distance3D_Software(left, right);
-        }
-
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Avx | InstructionSets.Sse)]
+        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance4D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D diff = Avx.Subtract(left, right);
-                Vector256<double> result = Avx.Multiply(diff, diff);
-
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                return Avx.Sqrt(result);
-            }
-
-            return Distance4D_Software(left, right);
-        }
+            => Length4D(Subtract(left, right));
 
         #endregion
 
@@ -465,79 +275,17 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4D DistanceSquared2D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
-        {
-            // SSE4.1 has a native dot product instruction, dppd
-            if (Sse41.IsSupported)
-            {
-                Vector2D diff = Sse2.Subtract(left.GetLower(), right.GetLower());
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector2D dp = Sse41.DotProduct(diff, diff, control);
-
-                return Helpers.DuplicateToVector256(dp);
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector2D diff = Sse2.Subtract(left.GetLower(), right.GetLower());
-                Vector2D tmp = Sse2.Multiply(diff, diff);
-                return Helpers.DuplicateToVector256(Sse3.HorizontalAdd(tmp, tmp));
-            }
-            else if (Sse2.IsSupported)
-            {
-                Vector2D tmp = Sse2.Subtract(left.GetLower(), right.GetLower());
-                tmp = Sse2.Multiply(tmp, tmp);
-                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues._0_1_0_1);
-                return Helpers.DuplicateToVector256(Sse2.Add(tmp, shuf));
-            }
-
-            return DistanceSquared2D_Software(left, right);
-        }
+            => LengthSquared2D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
         public static Vector4D DistanceSquared3D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D diff = Avx.Subtract(left, right);
-                Vector256<double> mul = Avx.Multiply(diff, diff);
+            => LengthSquared3D(Subtract(left, right));
 
-                // Set W to zero
-                Vector256<double> result = Avx.And(mul, MaskWDouble);
 
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                return result;
-            }
-
-            return DistanceSquared3D_Software(left, right);
-        }
-
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Avx | InstructionSets.Sse)]
+        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4D DistanceSquared4D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D diff = Avx.Subtract(left, right);
-                Vector256<double> result  = Avx.Multiply(diff, diff);
-
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                return result;
-            }
-
-            return DistanceSquared4D_Software(left, right);
-        }
+            => LengthSquared4D(Subtract(left, right));
 
         #endregion
 
@@ -548,17 +296,11 @@ namespace MathSharp
         {
             Debug.Assert(weight <= 1 && weight >= 0);
 
-
-            if (Avx.IsSupported)
-            {
-                // Lerp (Linear interpolate) interpolates between two values (here, vectors)
-                // The general formula for it is 'from + (to - from) * weight'
-                Vector4D offset = Avx.Subtract(to, from);
-                offset = Avx.Multiply(offset, Vector256.Create(weight));
-                return Avx.Add(from, offset);
-            }
-
-            return Lerp_Software(from, to, weight);
+            // Lerp (Linear interpolate) interpolates between two values (here, vectors)
+            // The general formula for it is 'from + (to - from) * weight'
+            Vector4D offset = Subtract(to, from);
+            offset = Multiply(offset, weight.LoadScalarBroadcast());
+            return Add(from, offset);
         }
 
         #endregion
@@ -568,79 +310,28 @@ namespace MathSharp
         public static Vector4D Reflect2D(in Vector4DParam1_3 incident, in Vector4DParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            // SSE4.1 has a native dot product instruction, dppd
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector2D dp = Sse41.DotProduct(incident.GetLower(), normal.GetLower(), control);
-                dp = Sse2.Add(dp, dp);
-                dp = Sse2.Multiply(dp, normal.GetLower());
-                return Sse2.Subtract(incident.GetLower(), dp).ToVector256();
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector2D tmp = Sse2.Multiply(incident.GetLower(), normal.GetLower());
-                tmp = Sse3.HorizontalAdd(tmp, tmp);
-                tmp = Sse2.Add(tmp, tmp);
-                tmp = Sse2.Multiply(tmp, normal.GetLower());
-                return Sse2.Subtract(incident.GetLower(), tmp).ToVector256();
-            }
-            else if (Sse2.IsSupported)
-            {
-                Vector2D tmp = Sse2.Multiply(incident.GetLower(), normal.GetLower());
-                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues._0_1_0_1);
-                tmp = Sse2.Add(tmp, shuf);
-                tmp = Sse2.Add(tmp, tmp);
-                tmp = Sse2.Multiply(tmp, normal.GetLower());
-                return Sse2.Subtract(incident.GetLower(), tmp).ToVector256();
-            }
-
-            return Reflect2D_Software(incident, normal);
+            Vector4D tmp = DotProduct2D(incident, normal);
+            tmp = Add(tmp, tmp);
+            tmp = Multiply(tmp, normal);
+            return Subtract(incident, tmp);
         }
 
         public static Vector4D Reflect3D(in Vector4DParam1_3 incident, in Vector4DParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            if (Avx.IsSupported)
-            {
-                Vector256<double> mul = Avx.Multiply(incident, normal);
-
-                // Set W to zero
-                Vector256<double> result = Avx.And(mul, MaskWDouble);
-
-                // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-                result = Avx.HorizontalAdd(result, result);
-
-                // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-                result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-                // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-                // Dot done
-
-                result = Avx.Add(result, result);
-                result = Avx.Multiply(result, normal);
-                return Avx.Subtract(incident, result);
-            }
-
-            return Reflect3D_Software(incident, normal);
+            Vector4D tmp = DotProduct3D(incident, normal);
+            tmp = Add(tmp, tmp);
+            tmp = Multiply(tmp, normal);
+            return Subtract(incident, tmp);
         }
 
         public static Vector4D Reflect4D(in Vector4DParam1_3 incident, in Vector4DParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector256<double> result = Avx.Multiply(incident, normal);
-
-            // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
-            result = Avx.HorizontalAdd(result, result);
-
-            // Now we have (X + Y, X + Y, Z + 0, Z + 0)
-            result = Avx.Add(result, Avx.Permute2x128(result, result, 0b_0000_0001));
-            // We switch the 2 halves, and add that to the original, getting the result in all elems
-
-            result = Avx.Add(result, result);
-            result = Avx.Multiply(result, normal);
-            return Avx.Subtract(incident, result);
+            Vector4D tmp = DotProduct4D(incident, normal);
+            tmp = Add(tmp, tmp);
+            tmp = Multiply(tmp, normal);
+            return Subtract(incident, tmp);
         }
 
         #endregion
