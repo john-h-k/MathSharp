@@ -15,17 +15,8 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Abs(Vector4FParam1_3 vector)
-        {
-            if (Sse.IsSupported)
-            {
-                Vector4F zero = Vector4F.Zero;
-                zero = Sse.Subtract(zero, vector); // This gets the inverted results of all elements
-                return Sse.Max(zero, vector); // This selects the positive values of the 2 vectors
-            }
-
-            return Abs_Software(vector);
-        }
+        public static Vector4F Abs(Vector4FParam1_3 vector) 
+            => Max(Subtract(Vector4F.Zero, vector), vector);
 
         [UsesInstructionSet(InstructionSets.Sse3)]
         [MethodImpl(MaxOpt)]
@@ -53,18 +44,10 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        [UsesInstructionSet(InstructionSets.None)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Add(Vector4FParam1_3 vector, float scalar)
-        {
-            if (Sse.IsSupported)
-            {
-                Vector4F expand = Vector128.Create(scalar);
-                return Sse.Add(vector, expand);
-            }
-
-            return Add_Software(vector, scalar);
-        }
+        public static Vector4F Add(Vector4FParam1_3 vector, float scalar) 
+            => Add(vector, Vector128.Create(scalar));
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
@@ -81,15 +64,7 @@ namespace MathSharp
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Subtract(Vector4FParam1_3 vector, float scalar)
-        {
-            if (Sse.IsSupported)
-            {
-                Vector4F expand = Vector128.Create(scalar);
-                return Sse.Add(vector, expand);
-            }
-
-            return Subtract_Software(vector, scalar);
-        }
+            => Subtract(vector, Vector128.Create(scalar));
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
@@ -104,15 +79,9 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Multiply(Vector4FParam1_3 left, float scalar)
-        {
-            if (Sse.IsSupported)
-            {
-                return Sse.Multiply(left, Vector128.Create(scalar));
-            }
+        public static Vector4F Multiply(Vector4FParam1_3 vector, float scalar)
+            => Multiply(vector, Vector128.Create(scalar));
 
-            return Multiply_Software(left, scalar);
-        }
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Divide(Vector4FParam1_3 dividend, Vector4FParam1_3 divisor)
@@ -128,27 +97,13 @@ namespace MathSharp
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Divide(Vector4FParam1_3 dividend, float scalarDivisor)
-        {
-            if (Sse.IsSupported)
-            {
-                Vector4F expand = Vector128.Create(scalarDivisor);
-                return Sse.Divide(dividend, expand);
-            }
+            => Multiply(dividend, Vector128.Create(scalarDivisor));
 
-            return Divide_Software(dividend, scalarDivisor);
-        }
 
-        [UsesInstructionSet(InstructionSets.Sse)] [MethodImpl(MaxOpt)]
-        public static Vector4F Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
-        {
-            if (Sse.IsSupported)
-            {
-                Vector4F temp = Sse.Min(vector, high);
-                return Sse.Max(temp, low);
-            }
-
-            return Clamp_Software(vector, low, high);
-        }
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high) 
+            => Max(Min(vector, high), low);
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
@@ -193,38 +148,19 @@ namespace MathSharp
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Negate2D(Vector4FParam1_3 vector)
-        {
-            if (Sse.IsSupported)
-            {
-                return Sse.Xor(vector, SignFlip2D);
-            }
-
-            return Negate4D_Software(vector);
-        }
+            => Xor(vector, SignFlip2D);
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Negate3D(Vector4FParam1_3 vector)
-        {
-            if (Sse.IsSupported)
-            {
-                return Sse.Xor(vector, SignFlip3D);
-            }
+            => Xor(vector, SignFlip3D);
 
-            return Negate4D_Software(vector);
-        }
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Negate4D(Vector4FParam1_3 vector)
-        {
-            if (Sse.IsSupported)
-            {
-                return Sse.Xor(vector, SignFlip4D);
-            }
+            => Xor(vector, SignFlip4D);
 
-            return Negate4D_Software(vector);
-        }
 
         #endregion
     }

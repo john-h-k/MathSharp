@@ -45,19 +45,6 @@ namespace MathSharp.Interactive.Benchmarks.MatrixTests.Single
         }
 
         [Benchmark]
-        public MatrixSingle MathSharp_Clean_1()
-        {
-            return Matrix.Add_Clean_1(_mathSharp1, _mathSharp2);
-        }
-
-        [Benchmark]
-        public MatrixSingle MathSharp_Clean_2()
-        {
-            return Matrix.Add_Clean_2(_mathSharp1, _mathSharp2);
-
-        }
-
-        [Benchmark]
         public Matrix4 OpenTk()
         {
             return _openTk1 + _openTk2;

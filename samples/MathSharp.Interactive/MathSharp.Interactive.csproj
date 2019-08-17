@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <NoWarn>1573;1591;$(NoWarn)</NoWarn>
+    <NoWarn>1573;1591;NU1701;CS0649;CS1591;</NoWarn>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>preview</LangVersion>

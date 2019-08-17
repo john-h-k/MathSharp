@@ -170,7 +170,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance2D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
-            Vector4DParam1_3 diff = Subtract_Software(left, right);
+            Vector4D diff = Subtract_Software(left, right);
 
             return Length2D_Software(diff);
         }
@@ -178,7 +178,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance3D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
-            Vector4DParam1_3 diff = Subtract_Software(left, right);
+            Vector4D diff = Subtract_Software(left, right);
 
             return Length3D_Software(diff);
         }
@@ -186,7 +186,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance4D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
-            Vector4DParam1_3 diff = Subtract_Software(left, right);
+            Vector4D diff = Subtract_Software(left, right);
 
             return Length4D_Software(diff);
         }
@@ -198,7 +198,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D DistanceSquared2D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
-            Vector4DParam1_3 diff = Subtract_Software(left, right);
+            Vector4D diff = Subtract_Software(left, right);
 
             return DotProduct2D_Software(diff, diff);
         }
@@ -206,7 +206,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D DistanceSquared3D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
-            Vector4DParam1_3 diff = Subtract_Software(left, right);
+            Vector4D diff = Subtract_Software(left, right);
 
             return DotProduct3D_Software(diff, diff);
         }
@@ -214,7 +214,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D DistanceSquared4D_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
-            Vector4DParam1_3 diff = Subtract_Software(left, right);
+            Vector4D diff = Subtract_Software(left, right);
 
             return DotProduct4D_Software(diff, diff);
         }

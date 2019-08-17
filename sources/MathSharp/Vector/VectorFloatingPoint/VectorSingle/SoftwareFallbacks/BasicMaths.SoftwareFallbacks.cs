@@ -17,17 +17,6 @@ namespace MathSharp
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Abs_Software(Vector4FParam1_3 vector)
-        {
-            return Vector128.Create(
-                MathF.Abs(X(vector)),
-                MathF.Abs(Y(vector)),
-                MathF.Abs(Z(vector)),
-                MathF.Abs(W(vector))
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
         public static Vector4F HorizontalAdd_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
@@ -50,17 +39,6 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Add_Software(Vector4FParam1_3 vector, float scalar)
-        {
-            return Vector128.Create(
-                X(vector) + scalar,
-                Y(vector) + scalar,
-                Z(vector) + scalar,
-                W(vector) + scalar
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
         public static Vector4F Subtract_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
@@ -68,17 +46,6 @@ namespace MathSharp
                 Y(left) - Y(right),
                 Z(left) - Z(right),
                 W(left) - W(right)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Subtract_Software(Vector4FParam1_3 vector, float scalar)
-        {
-            return Vector128.Create(
-                X(vector) - scalar,
-                Y(vector) - scalar,
-                Z(vector) - scalar,
-                W(vector) - scalar
             );
         }
 
@@ -94,17 +61,6 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Multiply_Software(Vector4FParam1_3 left, float scalar)
-        {
-            return Vector128.Create(
-                X(left) * scalar,
-                Y(left) * scalar,
-                Z(left) * scalar,
-                W(left) * scalar
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
         public static Vector4F Divide_Software(Vector4FParam1_3 dividend, Vector4FParam1_3 divisor)
         {
             return Vector128.Create(
@@ -112,28 +68,6 @@ namespace MathSharp
                 Y(dividend) / Y(divisor),
                 Z(dividend) / Z(divisor),
                 W(dividend) / W(divisor)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Divide_Software(Vector4FParam1_3 dividend, float scalarDivisor)
-        {
-            return Vector128.Create(
-                X(dividend) / scalarDivisor,
-                Y(dividend) / scalarDivisor,
-                Z(dividend) / scalarDivisor,
-                W(dividend) / scalarDivisor
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Clamp_Software(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
-        {
-            return Vector128.Create(
-                Math.Clamp(X(vector), X(low), X(high)),
-                Math.Clamp(Y(vector), Y(low), Y(high)),
-                Math.Clamp(Z(vector), Z(low), Z(high)),
-                Math.Clamp(W(vector), W(low), W(high))
             );
         }
 
@@ -167,39 +101,6 @@ namespace MathSharp
                 MathF.Min(Y(left), Y(right)),
                 MathF.Min(Z(left), Z(right)),
                 MathF.Min(W(left), W(right))
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Negate2D_Software(Vector4FParam1_3 vector)
-        {
-            return Vector128.Create(
-                -X(vector),
-                -Y(vector),
-                +Z(vector),
-                +W(vector)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Negate3D_Software(Vector4FParam1_3 vector)
-        {
-            return Vector128.Create(
-                -X(vector),
-                -Y(vector),
-                -Z(vector),
-                +W(vector)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Negate4D_Software(Vector4FParam1_3 vector)
-        {
-            return Vector128.Create(
-                -X(vector),
-                -Y(vector),
-                -Z(vector),
-                -W(vector)
             );
         }
 

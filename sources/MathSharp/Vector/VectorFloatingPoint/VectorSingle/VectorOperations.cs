@@ -25,125 +25,15 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Normalize2D(Vector4FParam1_3 vector)
-        {
-            #region Manual Inline
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector4F dp = Sse41.DotProduct(vector, vector, control);
-
-                return Sse.Divide(vector, Sse.Sqrt(dp));
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-                // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
-                result = Sse3.HorizontalAdd(result, result);
-
-                // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
-                Vector4F dp = Sse3.MoveLowAndDuplicate(result);
-                return Sse.Divide(vector, Sse.Sqrt(dp));
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-
-                return Sse.Divide(vector, Sse.Sqrt(mul));
-            }
-            #endregion
-
-            return Normalize2D_Software(vector);
-        }
+            => Divide(vector, Length2D(vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Normalize3D(Vector4FParam1_3 vector)
-        {
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0111_1111;
-                return Sse.Divide(vector, Sse.Sqrt(Sse41.DotProduct(vector, vector, control)));
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-                // Set W to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Doubly horizontally adding fills the final vector with the sum
-                result = Sse3.HorizontalAdd(result, result);
-                return Sse.Divide(vector, Sse.Sqrt(Sse3.HorizontalAdd(result, result)));
-            }
-            else if (Sse.IsSupported)
-            {
-                // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-
-                // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0)));
-            }
-
-            return Normalize3D_Software(vector);
-        }
+            => Divide(vector, Length3D(vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Normalize4D(Vector4FParam1_3 vector)
-        {
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_1111_1111;
-                return Sse.Divide(vector, Sse.Sqrt(Sse41.DotProduct(vector, vector, control)));
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-                mul = Sse3.HorizontalAdd(mul, mul);
-                return Sse.Divide(vector, Sse.Sqrt(Sse3.HorizontalAdd(mul, mul)));
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F copy = vector;
-                Vector4F mul = Sse.Multiply(vector, copy);
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
-                copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
-                mul = Sse.AddScalar(mul, copy);
-
-                return Sse.Divide(vector, Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2)));
-            }
-
-            return Normalize4D_Software(vector);
-        }
+            => Divide(vector, Length4D(vector));
 
         #endregion
 
@@ -151,148 +41,31 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Length2D(Vector4FParam1_3 vector)
-        {
-            #region Manual Inline
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector4F dp = Sse41.DotProduct(vector, vector, control);
-
-                return Sse.Sqrt(dp);
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-                // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
-                result = Sse3.HorizontalAdd(result, result);
-
-                // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
-                Vector4F dp = Sse3.MoveLowAndDuplicate(result);
-                return Sse.Sqrt(dp);
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-
-                return Sse.Sqrt(mul);
-            }
-            #endregion
-
-            return Length2D_Software(vector);
-        }
+            => Sqrt(DotProduct2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Length3D(Vector4FParam1_3 vector)
-        {
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0111_1111;
-                return Sse.Sqrt(Sse41.DotProduct(vector, vector, control));
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-                // Set W to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Doubly horizontally adding fills the final vector with the sum
-                result = Sse3.HorizontalAdd(result, result);
-                return Sse.Sqrt(Sse3.HorizontalAdd(result, result));
-            }
-            else if (Sse.IsSupported)
-            {
-                // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(vector, vector);
-
-
-                // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0));
-            }
-
-            return Length3D_Software(vector);
-        }
+            => Sqrt(DotProduct3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Length4D(Vector4FParam1_3 vector)
-        {
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_1111_1111;
-                return Sse.Sqrt(Sse41.DotProduct(vector, vector, control));
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(vector, vector);
-                mul = Sse3.HorizontalAdd(mul, mul);
-                return Sse.Sqrt(Sse3.HorizontalAdd(mul, mul));
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F copy = vector;
-                Vector4F mul = Sse.Multiply(vector, copy);
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
-                copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
-                mul = Sse.AddScalar(mul, copy);
-
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2));
-            }
-
-            return Length4D_Software(vector);
-        }
+            => Sqrt(DotProduct4D(vector, vector));
 
         #endregion
 
         #region LengthSquared
 
-        // TODO investigate codegen for LengthSquared_D as there have been inlining codegen issues before
         [MethodImpl(MaxOpt)]
         public static Vector4F LengthSquared2D(Vector4FParam1_3 vector)
-        {
-            return DotProduct2D(vector, vector);
-        }
+            => DotProduct2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
         public static Vector4F LengthSquared3D(Vector4FParam1_3 vector)
-        {
-            return DotProduct3D(vector, vector);
-        }
+            => DotProduct3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
         public static Vector4F LengthSquared4D(Vector4FParam1_3 vector)
-        {
-            return DotProduct4D(vector, vector);
-        }
+            => DotProduct4D(vector, vector);
 
         #endregion
 
@@ -528,133 +301,18 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4F Distance2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
-        {
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                return Sse.Sqrt(Sse41.DotProduct(diff, diff, control));
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                Vector4F mul = Sse.Multiply(diff, diff);
-
-                // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
-                result = Sse3.HorizontalAdd(result, result);
-
-                // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
-                return Sse.Sqrt(Sse3.MoveLowAndDuplicate(result));
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                Vector4F mul = Sse.Multiply(diff, diff);
-
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-
-                return Sse.Sqrt(mul);
-            }
-
-            return Distance2D_Software(left, right);
-        }
+            => Length2D(Subtract(left, right));
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Distance3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
-        {
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0111_1111;
-                return Sse.Sqrt(Sse41.DotProduct(diff, diff, control));
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                Vector4F mul = Sse.Multiply(diff, diff);
+            => Length3D(Subtract(left, right));
 
-                // Set W to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Doubly horizontally adding fills the final vector with the sum
-                result = Sse3.HorizontalAdd(result, result);
-                return Sse.Sqrt(Sse3.HorizontalAdd(result, result));
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(diff, diff);
-
-                // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0));
-            }
-
-            return Distance3D_Software(left, right);
-        }
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F Distance4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
-        {
-            if (Sse41.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_1111_1111;
-                return Sse.Sqrt(Sse41.DotProduct(diff, diff, control));
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                Vector4F mul = Sse.Multiply(diff, diff);
-                mul = Sse3.HorizontalAdd(mul, mul);
-                return Sse.Sqrt(Sse3.HorizontalAdd(mul, mul));
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                Vector4F copy = diff;
-                Vector4F mul = Sse.Multiply(diff, copy);
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
-                copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
-                mul = Sse.AddScalar(mul, copy);
-
-                return Sse.Sqrt(Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2));
-            }
-
-            return Distance4D_Software(left, right);
-        }
+            => Length4D(Subtract(left, right));
 
         #endregion
 
@@ -662,135 +320,17 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4F DistanceSquared2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
-        {
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                return Sse41.DotProduct(diff, diff, control);
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                Vector4F mul = Sse.Multiply(diff, diff);
-
-                // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
-                result = Sse3.HorizontalAdd(result, result);
-
-                // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
-                return Sse3.MoveLowAndDuplicate(result);
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                Vector4F mul = Sse.Multiply(diff, diff);
-
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-
-                return mul;
-            }
-
-            return DistanceSquared2D_Software(left, right);
-        }
+            => LengthSquared2D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
         public static Vector4F DistanceSquared3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
-        {
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
+            => LengthSquared3D(Subtract(left, right));
 
-                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0111_1111;
-                return Sse41.DotProduct(diff, diff, control);
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                Vector4F mul = Sse.Multiply(diff, diff);
-
-                // Set W to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Doubly horizontally adding fills the final vector with the sum
-                result = Sse3.HorizontalAdd(result, result);
-                return Sse3.HorizontalAdd(result, result);
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-
-                // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(diff, diff);
-
-                // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                return Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-            }
-
-            return DistanceSquared3D_Software(left, right);
-        }
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4F DistanceSquared4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
-        {
-            if (Sse41.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_1111_1111;
-                return Sse41.DotProduct(diff, diff, control);
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                Vector4F mul = Sse.Multiply(diff, diff);
-                mul = Sse3.HorizontalAdd(mul, mul);
-                return Sse3.HorizontalAdd(mul, mul);
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F diff = Sse.Subtract(left, right);
-                Vector4F copy = diff;
-                Vector4F mul = Sse.Multiply(diff, copy);
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
-                copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
-                mul = Sse.AddScalar(mul, copy);
-
-                return Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
-            }
-
-            return DistanceSquared4D_Software(left, right);
-        }
+            => LengthSquared4D(Subtract(left, right));
 
         #endregion
 
@@ -801,17 +341,11 @@ namespace MathSharp
         {
             Debug.Assert(weight <= 1 && weight >= 0);
 
-
-            if (Sse.IsSupported)
-            {
-                // Lerp (Linear interpolate) interpolates between two values (here, vectors)
-                // The general formula for it is 'from + (to - from) * weight'
-                Vector4F offset = Sse.Subtract(to, from);
-                offset = Sse.Multiply(offset, weight.LoadScalarBroadcast());
-                return Sse.Add(from, offset);
-            }
-
-            return Lerp_Software(from, to, weight);
+            // Lerp (Linear interpolate) interpolates between two values (here, vectors)
+            // The general formula for it is 'from + (to - from) * weight'
+            Vector4F offset = Subtract(to, from);
+            offset = Multiply(offset, weight.LoadScalarBroadcast());
+            return Add(from, offset);
         }
 
         #endregion
@@ -821,150 +355,28 @@ namespace MathSharp
         public static Vector4F Reflect2D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 2 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0011_1111;
-                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident,  tmp);
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(incident, normal);
-
-                // Set W and Z to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
-                result = Sse3.HorizontalAdd(result, result);
-
-                // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
-                Vector4F tmp = Sse3.MoveLowAndDuplicate(result);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(incident, normal);
-
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-
-                mul = Sse.Add(mul, mul);
-                mul = Sse.Multiply(mul, normal);
-                return Sse.Subtract(incident, mul);
-            }
-
-            return Reflect2D_Software(incident, normal);
+            Vector4F tmp = DotProduct2D(incident, normal);
+            tmp = Add(tmp, tmp);
+            tmp = Multiply(tmp, normal);
+            return Subtract(incident, tmp);
         }
 
         public static Vector4F Reflect3D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            // SSE4.1 has a native dot product instruction, dpps
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 3 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_0111_1111;
-                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-            // We can use SSE to vectorize the multiplication
-            // There are different fastest methods to sum the resultant vector
-            // on SSE3 vs SSE1
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(incident, normal);
-
-                // Set W to zero
-                Vector4F result = Sse.And(mul, MaskWSingle);
-
-                // Doubly horizontally adding fills the final vector with the sum
-                result = Sse3.HorizontalAdd(result, result);
-                Vector4F tmp = Sse3.HorizontalAdd(result, result);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-
-            }
-            else if (Sse.IsSupported)
-            {
-                // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(incident, normal);
-
-                // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
-
-                mul = Sse.AddScalar(mul, temp);
-
-                Vector4F tmp = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-
-            return Reflect3D_Software(incident, normal);
+            Vector4F tmp = DotProduct3D(incident, normal);
+            tmp = Add(tmp, tmp);
+            tmp = Multiply(tmp, normal);
+            return Subtract(incident, tmp);
         }
 
         public static Vector4F Reflect4D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
         {
-#warning TODO hardware accelerate ASAP
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            //Vector4F tmp = DotProduct4D_Software(incident, normal);
-            //tmp = Add_Software(tmp, tmp);
-            //tmp = Multiply_Software(tmp, normal);
-            //return Subtract_Software(incident, tmp);
-            if (Sse41.IsSupported)
-            {
-                // This multiplies the first 4 elems of each and broadcasts it into each element of the returning vector
-                const byte control = 0b_1111_1111;
-                Vector4F tmp = Sse41.DotProduct(incident, normal, control);
-
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-            else if (Sse3.IsSupported)
-            {
-                Vector4F mul = Sse.Multiply(incident, normal);
-                mul = Sse3.HorizontalAdd(mul, mul);
-                Vector4F tmp = Sse3.HorizontalAdd(mul, mul);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-            else if (Sse.IsSupported)
-            {
-                Vector4F copy = normal;
-                Vector4F mul = Sse.Multiply(incident, copy);
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
-                copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
-                mul = Sse.AddScalar(mul, copy);
-
-                Vector4F tmp = Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
-                tmp = Sse.Add(tmp, tmp);
-                tmp = Sse.Multiply(tmp, normal);
-                return Sse.Subtract(incident, tmp);
-            }
-
-            return Reflect4D_Software(incident, normal);
+            Vector4F tmp = DotProduct4D(incident, normal);
+            tmp = Add(tmp, tmp);
+            tmp = Multiply(tmp, normal);
+            return Subtract(incident, tmp);
         }
 
         #endregion

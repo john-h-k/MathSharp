@@ -81,7 +81,7 @@
 namespace MathSharp.Utils
 {
     /// <summary>
-    /// Checks whether it is allowed for the program to use certain intrinsic supports
+    /// Checks whether it is allowed for the program to use certaintrinsic supports
     /// </summary>
     // TODO investigate inlining - ALL of these *should* be inlined to be zero-cost ( do we need AggressiveInlining? - unlikely but possible )
     internal static class IntrinsicSupport

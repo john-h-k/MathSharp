@@ -15,17 +15,8 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
-        public static Vector4D Abs(in Vector4DParam1_3 vector)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D zero = Vector4D.Zero;
-                zero = Avx.Subtract(zero, vector); // This gets the inverted results of all elements
-                return Avx.Max(zero, vector); // This selects the positive values of the 2 vectors
-            }
-
-            return Abs_Software(vector);
-        }
+        public static Vector4D Abs(in Vector4DParam1_3 vector) 
+            => Max(Subtract(Vector4D.Zero, vector), vector);
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
@@ -54,15 +45,7 @@ namespace MathSharp
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Add(in Vector4DParam1_3 vector, double scalar)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D expand = Vector256.Create(scalar);
-                return Avx.Add(vector, expand);
-            }
-
-            return Add_Software(vector, scalar);
-        }
+            => Add(vector, Vector256.Create(scalar));
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
@@ -79,15 +62,7 @@ namespace MathSharp
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Subtract(in Vector4DParam1_3 vector, double scalar)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D expand = Vector256.Create(scalar);
-                return Avx.Add(vector, expand);
-            }
-
-            return Subtract_Software(vector, scalar);
-        }
+            => Subtract(vector, Vector256.Create(scalar));
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
@@ -102,15 +77,8 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Multiply(in Vector4DParam1_3 left, double scalar)
-        {
-            if (Avx.IsSupported)
-            {
-                return Avx.Multiply(left, Vector256.Create(scalar));
-            }
-
-            return Multiply_Software(left, scalar);
-        }
+        public static Vector4D Multiply(in Vector4DParam1_3 vector, double scalar)
+            => Multiply(vector, Vector256.Create(scalar));
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Divide(in Vector4DParam1_3 dividend, in Vector4DParam1_3 divisor)
@@ -126,27 +94,11 @@ namespace MathSharp
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Divide(in Vector4DParam1_3 dividend, double scalarDivisor)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D expand = Vector256.Create(scalarDivisor);
-                return Avx.Divide(dividend, expand);
-            }
-
-            return Divide_Software(dividend, scalarDivisor);
-        }
+            => Subtract(dividend, Vector256.Create(scalarDivisor));
 
         [UsesInstructionSet(InstructionSets.Avx)] [MethodImpl(MaxOpt)]
-        public static Vector4D Clamp(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high)
-        {
-            if (Avx.IsSupported)
-            {
-                Vector4D temp = Avx.Min(vector, high);
-                return Avx.Max(temp, low);
-            }
-
-            return Clamp_Software(vector, low, high);
-        }
+        public static Vector4D Clamp(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high) 
+            => Max(Min(vector, high), low);
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
@@ -186,39 +138,18 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
-        public static Vector4D Negate2D(in Vector4DParam1_3 vector)
-        {
-            if (Avx.IsSupported)
-            {
-                return Avx.Xor(vector, SignFlip2DDouble);
-            }
-
-            return Negate4D_Software(vector);
-        }
+        public static Vector4D Negate2D(in Vector4DParam1_3 vector) 
+            => Xor(vector, SignFlip2DDouble);
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate3D(in Vector4DParam1_3 vector)
-        {
-            if (Avx.IsSupported)
-            {
-                return Avx.Xor(vector, SignFlip3DDouble);
-            }
-
-            return Negate4D_Software(vector);
-        }
+            => Xor(vector, SignFlip3DDouble);
 
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate4D(in Vector4DParam1_3 vector)
-        {
-            if (Avx.IsSupported)
-            {
-                return Avx.Xor(vector, SignFlip4DDouble);
-            }
-
-            return Negate4D_Software(vector);
-        }
+            => Xor(vector, SignFlip4DDouble);
 
         #endregion
     }
