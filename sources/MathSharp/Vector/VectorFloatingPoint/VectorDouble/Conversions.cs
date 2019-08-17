@@ -188,7 +188,7 @@ namespace MathSharp
         //{
         //    if (Sse.IsSupported)
         //    {
-        //        Vector4D hiBroadcast = Sse.Shuffle(vector, vector, Helpers.Shuffle(2, 2, 2, 2));
+        //        Vector4D hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues._2_2_2_2);
         //        fixed (void* pDest = &destination)
         //        {
         //            Sse.StoreLow((double*)pDest, vector);
