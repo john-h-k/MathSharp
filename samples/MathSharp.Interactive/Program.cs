@@ -1,6 +1,14 @@
 ﻿using System;
+using System.Data;
+using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.Intrinsics;
+using System.Text;
+using BenchmarkDotNet.Analysers;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Running;
 using MathSharp.Interactive.Benchmarks.MatrixTests.Single;
 using MathSharp.Interactive.Benchmarks.Vector.Single;
@@ -9,9 +17,9 @@ namespace MathSharp.Interactive
 {
     internal class Program
     {
-        private static void Main()
+        private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<MatrixAdditionBenchmark>();
+            BenchmarkRunner.Run<CameraClassBenchmark>();
         }
 
         private static void Example()

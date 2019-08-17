@@ -24,15 +24,15 @@ namespace MathSharp
         #region Normalize
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Normalize2D(Vector4FParam1_3 vector)
+        public static Vector4F Normalize2D(in Vector4FParam1_3 vector)
             => Divide(vector, Length2D(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Normalize3D(Vector4FParam1_3 vector)
+        public static Vector4F Normalize3D(in Vector4FParam1_3 vector)
             => Divide(vector, Length3D(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Normalize4D(Vector4FParam1_3 vector)
+        public static Vector4F Normalize4D(in Vector4FParam1_3 vector)
             => Divide(vector, Length4D(vector));
 
         #endregion
@@ -40,15 +40,15 @@ namespace MathSharp
         #region Length
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Length2D(Vector4FParam1_3 vector)
+        public static Vector4F Length2D(in Vector4FParam1_3 vector)
             => Sqrt(DotProduct2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Length3D(Vector4FParam1_3 vector)
+        public static Vector4F Length3D(in Vector4FParam1_3 vector)
             => Sqrt(DotProduct3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Length4D(Vector4FParam1_3 vector)
+        public static Vector4F Length4D(in Vector4FParam1_3 vector)
             => Sqrt(DotProduct4D(vector, vector));
 
         #endregion
@@ -56,15 +56,15 @@ namespace MathSharp
         #region LengthSquared
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F LengthSquared2D(Vector4FParam1_3 vector)
+        public static Vector4F LengthSquared2D(in Vector4FParam1_3 vector)
             => DotProduct2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F LengthSquared3D(Vector4FParam1_3 vector)
+        public static Vector4F LengthSquared3D(in Vector4FParam1_3 vector)
             => DotProduct3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F LengthSquared4D(Vector4FParam1_3 vector)
+        public static Vector4F LengthSquared4D(in Vector4FParam1_3 vector)
             => DotProduct4D(vector, vector);
 
         #endregion
@@ -73,7 +73,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F DotProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DotProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -116,7 +116,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F DotProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DotProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -161,7 +161,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F DotProduct4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DotProduct4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -196,7 +196,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F CrossProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F CrossProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             /* Cross product of A(x, y, _, _) and B(x, y, _, _) is
              * 'E = (Ax * By) - (Ay * Bx)'
@@ -227,7 +227,7 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F CrossProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F CrossProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -286,7 +286,7 @@ namespace MathSharp
 
         // TODO [UsesInstructionSet(InstructionSets.Sse41)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F CrossProduct4D(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
+        public static Vector4F CrossProduct4D(in Vector4FParam1_3 one, in Vector4FParam1_3 two, in Vector4FParam1_3 three)
         {
 #warning Needs to be hardware accelerated ASAP
             // hardware
@@ -300,18 +300,18 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Distance2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F Distance2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length2D(Subtract(left, right));
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Distance3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F Distance3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length3D(Subtract(left, right));
 
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Distance4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F Distance4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length4D(Subtract(left, right));
 
         #endregion
@@ -319,17 +319,17 @@ namespace MathSharp
         #region DistanceSquared
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F DistanceSquared2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DistanceSquared2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared2D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F DistanceSquared3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DistanceSquared3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared3D(Subtract(left, right));
 
 
         [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F DistanceSquared4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DistanceSquared4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared4D(Subtract(left, right));
 
         #endregion
@@ -337,7 +337,7 @@ namespace MathSharp
         #region Lerp
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Lerp(Vector4FParam1_3 from, Vector4FParam1_3 to, float weight)
+        public static Vector4F Lerp(in Vector4FParam1_3 from, in Vector4FParam1_3 to, float weight)
         {
             Debug.Assert(weight <= 1 && weight >= 0);
 
@@ -352,7 +352,7 @@ namespace MathSharp
 
         #region Reflect
 
-        public static Vector4F Reflect2D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        public static Vector4F Reflect2D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct2D(incident, normal);
@@ -361,7 +361,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        public static Vector4F Reflect3D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        public static Vector4F Reflect3D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct3D(incident, normal);
@@ -370,7 +370,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        public static Vector4F Reflect4D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        public static Vector4F Reflect4D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct4D(incident, normal);
