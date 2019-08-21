@@ -52,9 +52,8 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         public Vector2 OpenTkMath()
         {
             Vector2 newScale = _openTkScale * _openTkAmount;
-            Vector2 deltaT = _openTkScale 
-                         * (Vector2.One - _openTkAmount)
-                         * _openTkAnchor;
+            Vector2 deltaT = _openTkScale * (Vector2.One - _openTkAmount);
+            deltaT *= _openTkAnchor;
             return (_openTkTranslation + deltaT) * newScale;
         }
     }

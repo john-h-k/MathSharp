@@ -19,6 +19,25 @@ namespace MathSharp
 
         #region Vector128
 
+        public static Vector128<float> Shuffle_Software(in Vector128<float> left, in Vector128<float> right, byte control)
+        {
+            const byte e0Mask = 0b_0000_0011, e1Mask = 0b_0000_1100, e2Mask = 0b_0011_0000, e3Mask = 0b_1100_0000;
+
+            int e0Selector = control & e0Mask;
+            float e0 = left.GetElement(e0Selector);
+
+            int e1Selector = (control & e1Mask) >> 2;
+            float e1 = left.GetElement(e1Selector);
+
+            int e2Selector = (control & e2Mask) >> 4;
+            float e2 = right.GetElement(e2Selector);
+
+            int e3Selector = (control & e3Mask) >> 6;
+            float e3 = right.GetElement(e3Selector);
+
+            return Vector128.Create(e0, e1, e2, e3);
+        }
+
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Or_Software(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -123,6 +142,6 @@ namespace MathSharp
             return And_Software(Not_Software(left), right);
         }
 
-        #endregion
+        #endregion    }
     }
 }

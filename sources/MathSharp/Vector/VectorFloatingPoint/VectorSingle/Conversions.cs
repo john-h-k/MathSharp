@@ -4,6 +4,8 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using MathSharp.Utils;
+using Microsoft.VisualBasic.CompilerServices;
+using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
@@ -11,6 +13,29 @@ namespace MathSharp
 
     public static unsafe partial class Vector
     {
+        [MethodImpl(MaxOpt)]
+        public static byte ExtractMask(Vector4F vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return (byte)Sse.MoveMask(vector);
+            }
+
+            return SoftwareFallback(vector);
+
+            static byte SoftwareFallback(Vector4F vector)
+            {
+                int e0 = Unsafe.As<float, int>(ref Unsafe.AsRef(X(vector)));
+                int e1 = Unsafe.As<float, int>(ref Unsafe.AsRef(Y(vector)));
+                int e2 = Unsafe.As<float, int>(ref Unsafe.AsRef(Z(vector)));
+                int e3 = Unsafe.As<float, int>(ref Unsafe.AsRef(W(vector)));
+
+                return (byte)(SignAsByteBool(e0) | (SignAsByteBool(e1) << 1) | (SignAsByteBool(e2) << 2) | (SignAsByteBool(e3) << 3));
+            }
+
+            static byte SignAsByteBool(int i) => i < 0 ? (byte)1 : (byte)0;
+        }
+
         #region Loads
 
         // TODO all the code here already exists as Create'yyy' methods in Vector128 - should be cleaned up to just use that

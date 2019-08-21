@@ -16,10 +16,22 @@ namespace MathSharp
     {
         #region Vector Maths
 
-        private static readonly Vector128<float> SignFlip1D = Vector128.Create(int.MinValue, 0, 0, 0).AsSingle();
         private static readonly Vector128<float> SignFlip2D = Vector128.Create(int.MinValue, int.MinValue, 0, 0).AsSingle();
         private static readonly Vector128<float> SignFlip3D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
         private static readonly Vector128<float> SignFlip4D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
+
+        public static readonly Vector128<float> MaskW = Vector128.Create(-1, -1, -1, 0).AsSingle();
+        public static readonly Vector128<float> MaskXYZ = Vector128.Create(0, 0, 0, -1).AsSingle();
+
+
+        public static readonly Vector128<float> UnitX = Vector128.Create(1f, 0f, 0f, 0f);
+        public static readonly Vector128<float> UnitY = Vector128.Create(0f, 1f, 0f, 0f);
+        public static readonly Vector128<float> UnitZ = Vector128.Create(0f, 0f, 1f, 0f);
+        public static readonly Vector128<float> UnitW = Vector128.Create(0f, 0f, 0f, 1f);
+
+        public static readonly Vector128<float> One = Vector128.Create(1f, 1f, 1f, 1f);
+        public static readonly Vector128<float> Zero = Vector128<float>.Zero;
+        
 
         #region Normalize
 
@@ -171,14 +183,19 @@ namespace MathSharp
             }
             else if (Sse3.IsSupported)
             {
+                // Multiply the two vectors to get all the needed elements
                 Vector4F mul = Sse.Multiply(left, right);
+
+                // Double horizontal add is the same as broadcasting the sum of all 4
                 mul = Sse3.HorizontalAdd(mul, mul);
                 return Sse3.HorizontalAdd(mul, mul);
             }
             else if (Sse.IsSupported)
             {
                 Vector4F copy = right;
+                // Multiply the two vectors to get all the needed elements
                 Vector4F mul = Sse.Multiply(left, copy);
+                
                 copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
                 mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);

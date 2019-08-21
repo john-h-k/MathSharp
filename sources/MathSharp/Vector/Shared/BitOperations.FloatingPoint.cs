@@ -23,6 +23,18 @@ namespace MathSharp
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
+        public static Vector4Single Shuffle(Vector4Single left, Vector4Single right, byte control)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Shuffle(left, right, control);
+            }
+
+            return SoftwareFallbacks.Shuffle_Software(left, right, control);
+        }
+
+        [UsesInstructionSet(InstructionSets.Sse)]
+        [MethodImpl(MaxOpt)]
         public static Vector4Single Or(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)

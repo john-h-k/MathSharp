@@ -14,7 +14,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.ComparisonTests
                 new object[] { Vector128.Create(0f), Vector128.Create(1f), new []{ false, false, false, false } },
                 new object[] { Vector128.Create(0f, 1f, 0f, 1f), Vector128.Create(0f), new []{ true, false, true, false } },
                 new object[] { Vector128.Create(float.NaN), Vector128.Create(0f), new []{ false, false, false, false } },
-                new object[] 
+                new object[]
                 {
                     Vector128.Create(0f, float.MaxValue, float.MinValue, float.PositiveInfinity),
                     Vector128.Create(float.Epsilon, float.MaxValue - 1E+32f, float.MinValue + 1E+32f, float.NegativeInfinity),

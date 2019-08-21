@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Configs;
@@ -19,7 +20,15 @@ namespace MathSharp.Interactive
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<CameraClassBenchmark>();
+            Vector128<float> a = Vector128.Create(1f, 2f, 3f, 4f);
+            Vector128<float> b = Vector128.Create(-1f, -2f, -3f, -4f);
+            const byte control = 0b_11_00_10_01;
+
+            var intrinsic = Sse.Shuffle(a, b, control);
+            var software = SoftwareFallbacks.Shuffle_Software(a, b, control);
+
+            Console.WriteLine($"Intrinsic: {intrinsic}");
+            Console.WriteLine($"Software: {software}");
         }
 
         private static void Example()

@@ -18,6 +18,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                 new object[] {Vector128.Create(-1f), default(Vector4)},
                 new object[] {Vector128.Create(-1f), default(Vector4)},
                 new object[] {Vector128.Create(1f, 2f, 3f, 4f), default(Vector4)},
+                new object[] {Vector128.Create(15324.32354253f, 0.00000000213112f, 3222222222222222222222f, 4.2342342222222222f), default(Vector4)},
                 new object[] {Vector128.Create(float.PositiveInfinity), default(Vector4)},
                 new object[] {Vector128.Create(float.PositiveInfinity), default(Vector4)},
                 new object[] {Vector128.Create(float.NaN), default(Vector4)},
@@ -30,21 +31,21 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                 {
                     case VectorDimensions.V2D:
                         {
-                            Vector2 v1 = ByValToSlowVector2(((Vector128<float>)set[0]));
+                            Vector2 v1 = ByValToSlowVector2((Vector128<float>)set[0]);
                             set[1] = Vector2.Normalize(v1);
                             break;
                         }
 
                     case VectorDimensions.V3D:
                         {
-                            Vector3 v1 = ByValToSlowVector3(((Vector128<float>)set[0]));
+                            Vector3 v1 = ByValToSlowVector3((Vector128<float>)set[0]);
                             set[1] = Vector3.Normalize(v1);
                             break;
                         }
 
                     case VectorDimensions.V4D:
                         {
-                            Vector4 v1 = ByValToSlowVector4(((Vector128<float>)set[0]));
+                            Vector4 v1 = ByValToSlowVector4((Vector128<float>)set[0]);
                             set[1] = Vector4.Normalize(v1);
                             break;
                         }

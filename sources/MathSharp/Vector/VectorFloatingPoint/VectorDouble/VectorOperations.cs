@@ -20,7 +20,16 @@ namespace MathSharp
         private static readonly Vector256<double> SignFlip2DDouble = Vector256.Create(long.MinValue, long.MinValue, 0, 0).AsDouble();
         private static readonly Vector256<double> SignFlip3DDouble = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, 0).AsDouble();
         private static readonly Vector256<double> SignFlip4DDouble = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, long.MinValue).AsDouble();
-        private static readonly Vector256<double> MaskWDouble = Vector256.Create(-1, -1, -1, 0).AsDouble();
+        
+        public static readonly Vector256<double> MaskWDouble = Vector256.Create(-1, -1, -1, 0).AsDouble();
+
+        public static readonly Vector256<double> UnitXDouble = Vector256.Create(1d, 0d, 0d, 0d);
+        public static readonly Vector256<double> UnitYDouble = Vector256.Create(0d, 1d, 0d, 0d);
+        public static readonly Vector256<double> UnitZDouble = Vector256.Create(0d, 0d, 1d, 0d);
+        public static readonly Vector256<double> UnitWDouble = Vector256.Create(0d, 0d, 0d, 1d);
+
+        public static readonly Vector256<double> OneDouble = Vector256.Create(1d, 1d, 1d, 1d);
+        public static readonly Vector256<double> ZeroDouble = Vector256<double>.Zero;
 
         #region Normalize
 
@@ -253,18 +262,17 @@ namespace MathSharp
 
         #region Distance
 
-
+        [UsesInstructionSet(InstructionSets.None)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance2D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
             => Length2D(Subtract(left, right));
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
+        [UsesInstructionSet(InstructionSets.None)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance3D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
             => Length3D(Subtract(left, right));
 
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Distance4D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
             => Length4D(Subtract(left, right));
@@ -282,7 +290,6 @@ namespace MathSharp
             => LengthSquared3D(Subtract(left, right));
 
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4D DistanceSquared4D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
             => LengthSquared4D(Subtract(left, right));

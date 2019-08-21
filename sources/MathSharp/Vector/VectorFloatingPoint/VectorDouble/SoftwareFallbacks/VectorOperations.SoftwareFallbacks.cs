@@ -132,35 +132,35 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D CrossProduct4D_Software(in Vector4DParam1_3 one, in Vector4DParam1_3 two, in Vector4DParam1_3 three)
         {
-            return Vector256.Create(
-                (two.GetElement(2) * three.GetElement(3) - two.GetElement(3) * three.GetElement(2)) *
-                one.GetElement(1) -
-                (two.GetElement(1) * three.GetElement(3) - two.GetElement(3) * three.GetElement(1)) *
-                one.GetElement(2) +
-                (two.GetElement(1) * three.GetElement(2) - two.GetElement(2) * three.GetElement(1)) *
-                one.GetElement(3),
+            double x = (Z(two) * W(three) - W(two) * Z(three)) *
+                      Y(one) -
+                      (Y(two) * W(three) - W(two) * Y(three)) *
+                      Z(one) +
+                      (Y(two) * Z(three) - Z(two) * Y(three)) *
+                      W(one);
 
-                (two.GetElement(3) * three.GetElement(2) - two.GetElement(2) * three.GetElement(3)) *
-                one.GetElement(0) -
-                (two.GetElement(3) * three.GetElement(0) - two.GetElement(0) * three.GetElement(3)) *
-                one.GetElement(2) +
-                (two.GetElement(2) * three.GetElement(0) - two.GetElement(0) * three.GetElement(2)) *
-                one.GetElement(3),
+            double y = (W(two) * Z(three) - Z(two) * W(three)) *
+                      X(one) -
+                      (W(two) * X(three) - X(two) * W(three)) *
+                      Z(one) +
+                      (Z(two) * X(three) - X(two) * Z(three)) *
+                      W(one);
 
-                (two.GetElement(1) * three.GetElement(3) - two.GetElement(3) * three.GetElement(1)) *
-                one.GetElement(0) -
-                (two.GetElement(0) * three.GetElement(3) - two.GetElement(3) * three.GetElement(0)) *
-                one.GetElement(1) +
-                (two.GetElement(0) * three.GetElement(1) - two.GetElement(1) * three.GetElement(0)) *
-                one.GetElement(3),
+            double z = (Y(two) * W(three) - W(two) * Y(three)) *
+                      X(one) -
+                      (X(two) * W(three) - W(two) * X(three)) *
+                      Y(one) +
+                      (X(two) * Y(three) - Y(two) * X(three)) *
+                      W(one);
 
-                (two.GetElement(2) * three.GetElement(1) - two.GetElement(1) * three.GetElement(2)) *
-                one.GetElement(0) -
-                (two.GetElement(2) * three.GetElement(0) - two.GetElement(0) * three.GetElement(2)) *
-                one.GetElement(1) +
-                (two.GetElement(1) * three.GetElement(0) - two.GetElement(0) * three.GetElement(1)) *
-                one.GetElement(2)
-            );
+            double w = (Z(two) * Y(three) - Y(two) * Z(three)) *
+                      X(one) -
+                      (Z(two) * X(three) - X(two) * Z(three)) *
+                      Y(one) +
+                      (Y(two) * X(three) - X(two) * Y(three)) *
+                      Z(one);
+
+            return Vector256.Create(x, y, z, w);
         }
 
         #endregion
