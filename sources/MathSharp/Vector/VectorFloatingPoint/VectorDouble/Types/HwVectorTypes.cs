@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Tracing;
+﻿using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 
@@ -8,9 +9,12 @@ namespace MathSharp
 
     // Used for overload resolution. All conversions are nops and the codegen around them is good
 
+    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
     public readonly struct HwVector2D
     {
         public readonly Vector4D Value;
+
+        internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}>";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector2D(Vector4D value)
@@ -66,9 +70,12 @@ namespace MathSharp
         }
     }
 
+    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
     public readonly struct HwVector3D
     {
         public readonly Vector4D Value;
+
+        internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}, {Value.GetElement(2)}>";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector3D(Vector4D value)
@@ -124,9 +131,12 @@ namespace MathSharp
         }
     }
 
+    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
     public readonly struct HwVector4D
     {
         public readonly Vector4D Value;
+
+        internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}, {Value.GetElement(2)}, {Value.GetElement(3)}>";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector4D(Vector4D value)

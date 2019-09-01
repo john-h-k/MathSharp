@@ -12,5 +12,16 @@ namespace MathSharp.Interactive
         {
             BenchmarkRunner.Run<AnchoredScaleBenchmark>();
         }
+
+        private static Vector3 Direction;
+        private static Vector3 Offset;
+
+        public static HwVector3 Example()
+        {
+            var dir = Direction.Load();
+            var offset = Offset.Load();
+
+            return dir * offset;
+        }
     }
 }
