@@ -21,7 +21,7 @@ namespace MathSharp
 
         #region Vector128
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Or(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -33,7 +33,7 @@ namespace MathSharp
             return SoftwareFallbacks.Or_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 And(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -45,7 +45,7 @@ namespace MathSharp
             return SoftwareFallbacks.And_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Xor(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -57,7 +57,7 @@ namespace MathSharp
             return SoftwareFallbacks.Xor_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Not(Vector4UInt32Param1_3 vector)
         {
@@ -70,7 +70,7 @@ namespace MathSharp
             return SoftwareFallbacks.Not_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 AndNot(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -86,7 +86,7 @@ namespace MathSharp
 
         #region Vector256
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt64 Or(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
         {
@@ -98,7 +98,7 @@ namespace MathSharp
             return SoftwareFallbacks.Or_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt64 And(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
         {
@@ -110,7 +110,7 @@ namespace MathSharp
             return SoftwareFallbacks.And_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt64 Xor(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
         {
@@ -122,7 +122,7 @@ namespace MathSharp
             return SoftwareFallbacks.Xor_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt64 Not(Vector4UInt64Param1_3 vector)
         {
@@ -135,7 +135,7 @@ namespace MathSharp
             return SoftwareFallbacks.Not_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt64 AndNot(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
         {

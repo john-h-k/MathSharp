@@ -13,12 +13,12 @@ namespace MathSharp
     {
         #region Vector
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Abs(in Vector4DParam1_3 vector) 
             => Max(Subtract(Vector4D.Zero, vector), vector);
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D HorizontalAdd(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -30,7 +30,7 @@ namespace MathSharp
             return HorizontalAdd_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Add(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -42,12 +42,12 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Add(in Vector4DParam1_3 vector, double scalar)
             => Add(vector, Vector256.Create(scalar));
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Subtract(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -59,12 +59,12 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Subtract(in Vector4DParam1_3 vector, double scalar)
             => Subtract(vector, Vector256.Create(scalar));
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Multiply(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -91,16 +91,16 @@ namespace MathSharp
             return Divide_Software(dividend, divisor);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Divide(in Vector4DParam1_3 dividend, double scalarDivisor)
             => Subtract(dividend, Vector256.Create(scalarDivisor));
 
-        [UsesInstructionSet(InstructionSets.Avx)] [MethodImpl(MaxOpt)]
+        
         public static Vector4D Clamp(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high) 
             => Max(Min(vector, high), low);
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Sqrt(in Vector4DParam1_3 vector)
         {
@@ -112,7 +112,7 @@ namespace MathSharp
             return Sqrt_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Max(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -124,7 +124,7 @@ namespace MathSharp
             return Max_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Min(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -145,17 +145,17 @@ namespace MathSharp
         public static HwVector4D Negate(HwVector4D vector)
             => Negate4D(vector);
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate2D(in Vector4DParam1_3 vector) 
             => Xor(vector, SignFlip2DDouble);
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate3D(in Vector4DParam1_3 vector)
             => Xor(vector, SignFlip3DDouble);
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate4D(in Vector4DParam1_3 vector)
             => Xor(vector, SignFlip4DDouble);

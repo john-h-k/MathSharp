@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Tracing;
+﻿using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 
@@ -8,9 +9,12 @@ namespace MathSharp
 
     // Used for overload resolution. All conversions are nops and the codegen around them is good
 
+    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
     public readonly struct HwVector2
     {
         public readonly Vector4F Value;
+        internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}>";
+        public override string ToString() => DebuggerString;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector2(Vector4F value)
@@ -66,9 +70,13 @@ namespace MathSharp
         }
     }
 
+    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
     public readonly struct HwVector3
     {
         public readonly Vector4F Value;
+
+        internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}, {Value.GetElement(2)}>";
+        public override string ToString() => DebuggerString;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector3(Vector4F value)
@@ -124,9 +132,12 @@ namespace MathSharp
         }
     }
 
+    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
     public readonly struct HwVector4
     {
         public readonly Vector4F Value;
+        internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}, {Value.GetElement(2)}, {Value.GetElement(3)}>";
+        public override string ToString() => DebuggerString;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector4(Vector4F value)

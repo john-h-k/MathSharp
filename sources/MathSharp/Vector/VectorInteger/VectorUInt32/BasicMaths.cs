@@ -12,7 +12,7 @@ namespace MathSharp
     public static partial class Vector
     {
         #region Vector
-        [UsesInstructionSet(InstructionSets.Ssse3)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 HorizontalAdd(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -26,7 +26,7 @@ namespace MathSharp
             return HorizontalAdd_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Add(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -38,7 +38,7 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Add(Vector4UInt32Param1_3 vector, uint scalar)
         {
@@ -51,7 +51,7 @@ namespace MathSharp
             return Add_Software(vector, scalar);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Subtract(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -63,7 +63,7 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Subtract(Vector4UInt32Param1_3 vector, uint scalar)
         {
@@ -76,7 +76,7 @@ namespace MathSharp
             return Subtract_Software(vector, scalar);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Multiply(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -93,7 +93,7 @@ namespace MathSharp
             return Multiply_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Multiply(Vector4UInt32Param1_3 left, uint scalar)
         {
@@ -122,7 +122,7 @@ namespace MathSharp
             return Divide_Software(dividend, divisor);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Divide(Vector4UInt32Param1_3 dividend, uint scalarDivisor)
         {
@@ -136,7 +136,7 @@ namespace MathSharp
             return Divide_Software(dividend, scalarDivisor);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Clamp(Vector4UInt32Param1_3 vector, Vector4UInt32Param1_3 low, Vector4UInt32Param1_3 high)
         {
@@ -149,7 +149,7 @@ namespace MathSharp
             return Clamp_Software(vector, low, high);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Sqrt(Vector4UInt32Param1_3 vector)
         {
@@ -165,7 +165,7 @@ namespace MathSharp
         // Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded, and also with +0/-0, where with MathF/Math, +0 is returned over -0,
         // - here, the second op is returned irrelevant of value if both are +0/-0
         // TODO We should provide a symmetric alternative to this
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Max(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -178,7 +178,7 @@ namespace MathSharp
         }
 
         // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Min(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {

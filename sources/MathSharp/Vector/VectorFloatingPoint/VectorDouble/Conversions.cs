@@ -16,7 +16,7 @@ namespace MathSharp
         // TODO all the code here already exists as Create'yyy' methods in Vector256 - should be cleaned up to just use that
 
         
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D LoadScalar(this double scalar) 
             => Vector256.CreateScalar(scalar);
@@ -115,7 +115,7 @@ namespace MathSharp
 
         #region Movement
 
-        //[UsesInstructionSet(InstructionSets.Avx2 | InstructionSets.Avx | InstructionSets.Sse)]
+        //
         //[MethodImpl(MaxOpt)]
         //public static Vector4D ScalarToVector(Vector4D scalar)
         //{

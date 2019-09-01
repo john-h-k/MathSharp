@@ -11,7 +11,7 @@ namespace MathSharp
 
     public static partial class Vector
     {
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 Equality(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
         {
@@ -23,7 +23,7 @@ namespace MathSharp
             return Equality_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 Inequality(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
         {
@@ -36,7 +36,7 @@ namespace MathSharp
             return Inequality_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 GreaterThan(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
         {
@@ -48,7 +48,7 @@ namespace MathSharp
             return GreaterThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 LessThan(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
         {
@@ -60,7 +60,7 @@ namespace MathSharp
             return LessThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 GreaterThanOrEqual(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
         {
@@ -73,7 +73,7 @@ namespace MathSharp
             return GreaterThanOrEqual_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 LessThanOrEqual(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
         {

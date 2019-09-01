@@ -13,7 +13,7 @@ namespace MathSharp
     {
         private static readonly Vector4UInt32 ComparisonMask = Vector128.Create(int.MinValue).AsUInt32();
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Equality(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -25,7 +25,7 @@ namespace MathSharp
             return Equality_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Inequality(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -38,7 +38,7 @@ namespace MathSharp
             return Inequality_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 GreaterThan(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -50,7 +50,7 @@ namespace MathSharp
             return GreaterThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 LessThan(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -62,7 +62,7 @@ namespace MathSharp
             return LessThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 GreaterThanOrEqual(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {
@@ -76,7 +76,7 @@ namespace MathSharp
             return GreaterThanOrEqual_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 LessThanOrEqual(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
         {

@@ -12,7 +12,7 @@ namespace MathSharp
     public static partial class Vector
     {
 #warning TODO check Unordered/Ordered
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Equality(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -24,7 +24,7 @@ namespace MathSharp
             return Equality_Software(left, right);
         }
         
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D Inequality(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -36,7 +36,7 @@ namespace MathSharp
             return Inequality_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D GreaterThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -48,7 +48,7 @@ namespace MathSharp
             return GreaterThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D LessThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -60,7 +60,7 @@ namespace MathSharp
             return LessThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D GreaterThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -72,7 +72,7 @@ namespace MathSharp
             return GreaterThanOrEqual_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4D LessThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {

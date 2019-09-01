@@ -131,7 +131,7 @@ namespace MathSharp
         public static HwVector3 DotProduct(in HwVector3 left, in HwVector3 right) => DotProduct3D(left, right);
         public static HwVector4 DotProduct(in HwVector4 left, in HwVector4 right) => DotProduct4D(left, right);
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F DotProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
@@ -174,7 +174,7 @@ namespace MathSharp
             return DotProduct2D_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F DotProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
@@ -219,7 +219,7 @@ namespace MathSharp
             return DotProduct3D_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F DotProduct4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
@@ -263,7 +263,7 @@ namespace MathSharp
         public static HwVector3 CrossProduct(in HwVector3 left, in HwVector3 right) => CrossProduct3D(left, right);
         public static HwVector4 CrossProduct(in HwVector4 one, in HwVector4 two, in HwVector4 three) => CrossProduct4D(one, two, three);
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F CrossProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
@@ -294,7 +294,7 @@ namespace MathSharp
             return CrossProduct2D_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F CrossProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
@@ -353,7 +353,7 @@ namespace MathSharp
             return CrossProduct3D_Software(left, right);
         }
 
-        // TODO [UsesInstructionSet(InstructionSets.Sse41)]
+        // TODO 
         [MethodImpl(MaxOpt)]
         internal static Vector4F CrossProduct4D(in Vector4FParam1_3 one, in Vector4FParam1_3 two, in Vector4FParam1_3 three)
         {
@@ -380,13 +380,13 @@ namespace MathSharp
         internal static Vector4F Distance2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length2D(Subtract(left, right));
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F Distance3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length3D(Subtract(left, right));
 
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F Distance4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length4D(Subtract(left, right));
@@ -413,7 +413,7 @@ namespace MathSharp
             => LengthSquared3D(Subtract(left, right));
 
 
-        [UsesInstructionSet(InstructionSets.Sse41 | InstructionSets.Sse3 | InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         internal static Vector4F DistanceSquared4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared4D(Subtract(left, right));

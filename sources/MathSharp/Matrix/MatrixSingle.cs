@@ -4,7 +4,7 @@ using System.Runtime.Intrinsics;
 using MathSharp.Attributes;
 
 namespace MathSharp
-{ 
+{
     using VectorF = Vector128<float>;
 
     [Hva]
@@ -85,5 +85,38 @@ namespace MathSharp
         {
             return Create(Vector128.Create(value));
         }
+
+        #region Operators
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MatrixSingle operator +(in MatrixSingle left, in MatrixSingle right)
+            => Matrix.Add(left, right);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MatrixSingle operator -(in MatrixSingle left, in MatrixSingle right)
+            => Matrix.Subtract(left, right);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MatrixSingle operator *(in MatrixSingle left, float scalar)
+            => Matrix.ScalarMultiply(left, scalar);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MatrixSingle operator *(float scalar, in MatrixSingle right)
+            => Matrix.ScalarMultiply(right, scalar);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MatrixSingle operator *(in MatrixSingle left, Vector128<float> vectorOfScalar)
+            => Matrix.ScalarMultiply(left, vectorOfScalar);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MatrixSingle operator *(Vector128<float> vectorOfScalar, in MatrixSingle right)
+            => Matrix.ScalarMultiply(right, vectorOfScalar);
+
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MatrixSingle operator -(in MatrixSingle matrix)
+            => Matrix.Negate(matrix);
+
+        #endregion
     }
 }

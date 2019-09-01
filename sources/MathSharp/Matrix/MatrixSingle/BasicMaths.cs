@@ -18,7 +18,7 @@ namespace MathSharp
         private static readonly Vector128<float> SignFlip3DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
         private static readonly Vector128<float> SignFlip4DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
 
-        [UsesInstructionSet(InstructionSets.None)]
+        
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right) =>
             new MatrixSingle(
@@ -28,7 +28,7 @@ namespace MathSharp
                 Vector.Add(left._v3, right._v3)
             );
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right) =>
             new MatrixSingle(
@@ -38,7 +38,7 @@ namespace MathSharp
                 Vector.Subtract(left._v3, right._v3)
             );
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Negate(in MatrixSingle matrix) =>
             new MatrixSingle(
@@ -57,12 +57,12 @@ namespace MathSharp
                 Vector.Multiply(left._v3, vectorOfScalar)
             );
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static MatrixSingle ScalarMultiply(in MatrixSingle left, float scalar) 
             => ScalarMultiply(left, Vector128.Create(scalar));
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Transpose(in MatrixSingle matrix)
         {
@@ -134,9 +134,9 @@ namespace MathSharp
                 return result;
             }
 
-            return Transpose_Software(matrix);
+            return SoftwareFallback(matrix);
             
-            static MatrixSingle Transpose_Software(MatrixSingle matrix) =>
+            static MatrixSingle SoftwareFallback(MatrixSingle matrix) =>
                 MatrixSingle.Create(
                     X(matrix._v0), X(matrix._v1), X(matrix._v2), X(matrix._v3),
                     Y(matrix._v0), Y(matrix._v1), Y(matrix._v2), Y(matrix._v3),

@@ -15,6 +15,7 @@ namespace MathSharp
         public readonly Vector4D Value;
 
         internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}>";
+        public override string ToString() => DebuggerString;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector2D(Vector4D value)
@@ -76,6 +77,7 @@ namespace MathSharp
         public readonly Vector4D Value;
 
         internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}, {Value.GetElement(2)}>";
+        public override string ToString() => DebuggerString;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector3D(Vector4D value)
@@ -137,6 +139,7 @@ namespace MathSharp
         public readonly Vector4D Value;
 
         internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}, {Value.GetElement(2)}, {Value.GetElement(3)}>";
+        public override string ToString() => DebuggerString;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public HwVector4D(Vector4D value)
