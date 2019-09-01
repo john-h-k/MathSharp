@@ -15,7 +15,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Abs(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Abs(in Vector4Int32Param1_3 vector)
         {
             if (Sse41.IsSupported)
             {
@@ -29,7 +29,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 HorizontalAdd(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 HorizontalAdd(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Ssse3.IsSupported)
             {
@@ -43,7 +43,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Add(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -55,7 +55,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4Int32 Add(in Vector4Int32Param1_3 vector, int scalar)
         {
             if (Sse2.IsSupported)
             {
@@ -68,7 +68,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Subtract(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -80,7 +80,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4Int32 Subtract(in Vector4Int32Param1_3 vector, int scalar)
         {
             if (Sse2.IsSupported)
             {
@@ -93,7 +93,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Multiply(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -110,7 +110,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply(Vector4Int32Param1_3 left, int scalar)
+        public static Vector4Int32 Multiply(in Vector4Int32Param1_3 left, int scalar)
         {
             if (Sse41.IsSupported)
             {
@@ -126,9 +126,8 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(Vector4Int32Param1_3 dividend, Vector4Int32Param1_3 divisor)
+        public static Vector4Int32 Divide(in Vector4Int32Param1_3 dividend, in Vector4Int32Param1_3 divisor)
         {
-#warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse2.IsSupported)
             //{
             //    return Ssse3.Divide(dividend, divisor);
@@ -139,9 +138,8 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(Vector4Int32Param1_3 dividend, int scalarDivisor)
+        public static Vector4Int32 Divide(in Vector4Int32Param1_3 dividend, int scalarDivisor)
         {
-#warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse.IsSupported)
             //{
             //    Vector4Int expand = Vector128.Create(scalarDivisor);
@@ -153,7 +151,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Clamp(Vector4Int32Param1_3 vector, Vector4Int32Param1_3 low, Vector4Int32Param1_3 high)
+        public static Vector4Int32 Clamp(in Vector4Int32Param1_3 vector, in Vector4Int32Param1_3 low, in Vector4Int32Param1_3 high)
         {
             if (Sse41.IsSupported)
             {
@@ -166,9 +164,8 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Sqrt(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Sqrt(in Vector4Int32Param1_3 vector)
         {
-#warning No direct hardware acceleration for integer sqrt; research acceleration techniques
             //if (Sse.IsSupported)
             //{
             //    return Sse42.Sqrt(vector);
@@ -182,7 +179,7 @@ namespace MathSharp
         // TODO We should provide a symmetric alternative to this
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Max(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Max(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -195,7 +192,7 @@ namespace MathSharp
         // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Min(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Min(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -207,7 +204,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate2D(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate2D(in Vector4Int32Param1_3 vector)
         {
             if (Sse2.IsSupported)
             {
@@ -219,7 +216,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate3D(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate3D(in Vector4Int32Param1_3 vector)
         {
             if (Sse2.IsSupported)
             {
@@ -231,7 +228,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate4D(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate4D(in Vector4Int32Param1_3 vector)
         {
             if (Sse2.IsSupported)
             {

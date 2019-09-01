@@ -41,27 +41,28 @@ namespace MathSharp
             return Vector.And(vec, Vector.MaskW);
         }
 
-        public static MatrixSingle SetTranslation(MatrixSingle matrix, Vector4FParam1_3 translation)
+        public static MatrixSingle SetTranslation(MatrixSingle matrix, in Vector4FParam1_3 translation)
         {
             // (X, Y, Z, W) - we must keep W
-            Vector128<float> old = matrix._v3;
+            Vector4F old = matrix._v3;
 
             // Make W of translation zero
-            translation = Vector.And(translation, Vector.MaskW);
+            
+            Vector4F newTranslation = Vector.And(translation, Vector.MaskW);
             // Mask out everything but W
             old = Vector.And(old, Vector.MaskXYZ);
 
             // Or them together to get X Y Z from translation and W from old
-            translation = Vector.Or(translation, old);
+            newTranslation = Vector.Or(newTranslation, old);
 
-            matrix._v3 = translation;
+            matrix._v3 = newTranslation;
 
             return matrix;
         }
 
         private static readonly Vector4F BillboardEpsilon = Vector128.Create(1e-4f);
 
-        public static MatrixSingle CreateBillboard(Vector4FParam1_3 objectPosition, Vector4FParam1_3 cameraPosition, Vector4FParam1_3 cameraUpVector, Vector4FParam1_3 cameraForwardVector)
+        public static MatrixSingle CreateBillboard(in Vector4FParam1_3 objectPosition, in Vector4FParam1_3 cameraPosition, in Vector4FParam1_3 cameraUpVector, in Vector4FParam1_3 cameraForwardVector)
         {
             Vector4F z = Vector.Subtract(objectPosition, cameraPosition);
 
@@ -81,10 +82,10 @@ namespace MathSharp
             z = Vector.ZeroW(z);
 
             // Get objectPosition to be (X, Y, Z, 0) and the mask to be (0, 0, 0, 1.0f) and OR them
-            objectPosition = Vector.ZeroW(objectPosition);
-            objectPosition = Vector.Or(objectPosition, Vector.And(Vector.MaskXYZ, Vector.One));
+            Vector4F newObjectPosition = Vector.ZeroW(objectPosition);
+            newObjectPosition = Vector.Or(newObjectPosition, Vector.And(Vector.MaskXYZ, Vector.One));
 
-            return new MatrixSingle(x, y, z, objectPosition);
+            return new MatrixSingle(x, y, z, newObjectPosition);
         }
     }
 }

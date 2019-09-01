@@ -39,7 +39,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Or_Software(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Or_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             return Vector128.Create(
                 X(left) | X(right),
@@ -50,7 +50,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 And_Software(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 And_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             return Vector128.Create(
                 X(left) & X(right),
@@ -61,7 +61,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Xor_Software(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Xor_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             return Vector128.Create(
                 X(left) ^ X(right),
@@ -72,7 +72,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Not_Software(Vector4UInt32Param1_3 vector)
+        public static Vector4UInt32 Not_Software(in Vector4UInt32Param1_3 vector)
         {
             return Vector128.Create(
                 ~X(vector),
@@ -83,7 +83,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 AndNot_Software(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 AndNot_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             return And_Software(Not_Software(left), right);
         }
@@ -93,7 +93,7 @@ namespace MathSharp
         #region Vector256
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 Or_Software(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 Or_Software(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             return Vector256.Create(
                 X(left) | X(right),
@@ -104,7 +104,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 And_Software(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 And_Software(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             return Vector256.Create(
                 X(left) & X(right),
@@ -115,7 +115,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 Xor_Software(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 Xor_Software(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             return Vector256.Create(
                 X(left) ^ X(right),
@@ -126,7 +126,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 Not_Software(Vector4UInt64Param1_3 vector)
+        public static Vector4UInt64 Not_Software(in Vector4UInt64Param1_3 vector)
         {
             return Vector256.Create(
                 ~X(vector),
@@ -137,7 +137,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 AndNot_Software(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 AndNot_Software(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             return And_Software(Not_Software(left), right);
         }

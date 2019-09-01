@@ -11,8 +11,6 @@ namespace MathSharp
 
     public static partial class Vector
     {
-#warning TODO check Unordered/Ordered
-        
         [MethodImpl(MaxOpt)]
         public static Vector4D Equality(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {

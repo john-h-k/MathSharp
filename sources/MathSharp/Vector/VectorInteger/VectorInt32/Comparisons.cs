@@ -13,7 +13,7 @@ namespace MathSharp
     {
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Equality(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Equality(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -25,7 +25,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Inequality(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Inequality(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -38,7 +38,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 GreaterThan(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 GreaterThan(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -50,7 +50,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 LessThan(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 LessThan(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -62,7 +62,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 GreaterThanOrEqual(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 GreaterThanOrEqual(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -75,7 +75,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 LessThanOrEqual(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 LessThanOrEqual(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {

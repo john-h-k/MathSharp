@@ -29,7 +29,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Single Or(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single Or(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -41,7 +41,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Single And(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single And(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -53,7 +53,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Single Xor(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single Xor(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -65,7 +65,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Single Not(Vector4SingleParam1_3 vector)
+        public static Vector4Single Not(in Vector4SingleParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
@@ -78,7 +78,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Single AndNot(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single AndNot(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {

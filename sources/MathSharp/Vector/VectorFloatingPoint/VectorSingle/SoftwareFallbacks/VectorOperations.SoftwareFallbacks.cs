@@ -16,7 +16,7 @@ namespace MathSharp
         #region DotProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F DotProduct2D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DotProduct2D_Software(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 X(left) * X(right) +
@@ -25,7 +25,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F DotProduct3D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DotProduct3D_Software(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 X(left) * X(right)
@@ -35,7 +35,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F DotProduct4D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F DotProduct4D_Software(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 X(left) * X(right)
@@ -50,13 +50,13 @@ namespace MathSharp
         #region CrossProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F CrossProduct2D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F CrossProduct2D_Software(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             return Vector128.Create((X(left) * Y(right) - Y(left) * X(right)));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F CrossProduct3D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F CrossProduct3D_Software(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             /* Cross product of A(x, y, z, _) and B(x, y, z, _) is
              *
@@ -72,7 +72,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F CrossProduct4D_Software(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
+        public static Vector4F CrossProduct4D_Software(in Vector4FParam1_3 one, in Vector4FParam1_3 two, in Vector4FParam1_3 three)
         {
             float x = (Z(two) * W(three) - W(two) * Z(three)) *
                     Y(one) -

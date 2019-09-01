@@ -14,7 +14,7 @@ namespace MathSharp
         #region Vector
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 HorizontalAdd(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 HorizontalAdd(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Ssse3.IsSupported)
             {
@@ -28,7 +28,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Add(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Add(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -40,7 +40,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Add(Vector4UInt32Param1_3 vector, uint scalar)
+        public static Vector4UInt32 Add(in Vector4UInt32Param1_3 vector, uint scalar)
         {
             if (Sse2.IsSupported)
             {
@@ -53,7 +53,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Subtract(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Subtract(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -65,7 +65,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Subtract(Vector4UInt32Param1_3 vector, uint scalar)
+        public static Vector4UInt32 Subtract(in Vector4UInt32Param1_3 vector, uint scalar)
         {
             if (Sse2.IsSupported)
             {
@@ -78,7 +78,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Multiply(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Multiply(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -95,7 +95,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Multiply(Vector4UInt32Param1_3 left, uint scalar)
+        public static Vector4UInt32 Multiply(in Vector4UInt32Param1_3 left, uint scalar)
         {
             if (Sse41.IsSupported)
             {
@@ -111,7 +111,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Divide(Vector4UInt32Param1_3 dividend, Vector4UInt32Param1_3 divisor)
+        public static Vector4UInt32 Divide(in Vector4UInt32Param1_3 dividend, in Vector4UInt32Param1_3 divisor)
         {
 #warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse2.IsSupported)
@@ -124,7 +124,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Divide(Vector4UInt32Param1_3 dividend, uint scalarDivisor)
+        public static Vector4UInt32 Divide(in Vector4UInt32Param1_3 dividend, uint scalarDivisor)
         {
 #warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse.IsSupported)
@@ -138,7 +138,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Clamp(Vector4UInt32Param1_3 vector, Vector4UInt32Param1_3 low, Vector4UInt32Param1_3 high)
+        public static Vector4UInt32 Clamp(in Vector4UInt32Param1_3 vector, in Vector4UInt32Param1_3 low, in Vector4UInt32Param1_3 high)
         {
             if (Sse41.IsSupported)
             {
@@ -151,7 +151,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Sqrt(Vector4UInt32Param1_3 vector)
+        public static Vector4UInt32 Sqrt(in Vector4UInt32Param1_3 vector)
         {
 #warning No direct hardware acceleration for integer sqrt; research acceleration techniques
             //if (Sse.IsSupported)
@@ -167,7 +167,7 @@ namespace MathSharp
         // TODO We should provide a symmetric alternative to this
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Max(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Max(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -180,7 +180,7 @@ namespace MathSharp
         // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Min(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Min(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {

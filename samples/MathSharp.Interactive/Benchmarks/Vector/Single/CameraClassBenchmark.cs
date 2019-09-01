@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Runtime.Intrinsics;
 using BenchmarkDotNet.Attributes;
 using OpenTK;

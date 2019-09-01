@@ -34,7 +34,7 @@ namespace MathSharp
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator HwVector4(HwVector2 vector) => new HwVector4(vector);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator HwVector2(HwVectorAny vector) => vector.Value;
+        public static implicit operator HwVector2(HwVectorAny vector) => vector.Value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HwVector2 operator +(HwVector2 left, HwVector2 right) => Vector.Add(left, right);
@@ -96,7 +96,7 @@ namespace MathSharp
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator HwVector4(HwVector3 vector) => new HwVector4(vector);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator HwVector3(HwVectorAny vector) => vector.Value;
+        public static implicit operator HwVector3(HwVectorAny vector) => vector.Value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HwVector3 operator +(HwVector3 left, HwVector3 right) => Vector.Add(left, right);
@@ -157,7 +157,7 @@ namespace MathSharp
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator HwVector3(HwVector4 vector) => new HwVector3(vector);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator HwVector4(HwVectorAny vector) => vector.Value;
+        public static implicit operator HwVector4(HwVectorAny vector) => vector.Value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HwVector4 operator +(HwVector4 left, HwVector4 right) => Vector.Add(left, right);

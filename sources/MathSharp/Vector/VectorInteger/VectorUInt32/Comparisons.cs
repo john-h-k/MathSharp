@@ -15,7 +15,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Equality(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Equality(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -27,7 +27,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Inequality(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Inequality(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -40,7 +40,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 GreaterThan(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 GreaterThan(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -52,7 +52,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 LessThan(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 LessThan(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -64,13 +64,13 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 GreaterThanOrEqual(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 GreaterThanOrEqual(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
                 Vector128<uint> mask = Vector128.Create(-1).AsUInt32();
                 Vector4UInt32 temp = Sse2.CompareLessThan(Sse2.Xor(left, ComparisonMask).AsInt32(), Sse2.Xor(right, ComparisonMask).AsInt32()).AsUInt32();
-                return Sse2.Xor(mask, mask);
+                return Sse2.Xor(temp  , mask);
             }
 
             return GreaterThanOrEqual_Software(left, right);
@@ -78,13 +78,13 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 LessThanOrEqual(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 LessThanOrEqual(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
                 Vector128<uint> mask = Vector128.Create(-1).AsUInt32();
                 Vector4UInt32 temp = Sse2.CompareGreaterThan(Sse2.Xor(left, ComparisonMask).AsInt32(), Sse2.Xor(right, ComparisonMask).AsInt32()).AsUInt32();
-                return Sse2.Xor(mask, mask);
+                return Sse2.Xor(temp, mask);
             }
 
             return LessThanOrEqual_Software(left, right);
