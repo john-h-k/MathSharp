@@ -21,6 +21,12 @@ namespace MathSharp
 
         #region Vector128
 
+        [MethodImpl(MaxOpt)]
+        public static Vector4Single ZeroW(Vector4Single vector)
+        {
+            return Vector.And(vector, MaskW);
+        }
+
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
         public static Vector4Single Shuffle(Vector4Single left, Vector4Single right, byte control)

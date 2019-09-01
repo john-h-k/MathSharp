@@ -136,6 +136,15 @@ namespace MathSharp
             return Min_Software(left, right);
         }
 
+        public static HwVector2D Negate(HwVector2D vector)
+            => Negate2D(vector);
+
+        public static HwVector3D Negate(HwVector3D vector)
+            => Negate3D(vector);
+
+        public static HwVector4D Negate(HwVector4D vector)
+            => Negate4D(vector);
+
         [UsesInstructionSet(InstructionSets.Avx)]
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate2D(in Vector4DParam1_3 vector) 

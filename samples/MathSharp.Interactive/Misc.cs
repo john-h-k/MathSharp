@@ -269,21 +269,21 @@ namespace MathSharp.Interactive
         {
             for (var i = 0; i < Count; i++)
             {
-                JohnVector vector = JohnVectorsSrc![i].Load();
+                HwVector4 vector = JohnVectorsSrc![i].Load();
 
                 vector = Multiply(vector, vector);
-                vector = Normalize4D(vector);
+                vector = Normalize(vector);
                 vector = Subtract(vector, vector);
-                vector = Normalize4D(vector);
-                vector = Multiply(vector, DotProduct4D(vector, vector));
-                vector = DotProduct4D(CrossProduct3D(vector, vector), Abs(vector));
+                vector = Normalize(vector);
+                vector = Multiply(vector, DotProduct(vector, vector));
+                vector = DotProduct((HwVector4)CrossProduct((HwVector3)vector, (HwVector3)vector), Abs(vector));
                 for (var j = 0; j < Count / 2; j++)
                 {
                     vector = Add(vector, vector);
                     vector = Subtract(vector, vector);
                 }
 
-                vector.Store(out JohnVectorsDest![i]);
+                //vector.Store(out JohnVectorsDest![i]);
             }
         }
 

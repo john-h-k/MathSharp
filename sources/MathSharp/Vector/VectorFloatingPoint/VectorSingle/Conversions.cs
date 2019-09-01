@@ -25,10 +25,15 @@ namespace MathSharp
 
             static byte SoftwareFallback(Vector4F vector)
             {
-                int e0 = Unsafe.As<float, int>(ref Unsafe.AsRef(X(vector)));
-                int e1 = Unsafe.As<float, int>(ref Unsafe.AsRef(Y(vector)));
-                int e2 = Unsafe.As<float, int>(ref Unsafe.AsRef(Z(vector)));
-                int e3 = Unsafe.As<float, int>(ref Unsafe.AsRef(W(vector)));
+                float s0 = X(vector);
+                float s1 = Y(vector);
+                float s2 = Z(vector);
+                float s3 = W(vector);
+
+                int e0 = Unsafe.As<float, int>(ref s0);
+                int e1 = Unsafe.As<float, int>(ref s1);
+                int e2 = Unsafe.As<float, int>(ref s2);
+                int e3 = Unsafe.As<float, int>(ref s3);
 
                 return (byte)(SignAsByteBool(e0) | (SignAsByteBool(e1) << 1) | (SignAsByteBool(e2) << 2) | (SignAsByteBool(e3) << 3));
             }
@@ -38,144 +43,106 @@ namespace MathSharp
 
         #region Loads
 
-        // TODO all the code here already exists as Create'yyy' methods in Vector128 - should be cleaned up to just use that
-
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Load(this Vector4 vector)
+        public static HwVector4 Load4D(float* p)
         {
             if (Sse.IsSupported)
             {
-                return Sse.LoadVector128((float*)&vector);
+                return Sse.LoadVector128(p);
             }
 
-            return SoftwareFallback(vector);
+            return SoftwareFallback(p);
 
-            static Vector4F SoftwareFallback(Vector4 vector)
+            static Vector4F SoftwareFallback(float* p)
             {
-                return Vector128.Create(vector.X, vector.Y, vector.Z, vector.W);
+                return Vector128.Create(p[0], p[1], p[2], p[3]);
             }
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Load(this Vector3 vector)
+        public static HwVector3 Load3D(float* p)
         {
             if (Sse.IsSupported)
             {
                 // Construct 3 separate vectors, each with the first element being the value
                 // and the rest being undefined (shown as ?)
-                Vector4F lo = Vector128.CreateScalarUnsafe(vector.X);
-                Vector4F mid = Vector128.CreateScalarUnsafe(vector.Y);
-                Vector4F hi = Vector128.CreateScalarUnsafe(vector.Z);
-                hi = Sse.And(hi, Vector.MaskWSingle);
+                Vector4F lo = Sse.LoadScalarVector128(&p[0]);
+                Vector4F mid = Sse.LoadScalarVector128(&p[1]);
+                Vector4F hi = Sse.LoadScalarVector128(&p[2]);
+                hi = Vector.ZeroW(hi);
 
                 // Construct a vector of (lo, mid, ?, ?)
                 Vector4F loMid = Sse.UnpackLow(lo, mid);
 
-                // Given the hi vector is zeroed (because of the And), the first two elements are (hi, 0)
+                // Given the hi vector is zeroed (because of the ZeroW), the first two elements are (hi, 0)
                 // Move these 2 values to the last 2 elements of the loMid vector
                 // This results in (lo, mid, hi, 0), the desired vector
                 return Sse.MoveLowToHigh(loMid, hi);
             }
 
-            return SoftwareFallback(vector);
+            return SoftwareFallback(p);
 
-            static Vector4F SoftwareFallback(Vector3 vector)
+            static Vector4F SoftwareFallback(float* p)
             {
-                return Vector128.Create(vector.X, vector.Y, vector.Z, 0);
+                return Vector128.Create(p[0], p[1], p[2], 0);
             }
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Load(this Vector3 vector, float scalarW)
+        public static HwVector4 Load3D(float* p, float w)
         {
             if (Sse.IsSupported)
             {
                 // Construct 3 separate vectors, each with the first element being the value
-                // and the rest being 0
-                Vector4F lo = Vector128.CreateScalarUnsafe(vector.X);
-                Vector4F midLo = Vector128.CreateScalarUnsafe(vector.Y);
-                Vector4F midHi = Vector128.CreateScalarUnsafe(vector.Z);
-                Vector4F hi = Vector128.CreateScalarUnsafe(scalarW);
+                // and the rest being undefined (shown as ?)
+                Vector4F lo = Sse.LoadScalarVector128(&p[0]);
+                Vector4F mid = Sse.LoadScalarVector128(&p[1]);
+                Vector4F hi = Sse.LoadScalarVector128(&p[2]);
+                Vector4F wVec = Vector128.CreateScalarUnsafe(w);
 
-                // Construct a vector of(lo, midLo, ?, ?) and(midHi, hi, ?, ?)
-                Vector4F loMid = Sse.UnpackLow(lo, midLo);
-                Vector4F hiMid = Sse.UnpackLow(midHi, hi);
+                // Construct a vector of (lo, mid, ?, ?)
+                lo = Sse.UnpackLow(lo, mid);
+                hi = Sse.UnpackLow(hi, wVec);
 
-                // Move the low elements of hiMid to high elements of lowMid
-                // resulting in (lo, midLo, midHi, hi)
-                return Sse.MoveLowToHigh(loMid, hiMid);
-
-                // TODO minimise reg usage
+                // Given the hi vector is zeroed (because of the ZeroW), the first two elements are (hi, 0)
+                // Move these 2 values to the last 2 elements of the loMid vector
+                // This results in (lo, mid, hi, 0), the desired vector
+                return Sse.MoveLowToHigh(lo, hi);
             }
 
-            return SoftwareFallback(vector, scalarW);
+            return SoftwareFallback(p, w);
 
-            static Vector4F SoftwareFallback(Vector3 vector, float scalarW)
+            static Vector4F SoftwareFallback(float* p, float w)
             {
-                return Vector128.Create(vector.X, vector.Y, vector.Z, scalarW);
+                return Vector128.Create(p[0], p[1], p[2], w);
             }
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Load(this Vector2 vector)
+        public static HwVector2 Load2D(float* p)
         {
             if (Sse.IsSupported)
             {
                 // Construct 2 separate vectors, each having the first element being the value
                 // and the rest being 0
-                Vector4F lo = Sse.LoadScalarVector128(&vector.X);
-                Vector4F hi = Sse.LoadScalarVector128(&vector.Y);
+                Vector4F lo = Sse.LoadScalarVector128(&p[0]);
+                Vector4F hi = Sse.LoadScalarVector128(&p[1]);
 
                 // Unpack these to (lo, mid, 0, 0), the desired vector
                 return Sse.UnpackLow(lo, hi);
             }
 
-            return SoftwareFallback(vector);
+            return SoftwareFallback(p);
 
-            static Vector4F SoftwareFallback(Vector2 vector)
+            static Vector4F SoftwareFallback(float* p)
             {
-                return Vector128.Create(vector.X, vector.Y, 0, 0);
+                return Vector128.Create(p[0], p[1], 0f, 0f);
             }
         }
-
-        [UsesInstructionSet(InstructionSets.Sse)]
-        [MethodImpl(MaxOpt)]
-        public static Vector4F LoadBroadcast(this Vector2 vector)
-        {
-            if (Sse.IsSupported)
-            {
-                // Construct 2 separate vectors, each having the first element being the value
-                // and the rest being undefined (because we fill them later)
-                Vector4F lo = Vector128.CreateScalarUnsafe(vector.X);
-                Vector4F hi = Vector128.CreateScalarUnsafe(vector.Y);
-
-                // Unpack these to (lo, mid, 0, 0), the desired vector
-                Vector4F loHiHalf = Sse.UnpackLow(lo, hi);
-
-                return Sse.MoveLowToHigh(loHiHalf, loHiHalf);
-            }
-
-            return SoftwareFallback(vector);
-
-            static Vector4F SoftwareFallback(Vector2 vector)
-            {
-                return Vector128.Create(vector.X, vector.Y, vector.X, vector.Y);
-            }
-        }
-
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4F LoadScalar(this float scalar)
         {
-            if (Sse.IsSupported)
-            {
-                return Sse.LoadScalarVector128(&scalar);
-            }
-
             return Vector128.CreateScalar(scalar);
         }
 
@@ -189,93 +156,82 @@ namespace MathSharp
 
         #region Stores
 
-        public static void Store(this Vector4F vector, out Vector4 destination)
+        public static void Store4D(this HwVector4 vector, float* destination)
         {
             if (Sse.IsSupported)
             {
-                fixed (void* pDest = &destination)
-                {
-                    Sse.Store((float*)pDest, vector);
-                }
+                Sse.Store(destination, vector);
 
                 return;
             }
 
-            SoftwareFallback(vector, out destination);
+            SoftwareFallback(vector, destination);
 
-            static void SoftwareFallback(Vector4F vector, out Vector4 destination)
+            static void SoftwareFallback(Vector128<float> vector, float* destination)
             {
-                destination = Unsafe.As<Vector4F, Vector4>(ref vector);
+                destination[0] = X(vector);
+                destination[1] = Y(vector);
+                destination[2] = Z(vector);
+                destination[3] = W(vector);
             }
         }
 
-        public static void Store(this Vector4F vector, out Vector3 destination)
+        public static void Store3D(this HwVector3 vector, float* destination)
         {
             if (Sse.IsSupported)
             {
                 Vector4F hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues._2_2_2_2);
-                fixed (void* pDest = &destination)
-                {
-                    Sse.StoreLow((float*)pDest, vector);
-                    Sse.StoreScalar((float*)pDest + 3, hiBroadcast);
-                }
+
+                Sse.StoreLow(destination, vector);
+                Sse.StoreScalar(&destination[3], hiBroadcast);
 
                 return;
             }
 
-            SoftwareFallback(vector, out destination);
+            SoftwareFallback(vector, destination);
 
-            static void SoftwareFallback(Vector4F vector, out Vector3 destination)
+            static void SoftwareFallback(Vector128<float> vector, float* destination)
             {
-                destination = Unsafe.As<Vector4F, Vector3>(ref vector);
+                destination[0] = X(vector);
+                destination[1] = Y(vector);
+                destination[2] = Z(vector);
             }
         }
 
-        public static void Store(this Vector4F vector, out Vector2 destination)
+        public static void Store2D(this HwVector2 vector, float* destination)
         {
             if (Sse.IsSupported)
             {
-                fixed (void* pDest = &destination)
-                {
-                    Sse.StoreLow((float*)pDest, vector);
-                }
+                Sse.StoreLow(destination, vector);
 
                 return;
             }
 
-            SoftwareFallback(vector, out destination);
+            SoftwareFallback(vector, destination);
 
-            static void SoftwareFallback(Vector4F vector, out Vector2 destination)
+            static void SoftwareFallback(Vector128<float> vector, float* destination)
             {
-                destination = Unsafe.As<Vector4F, Vector2>(ref vector);
+                destination[0] = X(vector);
+                destination[1] = Y(vector);
             }
         }
 
-        public static void Store(this Vector4F vector, out float destination)
+        public static void StoreScalar(this Vector128<float> scalar, float* destination)
         {
-            if (Sse.IsSupported)
-            {
-                fixed (float* pDest = &destination)
-                {
-                    Sse.StoreScalar(pDest, vector);
-                }
+            *destination = scalar.ToScalar();
+        }
 
-                return;
-            }
-
-            SoftwareFallback(vector, out destination);
-
-            static void SoftwareFallback(Vector4F vector, out float destination)
-            {
-                destination = Unsafe.As<Vector4F, float>(ref vector);
-            }
+        // remove pinning codegen as is unnecessary
+        public static void StoreScalar(this Vector128<float> scalar, out float destination)
+        {
+            destination = scalar.ToScalar();
         }
 
         #endregion
 
         #region Movement
 
-        [UsesInstructionSet(InstructionSets.Avx2 | InstructionSets.Avx | InstructionSets.Sse)]
+
         [MethodImpl(MaxOpt)]
         public static Vector4F ScalarToVector(Vector4F scalar)
         {
@@ -297,7 +253,7 @@ namespace MathSharp
 
             static Vector4F SoftwareFallback(Vector4F scalar)
             {
-                return Vector128.Create(Helpers.X(scalar));
+                return Vector128.Create(X(scalar));
             }
 
         }

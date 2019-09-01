@@ -13,18 +13,6 @@ namespace MathSharp
     {
         #region Vector Maths
 
-        #region Normalize
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Normalize4D_Software(Vector4FParam1_3 vector)
-        {
-            // No software fallback needed, these methods cover it
-            Vector4F magnitude = Vector.Length4D(vector);
-            return Vector.Divide(vector, magnitude);
-        }
-
-        #endregion
-
         #region DotProduct
 
         [MethodImpl(MaxOpt)]

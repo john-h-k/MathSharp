@@ -145,20 +145,29 @@ namespace MathSharp
             return Min_Software(left, right);
         }
 
+        public static HwVector2 Negate(HwVector2 vector)
+            => Negate2D(vector);
+
+        public static HwVector3 Negate(HwVector3 vector)
+            => Negate3D(vector);
+
+        public static HwVector4 Negate(HwVector4 vector)
+            => Negate4D(vector);
+
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Negate2D(Vector4FParam1_3 vector)
+        internal static Vector4F Negate2D(Vector4FParam1_3 vector)
             => Xor(vector, SignFlip2D);
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Negate3D(Vector4FParam1_3 vector)
+        internal static Vector4F Negate3D(Vector4FParam1_3 vector)
             => Xor(vector, SignFlip3D);
 
 
         [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4F Negate4D(Vector4FParam1_3 vector)
+        internal static Vector4F Negate4D(Vector4FParam1_3 vector)
             => Xor(vector, SignFlip4D);
 
 

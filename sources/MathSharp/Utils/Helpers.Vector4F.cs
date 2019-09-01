@@ -20,7 +20,7 @@ namespace MathSharp.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static Vector256<double> DuplicateToVector256(Vector128<double> vector)
         {
-            return Vector256.Create(vector.ToScalar());
+            return Vector256.Create(vector, vector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
