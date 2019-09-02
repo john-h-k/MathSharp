@@ -13,9 +13,9 @@ namespace MathSharp
     {
         #region Vector
 
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Abs(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Abs(in Vector4Int32Param1_3 vector)
         {
             if (Sse41.IsSupported)
             {
@@ -27,9 +27,9 @@ namespace MathSharp
             return Abs_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Ssse3)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 HorizontalAdd(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 HorizontalAdd(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Ssse3.IsSupported)
             {
@@ -41,9 +41,9 @@ namespace MathSharp
             return HorizontalAdd_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Add(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -53,9 +53,9 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4Int32 Add(in Vector4Int32Param1_3 vector, int scalar)
         {
             if (Sse2.IsSupported)
             {
@@ -66,9 +66,9 @@ namespace MathSharp
             return Add_Software(vector, scalar);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Subtract(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -78,9 +78,9 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4Int32 Subtract(in Vector4Int32Param1_3 vector, int scalar)
         {
             if (Sse2.IsSupported)
             {
@@ -91,9 +91,9 @@ namespace MathSharp
             return Subtract_Software(vector, scalar);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Multiply(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -108,9 +108,9 @@ namespace MathSharp
             return Multiply_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply(Vector4Int32Param1_3 left, int scalar)
+        public static Vector4Int32 Multiply(in Vector4Int32Param1_3 left, int scalar)
         {
             if (Sse41.IsSupported)
             {
@@ -126,9 +126,8 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(Vector4Int32Param1_3 dividend, Vector4Int32Param1_3 divisor)
+        public static Vector4Int32 Divide(in Vector4Int32Param1_3 dividend, in Vector4Int32Param1_3 divisor)
         {
-#warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse2.IsSupported)
             //{
             //    return Ssse3.Divide(dividend, divisor);
@@ -137,11 +136,10 @@ namespace MathSharp
             return Divide_Software(dividend, divisor);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(Vector4Int32Param1_3 dividend, int scalarDivisor)
+        public static Vector4Int32 Divide(in Vector4Int32Param1_3 dividend, int scalarDivisor)
         {
-#warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse.IsSupported)
             //{
             //    Vector4Int expand = Vector128.Create(scalarDivisor);
@@ -151,9 +149,9 @@ namespace MathSharp
             return Divide_Software(dividend, scalarDivisor);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Clamp(Vector4Int32Param1_3 vector, Vector4Int32Param1_3 low, Vector4Int32Param1_3 high)
+        public static Vector4Int32 Clamp(in Vector4Int32Param1_3 vector, in Vector4Int32Param1_3 low, in Vector4Int32Param1_3 high)
         {
             if (Sse41.IsSupported)
             {
@@ -164,11 +162,10 @@ namespace MathSharp
             return Clamp_Software(vector, low, high);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Sqrt(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Sqrt(in Vector4Int32Param1_3 vector)
         {
-#warning No direct hardware acceleration for integer sqrt; research acceleration techniques
             //if (Sse.IsSupported)
             //{
             //    return Sse42.Sqrt(vector);
@@ -180,9 +177,9 @@ namespace MathSharp
         // Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded, and also with +0/-0, where with MathF/Math, +0 is returned over -0,
         // - here, the second op is returned irrelevant of value if both are +0/-0
         // TODO We should provide a symmetric alternative to this
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Max(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Max(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -193,9 +190,9 @@ namespace MathSharp
         }
 
         // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
-        [UsesInstructionSet(InstructionSets.Sse41)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Min(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Min(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -205,9 +202,9 @@ namespace MathSharp
             return Min_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate2D(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate2D(in Vector4Int32Param1_3 vector)
         {
             if (Sse2.IsSupported)
             {
@@ -217,9 +214,9 @@ namespace MathSharp
             return Negate4D_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate3D(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate3D(in Vector4Int32Param1_3 vector)
         {
             if (Sse2.IsSupported)
             {
@@ -229,9 +226,9 @@ namespace MathSharp
             return Negate4D_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate4D(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate4D(in Vector4Int32Param1_3 vector)
         {
             if (Sse2.IsSupported)
             {

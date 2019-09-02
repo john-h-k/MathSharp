@@ -21,9 +21,9 @@ namespace MathSharp
 
         #region Vector128
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Or(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Or(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -33,9 +33,9 @@ namespace MathSharp
             return SoftwareFallbacks.Or_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 And(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 And(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -45,9 +45,9 @@ namespace MathSharp
             return SoftwareFallbacks.And_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Xor(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 Xor(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -57,9 +57,9 @@ namespace MathSharp
             return SoftwareFallbacks.Xor_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Not(Vector4UInt32Param1_3 vector)
+        public static Vector4UInt32 Not(in Vector4UInt32Param1_3 vector)
         {
             if (Sse2.IsSupported)
             {
@@ -70,9 +70,9 @@ namespace MathSharp
             return SoftwareFallbacks.Not_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 AndNot(Vector4UInt32Param1_3 left, Vector4UInt32Param1_3 right)
+        public static Vector4UInt32 AndNot(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -86,9 +86,9 @@ namespace MathSharp
 
         #region Vector256
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 Or(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 Or(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             if (Avx2.IsSupported)
             {
@@ -98,9 +98,9 @@ namespace MathSharp
             return SoftwareFallbacks.Or_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 And(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 And(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             if (Avx2.IsSupported)
             {
@@ -110,9 +110,9 @@ namespace MathSharp
             return SoftwareFallbacks.And_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 Xor(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 Xor(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             if (Avx2.IsSupported)
             {
@@ -122,9 +122,9 @@ namespace MathSharp
             return SoftwareFallbacks.Xor_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 Not(Vector4UInt64Param1_3 vector)
+        public static Vector4UInt64 Not(in Vector4UInt64Param1_3 vector)
         {
             if (Avx2.IsSupported)
             {
@@ -135,9 +135,9 @@ namespace MathSharp
             return SoftwareFallbacks.Not_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt64 AndNot(Vector4UInt64Param1_3 left, Vector4UInt64Param1_3 right)
+        public static Vector4UInt64 AndNot(in Vector4UInt64Param1_3 left, in Vector4UInt64Param1_3 right)
         {
             if (Avx2.IsSupported)
             {

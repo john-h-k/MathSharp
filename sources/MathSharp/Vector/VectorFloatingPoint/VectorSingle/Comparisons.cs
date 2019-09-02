@@ -11,9 +11,9 @@ namespace MathSharp
 
     public static partial class Vector
     {
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4F Equality(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F Equality(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -23,9 +23,9 @@ namespace MathSharp
             return Equality_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4F Inequality(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F Inequality(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -35,9 +35,9 @@ namespace MathSharp
             return Inequality_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4F GreaterThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F GreaterThan(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -47,9 +47,9 @@ namespace MathSharp
             return GreaterThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4F LessThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F LessThan(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -59,9 +59,9 @@ namespace MathSharp
             return LessThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4F GreaterThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F GreaterThanOrEqual(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -71,9 +71,9 @@ namespace MathSharp
             return GreaterThanOrEqual_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4F LessThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector4F LessThanOrEqual(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {

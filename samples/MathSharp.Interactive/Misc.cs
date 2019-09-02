@@ -269,21 +269,21 @@ namespace MathSharp.Interactive
         {
             for (var i = 0; i < Count; i++)
             {
-                JohnVector vector = JohnVectorsSrc![i].Load();
+                HwVector4 vector = JohnVectorsSrc![i].Load();
 
                 vector = Multiply(vector, vector);
-                vector = Normalize4D(vector);
+                vector = Normalize(vector);
                 vector = Subtract(vector, vector);
-                vector = Normalize4D(vector);
-                vector = Multiply(vector, DotProduct4D(vector, vector));
-                vector = DotProduct4D(CrossProduct3D(vector, vector), Abs(vector));
+                vector = Normalize(vector);
+                vector = Multiply(vector, DotProduct(vector, vector));
+                vector = DotProduct((HwVector4)CrossProduct((HwVector3)vector, (HwVector3)vector), Abs(vector));
                 for (var j = 0; j < Count / 2; j++)
                 {
                     vector = Add(vector, vector);
                     vector = Subtract(vector, vector);
                 }
 
-                vector.Store(out JohnVectorsDest![i]);
+                //vector.Store(out JohnVectorsDest![i]);
             }
         }
 
@@ -372,7 +372,6 @@ namespace MathSharp.Interactive
             for (var i = 0; i < Count / sizeof(OpenTKVector); i++)
             {
                 _openTkDest[i] = _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i];
-                _openTkDest[i] = _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i] * _openTkSrc[i];
             }
         }
 
@@ -380,55 +379,12 @@ namespace MathSharp.Interactive
         [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.NoInlining)]
         public void MathSharp()
         {
-            for (var i = 0; i < Count / sizeof(Vector256<float>) / 16; i++)
+            for (var i = 0; i < Count / sizeof(Vector256<float>) / 4; i++)
             {
-                _mathSharpDest[i + 0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 0], _mathSharpSrc[i + 0]), _mathSharpSrc[i]), _mathSharpSrc[i + 0]);
-                _mathSharpDest[i + 0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 0], _mathSharpSrc[i + 0]), _mathSharpSrc[i]), _mathSharpSrc[i + 0]);
-
-                _mathSharpDest[i + 1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 1], _mathSharpSrc[i + 1]), _mathSharpSrc[i]), _mathSharpSrc[i + 1]);
-                _mathSharpDest[i + 1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 1], _mathSharpSrc[i + 1]), _mathSharpSrc[i]), _mathSharpSrc[i + 1]);
-
-                _mathSharpDest[i + 2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 2], _mathSharpSrc[i + 2]), _mathSharpSrc[i]), _mathSharpSrc[i + 2]);
-                _mathSharpDest[i + 2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 2], _mathSharpSrc[i + 2]), _mathSharpSrc[i]), _mathSharpSrc[i + 2]);
-
-                _mathSharpDest[i + 3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 3], _mathSharpSrc[i + 3]), _mathSharpSrc[i]), _mathSharpSrc[i + 3]);
-                _mathSharpDest[i + 3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 3], _mathSharpSrc[i + 3]), _mathSharpSrc[i]), _mathSharpSrc[i + 3]);
-
-                _mathSharpDest[i + 4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 4], _mathSharpSrc[i + 4]), _mathSharpSrc[i]), _mathSharpSrc[i + 4]);
-                _mathSharpDest[i + 4] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 4], _mathSharpSrc[i + 4]), _mathSharpSrc[i]), _mathSharpSrc[i + 4]);
-
-                _mathSharpDest[i + 5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 5], _mathSharpSrc[i + 5]), _mathSharpSrc[i]), _mathSharpSrc[i + 5]);
-                _mathSharpDest[i + 5] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 5], _mathSharpSrc[i + 5]), _mathSharpSrc[i]), _mathSharpSrc[i + 5]);
-
-                _mathSharpDest[i + 6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 6], _mathSharpSrc[i + 6]), _mathSharpSrc[i]), _mathSharpSrc[i + 6]);
-                _mathSharpDest[i + 6] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 6], _mathSharpSrc[i + 6]), _mathSharpSrc[i]), _mathSharpSrc[i + 6]);
-
-                _mathSharpDest[i + 7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 7], _mathSharpSrc[i + 7]), _mathSharpSrc[i]), _mathSharpSrc[i + 7]);
-                _mathSharpDest[i + 7] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 7], _mathSharpSrc[i + 7]), _mathSharpSrc[i]), _mathSharpSrc[i + 7]);
-
-                _mathSharpDest[i + 8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 8], _mathSharpSrc[i + 8]), _mathSharpSrc[i]), _mathSharpSrc[i + 8]);
-                _mathSharpDest[i + 8] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 8], _mathSharpSrc[i + 8]), _mathSharpSrc[i]), _mathSharpSrc[i + 8]);
-
-                _mathSharpDest[i + 9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 9], _mathSharpSrc[i + 9]), _mathSharpSrc[i]), _mathSharpSrc[i + 9]);
-                _mathSharpDest[i + 9] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 9], _mathSharpSrc[i + 9]), _mathSharpSrc[i]), _mathSharpSrc[i + 9]);
-
-                _mathSharpDest[i + 10] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 10], _mathSharpSrc[i + 10]), _mathSharpSrc[i]), _mathSharpSrc[i + 10]);
-                _mathSharpDest[i + 10] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 10], _mathSharpSrc[i + 10]), _mathSharpSrc[i]), _mathSharpSrc[i + 10]);
-
-                _mathSharpDest[i + 11] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 11], _mathSharpSrc[i + 11]), _mathSharpSrc[i]), _mathSharpSrc[i + 11]);
-                _mathSharpDest[i + 11] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 11], _mathSharpSrc[i + 11]), _mathSharpSrc[i]), _mathSharpSrc[i + 11]);
-
-                _mathSharpDest[i + 12] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 12], _mathSharpSrc[i + 12]), _mathSharpSrc[i]), _mathSharpSrc[i + 12]);
-                _mathSharpDest[i + 12] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 12], _mathSharpSrc[i + 12]), _mathSharpSrc[i]), _mathSharpSrc[i + 12]);
-
-                _mathSharpDest[i + 13] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 13], _mathSharpSrc[i + 13]), _mathSharpSrc[i]), _mathSharpSrc[i + 13]);
-                _mathSharpDest[i + 13] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 13], _mathSharpSrc[i + 13]), _mathSharpSrc[i]), _mathSharpSrc[i + 13]);
-
-                _mathSharpDest[i + 14] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 14], _mathSharpSrc[i + 14]), _mathSharpSrc[i]), _mathSharpSrc[i + 14]);
-                _mathSharpDest[i + 14] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 14], _mathSharpSrc[i + 14]), _mathSharpSrc[i]), _mathSharpSrc[i + 14]);
-
-                _mathSharpDest[i + 15] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 15], _mathSharpSrc[i + 15]), _mathSharpSrc[i]), _mathSharpSrc[i + 15]);
-                _mathSharpDest[i + 15] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 15], _mathSharpSrc[i + 15]), _mathSharpSrc[i]), _mathSharpSrc[i + 15]);
+                _mathSharpDest[i + 0] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 0], _mathSharpSrc[i + 0]), _mathSharpSrc[i + 0]), _mathSharpSrc[i + 0]);
+                _mathSharpDest[i + 1] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 1], _mathSharpSrc[i + 1]), _mathSharpSrc[i + 1]), _mathSharpSrc[i + 1]);
+                _mathSharpDest[i + 2] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 2], _mathSharpSrc[i + 2]), _mathSharpSrc[i + 2]), _mathSharpSrc[i + 2]);
+                _mathSharpDest[i + 3] = Avx.Multiply(Avx.Multiply(Avx.Multiply(_mathSharpSrc[i + 3], _mathSharpSrc[i + 3]), _mathSharpSrc[i + 3]), _mathSharpSrc[i + 3]);
             }
         }
     }

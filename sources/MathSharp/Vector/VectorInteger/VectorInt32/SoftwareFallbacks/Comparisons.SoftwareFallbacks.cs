@@ -10,7 +10,7 @@ namespace MathSharp
     public static partial class SoftwareFallbacks
     {
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Equality_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Equality_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                Helpers.BoolToSimdBoolInt32(Helpers.X(left) == Helpers.X(right)),
@@ -21,7 +21,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Inequality_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Inequality_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolInt32(Helpers.X(left) != Helpers.X(right)),
@@ -32,7 +32,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 GreaterThan_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 GreaterThan_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolInt32(Helpers.X(left) > Helpers.X(right)),
@@ -43,7 +43,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 LessThan_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 LessThan_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolInt32(Helpers.X(left) < Helpers.X(right)),
@@ -54,7 +54,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 GreaterThanOrEqual_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 GreaterThanOrEqual_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolInt32(Helpers.X(left) >= Helpers.X(right)),
@@ -65,7 +65,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 LessThanOrEqual_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 LessThanOrEqual_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolInt32(Helpers.X(left) <= Helpers.X(right)),

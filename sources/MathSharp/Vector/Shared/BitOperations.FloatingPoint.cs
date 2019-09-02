@@ -21,9 +21,15 @@ namespace MathSharp
 
         #region Vector128
 
-        [UsesInstructionSet(InstructionSets.Sse)]
         [MethodImpl(MaxOpt)]
-        public static Vector4Single Or(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single ZeroW(Vector4Single vector)
+        {
+            return And(vector, MaskW);
+        }
+
+        
+        [MethodImpl(MaxOpt)]
+        public static Vector4Single Or(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -33,9 +39,9 @@ namespace MathSharp
             return SoftwareFallbacks.Or_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Single And(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single And(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -45,9 +51,9 @@ namespace MathSharp
             return SoftwareFallbacks.And_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Single Xor(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single Xor(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -57,9 +63,9 @@ namespace MathSharp
             return SoftwareFallbacks.Xor_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Single Not(Vector4SingleParam1_3 vector)
+        public static Vector4Single Not(in Vector4SingleParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
@@ -70,9 +76,9 @@ namespace MathSharp
             return SoftwareFallbacks.Not_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Single AndNot(Vector4SingleParam1_3 left, Vector4SingleParam1_3 right)
+        public static Vector4Single AndNot(in Vector4SingleParam1_3 left, in Vector4SingleParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -86,7 +92,7 @@ namespace MathSharp
 
         #region Vector256
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Double Or(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {
@@ -98,7 +104,7 @@ namespace MathSharp
             return SoftwareFallbacks.Or_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Double And(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {
@@ -110,7 +116,7 @@ namespace MathSharp
             return SoftwareFallbacks.And_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Double Xor(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {
@@ -122,7 +128,7 @@ namespace MathSharp
             return SoftwareFallbacks.Xor_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Double Not(in Vector4DoubleParam1_3 vector)
         {
@@ -135,7 +141,7 @@ namespace MathSharp
             return SoftwareFallbacks.Not_Software(vector);
         }
 
-        [UsesInstructionSet(InstructionSets.Avx)]
+        
         [MethodImpl(MaxOpt)]
         public static Vector4Double AndNot(in Vector4DoubleParam1_3 left, in Vector4DoubleParam1_3 right)
         {

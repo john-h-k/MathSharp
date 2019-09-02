@@ -1,6 +1,8 @@
 ﻿// ReSharper disable InconsistentNaming
 namespace MathSharp.Utils
 {
+#pragma warning disable IDE1006
+
     public static class ShuffleValues
     {
         public const byte _0_0_0_0 = (0 << 6) | (0 << 4) | (0 << 2) | 0;
