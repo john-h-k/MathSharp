@@ -17,7 +17,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static HwVector3 Load(this Vector3 vector)
         {
-            return Load3D(&vector.X);
+            return Load3DAligned(&vector.X); // Vector3 is special cased to be 16 bytes on the stack to allow this
         }
 
         [MethodImpl(MaxOpt)]
