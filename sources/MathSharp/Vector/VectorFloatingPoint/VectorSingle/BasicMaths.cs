@@ -274,7 +274,7 @@ namespace MathSharp
         public static Vector4F Remainder(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             var n = Divide(left, right);
-            n = RoundToZero(n);
+            n = Truncate(n);
 
             var y = Multiply(n, right);
 
@@ -323,7 +323,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F RoundToZero(in Vector4FParam1_3 vector)
+        public static Vector4F Truncate(in Vector4FParam1_3 vector)
         {
             if (Sse41.IsSupported)
             {
@@ -335,10 +335,10 @@ namespace MathSharp
             static Vector4F SoftwareFallback(in Vector4FParam1_3 vector)
             {
                 return Vector128.Create(
-                   MathF.Round(X(vector), MidpointRounding.ToZero),
-                   MathF.Round(Y(vector), MidpointRounding.ToZero),
-                   MathF.Round(Z(vector), MidpointRounding.ToZero),
-                   MathF.Round(W(vector), MidpointRounding.ToZero)
+                   MathF.Truncate(X(vector)),
+                   MathF.Truncate(Y(vector)),
+                   MathF.Truncate(Z(vector)),
+                   MathF.Truncate(W(vector))
                );
             }
         }
