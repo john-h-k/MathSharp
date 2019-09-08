@@ -274,7 +274,7 @@ namespace MathSharp
         public static Vector4F Remainder(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             var n = Divide(left, right);
-            n = Floor(n);
+            n = RoundToZero(n);
 
             var y = Multiply(n, right);
 
