@@ -269,7 +269,21 @@ namespace MathSharp
 
             return result;
         }
-    
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Remainder(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        {
+            var n = Divide(left, right);
+            n = Floor(n);
+
+            var y = Multiply(n, right);
+
+            return Subtract(left, y);
+        }
+
+        public static Vector4F Remainder(in Vector4FParam1_3 left, float right)
+            => Remainder(left, Vector128.Create(right));
+
         private static readonly Vector4F OneDiv2Pi = Vector128.Create(SingleConstants.OneDiv2Pi);
         private static readonly Vector4F Pi2 = Vector128.Create(SingleConstants.Pi2);
         private static readonly Vector4F Pi = Vector128.Create(SingleConstants.Pi);
@@ -309,11 +323,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Floor(in Vector4FParam1_3 vector)
+        public static Vector4F RoundToZero(in Vector4FParam1_3 vector)
         {
             if (Sse41.IsSupported)
             {
-                return Sse41.RoundToNegativeInfinity(vector);
+                return Sse41.RoundToZero(vector);
             }
 
             return SoftwareFallback(vector);
@@ -321,10 +335,10 @@ namespace MathSharp
             static Vector4F SoftwareFallback(in Vector4FParam1_3 vector)
             {
                 return Vector128.Create(
-                   MathF.Round(X(vector)),
-                   MathF.Round(Y(vector)),
-                   MathF.Round(Z(vector)),
-                   MathF.Round(W(vector))
+                   MathF.Round(X(vector), MidpointRounding.ToZero),
+                   MathF.Round(Y(vector), MidpointRounding.ToZero),
+                   MathF.Round(Z(vector), MidpointRounding.ToZero),
+                   MathF.Round(W(vector), MidpointRounding.ToZero)
                );
             }
         }
