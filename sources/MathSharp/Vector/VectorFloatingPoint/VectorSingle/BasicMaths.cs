@@ -269,7 +269,7 @@ namespace MathSharp
 
             return result;
         }
-
+    
         private static readonly Vector4F OneDiv2Pi = Vector128.Create(SingleConstants.OneDiv2Pi);
         private static readonly Vector4F Pi2 = Vector128.Create(SingleConstants.Pi2);
         private static readonly Vector4F Pi = Vector128.Create(SingleConstants.Pi);
@@ -285,7 +285,6 @@ namespace MathSharp
 
             return Subtract(vector, result);
         }
-
         [MethodImpl(MaxOpt)]
         public static Vector4F Round(in Vector4FParam1_3 vector)
         {
@@ -306,6 +305,27 @@ namespace MathSharp
                     MathF.Round(Z(vector)),
                     MathF.Round(W(vector))
                 );
+            }
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4F Floor(in Vector4FParam1_3 vector)
+        {
+            if (Sse41.IsSupported)
+            {
+                return Sse41.RoundToNegativeInfinity(vector);
+            }
+
+            return SoftwareFallback(vector);
+
+            static Vector4F SoftwareFallback(in Vector4FParam1_3 vector)
+            {
+                return Vector128.Create(
+                   MathF.Round(X(vector)),
+                   MathF.Round(Y(vector)),
+                   MathF.Round(Z(vector)),
+                   MathF.Round(W(vector))
+               );
             }
         }
 
