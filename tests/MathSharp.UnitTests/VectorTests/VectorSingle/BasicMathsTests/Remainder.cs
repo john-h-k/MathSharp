@@ -21,6 +21,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
             new[]
             {
                 new object[] { 10.4f, 2f},
+                new object[] {-10.4f, 2f}
             };
 
         [Theory]
