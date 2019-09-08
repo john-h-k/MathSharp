@@ -34,6 +34,6 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         }
 
         private Vector4 normal(Vector4 vector, float divisor)
-           => new Vector4(vector.X % 2, vector.Y % 2, vector.Z % 2, vector.W % 2);
+           => new Vector4(vector.X % divisor, vector.Y % divisor, vector.Z % divisor, vector.W % divisor);
     }
 }
