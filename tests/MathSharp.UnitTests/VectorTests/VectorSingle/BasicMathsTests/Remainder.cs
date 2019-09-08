@@ -10,13 +10,6 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class Remainder
     {
-        private readonly ITestOutputHelper output;
-
-        public Remainder(ITestOutputHelper helper)
-        {
-            output = helper;
-        }
-
         public static IEnumerable<object[]> Data =>
             new[]
             {
@@ -33,8 +26,6 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
             var r = new Vector4(left % right);
 
             Assert.Equal(l, r);
-            output.WriteLine($"Expected: {r}");
-            output.WriteLine($"Found: {l}");
         }
     }
 }
