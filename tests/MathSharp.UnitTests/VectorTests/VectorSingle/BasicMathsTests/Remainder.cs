@@ -13,19 +13,28 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
         public static IEnumerable<object[]> Data =>
             new[]
             {
-                new object[] { 10.4f, 2f},
-                new object[] {-10.4f, 2f}
+                new object[] { new Vector4(10.4f), new Vector4(2f) },
+                new object[] { new Vector4(-10.4f), new Vector4(2f) },
+                new object[] { new Vector4(float.NaN, float.MinValue, float.MaxValue, float.PositiveInfinity), new Vector4(3f) },
+                new object[] { new Vector4(float.NaN, float.MinValue, float.MaxValue, float.PositiveInfinity), new Vector4(2.4f) },
+                new object[] { new Vector4(23.45f), new Vector4(219f) },
+                new object[] { new Vector4(12), new Vector4(float.NaN) },
+                new object[] { new Vector4(-10000000f), new Vector4(2.2f) },
+                new object[] { new Vector4(10000000f), new Vector4(2.2f) },
+                new object[] { new Vector4(float.NegativeInfinity), new Vector4(3f) }
             };
 
         [Theory]
         [MemberData(nameof(Data))]
-        public void Remainder_Theory(float left, float right)
+        public void Remainder_Theory(Vector4 left, Vector4 right)
         {
-            var result = Vector.Remainder(Vector128.Create(left), right);
-            Vector.Store(result, out Vector4 l);
-            var r = new Vector4(left % right);
+            var l = Vector.Load(left);
+            var r = Vector.Load(right);
 
-            Assert.Equal(l, r);
+            var remainder = Vector.Remainder(l, r);
+            var expected = new Vector4(left.X % right.X, left.Y % right.Y, left.Z % right.Z, left.W % right.W);
+
+            TestHelpers.AreEqual(expected, remainder);
         }
     }
 }
