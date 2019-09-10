@@ -5,11 +5,11 @@ using MathSharp.Attributes;
 
 namespace MathSharp
 {
-    using Vector4UInt32 = Vector128<uint>;
-    using Vector4UInt32Param1_3 = Vector128<uint>;
+    using Vector4UInt32 = Vector128<byte>;
+    using Vector4UInt32Param1_3 = Vector128<byte>;
 
-    using Vector4UInt64 = Vector256<ulong>;
-    using Vector4UInt64Param1_3 = Vector256<ulong>;
+    using Vector4UInt64 = Vector256<byte>;
+    using Vector4UInt64Param1_3 = Vector256<byte>;
 
     public static partial class Vector
     {
@@ -63,7 +63,7 @@ namespace MathSharp
         {
             if (Sse2.IsSupported)
             {
-                Vector4UInt32 mask = Vector128.Create(-1, -1, -1, -1).AsUInt32();
+                Vector4UInt32 mask = Vector128.Create(-1, -1, -1, -1).AsByte();
                 return Sse2.AndNot(vector, mask);
             }
 
@@ -128,7 +128,7 @@ namespace MathSharp
         {
             if (Avx2.IsSupported)
             {
-                Vector4UInt64 mask = Vector256.Create(-1, -1, -1, -1).AsUInt64();
+                Vector4UInt64 mask = Vector256.Create(-1, -1, -1, -1).AsByte();
                 return Avx2.AndNot(vector, mask);
             }
 

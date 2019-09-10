@@ -44,6 +44,28 @@ namespace MathSharp
         #region Loads
 
         [MethodImpl(MaxOpt)]
+        public static HwVector4 Load4DAligned(float* p)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.LoadAlignedVector128(p);
+            }
+
+            return SoftwareFallback(p);
+
+            static Vector4F SoftwareFallback(float* p)
+            {
+                ThrowHelper.ThrowForUnaligned16BPointer(p, "Pointer not 16 byte aligned");
+
+                return Vector128.Create(p[0], p[1], p[2], p[3]);
+            }
+        }
+
+        public static HwVector3 Load3DAligned(float* p) => (HwVector3)Load4DAligned(p);
+        public static HwVector2 Load2DAligned(float* p) => (HwVector2)Load4DAligned(p);
+
+
+        [MethodImpl(MaxOpt)]
         public static HwVector4 Load4D(float* p)
         {
             if (Sse.IsSupported)
@@ -155,6 +177,35 @@ namespace MathSharp
         #endregion
 
         #region Stores
+
+        public static void Store4DAligned(this HwVector4 vector, float* destination)
+        {
+            if (Sse.IsSupported)
+            {
+                Sse.StoreAligned(destination, vector);
+
+                return;
+            }
+
+            SoftwareFallback(vector, destination);
+
+            static void SoftwareFallback(Vector128<float> vector, float* destination)
+            {
+                ThrowHelper.ThrowForUnaligned16BPointer(destination, "Pointer not 16 byte aligned");
+
+                destination[0] = X(vector);
+                destination[1] = Y(vector);
+                destination[2] = Z(vector);
+                destination[3] = W(vector);
+            }
+        }
+
+        public static void Store3DAligned(this HwVector3 vector, float* destination)
+            => Store4DAligned((HwVector4)vector, destination);
+
+        public static void Store2DAligned(this HwVector2 vector, float* destination) 
+            => Store4DAligned((HwVector4)vector, destination);
+
 
         public static void Store4D(this HwVector4 vector, float* destination)
         {

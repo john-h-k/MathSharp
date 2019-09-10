@@ -305,7 +305,6 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D CrossProduct4D(in Vector4DParam1_3 one, in Vector4DParam1_3 two, in Vector4DParam1_3 three)
         {
-#warning Needs to be hardware accelerated ASAP
             // hardware
 
             return CrossProduct4D_Software(one, two, three);
