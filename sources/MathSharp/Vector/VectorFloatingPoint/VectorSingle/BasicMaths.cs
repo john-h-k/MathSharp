@@ -270,20 +270,6 @@ namespace MathSharp
             return result;
         }
 
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Remainder(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
-        {
-            var n = Divide(left, right);
-            n = Truncate(n);
-
-            var y = Multiply(n, right);
-
-            return Subtract(left, y);
-        }
-
-        public static Vector4F Remainder(in Vector4FParam1_3 left, float right)
-            => Remainder(left, Vector128.Create(right));
-
         private static readonly Vector4F OneDiv2Pi = Vector128.Create(SingleConstants.OneDiv2Pi);
         private static readonly Vector4F Pi2 = Vector128.Create(SingleConstants.Pi2);
         private static readonly Vector4F Pi = Vector128.Create(SingleConstants.Pi);
@@ -299,6 +285,7 @@ namespace MathSharp
 
             return Subtract(vector, result);
         }
+
         [MethodImpl(MaxOpt)]
         public static Vector4F Round(in Vector4FParam1_3 vector)
         {
@@ -319,27 +306,6 @@ namespace MathSharp
                     MathF.Round(Z(vector)),
                     MathF.Round(W(vector))
                 );
-            }
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4F Truncate(in Vector4FParam1_3 vector)
-        {
-            if (Sse41.IsSupported)
-            {
-                return Sse41.RoundToZero(vector);
-            }
-
-            return SoftwareFallback(vector);
-
-            static Vector4F SoftwareFallback(in Vector4FParam1_3 vector)
-            {
-                return Vector128.Create(
-                   MathF.Truncate(X(vector)),
-                   MathF.Truncate(Y(vector)),
-                   MathF.Truncate(Z(vector)),
-                   MathF.Truncate(W(vector))
-               );
             }
         }
 
