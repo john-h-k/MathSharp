@@ -1,7 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
+using static MathSharp.Utils.Helpers;
 using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
@@ -13,12 +15,12 @@ namespace MathSharp
     {
         #region Vector
 
-        
+
         [MethodImpl(MaxOpt)]
-        public static Vector4D Abs(in Vector4DParam1_3 vector) 
+        public static Vector4D Abs(in Vector4DParam1_3 vector)
             => Max(Subtract(Vector4D.Zero, vector), vector);
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D HorizontalAdd(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -30,7 +32,7 @@ namespace MathSharp
             return HorizontalAdd_Software(left, right);
         }
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Add(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -42,12 +44,12 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Add(in Vector4DParam1_3 vector, double scalar)
             => Add(vector, Vector256.Create(scalar));
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Subtract(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -59,12 +61,12 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Subtract(in Vector4DParam1_3 vector, double scalar)
             => Subtract(vector, Vector256.Create(scalar));
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Multiply(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -91,16 +93,16 @@ namespace MathSharp
             return Divide_Software(dividend, divisor);
         }
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Divide(in Vector4DParam1_3 dividend, double scalarDivisor)
             => Subtract(dividend, Vector256.Create(scalarDivisor));
 
-        
-        public static Vector4D Clamp(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high) 
+
+        public static Vector4D Clamp(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high)
             => Max(Min(vector, high), low);
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Sqrt(in Vector4DParam1_3 vector)
         {
@@ -112,7 +114,7 @@ namespace MathSharp
             return Sqrt_Software(vector);
         }
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Max(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -124,7 +126,7 @@ namespace MathSharp
             return Max_Software(left, right);
         }
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Min(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
@@ -145,21 +147,55 @@ namespace MathSharp
         public static HwVector4D Negate(HwVector4D vector)
             => Negate4D(vector);
 
-        
+
         [MethodImpl(MaxOpt)]
-        public static Vector4D Negate2D(in Vector4DParam1_3 vector) 
+        public static Vector4D Negate2D(in Vector4DParam1_3 vector)
             => Xor(vector, SignFlip2DDouble);
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate3D(in Vector4DParam1_3 vector)
             => Xor(vector, SignFlip3DDouble);
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate4D(in Vector4DParam1_3 vector)
             => Xor(vector, SignFlip4DDouble);
 
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Remainder(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        {
+            var n = Divide(left, right);
+            n = Truncate(n);
+
+            var y = Multiply(n, right);
+
+            return Subtract(left, y);
+        }
+
+        public static Vector4D Remainder(in Vector4DParam1_3 left, double right)
+            => Remainder(left, Vector256.Create(right));
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Truncate(in Vector4DParam1_3 vector)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.RoundToZero(vector);
+            }
+
+            return SoftwareFallback(vector);
+
+            static Vector4D SoftwareFallback(in Vector4DParam1_3 vector)
+            {
+                return Vector256.Create(
+                   Math.Truncate(X(vector)),
+                   Math.Truncate(Y(vector)),
+                   Math.Truncate(Z(vector)),
+                   Math.Truncate(W(vector))
+               );
+             }
+        }
         #endregion
     }
 }
