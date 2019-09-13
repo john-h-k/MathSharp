@@ -113,7 +113,6 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Divide(in Vector4UInt32Param1_3 dividend, in Vector4UInt32Param1_3 divisor)
         {
-#warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse2.IsSupported)
             //{
             //    return Ssse3.Divide(dividend, divisor);
@@ -126,7 +125,6 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Divide(in Vector4UInt32Param1_3 dividend, uint scalarDivisor)
         {
-#warning No direct hardware acceleration for integer divison; research acceleration techniques
             //if (Sse.IsSupported)
             //{
             //    Vector4Int expand = Vector128.Create(scalarDivisor);
@@ -153,7 +151,6 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4UInt32 Sqrt(in Vector4UInt32Param1_3 vector)
         {
-#warning No direct hardware acceleration for integer sqrt; research acceleration techniques
             //if (Sse.IsSupported)
             //{
             //    return Sse42.Sqrt(vector);

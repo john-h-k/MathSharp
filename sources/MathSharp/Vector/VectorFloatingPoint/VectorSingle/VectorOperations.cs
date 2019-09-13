@@ -300,7 +300,6 @@ namespace MathSharp
         {
             if (Sse.IsSupported)
             {
-                #region Comments
 
                 /* Cross product of A(x, y, z, _) and B(x, y, z, _) is
                  *                    0  1  2  3        0  1  2  3
@@ -314,13 +313,7 @@ namespace MathSharp
                  * Then we subtract them to get the correct vector
                  * We then mask out W to zero, because that is required for the Vector3 representation
                  *
-                 * We perform the first 2 multiplications by shuffling the vectors and then multiplying them
-                 * Helpers.Shuffle is the same as the C++ macro _MM_SHUFFLE, and you provide the order you wish the elements
-                 * to be in *reversed* (no clue why), so here (3, 0, 2, 1) means you have the 2nd elem (1, 0 indexed) in the first slot,
-                 * the 3rd elem (2) in the next one, the 1st elem (0) in the next one, and the 4th (3, W/_, unused here) in the last reg
                  */
-
-                #endregion
 
                 /*
                  * lhs1 goes from x, y, z, _ to y, z, x, _
@@ -357,7 +350,6 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         internal static Vector4F CrossProduct4D(in Vector4FParam1_3 one, in Vector4FParam1_3 two, in Vector4FParam1_3 three)
         {
-#warning Needs to be hardware accelerated ASAP
             // hardware
 
             return CrossProduct4D_Software(one, two, three);
@@ -412,8 +404,6 @@ namespace MathSharp
         internal static Vector4F DistanceSquared3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared3D(Subtract(left, right));
 
-
-        
         [MethodImpl(MaxOpt)]
         internal static Vector4F DistanceSquared4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared4D(Subtract(left, right));

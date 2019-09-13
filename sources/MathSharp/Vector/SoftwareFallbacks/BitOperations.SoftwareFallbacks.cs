@@ -4,8 +4,8 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4UInt32 = Vector128<uint>;
-    using Vector4UInt32Param1_3 = Vector128<uint>;
+    using Vector2UInt64 = Vector128<ulong>;
+    using Vector2UInt64Param1_3 = Vector128<ulong>;
 
     using Vector4UInt64 = Vector256<ulong>;
     using Vector4UInt64Param1_3 = Vector256<ulong>;
@@ -39,51 +39,43 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Or_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
+        public static Vector2UInt64 Or_Software(in Vector2UInt64Param1_3 left, in Vector2UInt64Param1_3 right)
         {
             return Vector128.Create(
                 X(left) | X(right),
-                Y(left) | Y(right),
-                Z(left) | Z(right),
-                W(left) | W(right)
+                Y(left) | Y(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 And_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
+        public static Vector2UInt64 And_Software(in Vector2UInt64Param1_3 left, in Vector2UInt64Param1_3 right)
         {
             return Vector128.Create(
                 X(left) & X(right),
-                Y(left) & Y(right),
-                Z(left) & Z(right),
-                W(left) & W(right)
+                Y(left) & Y(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Xor_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
+        public static Vector2UInt64 Xor_Software(in Vector2UInt64Param1_3 left, in Vector2UInt64Param1_3 right)
         {
             return Vector128.Create(
                 X(left) ^ X(right),
-                Y(left) ^ Y(right),
-                Z(left) ^ Z(right),
-                W(left) ^ W(right)
+                Y(left) ^ Y(right)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 Not_Software(in Vector4UInt32Param1_3 vector)
+        public static Vector2UInt64 Not_Software(in Vector2UInt64Param1_3 vector)
         {
             return Vector128.Create(
                 ~X(vector),
-                ~Y(vector),
-                ~Z(vector),
-                ~W(vector)
+                ~Y(vector)
             );
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4UInt32 AndNot_Software(in Vector4UInt32Param1_3 left, in Vector4UInt32Param1_3 right)
+        public static Vector2UInt64 AndNot_Software(in Vector2UInt64Param1_3 left, in Vector2UInt64Param1_3 right)
         {
             return And_Software(Not_Software(left), right);
         }
