@@ -15,7 +15,7 @@ namespace MathSharp.Utils
             ulong pAligned = (ulong)p;
             if (pAligned % 16 != 0)
             {
-                ThrowAccessViolationException("Pointer not 16 byte aligned"); // TODO get right message
+                ThrowAccessViolationException(message);
             }
         }
     }
