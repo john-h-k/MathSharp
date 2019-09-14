@@ -18,7 +18,7 @@ namespace MathSharp
         private static readonly Vector128<float> SignFlip3DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
         private static readonly Vector128<float> SignFlip4DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
 
-        
+
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right) =>
             new MatrixSingle(
@@ -28,7 +28,7 @@ namespace MathSharp
                 Vector.Add(left._v3, right._v3)
             );
 
-        
+
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right) =>
             new MatrixSingle(
@@ -38,7 +38,7 @@ namespace MathSharp
                 Vector.Subtract(left._v3, right._v3)
             );
 
-        
+
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Negate(in MatrixSingle matrix) =>
             new MatrixSingle(
@@ -57,92 +57,74 @@ namespace MathSharp
                 Vector.Multiply(left._v3, vectorOfScalar)
             );
 
-        
+
         [MethodImpl(MaxOpt)]
-        public static MatrixSingle ScalarMultiply(in MatrixSingle left, float scalar) 
+        public static MatrixSingle ScalarMultiply(in MatrixSingle left, float scalar)
             => ScalarMultiply(left, Vector128.Create(scalar));
 
-        
+
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Transpose(in MatrixSingle matrix)
         {
-            if (Sse.IsSupported)
-            {
-                /*
-                 * ---------------
-                 * | x1 y1 z1 w1 |
-                 * | x2 y2 z2 w2 |
-                 * | x3 y3 z3 w3 |
-                 * | x4 y4 z4 w4 |
-                 * ---------------
-                 *
-                 * become
-                 *
-                 * ---------------
-                 * | x1 x2 x3 x4 |
-                 * | y1 y2 y3 y4 |
-                 * | z1 z2 z3 z4 |
-                 * | w1 w2 w3 w4 |
-                 * ---------------
-                 *
-                 * We achieve this with an intermediate step of
-                 *
-                 * ---------------
-                 * | x1 y1 x2 y2 |
-                 * | z1 w1 z2 w2 |
-                 * | x3 y3 x4 y4 |
-                 * | z3 w3 z4 w4 |
-                 * ---------------
-                 *
-                 * We use Shuffle(Vector FirstVec, Vector SecondVec, byte control)
-                 * Shuffle takes a byte control which consists of 4 numbers (here part of the field). They work back to front like this
-                 * _a_b_c_d
-                 * d - the element from FirstVec, which should be in the first element of the returned vector
-                 * c - the element from FirstVec, which should be in the second element of the returned vector
-                 * b - the element from SecondVec, which should be in the third element of the returned vector
-                 * a - the element from SecondVec, which should be in the fourth element of the returned vector
-                 *
-                 */
+            /*
+             * ---------------
+             * | x1 y1 z1 w1 |
+             * | x2 y2 z2 w2 |
+             * | x3 y3 z3 w3 |
+             * | x4 y4 z4 w4 |
+             * ---------------
+             *
+             * become
+             *
+             * ---------------
+             * | x1 x2 x3 x4 |
+             * | y1 y2 y3 y4 |
+             * | z1 z2 z3 z4 |
+             * | w1 w2 w3 w4 |
+             * ---------------
+             *
+             * We achieve this with an intermediate step of
+             *
+             * ---------------
+             * | x1 y1 x2 y2 |
+             * | z1 w1 z2 w2 |
+             * | x3 y3 x4 y4 |
+             * | z3 w3 z4 w4 |
+             * ---------------
+             *
+             * We use Shuffle(Vector FirstVec, Vector SecondVec, byte control)
+             * Shuffle takes a byte control which consists of 4 numbers (here part of the field). They work back to front like this
+             * _a_b_c_d
+             * d - the element from FirstVec, which should be in the first element of the returned vector
+             * c - the element from FirstVec, which should be in the second element of the returned vector
+             * b - the element from SecondVec, which should be in the third element of the returned vector
+             * a - the element from SecondVec, which should be in the fourth element of the returned vector
+             *
+             */
 
 
-                // x1, y1, x2, y2
-                Vector128<float> xAndY1 = Sse.Shuffle(matrix._v0, matrix._v1, ShuffleValues._1_0_1_0);
+            // x1, y1, x2, y2
+            Vector128<float> xAndY1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues._1_0_1_0);
 
-                // z1, w1, z2, w2
-                Vector128<float> zAndW1 = Sse.Shuffle(matrix._v0, matrix._v1, ShuffleValues._3_2_3_2);
+            // z1, w1, z2, w2
+            Vector128<float> zAndW1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues._3_2_3_2);
 
-                // x3, y3, x4, y4
-                Vector128<float> xAndY2 = Sse.Shuffle(matrix._v2, matrix._v3, ShuffleValues._1_0_1_0);
+            // x3, y3, x4, y4
+            Vector128<float> xAndY2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues._1_0_1_0);
 
-                // z3, w3, z4, w4
-                Vector128<float> zAndW2 = Sse.Shuffle(matrix._v2, matrix._v3, ShuffleValues._3_2_3_2);
+            // z3, w3, z4, w4
+            Vector128<float> zAndW2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues._3_2_3_2);
 
-                MatrixSingle result;
-
+            return new MatrixSingle(
                 // x1, x2, x3, x4
-                result._v0 = Sse.Shuffle(xAndY1, xAndY2, ShuffleValues._2_0_2_0);
-
+                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues._2_0_2_0),
                 // y1, y2, y3, y4
-                result._v1 = Sse.Shuffle(xAndY1, xAndY2, ShuffleValues._3_1_3_1);
-
+                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues._3_1_3_1),
                 // z1, z2, z3, z4
-                result._v2 = Sse.Shuffle(zAndW1, zAndW2, ShuffleValues._2_0_2_0);
-
+                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues._2_0_2_0),
                 // w1, w2, w3, w4
-                result._v3 = Sse.Shuffle(zAndW1, zAndW2, ShuffleValues._3_1_3_1);
-
-                return result;
-            }
-
-            return SoftwareFallback(matrix);
-            
-            static MatrixSingle SoftwareFallback(MatrixSingle matrix) =>
-                MatrixSingle.Create(
-                    X(matrix._v0), X(matrix._v1), X(matrix._v2), X(matrix._v3),
-                    Y(matrix._v0), Y(matrix._v1), Y(matrix._v2), Y(matrix._v3),
-                    Z(matrix._v0), Z(matrix._v1), Z(matrix._v2), Z(matrix._v3),
-                    W(matrix._v0), W(matrix._v1), W(matrix._v2), W(matrix._v3)
-                );
+                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues._3_1_3_1)
+            );
         }
     }
 }

@@ -1,16 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
-using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4Int = Vector128<int>;
-    using Vector4 = Vector128<uint>;
-
-    using Vector4IntParam1_3 = Vector128<int>;
-    using Vector4Param1_3 = Vector128<uint>;
-
     public static partial class SoftwareFallbacks
     {
         #region Vector128

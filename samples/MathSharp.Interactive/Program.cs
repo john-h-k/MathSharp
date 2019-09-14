@@ -16,7 +16,7 @@ namespace MathSharp.Interactive
     {
         private static void Main(string[] args)
         {
-            Span<Vector3> vectors = stackalloc Vector3[10];
+            BenchmarkRunner.Run<RemainderBenchmark>();
         }
 
         private static readonly Vector3 Direction = new Vector3(1, 2, 3);
