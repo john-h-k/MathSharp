@@ -15,7 +15,7 @@ namespace MathSharp.Utils
             ulong pAligned = (ulong)p;
             if (pAligned % 16 != 0)
             {
-                ThrowAccessViolationException(message); // TODO get right message
+                ThrowAccessViolationException(message);
             }
         }
     }

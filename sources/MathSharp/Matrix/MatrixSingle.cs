@@ -12,10 +12,10 @@ namespace MathSharp
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public struct MatrixSingle
     {
-        public VectorF _v0;
-        public VectorF _v1;
-        public VectorF _v2;
-        public VectorF _v3;
+        public HwVector4 _v0;
+        public HwVector4 _v1;
+        public HwVector4 _v2;
+        public HwVector4 _v3;
 
         internal VectorF this[uint index]
         {
@@ -26,9 +26,9 @@ namespace MathSharp
 
         internal float this[uint x, uint y]
         {
-            get => Unsafe.Add(ref Unsafe.As<VectorF, float>(ref _v0), (int)(x * 4 + y));
+            get => Unsafe.Add(ref Unsafe.As<HwVector4, float>(ref _v0), (int)(x * 4 + y));
 
-            set => Unsafe.Add(ref Unsafe.As<VectorF, float>(ref _v0), (int)(x * 4 + y)) = value;
+            set => Unsafe.Add(ref Unsafe.As<HwVector4, float>(ref _v0), (int)(x * 4 + y)) = value;
         }
 
         internal MatrixSingle(Vector128<float> v0, Vector128<float> v1, Vector128<float> v2, Vector128<float> v3)
