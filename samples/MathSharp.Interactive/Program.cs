@@ -16,7 +16,7 @@ namespace MathSharp.Interactive
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<RemainderBenchmark>();
+            Console.WriteLine(IntrinsicSupport.SupportSummary);
         }
 
         private static readonly Vector3 Direction = new Vector3(1, 2, 3);
