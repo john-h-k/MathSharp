@@ -38,6 +38,7 @@ namespace MathSharp
         // which is functionally identical
         public static Vector128<float> One
         {
+            [MethodImpl(MaxOpt)]
             get
             {
                 Vector4F v = Zero;
