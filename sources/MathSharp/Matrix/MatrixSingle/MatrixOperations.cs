@@ -70,7 +70,7 @@ namespace MathSharp
 
             z = Vector.ExtractMask(Vector.LessThan(norm, BillboardEpsilon)) != 0 ? 
                 Vector.Negate3D(cameraForwardVector) 
-                : Vector.Multiply(z, Vector.Divide(Vector.AllBitsSet, Vector.Sqrt(norm)));
+                : Vector.Multiply(z, Vector.Divide(Vector.SingleConstants.AllBitsSet, Vector.Sqrt(norm)));
 
             Vector4F x = Vector.Normalize3D(Vector.CrossProduct3D(cameraUpVector, z));
 
@@ -83,7 +83,7 @@ namespace MathSharp
 
             // Get objectPosition to be (X, Y, Z, 0) and the mask to be (0, 0, 0, 1.0f) and OR them
             Vector4F newObjectPosition = Vector.ZeroW(objectPosition);
-            newObjectPosition = Vector.Or(newObjectPosition, Vector.And(Vector.SingleConstants.MaskXYZ, Vector.AllBitsSet));
+            newObjectPosition = Vector.Or(newObjectPosition, Vector.And(Vector.SingleConstants.MaskXYZ, Vector.SingleConstants.AllBitsSet));
 
             return new MatrixSingle(x, y, z, newObjectPosition);
         }
