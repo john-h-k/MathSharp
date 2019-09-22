@@ -35,10 +35,10 @@ namespace MathSharp
             return Vector.ExtractMask(row0) == 0b_0000_1111;
         }
 
-        public static Vector128<float> GetTranslation(MatrixSingle matrix)
+        public static HwVectorAnyS GetTranslation(MatrixSingle matrix)
         {
             Vector128<float> vec = matrix._v3;
-            return Vector.And(vec, Vector.MaskW);
+            return Vector.And(vec, Vector.SingleConstants.MaskW);
         }
 
         public static MatrixSingle SetTranslation(MatrixSingle matrix, in Vector4FParam1_3 translation)
@@ -48,9 +48,9 @@ namespace MathSharp
 
             // Make W of translation zero
             
-            Vector4F newTranslation = Vector.And(translation, Vector.MaskW);
+            Vector4F newTranslation = Vector.And(translation, Vector.SingleConstants.MaskW);
             // Mask out everything but W
-            old = Vector.And(old, Vector.MaskXYZ);
+            old = Vector.And(old, Vector.SingleConstants.MaskXYZ);
 
             // Or them together to get X Y Z from translation and W from old
             newTranslation = Vector.Or(newTranslation, old);
@@ -70,7 +70,7 @@ namespace MathSharp
 
             z = Vector.ExtractMask(Vector.LessThan(norm, BillboardEpsilon)) != 0 ? 
                 Vector.Negate3D(cameraForwardVector) 
-                : Vector.Multiply(z, Vector.Divide(Vector.One, Vector.Sqrt(norm)));
+                : Vector.Multiply(z, Vector.Divide(Vector.AllBitsSet, Vector.Sqrt(norm)));
 
             Vector4F x = Vector.Normalize3D(Vector.CrossProduct3D(cameraUpVector, z));
 
@@ -83,7 +83,7 @@ namespace MathSharp
 
             // Get objectPosition to be (X, Y, Z, 0) and the mask to be (0, 0, 0, 1.0f) and OR them
             Vector4F newObjectPosition = Vector.ZeroW(objectPosition);
-            newObjectPosition = Vector.Or(newObjectPosition, Vector.And(Vector.MaskXYZ, Vector.One));
+            newObjectPosition = Vector.Or(newObjectPosition, Vector.And(Vector.SingleConstants.MaskXYZ, Vector.AllBitsSet));
 
             return new MatrixSingle(x, y, z, newObjectPosition);
         }

@@ -6,6 +6,8 @@ using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
+using static MathSharp.Vector.SingleConstants;
+using static MathSharp.Vector.DoubleConstants;
 
 namespace MathSharp
 {
@@ -16,125 +18,92 @@ namespace MathSharp
     {
         #region Vector Maths
 
-        private static readonly Vector128<float> SignFlip2D = Vector128.Create(int.MinValue, int.MinValue, 0, 0).AsSingle();
-        private static readonly Vector128<float> SignFlip3D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
-        private static readonly Vector128<float> SignFlip4D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
-
-        public static readonly Vector128<float> MaskW = Vector128.Create(-1, -1, -1, 0).AsSingle();
-        public static readonly Vector128<float> MaskXYZ = Vector128.Create(0, 0, 0, -1).AsSingle();
-
-
-        public static readonly Vector128<float> UnitX = Vector128.Create(1f, 0f, 0f, 0f);
-        public static readonly Vector128<float> UnitY = Vector128.Create(0f, 1f, 0f, 0f);
-        public static readonly Vector128<float> UnitZ = Vector128.Create(0f, 0f, 1f, 0f);
-        public static readonly Vector128<float> UnitW = Vector128.Create(0f, 0f, 0f, 1f);
-
-        // Uses the 'ones idiom', which is where
-        // cmpeq xmmN, xmmN
-        // is used, and the result is guaranteed to be all ones
-        // it has no dependencies and is useful
-        // For anyone looking at codegen, it is actually
-        // [v]cmpps xmm0, xmm0, xmm0, 0x0
-        // which is functionally identical
-        public static Vector128<float> One
-        {
-            [MethodImpl(MaxOpt)]
-            get
-            {
-                Vector4F v = Zero;
-                return Equality(v, v);
-            }
-        }
-
-        public static readonly Vector128<float> Zero = Vector128<float>.Zero;
-
-
         #region Normalize
 
         [MethodImpl(MaxOpt)]
-        public static HwVector2 Normalize(in HwVector2 vector)
+        public static HwVector2S Normalize(in HwVector2S vector)
             => Normalize2D(vector);
 
         [MethodImpl(MaxOpt)]
-        public static HwVector3 Normalize(in HwVector3 vector)
+        public static HwVector3S Normalize(in HwVector3S vector)
             => Normalize3D(vector);
 
         [MethodImpl(MaxOpt)]
-        public static HwVector4 Normalize(in HwVector4 vector)
+        public static HwVector4S Normalize(in HwVector4S vector)
             => Normalize4D(vector);
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Normalize2D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Normalize2D(in Vector4FParam1_3 vector)
             => Divide(vector, Length2D(vector));
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Normalize3D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Normalize3D(in Vector4FParam1_3 vector)
             => Divide(vector, Length3D(vector));
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Normalize4D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Normalize4D(in Vector4FParam1_3 vector)
             => Divide(vector, Length4D(vector));
 
         #endregion
 
         #region Length
 
-        public static HwVector2 Length(HwVector2 vector)
+        public static HwVector2S Length(HwVector2S vector)
             => Length2D(vector);
 
-        public static HwVector3 Length(HwVector3 vector)
+        public static HwVector3S Length(HwVector3S vector)
             => Length3D(vector);
 
-        public static HwVector4 Length(HwVector4 vector)
+        public static HwVector4S Length(HwVector4S vector)
             => Length4D(vector);
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Length2D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Length2D(in Vector4FParam1_3 vector)
             => Sqrt(DotProduct2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Length3D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Length3D(in Vector4FParam1_3 vector)
             => Sqrt(DotProduct3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Length4D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Length4D(in Vector4FParam1_3 vector)
             => Sqrt(DotProduct4D(vector, vector));
 
         #endregion
 
         #region LengthSquared
 
-        public static HwVector2 LengthSquared(HwVector2 vector)
+        public static HwVector2S LengthSquared(HwVector2S vector)
             => LengthSquared2D(vector);
 
-        public static HwVector3 LengthSquared(HwVector3 vector)
+        public static HwVector3S LengthSquared(HwVector3S vector)
             => LengthSquared3D(vector);
 
-        public static HwVector4 LengthSquared(HwVector4 vector)
+        public static HwVector4S LengthSquared(HwVector4S vector)
             => LengthSquared4D(vector);
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F LengthSquared2D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS LengthSquared2D(in Vector4FParam1_3 vector)
             => DotProduct2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F LengthSquared3D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS LengthSquared3D(in Vector4FParam1_3 vector)
             => DotProduct3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F LengthSquared4D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS LengthSquared4D(in Vector4FParam1_3 vector)
             => DotProduct4D(vector, vector);
 
         #endregion
 
         #region DotProduct
-        public static HwVector2 DotProduct(in HwVector2 left, in HwVector2 right) => DotProduct2D(left, right);
-        public static HwVector3 DotProduct(in HwVector3 left, in HwVector3 right) => DotProduct3D(left, right);
-        public static HwVector4 DotProduct(in HwVector4 left, in HwVector4 right) => DotProduct4D(left, right);
+        public static HwVector2S DotProduct(in HwVector2S left, in HwVector2S right) => DotProduct2D(left, right);
+        public static HwVector3S DotProduct(in HwVector3S left, in HwVector3S right) => DotProduct3D(left, right);
+        public static HwVector4S DotProduct(in HwVector4S left, in HwVector4S right) => DotProduct4D(left, right);
 
         
         [MethodImpl(MaxOpt)]
-        internal static Vector4F DotProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DotProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -177,7 +146,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static Vector4F DotProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DotProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -222,7 +191,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static Vector4F DotProduct4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DotProduct4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -260,13 +229,13 @@ namespace MathSharp
 
         #region CrossProduct
 
-        public static HwVector2 CrossProduct(in HwVector2 left, in HwVector2 right) => CrossProduct2D(left, right);
-        public static HwVector3 CrossProduct(in HwVector3 left, in HwVector3 right) => CrossProduct3D(left, right);
-        public static HwVector4 CrossProduct(in HwVector4 one, in HwVector4 two, in HwVector4 three) => CrossProduct4D(one, two, three);
+        public static HwVector2S CrossProduct(in HwVector2S left, in HwVector2S right) => CrossProduct2D(left, right);
+        public static HwVector3S CrossProduct(in HwVector3S left, in HwVector3S right) => CrossProduct3D(left, right);
+        public static HwVector4S CrossProduct(in HwVector4S one, in HwVector4S two, in HwVector4S three) => CrossProduct4D(one, two, three);
 
         
         [MethodImpl(MaxOpt)]
-        internal static Vector4F CrossProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS CrossProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             /* Cross product of A(x, y, _, _) and B(x, y, _, _) is
              * 'E = (Ax * By) - (Ay * Bx)'
@@ -297,7 +266,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static Vector4F CrossProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS CrossProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -349,7 +318,7 @@ namespace MathSharp
 
         // TODO 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F CrossProduct4D(in Vector4FParam1_3 one, in Vector4FParam1_3 two, in Vector4FParam1_3 three)
+        internal static HwVectorAnyS CrossProduct4D(in Vector4FParam1_3 one, in Vector4FParam1_3 two, in Vector4FParam1_3 three)
         {
             // hardware
 
@@ -360,53 +329,53 @@ namespace MathSharp
 
         #region Distance
 
-        public static HwVector2 Distance(in HwVector2 left, in HwVector2 right)
+        public static HwVector2S Distance(in HwVector2S left, in HwVector2S right)
             => Distance2D(left, right);
 
-        public static HwVector3 Distance(in HwVector3 left, in HwVector3 right)
+        public static HwVector3S Distance(in HwVector3S left, in HwVector3S right)
             => Distance3D(left, right);
 
-        public static HwVector4 Distance(in HwVector4 left, in HwVector4 right)
+        public static HwVector4S Distance(in HwVector4S left, in HwVector4S right)
             => Distance4D(left, right);
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Distance2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS Distance2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length2D(Subtract(left, right));
 
         
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Distance3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS Distance3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length3D(Subtract(left, right));
 
 
         
         [MethodImpl(MaxOpt)]
-        internal static Vector4F Distance4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS Distance4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => Length4D(Subtract(left, right));
 
         #endregion
 
         #region DistanceSquared
 
-        public static HwVector2 DistanceSquared(in HwVector2 left, in HwVector2 right)
+        public static HwVector2S DistanceSquared(in HwVector2S left, in HwVector2S right)
             => DistanceSquared2D(left, right);
 
-        public static HwVector3 DistanceSquared(in HwVector3 left, in HwVector3 right)
+        public static HwVector3S DistanceSquared(in HwVector3S left, in HwVector3S right)
             => DistanceSquared3D(left, right);
 
-        public static HwVector4 DistanceSquared(in HwVector4 left, in HwVector4 right)
+        public static HwVector4S DistanceSquared(in HwVector4S left, in HwVector4S right)
             => DistanceSquared4D(left, right);
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F DistanceSquared2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DistanceSquared2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared2D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F DistanceSquared3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DistanceSquared3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared3D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        internal static Vector4F DistanceSquared4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DistanceSquared4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
             => LengthSquared4D(Subtract(left, right));
 
         #endregion
@@ -414,7 +383,7 @@ namespace MathSharp
         #region Lerp
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F Lerp(in Vector4FParam1_3 from, in Vector4FParam1_3 to, float weight)
+        public static HwVectorAnyS Lerp(in Vector4FParam1_3 from, in Vector4FParam1_3 to, float weight)
         {
             Debug.Assert(weight <= 1 && weight >= 0);
 
@@ -429,16 +398,16 @@ namespace MathSharp
 
         #region Reflect
 
-        public static HwVector2 Reflect(in HwVector2 incident, in HwVector2 normal)
+        public static HwVector2S Reflect(in HwVector2S incident, in HwVector2S normal)
             => Reflect2D(incident, normal);
 
-        public static HwVector3 Reflect(in HwVector3 incident, in HwVector3 normal)
+        public static HwVector3S Reflect(in HwVector3S incident, in HwVector3S normal)
             => Reflect3D(incident, normal);
 
-        public static HwVector4 Reflect(in HwVector4 incident, in HwVector4 normal)
+        public static HwVector4S Reflect(in HwVector4S incident, in HwVector4S normal)
             => Reflect4D(incident, normal);
 
-        internal static Vector4F Reflect2D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
+        internal static HwVectorAnyS Reflect2D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct2D(incident, normal);
@@ -447,7 +416,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        internal static Vector4F Reflect3D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
+        internal static HwVectorAnyS Reflect3D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct3D(incident, normal);
@@ -456,7 +425,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        internal static Vector4F Reflect4D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
+        internal static HwVectorAnyS Reflect4D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct4D(incident, normal);

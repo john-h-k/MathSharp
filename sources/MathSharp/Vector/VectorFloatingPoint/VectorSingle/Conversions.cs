@@ -44,7 +44,7 @@ namespace MathSharp
         #region Loads
 
         [MethodImpl(MaxOpt)]
-        public static HwVector4 Load4DAligned(float* p)
+        public static HwVector4S Load4DAligned(float* p)
         {
             if (Sse.IsSupported)
             {
@@ -53,7 +53,7 @@ namespace MathSharp
 
             return SoftwareFallback(p);
 
-            static Vector4F SoftwareFallback(float* p)
+            static HwVectorAnyS SoftwareFallback(float* p)
             {
                 ThrowHelper.ThrowForUnaligned16BPointer(p, "Pointer not 16 byte aligned");
 
@@ -61,12 +61,12 @@ namespace MathSharp
             }
         }
 
-        public static HwVector3 Load3DAligned(float* p) => (HwVector3)Load4DAligned(p);
-        public static HwVector2 Load2DAligned(float* p) => (HwVector2)Load4DAligned(p);
+        public static HwVector3S Load3DAligned(float* p) => (HwVector3S)Load4DAligned(p);
+        public static HwVector2S Load2DAligned(float* p) => (HwVector2S)Load4DAligned(p);
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVector4 Load4D(float* p)
+        public static HwVector4S Load4D(float* p)
         {
             if (Sse.IsSupported)
             {
@@ -75,14 +75,14 @@ namespace MathSharp
 
             return SoftwareFallback(p);
 
-            static Vector4F SoftwareFallback(float* p)
+            static HwVectorAnyS SoftwareFallback(float* p)
             {
                 return Vector128.Create(p[0], p[1], p[2], p[3]);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVector3 Load3D(float* p)
+        public static HwVector3S Load3D(float* p)
         {
             if (Sse.IsSupported)
             {
@@ -104,14 +104,14 @@ namespace MathSharp
 
             return SoftwareFallback(p);
 
-            static Vector4F SoftwareFallback(float* p)
+            static HwVectorAnyS SoftwareFallback(float* p)
             {
                 return Vector128.Create(p[0], p[1], p[2], 0);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVector4 Load3D(float* p, float w)
+        public static HwVector4S Load3D(float* p, float w)
         {
             if (Sse.IsSupported)
             {
@@ -134,14 +134,14 @@ namespace MathSharp
 
             return SoftwareFallback(p, w);
 
-            static Vector4F SoftwareFallback(float* p, float w)
+            static HwVectorAnyS SoftwareFallback(float* p, float w)
             {
                 return Vector128.Create(p[0], p[1], p[2], w);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVector2 Load2D(float* p)
+        public static HwVector2S Load2D(float* p)
         {
             if (Sse.IsSupported)
             {
@@ -156,20 +156,20 @@ namespace MathSharp
 
             return SoftwareFallback(p);
 
-            static Vector4F SoftwareFallback(float* p)
+            static HwVectorAnyS SoftwareFallback(float* p)
             {
                 return Vector128.Create(p[0], p[1], 0f, 0f);
             }
         }
         
         [MethodImpl(MaxOpt)]
-        public static Vector4F LoadScalar(this float scalar)
+        public static HwVectorAnyS LoadScalar(this float scalar)
         {
             return Vector128.CreateScalar(scalar);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F LoadScalarBroadcast(this float scalar)
+        public static HwVectorAnyS LoadScalarBroadcast(this float scalar)
         {
             return Vector128.Create(scalar);
         }
@@ -178,7 +178,7 @@ namespace MathSharp
 
         #region Stores
 
-        public static void Store4DAligned(this HwVector4 vector, float* destination)
+        public static void Store4DAligned(this HwVector4S vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -200,14 +200,14 @@ namespace MathSharp
             }
         }
 
-        public static void Store3DAligned(this HwVector3 vector, float* destination)
-            => Store4DAligned((HwVector4)vector, destination);
+        public static void Store3DAligned(this HwVector3S vector, float* destination)
+            => Store4DAligned((HwVector4S)vector, destination);
 
-        public static void Store2DAligned(this HwVector2 vector, float* destination) 
-            => Store4DAligned((HwVector4)vector, destination);
+        public static void Store2DAligned(this HwVector2S vector, float* destination) 
+            => Store4DAligned((HwVector4S)vector, destination);
 
 
-        public static void Store4D(this HwVector4 vector, float* destination)
+        public static void Store4D(this HwVector4S vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -227,7 +227,7 @@ namespace MathSharp
             }
         }
 
-        public static void Store3D(this HwVector3 vector, float* destination)
+        public static void Store3D(this HwVector3S vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -249,7 +249,7 @@ namespace MathSharp
             }
         }
 
-        public static void Store2D(this HwVector2 vector, float* destination)
+        public static void Store2D(this HwVector2S vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -284,7 +284,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4F ScalarToVector(Vector4F scalar)
+        public static HwVectorAnyS ScalarToVector(Vector4F scalar)
         {
             if (Avx2.IsSupported)
             {
@@ -302,7 +302,7 @@ namespace MathSharp
 
             return SoftwareFallback(scalar);
 
-            static Vector4F SoftwareFallback(Vector4F scalar)
+            static HwVectorAnyS SoftwareFallback(Vector4F scalar)
             {
                 return Vector128.Create(X(scalar));
             }

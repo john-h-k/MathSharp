@@ -269,14 +269,14 @@ namespace MathSharp.Interactive
         {
             for (var i = 0; i < Count; i++)
             {
-                HwVector4 vector = JohnVectorsSrc![i].Load();
+                HwVector4S vector = JohnVectorsSrc![i].Load();
 
                 vector = Multiply(vector, vector);
                 vector = Normalize(vector);
                 vector = Subtract(vector, vector);
                 vector = Normalize(vector);
                 vector = Multiply(vector, DotProduct(vector, vector));
-                vector = DotProduct((HwVector4)CrossProduct((HwVector3)vector, (HwVector3)vector), Abs(vector));
+                vector = DotProduct((HwVector4S)CrossProduct((HwVector3S)vector, (HwVector3S)vector), Abs(vector));
                 for (var j = 0; j < Count / 2; j++)
                 {
                     vector = Add(vector, vector);

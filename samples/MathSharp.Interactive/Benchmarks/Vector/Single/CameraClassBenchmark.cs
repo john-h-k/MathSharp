@@ -11,10 +11,10 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         private float _pitch;
         private float _yaw;
         private Vector128<float> _unitY;
-        private HwVector3 _unitYWrapper;
+        private HwVector3S _unitYWrapper;
 
         private Vector128<float> _mathSharpFront;
-        private HwVector3 _mathSharpWrapperFront;
+        private HwVector3S _mathSharpWrapperFront;
         private Vector3 _openTkFront;
 
         [GlobalSetup]
@@ -35,22 +35,22 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         [Benchmark]
         public Vector128<float> MathSharp()
         {
-            HwVector3 front = _mathSharpFront;
+            HwVector3S front = _mathSharpFront;
             front = Vector.Normalize(front);
-            HwVector3 right = Vector.Normalize(Vector.CrossProduct(_unitY, front));
+            HwVector3S right = Vector.Normalize(Vector.CrossProduct(_unitY, front));
 
-            HwVector3 up = Vector.Normalize(Vector.CrossProduct(front, right));
+            HwVector3S up = Vector.Normalize(Vector.CrossProduct(front, right));
             return up;
         }
 
         [Benchmark]
-        public HwVector3 MathSharp_WrapperStruct()
+        public HwVector3S MathSharp_WrapperStruct()
         {
-            HwVector3 front = _mathSharpWrapperFront;
+            HwVector3S front = _mathSharpWrapperFront;
             front = Vector.Normalize(front);
-            HwVector3 right = Vector.Normalize(Vector.CrossProduct(_unitYWrapper, front));
+            HwVector3S right = Vector.Normalize(Vector.CrossProduct(_unitYWrapper, front));
 
-            HwVector3 up = Vector.Normalize(Vector.CrossProduct(front, right));
+            HwVector3S up = Vector.Normalize(Vector.CrossProduct(front, right));
             return up;
         }
 
