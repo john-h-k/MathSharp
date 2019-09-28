@@ -1,7 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
+using static MathSharp.Utils.Helpers;
 using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
@@ -159,6 +161,41 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D Negate4D(in Vector4DParam1_3 vector)
             => Xor(vector, SignFlip4DDouble);
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Remainder(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        {
+            Vector4D n = Divide(left, right);
+            n = Truncate(n);
+
+            Vector4D y = Multiply(n, right);
+
+            return Subtract(left, y);
+        }
+
+        public static Vector4D Remainder(in Vector4DParam1_3 left, double right)
+            => Remainder(left, Vector256.Create(right));
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Truncate(in Vector4DParam1_3 vector)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.RoundToZero(vector);
+            }
+
+            return SoftwareFallback(vector);
+
+            static Vector4D SoftwareFallback(in Vector4DParam1_3 vector)
+            {
+                return Vector256.Create(
+                    Math.Truncate(X(vector)),
+                    Math.Truncate(Y(vector)),
+                    Math.Truncate(Z(vector)),
+                    Math.Truncate(W(vector))
+                );
+            }
+        }
 
         #endregion
     }

@@ -26,13 +26,5 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 
             Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
-
-        [Fact]
-        public void Negate_NegateZero_Passes()
-        {
-            Vector128<float> result = Vector.Negate4D(Vector128.Create(0f));
-
-            Assert.True(result.AsInt32().Equals(Vector128.Create(int.MinValue)));
-        }
     }
 }

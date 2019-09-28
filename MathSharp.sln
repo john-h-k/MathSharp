@@ -55,8 +55,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5E19EDF5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathSharp.UnitTests", "tests\MathSharp.UnitTests\MathSharp.UnitTests.csproj", "{8FFF4DEA-FF68-4C22-8C53-E911D1B47837}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathSharp.Benchmarks", "MathSharp.Benchmarks\MathSharp.Benchmarks.csproj", "{D98072C3-F9B9-4B5D-ACD5-BC1F7A14F4B7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -26,11 +26,11 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         private Vector128<float> _mathSharpScale;
         private Vector128<float> _mathSharpAmount;
 
-        private HwVector2 _mathSharpTranslation_Wrapper;
-        private HwVector2 _mathSharpAnchor_Wrapper;
-        private HwVector2 _mathSharpScale_Wrapper;
-        private HwVector2 _mathSharpAmount_Wrapper;
-        private HwVector2 _mathSharpOne_Wrapper;
+        private HwVector2S _mathSharpTranslation_Wrapper;
+        private HwVector2S _mathSharpAnchor_Wrapper;
+        private HwVector2S _mathSharpScale_Wrapper;
+        private HwVector2S _mathSharpAmount_Wrapper;
+        private HwVector2S _mathSharpOne_Wrapper;
 
 
         private Vector2 _result;
@@ -58,9 +58,9 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         public void MathSharp()
         {
             Vector128<float> newScale = Vector.Multiply(_mathSharpScale, _mathSharpAmount);
-            Vector128<float> deltaT = Vector.Multiply(_mathSharpScale, Vector.Subtract(Vector.One, _mathSharpAmount));
+            Vector128<float> deltaT = Vector.Multiply(_mathSharpScale, Vector.Subtract(Vector.SingleConstants.AllBitsSet, _mathSharpAmount));
             deltaT = Vector.Multiply(deltaT, _mathSharpAnchor);
-            HwVector2 result = Vector.Multiply((Vector.Add(_mathSharpTranslation, deltaT)), newScale);
+            HwVector2S result = Vector.Multiply((Vector.Add(_mathSharpTranslation, deltaT)), newScale);
 
             result.Store(out _result);
         }
@@ -68,8 +68,8 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         [Benchmark]
         public void MathSharp_Wrappers()
         {
-            HwVector2 newScale = _mathSharpScale_Wrapper * _mathSharpAmount_Wrapper;
-            HwVector2 deltaT = _mathSharpScale_Wrapper * (Vector.One - _mathSharpAmount_Wrapper);
+            HwVector2S newScale = _mathSharpScale_Wrapper * _mathSharpAmount_Wrapper;
+            HwVector2S deltaT = _mathSharpScale_Wrapper * (Vector.SingleConstants.AllBitsSet - _mathSharpAmount_Wrapper);
             deltaT *= _mathSharpAnchor_Wrapper;
             ((_mathSharpTranslation_Wrapper + deltaT) * newScale).Store(out _result);
         }
@@ -88,7 +88,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Store(this HwVector2 hwVector, out Vector2 vector)
+        public static void Store(this HwVector2S hwVector, out Vector2 vector)
         {
             if (Sse.IsSupported)
             {
@@ -104,20 +104,20 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Store_Software(this HwVector2 hwVector, out Vector2 vector)
+        public static void Store_Software(this HwVector2S hwVector, out Vector2 vector)
         {
-            vector = Unsafe.As<HwVector2, Vector2>(ref hwVector);
+            vector = Unsafe.As<HwVector2S, Vector2>(ref hwVector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static HwVector2 Load(this Vector2 vector)
+        public static HwVector2S Load(this Vector2 vector)
         {
             if (Sse.IsSupported)
             {
                 // Construct 2 separate vectors, each having the first element being the value
                 // and the rest being 0
-                HwVector2 lo = Sse.LoadScalarVector128(&vector.X);
-                HwVector2 hi = Sse.LoadScalarVector128(&vector.Y);
+                HwVector2S lo = Sse.LoadScalarVector128(&vector.X);
+                HwVector2S hi = Sse.LoadScalarVector128(&vector.Y);
 
                 // Unpack these to (lo, mid, 0, 0), the desired vector
                 return Sse.UnpackLow(lo, hi);
@@ -125,7 +125,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 
             return SoftwareFallback(vector);
 
-            static HwVector2 SoftwareFallback(Vector2 vector)
+            static HwVector2S SoftwareFallback(Vector2 vector)
             {
                 return Vector128.Create(vector.X, vector.Y, 0, 0);
             }

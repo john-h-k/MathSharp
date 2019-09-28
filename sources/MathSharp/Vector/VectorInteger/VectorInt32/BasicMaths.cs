@@ -208,7 +208,7 @@ namespace MathSharp
         {
             if (Sse2.IsSupported)
             {
-                return Sse2.Xor(vector, SignFlip2D.AsInt32());
+                return Sse2.Xor(vector, SingleConstants.SignFlip2D.AsInt32());
             }
 
             return Negate4D_Software(vector);
@@ -220,7 +220,7 @@ namespace MathSharp
         {
             if (Sse2.IsSupported)
             {
-                return Sse2.Xor(vector, SignFlip3D.AsInt32());
+                return Sse2.Xor(vector, SingleConstants.SignFlip3D.AsInt32());
             }
 
             return Negate4D_Software(vector);
@@ -232,7 +232,7 @@ namespace MathSharp
         {
             if (Sse2.IsSupported)
             {
-                return Sse2.Xor(vector, SignFlip4D.AsInt32());
+                return Sse2.Xor(vector, SingleConstants.SignFlip4D.AsInt32());
             }
 
             return Negate4D_Software(vector);

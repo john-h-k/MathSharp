@@ -2,7 +2,7 @@
 
 namespace MathSharp.Constants
 {
-    public static class SingleConstants
+    public static class ScalarSingleConstants
     {
         public const float Pi = MathF.PI; // for symmetry
         public const float Pi2 = Pi * 2f;

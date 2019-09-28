@@ -12,7 +12,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
     {
         private static readonly Vector4 MathFVector = new Vector4(1f, 2f, 3f, 4f);
         private static readonly OpenTkVector4 OpenTkVector = new OpenTkVector4(1f, 2f, 3f, 4f);
-        private static readonly HwVector4 MathSharpVector = Vector128.Create(1f, 2f, 3f, 4f);
+        private static readonly HwVector4S MathSharpVector = Vector128.Create(1f, 2f, 3f, 4f);
 
         [Benchmark]
         public Vector4 MathF()
@@ -26,7 +26,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         }
 
         [Benchmark]
-        public HwVector4 MathSharp()
+        public HwVector4S MathSharp()
         {
             return global::MathSharp.Vector.Sin(MathSharpVector);
         }

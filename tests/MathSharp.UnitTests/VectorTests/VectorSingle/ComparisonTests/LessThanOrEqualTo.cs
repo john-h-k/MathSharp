@@ -33,7 +33,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.ComparisonTests
         [MemberData(nameof(Data))]
         public static void LessThanOrEqualTo_Theory(Vector128<float> left, Vector128<float> right, bool[] expected)
         {
-            Vector128<int> result1 = Vector.LessThanOrEqual(left, right).AsInt32();
+            Vector128<int> result1 = Vector.LessThanOrEqual(left, right).Value.AsInt32();
 
             Assert.True(AreAllNotEqual(expected, result1));
         }

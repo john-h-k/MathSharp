@@ -19,7 +19,7 @@ namespace MathSharp
 
         #region Vector128
 
-        public static Vector128<float> Shuffle_Software(in Vector128<float> left, in Vector128<float> right, byte control)
+        public static HwVectorAnyS Shuffle_Software(in Vector128<float> left, in Vector128<float> right, byte control)
         {
             const byte e0Mask = 0b_0000_0011, e1Mask = 0b_0000_1100, e2Mask = 0b_0011_0000, e3Mask = 0b_1100_0000;
 

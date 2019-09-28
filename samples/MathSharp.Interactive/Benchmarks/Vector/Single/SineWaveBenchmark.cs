@@ -47,7 +47,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             {
                 while (i < vecLength)
                 {
-                    HwVector4 vector = Divide(samplePoints, sampleRate);
+                    HwVector4S vector = Divide(samplePoints, sampleRate);
                     vector = Multiply(vector, sine);
                     vector = Sin(vector);
 
