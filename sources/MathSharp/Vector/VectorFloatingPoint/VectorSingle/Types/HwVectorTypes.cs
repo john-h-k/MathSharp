@@ -1,15 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using System.Text;
 using static System.Runtime.CompilerServices.MethodImplOptions;
+using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
     // Used for overload resolution. All conversions are nops and the codegen around them is good
 
 
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVectorAnyS
     {
         public readonly Vector128<float> Value;
@@ -26,7 +30,7 @@ namespace MathSharp
         public static implicit operator HwVectorAnyS(Vector128<float> vector) => new HwVectorAnyS(vector);
     }
 
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVector2S
     {
         public readonly Vector128<float> Value;
@@ -96,7 +100,7 @@ namespace MathSharp
         [MethodImpl(AggressiveInlining)]
         public static HwVector2S operator ~(HwVector2S vector) => Vector.Not(vector);
     }
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVector3S
     {
         public readonly Vector128<float> Value;
@@ -166,13 +170,54 @@ namespace MathSharp
         [MethodImpl(AggressiveInlining)]
         public static HwVector3S operator ~(HwVector3S vector) => Vector.Not(vector);
     }
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVector4S
     {
         public readonly Vector128<float> Value;
 
         internal string DebuggerString => $"<{Value.GetElement(0)}, {Value.GetElement(1)}, {Value.GetElement(2)}, {Value.GetElement(3)}>";
-        public override string ToString() => DebuggerString;
+
+
+        private unsafe struct CharP4
+        {
+            public CharP4(char* x, char* y, char* z, char* w)
+            {
+                X = x;
+                Y = y;
+                Z = z;
+                W = w;
+            }
+
+            public char* X;
+            public char* Y;
+            public char* Z;
+            public char* W;
+        }
+
+
+        public override unsafe string ToString()
+        {
+            const int maxFloatSize = 17;
+            const int formatStringSize = 1 + 2 + 2 + 2 + 1;
+            const int maxSize = maxFloatSize * 4 + formatStringSize;
+
+            Span<char> buff = stackalloc char[maxSize];
+
+
+            buff[0] = '<';
+
+            X(Value).TryFormat(buff, out int charsWritten, ", ");
+            buff = buff.Slice(charsWritten);
+            Y(Value).TryFormat(buff, out charsWritten, ", ");
+            buff = buff.Slice(charsWritten);
+            Z(Value).TryFormat(buff, out charsWritten, ", ");
+            buff = buff.Slice(charsWritten);
+            W(Value).TryFormat(buff, out charsWritten, ", ");
+            buff = buff.Slice(charsWritten);
+
+            buff[buff.Length - 1] = '>';
+            return buff.ToString();
+        }
 
         [MethodImpl(AggressiveInlining)]
         public HwVector4S(Vector128<float> value)

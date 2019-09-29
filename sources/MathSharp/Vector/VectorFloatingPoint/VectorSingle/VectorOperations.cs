@@ -33,15 +33,15 @@ namespace MathSharp
             => Normalize4D(vector);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Normalize2D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Normalize2D(Vector4FParam1_3 vector)
             => Divide(vector, Length2D(vector));
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Normalize3D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Normalize3D(Vector4FParam1_3 vector)
             => Divide(vector, Length3D(vector));
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Normalize4D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Normalize4D(Vector4FParam1_3 vector)
             => Divide(vector, Length4D(vector));
 
         #endregion
@@ -58,15 +58,15 @@ namespace MathSharp
             => Length4D(vector);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Length2D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Length2D(Vector4FParam1_3 vector)
             => Sqrt(DotProduct2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Length3D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Length3D(Vector4FParam1_3 vector)
             => Sqrt(DotProduct3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Length4D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS Length4D(Vector4FParam1_3 vector)
             => Sqrt(DotProduct4D(vector, vector));
 
         #endregion
@@ -83,15 +83,15 @@ namespace MathSharp
             => LengthSquared4D(vector);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS LengthSquared2D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS LengthSquared2D(Vector4FParam1_3 vector)
             => DotProduct2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS LengthSquared3D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS LengthSquared3D(Vector4FParam1_3 vector)
             => DotProduct3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS LengthSquared4D(in Vector4FParam1_3 vector)
+        internal static HwVectorAnyS LengthSquared4D(Vector4FParam1_3 vector)
             => DotProduct4D(vector, vector);
 
         #endregion
@@ -103,7 +103,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS DotProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DotProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -146,7 +146,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS DotProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DotProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -191,7 +191,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS DotProduct4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DotProduct4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse41.IsSupported)
             {
@@ -235,7 +235,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS CrossProduct2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS CrossProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             /* Cross product of A(x, y, _, _) and B(x, y, _, _) is
              * 'E = (Ax * By) - (Ay * Bx)'
@@ -266,7 +266,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS CrossProduct3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS CrossProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -318,7 +318,7 @@ namespace MathSharp
 
         // TODO 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS CrossProduct4D(in Vector4FParam1_3 one, in Vector4FParam1_3 two, in Vector4FParam1_3 three)
+        internal static HwVectorAnyS CrossProduct4D(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
         {
             // hardware
 
@@ -339,18 +339,18 @@ namespace MathSharp
             => Distance4D(left, right);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Distance2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS Distance2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
             => Length2D(Subtract(left, right));
 
         
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Distance3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS Distance3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
             => Length3D(Subtract(left, right));
 
 
         
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Distance4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS Distance4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
             => Length4D(Subtract(left, right));
 
         #endregion
@@ -367,15 +367,15 @@ namespace MathSharp
             => DistanceSquared4D(left, right);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS DistanceSquared2D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DistanceSquared2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
             => LengthSquared2D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS DistanceSquared3D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DistanceSquared3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
             => LengthSquared3D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS DistanceSquared4D(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        internal static HwVectorAnyS DistanceSquared4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
             => LengthSquared4D(Subtract(left, right));
 
         #endregion
@@ -383,7 +383,7 @@ namespace MathSharp
         #region Lerp
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Lerp(in Vector4FParam1_3 from, in Vector4FParam1_3 to, float weight)
+        public static HwVectorAnyS Lerp(Vector4FParam1_3 from, Vector4FParam1_3 to, float weight)
         {
             Debug.Assert(weight <= 1 && weight >= 0);
 
@@ -407,7 +407,7 @@ namespace MathSharp
         public static HwVector4S Reflect(in HwVector4S incident, in HwVector4S normal)
             => Reflect4D(incident, normal);
 
-        internal static HwVectorAnyS Reflect2D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
+        internal static HwVectorAnyS Reflect2D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct2D(incident, normal);
@@ -416,7 +416,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        internal static HwVectorAnyS Reflect3D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
+        internal static HwVectorAnyS Reflect3D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct3D(incident, normal);
@@ -425,7 +425,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        internal static HwVectorAnyS Reflect4D(in Vector4FParam1_3 incident, in Vector4FParam1_3 normal)
+        internal static HwVectorAnyS Reflect4D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector4F tmp = DotProduct4D(incident, normal);

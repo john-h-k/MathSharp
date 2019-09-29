@@ -13,7 +13,7 @@ namespace MathSharp
     {
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Equality(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static HwVectorAnyS Equality(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -25,7 +25,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Inequality(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static HwVectorAnyS Inequality(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -37,7 +37,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS GreaterThan(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static HwVectorAnyS GreaterThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -49,7 +49,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS LessThan(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static HwVectorAnyS LessThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -61,7 +61,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS GreaterThanOrEqual(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static HwVectorAnyS GreaterThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -73,7 +73,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS LessThanOrEqual(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static HwVectorAnyS LessThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {

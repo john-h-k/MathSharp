@@ -58,7 +58,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         public void MathSharp()
         {
             Vector128<float> newScale = Vector.Multiply(_mathSharpScale, _mathSharpAmount);
-            Vector128<float> deltaT = Vector.Multiply(_mathSharpScale, Vector.Subtract(Vector.SingleConstants.AllBitsSet, _mathSharpAmount));
+            Vector128<float> deltaT = Vector.Multiply(_mathSharpScale, Vector.Subtract(Vector.SingleConstants.One, _mathSharpAmount));
             deltaT = Vector.Multiply(deltaT, _mathSharpAnchor);
             HwVector2S result = Vector.Multiply((Vector.Add(_mathSharpTranslation, deltaT)), newScale);
 
@@ -69,7 +69,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         public void MathSharp_Wrappers()
         {
             HwVector2S newScale = _mathSharpScale_Wrapper * _mathSharpAmount_Wrapper;
-            HwVector2S deltaT = _mathSharpScale_Wrapper * (Vector.SingleConstants.AllBitsSet - _mathSharpAmount_Wrapper);
+            HwVector2S deltaT = _mathSharpScale_Wrapper * (Vector.SingleConstants.One - _mathSharpAmount_Wrapper);
             deltaT *= _mathSharpAnchor_Wrapper;
             ((_mathSharpTranslation_Wrapper + deltaT) * newScale).Store(out _result);
         }
@@ -106,6 +106,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Store_Software(this HwVector2S hwVector, out Vector2 vector)
         {
+            // JIT naturally uses SSE to store here so we are good :yay:
             vector = Unsafe.As<HwVector2S, Vector2>(ref hwVector);
         }
 

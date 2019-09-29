@@ -26,12 +26,6 @@ namespace MathSharp
             return Load2D(&vector.X);
         }
 
-        [MethodImpl(MaxOpt)]
-        public static HwVector4S Load(this Vector3 vector, float scalarW)
-        {
-            return Load3D(&vector.X, scalarW);
-        }
-
         public static void Store(this HwVector4S vector, out Vector4 destination)
         {
             fixed (void* p = &destination)

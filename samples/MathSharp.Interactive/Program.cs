@@ -7,6 +7,7 @@ using System.Runtime.Intrinsics.X86;
 using System.Xml;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using MathSharp.Interactive.Benchmarks.MatrixTests.Single;
 using MathSharp.Interactive.Benchmarks.Vector.Single;
 using MathSharp.Utils;
 
@@ -14,9 +15,9 @@ namespace MathSharp.Interactive
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
-            Console.WriteLine(IntrinsicSupport.SupportSummary);
+            BenchmarkRunner.Run<MatrixIsIdentityBenchmark>();
         }
 
         private static readonly Vector3 Direction = new Vector3(1, 2, 3);
@@ -27,7 +28,7 @@ namespace MathSharp.Interactive
             var dir = Direction.Load();
             var offset = Offset.Load();
 
-            return dir * offset;
+            return dir * offset + 1;
         }
     }
 }

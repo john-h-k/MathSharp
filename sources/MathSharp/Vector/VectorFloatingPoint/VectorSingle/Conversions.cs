@@ -14,7 +14,7 @@ namespace MathSharp
     public static unsafe partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static byte ExtractMask(Vector4F vector)
+        public static byte MoveMask(Vector4F vector)
         {
             if (Sse.IsSupported)
             {
@@ -45,24 +45,13 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static HwVector4S Load4DAligned(float* p)
-        {
-            if (Sse.IsSupported)
-            {
-                return Sse.LoadAlignedVector128(p);
-            }
-
-            return SoftwareFallback(p);
-
-            static HwVectorAnyS SoftwareFallback(float* p)
-            {
-                ThrowHelper.ThrowForUnaligned16BPointer(p, "Pointer not 16 byte aligned");
-
-                return Vector128.Create(p[0], p[1], p[2], p[3]);
-            }
-        }
-
-        public static HwVector3S Load3DAligned(float* p) => (HwVector3S)Load4DAligned(p);
-        public static HwVector2S Load2DAligned(float* p) => (HwVector2S)Load4DAligned(p);
+            => Load4D(p);
+        [MethodImpl(MaxOpt)]
+        public static HwVector3S Load3DAligned(float* p)
+            => (HwVector3S)Load4DAligned(p);
+        [MethodImpl(MaxOpt)]
+        public static HwVector2S Load2DAligned(float* p) 
+            => (HwVector2S)Load4DAligned(p);
 
 
         [MethodImpl(MaxOpt)]
@@ -88,18 +77,9 @@ namespace MathSharp
             {
                 // Construct 3 separate vectors, each with the first element being the value
                 // and the rest being undefined (shown as ?)
-                Vector4F lo = Sse.LoadScalarVector128(&p[0]);
-                Vector4F mid = Sse.LoadScalarVector128(&p[1]);
                 Vector4F hi = Sse.LoadScalarVector128(&p[2]);
-                hi = Vector.ZeroW(hi);
-
-                // Construct a vector of (lo, mid, ?, ?)
-                Vector4F loMid = Sse.UnpackLow(lo, mid);
-
-                // Given the hi vector is zeroed (because of the ZeroW), the first two elements are (hi, 0)
-                // Move these 2 values to the last 2 elements of the loMid vector
-                // This results in (lo, mid, hi, 0), the desired vector
-                return Sse.MoveLowToHigh(loMid, hi);
+                hi = And(hi, MaskYSingle);
+                return Sse.LoadLow(hi, p);
             }
 
             return SoftwareFallback(p);
@@ -111,47 +91,19 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVector4S Load3D(float* p, float w)
-        {
-            if (Sse.IsSupported)
-            {
-                // Construct 3 separate vectors, each with the first element being the value
-                // and the rest being undefined (shown as ?)
-                Vector4F lo = Sse.LoadScalarVector128(&p[0]);
-                Vector4F mid = Sse.LoadScalarVector128(&p[1]);
-                Vector4F hi = Sse.LoadScalarVector128(&p[2]);
-                Vector4F wVec = Vector128.CreateScalarUnsafe(w);
-
-                // Construct a vector of (lo, mid, ?, ?)
-                lo = Sse.UnpackLow(lo, mid);
-                hi = Sse.UnpackLow(hi, wVec);
-
-                // Given the hi vector is zeroed (because of the ZeroW), the first two elements are (hi, 0)
-                // Move these 2 values to the last 2 elements of the loMid vector
-                // This results in (lo, mid, hi, 0), the desired vector
-                return Sse.MoveLowToHigh(lo, hi);
-            }
-
-            return SoftwareFallback(p, w);
-
-            static HwVectorAnyS SoftwareFallback(float* p, float w)
-            {
-                return Vector128.Create(p[0], p[1], p[2], w);
-            }
-        }
-
-        [MethodImpl(MaxOpt)]
         public static HwVector2S Load2D(float* p)
         {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.LoadScalarVector128((double*)p).AsSingle();
+            }
             if (Sse.IsSupported)
             {
                 // Construct 2 separate vectors, each having the first element being the value
-                // and the rest being 0
-                Vector4F lo = Sse.LoadScalarVector128(&p[0]);
-                Vector4F hi = Sse.LoadScalarVector128(&p[1]);
+                // and the rest being undefined
+                Vector4F upper = SingleConstants.Zero;
 
-                // Unpack these to (lo, mid, 0, 0), the desired vector
-                return Sse.UnpackLow(lo, hi);
+                return Sse.LoadLow(upper, p);
             }
 
             return SoftwareFallback(p);
@@ -179,26 +131,7 @@ namespace MathSharp
         #region Stores
 
         public static void Store4DAligned(this HwVector4S vector, float* destination)
-        {
-            if (Sse.IsSupported)
-            {
-                Sse.StoreAligned(destination, vector);
-
-                return;
-            }
-
-            SoftwareFallback(vector, destination);
-
-            static void SoftwareFallback(Vector128<float> vector, float* destination)
-            {
-                ThrowHelper.ThrowForUnaligned16BPointer(destination, "Pointer not 16 byte aligned");
-
-                destination[0] = X(vector);
-                destination[1] = Y(vector);
-                destination[2] = Z(vector);
-                destination[3] = W(vector);
-            }
-        }
+            => Store4D(vector, destination);
 
         public static void Store3DAligned(this HwVector3S vector, float* destination)
             => Store4DAligned((HwVector4S)vector, destination);

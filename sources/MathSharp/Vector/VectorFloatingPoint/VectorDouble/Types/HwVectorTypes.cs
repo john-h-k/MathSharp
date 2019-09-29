@@ -8,7 +8,7 @@ namespace MathSharp
 {
     // Used for overload resolution. All conversions are nops and the codegen around them is good
 
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVectorAnyD
     {
         public readonly Vector256<double> Value;
@@ -25,7 +25,7 @@ namespace MathSharp
         public static implicit operator HwVectorAnyD(Vector256<double> vector) => new HwVectorAnyD(vector);
     }
 
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVector2D
     {
         public readonly Vector256<double> Value;
@@ -95,7 +95,7 @@ namespace MathSharp
         [MethodImpl(AggressiveInlining)]
         public static HwVector2D operator ~(HwVector2D vector) => Vector.Not(vector);
     }
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVector3D
     {
         public readonly Vector256<double> Value;
@@ -165,7 +165,7 @@ namespace MathSharp
         [MethodImpl(AggressiveInlining)]
         public static HwVector3D operator ~(HwVector3D vector) => Vector.Not(vector);
     }
-    [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
+    [DebuggerDisplay("{" + nameof(DebuggerString) + ",nq}")]
     public readonly struct HwVector4D
     {
         public readonly Vector256<double> Value;

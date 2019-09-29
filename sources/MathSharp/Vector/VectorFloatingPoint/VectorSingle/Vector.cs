@@ -52,6 +52,7 @@ namespace MathSharp
         {
             public static Vector256<double> Zero => Vector256<double>.Zero;
             public static Vector256<double> One => Vector256.Create(1d);
+            public static Vector128<double> MaskZ128 = Vector128.Create(int.MinValue, 0).AsDouble();
 
             // Uses the 'ones idiom', which is where
             // cmpeq xmmN, xmmN
@@ -69,6 +70,24 @@ namespace MathSharp
                     return Equality(v, v);
                 }
             }
+
+            public static readonly Vector256<double> SignFlip2D = Vector256.Create(long.MinValue, long.MinValue, 0, 0).AsDouble();
+            public static readonly Vector256<double> SignFlip3D = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, 0).AsDouble();
+            public static readonly Vector256<double> SignFlip4D = Vector256.Create(long.MinValue, long.MinValue, long.MinValue, long.MinValue).AsDouble();
+
+            public static readonly Vector256<double> MaskW = Vector256.Create(-1, -1, -1, 0).AsDouble();
+            public static readonly Vector256<double> MaskXYZ = Vector256.Create(0, 0, 0, -1).AsDouble();
+
+
+            public static readonly Vector256<double> UnitX = Vector256.Create(1d, 0d, 0d, 0d);
+            public static readonly Vector256<double> UnitY = Vector256.Create(0d, 1d, 0d, 0d);
+            public static readonly Vector256<double> UnitZ = Vector256.Create(0d, 0d, 1d, 0d);
+            public static readonly Vector256<double> UnitW = Vector256.Create(0d, 0d, 0d, 1d);
+
+            public static readonly HwVectorAnyD OneDiv2Pi = Vector256.Create(ScalarDoubleConstants.OneDiv2Pi);
+            public static readonly HwVectorAnyD Pi2 = Vector256.Create(ScalarDoubleConstants.Pi2);
+            public static readonly HwVectorAnyD Pi = Vector256.Create(ScalarDoubleConstants.Pi);
+            public static readonly HwVectorAnyD PiDiv2 = Vector256.Create(ScalarDoubleConstants.PiDiv2);
         }
     }
 }

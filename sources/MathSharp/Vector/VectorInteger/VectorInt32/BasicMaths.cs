@@ -13,19 +13,10 @@ namespace MathSharp
     {
         #region Vector
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 Abs(in Vector4Int32Param1_3 vector)
-        {
-            if (Sse41.IsSupported)
-            {
-                Vector4Int32 zero = Vector4Int32.Zero;
-                zero = Sse2.Subtract(zero, vector); // This gets the inverted results of all elements
-                return Sse41.Max(zero, vector); // This selects the positive values of the 2 vectors
-            }
-
-            return Abs_Software(vector);
-        }
+            => Max(vector, Subtract(Vector4Int32Param1_3.Zero, vector));
 
         
         [MethodImpl(MaxOpt)]
@@ -53,18 +44,10 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-        
+
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 Add(in Vector4Int32Param1_3 vector, int scalar)
-        {
-            if (Sse2.IsSupported)
-            {
-                Vector4Int32 expand = Vector128.Create(scalar);
-                return Sse2.Add(vector, expand);
-            }
-
-            return Add_Software(vector, scalar);
-        }
+            => Add(vector, Vector128.Create(scalar));
 
         
         [MethodImpl(MaxOpt)]
@@ -125,54 +108,10 @@ namespace MathSharp
             return Multiply_Software(left, scalar);
         }
 
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(in Vector4Int32Param1_3 dividend, in Vector4Int32Param1_3 divisor)
-        {
-            //if (Sse2.IsSupported)
-            //{
-            //    return Ssse3.Divide(dividend, divisor);
-            //}
-
-            return Divide_Software(dividend, divisor);
-        }
-
         
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide(in Vector4Int32Param1_3 dividend, int scalarDivisor)
-        {
-            //if (Sse.IsSupported)
-            //{
-            //    Vector4Int expand = Vector128.Create(scalarDivisor);
-            //    return Sse.Divide(dividend, expand);
-            //}
-
-            return Divide_Software(dividend, scalarDivisor);
-        }
-
-        
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Clamp(in Vector4Int32Param1_3 vector, in Vector4Int32Param1_3 low, in Vector4Int32Param1_3 high)
-        {
-            if (Sse41.IsSupported)
-            {
-                Vector4Int32 temp = Sse41.Min(vector, high);
-                return Sse41.Max(temp, low);
-            }
-
-            return Clamp_Software(vector, low, high);
-        }
-
-        
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Sqrt(in Vector4Int32Param1_3 vector)
-        {
-            //if (Sse.IsSupported)
-            //{
-            //    return Sse42.Sqrt(vector);
-            //}
-
-            return Sqrt_Software(vector);
-        }
+        public static Vector4Int32 Clamp(in Vector4Int32Param1_3 vector, in Vector4Int32Param1_3 low, in Vector4Int32Param1_3 high) 
+            => Max(Min(vector, high), low);
 
         // Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded, and also with +0/-0, where with MathF/Math, +0 is returned over -0,
         // - here, the second op is returned irrelevant of value if both are +0/-0
@@ -200,42 +139,6 @@ namespace MathSharp
             }
 
             return Min_Software(left, right);
-        }
-
-        
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate2D(in Vector4Int32Param1_3 vector)
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.Xor(vector, SingleConstants.SignFlip2D.AsInt32());
-            }
-
-            return Negate4D_Software(vector);
-        }
-
-        
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate3D(in Vector4Int32Param1_3 vector)
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.Xor(vector, SingleConstants.SignFlip3D.AsInt32());
-            }
-
-            return Negate4D_Software(vector);
-        }
-
-        
-        [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate4D(in Vector4Int32Param1_3 vector)
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.Xor(vector, SingleConstants.SignFlip4D.AsInt32());
-            }
-
-            return Negate4D_Software(vector);
         }
 
         #endregion

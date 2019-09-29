@@ -38,6 +38,25 @@ namespace MathSharp
             return Vector128.Create(e0, e1, e2, e3);
         }
 
+        public static HwVectorAnyD Shuffle_Software(in Vector256<double> left, in Vector256<double> right, byte control)
+        {
+            const byte e0Mask = 0b_0000_0011, e1Mask = 0b_0000_1100, e2Mask = 0b_0011_0000, e3Mask = 0b_1100_0000;
+
+            int e0Selector = control & e0Mask;
+            double e0 = left.GetElement(e0Selector);
+
+            int e1Selector = (control & e1Mask) >> 2;
+            double e1 = left.GetElement(e1Selector);
+
+            int e2Selector = (control & e2Mask) >> 4;
+            double e2 = right.GetElement(e2Selector);
+
+            int e3Selector = (control & e3Mask) >> 6;
+            double e3 = right.GetElement(e3Selector);
+
+            return Vector256.Create(e0, e1, e2, e3);
+        }
+
         [MethodImpl(MaxOpt)]
         public static Vector2UInt64 Or_Software(in Vector2UInt64Param1_3 left, in Vector2UInt64Param1_3 right)
         {

@@ -87,6 +87,19 @@ public readonly struct {TYPE}
     public static {TYPE} operator ^({TYPE} left, {TYPE_SCALAR} right) => Vector.Xor(left, right);
     [MethodImpl(AggressiveInlining)]
     public static {TYPE} operator ~({TYPE} vector) => Vector.Not(vector);
+
+    [MethodImpl(AggressiveInlining)]
+    public static {TYPE} operator ==({TYPE} left, {TYPE} right) => Vector.Equality(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static {TYPE} operator !=({TYPE} left, {TYPE} right) => Vector.Inequality(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static {TYPE} operator <({TYPE} left, {TYPE} right) => Vector.LessThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static {TYPE} operator >({TYPE} left, {TYPE} right) => Vector.GreaterThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static {TYPE} operator <=({TYPE} left, {TYPE} right) => Vector.LessThanOrEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static {TYPE} operator >=({TYPE} left, {TYPE} right) => Vector.GreaterThanOrEqual(left, right);
 }}"""
 
 
