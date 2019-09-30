@@ -12,74 +12,74 @@ namespace MathSharp
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static Vector4D Equality(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D CompareEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             if (Avx.IsSupported)
             {
                 return Avx.Compare(left, right, FloatComparisonMode.OrderedEqualNonSignaling);
             }
 
-            return Equality_Software(left, right);
+            return CompareEqual_Software(left, right);
         }
         
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D Inequality(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D CompareNotEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             if (Avx.IsSupported)
             {
                 return Avx.Compare(left, right, FloatComparisonMode.UnorderedNotEqualNonSignaling);
             }
 
-            return Inequality_Software(left, right);
+            return CompareNotEqual_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D GreaterThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D CompareGreaterThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             if (Avx.IsSupported)
             {
                 return Avx.Compare(left, right, FloatComparisonMode.UnorderedNotLessThanOrEqualNonSignaling);
             }
 
-            return GreaterThan_Software(left, right);
+            return CompareGreaterThan_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D LessThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D CompareLessThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             if (Avx.IsSupported)
             {
                 return Avx.Compare(left, right, FloatComparisonMode.OrderedLessThanSignaling);
             }
 
-            return LessThan_Software(left, right);
+            return CompareLessThan_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D GreaterThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D CompareGreaterThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             if (Avx.IsSupported)
             {
                 return Avx.Compare(left, right, FloatComparisonMode.UnorderedNotLessThanSignaling);
             }
 
-            return GreaterThanOrEqual_Software(left, right);
+            return CompareGreaterThanOrEqual_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D LessThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector4D CompareLessThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
             if (Avx.IsSupported)
             {
                 return Avx.Compare(left, right, FloatComparisonMode.OrderedLessThanOrEqualSignaling);
             }
 
-            return LessThanOrEqual_Software(left, right);
+            return CompareLessThanOrEqual_Software(left, right);
         }
     }
 }

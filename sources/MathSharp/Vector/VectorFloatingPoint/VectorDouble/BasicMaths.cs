@@ -209,7 +209,7 @@ namespace MathSharp
 
             var neg = Subtract(tmp, vec);
 
-            var comp = LessThanOrEqual(abs, DoubleConstants.PiDiv2);
+            var comp = CompareLessThanOrEqual(abs, DoubleConstants.PiDiv2);
 
             var select0 = And(comp, vec);
             var select1 = AndNot(comp, neg);

@@ -24,33 +24,10 @@ namespace MathSharp
 
         public static bool IsIdentity(MatrixSingle matrix)
         {
-            var row0 = Vector.Equality(matrix._v0, IdentityRow0);
-            var row1 = Vector.Equality(matrix._v1, IdentityRow1);
-            var row2 = Vector.Equality(matrix._v2, IdentityRow2);
-            var row3 = Vector.Equality(matrix._v3, IdentityRow3);
-
-            row0 = Vector.And(row0, row1);
-            row2 = Vector.And(row2, row3);
-            row0 = Vector.And(row0, row2);
-
-            return Vector.MoveMask(row0) == 0b_0000_1111;
-        }
-
-        public static bool IsIdentity_CreateLocal_2(MatrixSingle matrix)
-        {
-            var identityRow0 = Vector128.CreateScalar(1f);
-            var identityRow1 = Vector4F.Zero;
-            var identityRow2 = Vector4F.Zero;
-            var identityRow3 = Vector4F.Zero;
-
-            identityRow1 = Sse41.Insert(identityRow1, identityRow0, 0x10);
-            identityRow2 = Sse41.Insert(identityRow2, identityRow0, 0x20);
-            identityRow3 = Sse41.Insert(identityRow3, identityRow0, 0x30);
-
-            var row0 = Vector.Equality(matrix._v0, identityRow0);
-            var row1 = Vector.Equality(matrix._v1, identityRow1);
-            var row2 = Vector.Equality(matrix._v2, identityRow2);
-            var row3 = Vector.Equality(matrix._v3, identityRow3);
+            var row0 = Vector.CompareEqual(matrix._v0, IdentityRow0);
+            var row1 = Vector.CompareEqual(matrix._v1, IdentityRow1);
+            var row2 = Vector.CompareEqual(matrix._v2, IdentityRow2);
+            var row3 = Vector.CompareEqual(matrix._v3, IdentityRow3);
 
             row0 = Vector.And(row0, row1);
             row2 = Vector.And(row2, row3);
@@ -92,7 +69,7 @@ namespace MathSharp
 
             Vector4F norm = Vector.LengthSquared3D(z);
 
-            z = Vector.MoveMask(Vector.LessThan(norm, BillboardEpsilon)) != 0 ? 
+            z = Vector.MoveMask(Vector.CompareLessThan(norm, BillboardEpsilon)) != 0 ? 
                 Vector.Negate3D(cameraForwardVector) 
                 : Vector.Multiply(z, Vector.Divide(Vector.SingleConstants.AllBitsSet, Vector.Sqrt(norm)));
 

@@ -40,7 +40,7 @@ namespace MathSharp
             get
             {
                 Vector256<double> v = ZeroDouble;
-                return Equality(v, v);
+                return CompareEqual(v, v);
             }
         }
 

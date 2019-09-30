@@ -9,8 +9,17 @@ namespace MathSharp
     {
         public static class SingleConstants
         {
-            public static Vector128<float> Zero => Vector128<float>.Zero;
-            public static Vector128<float> One => Vector128.Create(1f);
+            public static Vector128<float> Zero
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector128<float>.Zero;
+            }
+
+            public static Vector128<float> One
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector128.Create(1f);
+            }
 
             // Uses the 'ones idiom', which is where
             // cmpeq xmmN, xmmN
@@ -25,7 +34,7 @@ namespace MathSharp
                 get
                 {
                     Vector128<float> v = Zero;
-                    return Equality(v, v);
+                    return CompareEqual(v, v);
                 }
             }
 
@@ -35,7 +44,6 @@ namespace MathSharp
 
             public static readonly Vector128<float> MaskW = Vector128.Create(-1, -1, -1, 0).AsSingle();
             public static readonly Vector128<float> MaskXYZ = Vector128.Create(0, 0, 0, -1).AsSingle();
-
 
             public static readonly Vector128<float> UnitX = Vector128.Create(1f, 0f, 0f, 0f);
             public static readonly Vector128<float> UnitY = Vector128.Create(0f, 1f, 0f, 0f);
@@ -67,7 +75,7 @@ namespace MathSharp
                 get
                 {
                     Vector256<double> v = Zero;
-                    return Equality(v, v);
+                    return CompareEqual(v, v);
                 }
             }
 

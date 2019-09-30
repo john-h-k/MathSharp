@@ -151,7 +151,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static HwVectorAnyS Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
         {
-            Debug.Assert(MoveMask(LessThan(low, high)) != 0, "Min (low) argument for clamp is less than max (high)", nameof(low));
+            Debug.Assert(MoveMask(CompareLessThan(low, high)) != 0, "Min (low) argument for clamp is less than max (high)", nameof(low));
 
             return Max(Min(vector, high), low);
         }
@@ -234,7 +234,7 @@ namespace MathSharp
 
             HwVectorAnyS neg = Subtract(tmp, vec);
 
-            HwVectorAnyS comp = LessThanOrEqual(abs, SingleConstants.PiDiv2);
+            HwVectorAnyS comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
             HwVectorAnyS select0 = And(comp, vec);
             HwVectorAnyS select1 = AndNot(comp, neg);
@@ -335,6 +335,27 @@ namespace MathSharp
                     MathF.Truncate(Y(vector)),
                     MathF.Truncate(Z(vector)),
                     MathF.Truncate(W(vector))
+                );
+            }
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static HwVectorAnyS Floor(Vector4FParam1_3 vector)
+        {
+            if (Sse41.IsSupported)
+            {
+                return Sse41.Floor(vector);
+            }
+
+            return SoftwareFallback(vector);
+
+            static HwVectorAnyS SoftwareFallback(Vector4FParam1_3 vector)
+            {
+                return Vector128.Create(
+                    MathF.Floor(X(vector)),
+                    MathF.Floor(Y(vector)),
+                    MathF.Floor(Z(vector)),
+                    MathF.Floor(W(vector))
                 );
             }
         }
