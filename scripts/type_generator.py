@@ -4,13 +4,11 @@ public readonly struct {TYPE}
 {{
     public readonly {TYPE_UNDERLYING} Value;
 
-    internal string DebuggerString => Value.ToString();
-    public override string ToString() => DebuggerString;
+    internal string DebuggerString => ToString();
+    public override string ToString() => Value.ToString();
 
     public {TYPE}({TYPE_UNDERLYING} value)
-    {{
-        Value = value;
-    }}
+        => Value = value;
 
     public static implicit operator {TYPE_UNDERLYING}({TYPE} vector) => vector.Value;
     public static implicit operator {TYPE}({TYPE_UNDERLYING} vector) => new {TYPE}(vector);
@@ -18,9 +16,9 @@ public readonly struct {TYPE}
 """
 
 scalar_variant_template = """    [MethodImpl(AggressiveInlining)]
-    public static {TYPE} operator {OPERATOR}({TYPE} left, {TYPE_SCALAR} right) => Vector.Add(left, {TYPE_UNDERLYING_CREATOR}.Create(right));
+    public static {TYPE} operator {OPERATOR}({TYPE} left, {TYPE_SCALAR} right) => {METHOD}(left, {TYPE_UNDERLYING_CREATOR}.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static {TYPE} operator {OPERATOR}({TYPE_SCALAR} left, {TYPE} right) => Vector.Add({TYPE_UNDERLYING_CREATOR}.Create(left), right);
+    public static {TYPE} operator {OPERATOR}({TYPE_SCALAR} left, {TYPE} right) => {METHOD}({TYPE_UNDERLYING_CREATOR}.Create(left), right);
 """
 
 template = """
@@ -29,20 +27,24 @@ public readonly struct {TYPE} : IEquatable<{TYPE}>
 {{
     public readonly {TYPE_UNDERLYING} Value;
     
-    internal string DebuggerString => $"{DEBUG_STRING}";
-    public override string ToString() => DebuggerString;
+    internal string DebuggerString => ToString();
+    public override string ToString() => $"{TO_STRING}";
 
     [MethodImpl(AggressiveInlining)]
     public {TYPE}({TYPE_UNDERLYING} value)
-    {{
-        Value = value;
-    }}
-
+        => Value = value;
+    
+    [MethodImpl(AggressiveInlining)]
     public bool AllTrue() => Vector.AllTrue(this);
+    [MethodImpl(AggressiveInlining)]
     public bool AllFalse() => Vector.AllFalse(this);
+    [MethodImpl(AggressiveInlining)]
     public bool AnyTrue() => Vector.AnyTrue(this);
+    [MethodImpl(AggressiveInlining)]
     public bool AnyFalse() => Vector.AnyFalse(this);
+    [MethodImpl(AggressiveInlining)]
     public bool ElementTrue(int index) => Vector.ElementTrue(this, index);
+    [MethodImpl(AggressiveInlining)]
     public bool ElementFalse(int index) => Vector.ElementFalse(this, index);
 
     public override bool Equals(object? obj)
@@ -53,6 +55,9 @@ public readonly struct {TYPE} : IEquatable<{TYPE}>
 
     public bool Equals({TYPE} obj)
         => (this == obj).AllTrue();
+
+    public static bool Equals({TYPE} left, {TYPE} right)
+        => left.Equals(right);
 
     [MethodImpl(AggressiveInlining)]
     public static implicit operator {TYPE_UNDERLYING}({TYPE} vector) => vector.Value;
@@ -137,7 +142,7 @@ def format_type(_type):
     _type_other_dimension_2 = _type[:-2] + _other_dims[1] + _type[-1]
     _constants = "SingleConstants" if _type[-1] == "S" else "DoubleConstants"
 
-    _debug_string = "<" + (", ".join(["{{Value.GetElement({0})}}".format(i) for i in range(int(_type_dim))])) + ">"
+    _to_string = "<" + (", ".join(["{{Value.GetElement({0})}}".format(i) for i in range(int(_type_dim))])) + ">"
 
     new = ""
     for line in template.split("\n"):
@@ -148,13 +153,18 @@ def format_type(_type):
             operator_ind = line.index("operator ") + len("operator ")
             end_ind = line.index("(")
             operator = line[operator_ind:end_ind]
+
+            method_ind = line.index("=> ") + len("=> ")
+            end_ind = line[method_ind:].index("(") + method_ind
+            method = line[method_ind:end_ind]
             
             new += line
             new += "\n"
             new += scalar_variant_template.format(TYPE=_type, 
                                                   TYPE_SCALAR=_type_scalar, 
                                                   TYPE_UNDERLYING_CREATOR=_type_underlying_creator,
-                                                  OPERATOR=operator)
+                                                  OPERATOR=operator,
+                                                  METHOD=method)
         else:
             new += line + "\n"
     
@@ -165,7 +175,7 @@ def format_type(_type):
                            TYPE_OTHER_DIMENSION_1=_type_other_dimension_1,
                            TYPE_OTHER_DIMENSION_2=_type_other_dimension_2,
                            CONSTANTS=_constants,
-                           DEBUG_STRING=_debug_string)
+                           TO_STRING=_to_string)
 
 def format_any_type(_type):
     return any_type_template.format(TYPE=_type, TYPE_UNDERLYING="Vector128<float>" if _type[-1] == "S" else "Vector256<double>")
