@@ -43,7 +43,9 @@ namespace MathSharp
             public static readonly Vector128<float> SignFlip4D = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
 
             public static readonly Vector128<float> MaskW = Vector128.Create(-1, -1, -1, 0).AsSingle();
+            public static readonly Vector128<float> MaskY = Vector128.Create(-1, 0, -1, -1).AsSingle();
             public static readonly Vector128<float> MaskXYZ = Vector128.Create(0, 0, 0, -1).AsSingle();
+            public static readonly Vector128<float> MaskZW = Vector128.Create(-1, -1, 0, 0).AsSingle();
 
             public static readonly Vector128<float> UnitX = Vector128.Create(1f, 0f, 0f, 0f);
             public static readonly Vector128<float> UnitY = Vector128.Create(0f, 1f, 0f, 0f);
