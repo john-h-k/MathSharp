@@ -73,6 +73,8 @@ function Restore() {
 
 function Test() {
   $logFile = Join-Path -Path $LogDir -ChildPath "$configuration\test.binlog"
+  $testPath = Join-Path -Path $RepoRoot -ChildPath "tests"
+  $testPath = Join-Path -Path $testPath -ChildPath "MathSharp.UnitTests"
   & dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$solution"
 
   if ($LastExitCode -ne 0) {

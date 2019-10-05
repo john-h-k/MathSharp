@@ -1,0 +1,62 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "**.csproj"
+          ],
+          "src": "C:\\Users\\johnk\\source\\repos\\MathSharp\\sources\\MathSharp"
+        }
+      ],
+      "dest": "../../docs/api",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "../../docs/api/**.yml",
+          "../../docs/api/index.md"
+        ]
+      },
+      {
+        "files": [
+          "../../docs/articles/**.md",
+          "../../docs/articles/**/toc.yml",
+          "toc.yml",
+          "../../docs/*.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "apidoc/**.md"
+        ],
+        "exclude": [
+          "obj/**"
+        ]
+      }
+    ],
+    "dest": "../../docs",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": [ "default", "templates/material" ],
+    "postProcessors": [],
+    "markdownEngineName": "markdig",
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": false,
+    "disableGitFeatures": false
+  }
+}
