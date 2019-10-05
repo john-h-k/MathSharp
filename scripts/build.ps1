@@ -7,7 +7,7 @@ Param(
   [switch] $help,
   [switch] $pack,
   [switch] $restore,
-  [string] $solution = "",
+  [string] $libraryproj = "",
   [switch] $test,
   [ValidateSet("quiet", "minimal", "normal", "detailed", "diagnostic")][string] $verbosity = "minimal",
   [Parameter(ValueFromRemainingArguments=$true)][String[]]$properties
@@ -19,10 +19,10 @@ $ErrorActionPreference = "Stop"
 
 function Build() {
   $logFile = Join-Path -Path $LogDir -ChildPath "$configuration\build.binlog"
-  & dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$solution"
+  & dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$libraryproj"
 
   if ($LastExitCode -ne 0) {
-    throw "'Build' failed for '$solution'"
+    throw "'Build' failed for '$libraryproj'"
   }
 }
 
@@ -55,30 +55,28 @@ function Help() {
 
 function Pack() {
   $logFile = Join-Path -Path $LogDir -ChildPath "$configuration\pack.binlog"
-  & dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$pack"
+  & dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$libraryproj"
 
   if ($LastExitCode -ne 0) {
-    throw "'Pack' failed for '$pack'"
+    throw "'Pack' failed for '$libraryproj'"
   }
 }
 
 function Restore() {
   $logFile = Join-Path -Path $LogDir -ChildPath "$configuration\restore.binlog"
-  & dotnet restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$solution"
+  & dotnet restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$libraryproj"
 
   if ($LastExitCode -ne 0) {
-    throw "'Restore' failed for '$solution'"
+    throw "'Restore' failed for '$libraryproj'"
   }
 }
 
 function Test() {
   $logFile = Join-Path -Path $LogDir -ChildPath "$configuration\test.binlog"
-  $testPath = Join-Path -Path $RepoRoot -ChildPath "tests"
-  $testPath = Join-Path -Path $testPath -ChildPath "MathSharp.UnitTests"
-  & dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$solution"
+  & dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$testproj"
 
   if ($LastExitCode -ne 0) {
-    throw "'Test' failed for '$solution'"
+    throw "'Test' failed for '$testproj'"
   }
 }
 
@@ -101,13 +99,11 @@ try {
 
   $RepoRoot = Join-Path -Path $PSScriptRoot -ChildPath ".."
 
-  if ($solution -eq "") {
-    $solution = Join-Path -Path $RepoRoot -ChildPath "MathSharp.sln"
+  if ($libraryproj -eq "") {
+    $libraryproj = [IO.Path]::Combine($RepoRoot, "sources", "MathSharp", "MathSharp.csproj")
   }
 
-  $pack = Join-Path -Path $RepoRoot -ChildPath "sources" 
-  $pack = Join-Path -Path $pack -ChildPath "MathSharp"
-  $pack = Join-Path -Path $pack -ChildPath "MathSharp.csproj"
+  $testproj = [IO.Path]::Combine($RepoRoot, "tests", "MathSharp.UnitTests", "MathSharp.UnitTests.csproj")
 
   $ArtifactsDir = Join-Path -Path $RepoRoot -ChildPath "artifacts"
   Create-Directory -Path $ArtifactsDir
