@@ -15,7 +15,8 @@ configuration='Debug'
 help=false
 pack=false
 restore=false
-solution=''
+libraryproj=''
+testproj=''
 test=false
 verbosity='minimal'
 properties=''
@@ -51,8 +52,8 @@ while [[ $# -gt 0 ]]; do
       restore=true
       shift 1
       ;;
-    --solution)
-      solution=$2
+    --libraryproj)
+      libraryproj=$2
       shift 2
       ;;
     --test)
@@ -74,15 +75,15 @@ function Build {
   logFile="$LogDir/$configuration/build.binlog"
 
   if [[ -z "$properties" ]]; then
-    dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "$solution"
+    dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$solution"
+    dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$libraryproj"
   fi
 
   LASTEXITCODE=$?
 
   if [ "$LASTEXITCODE" != 0 ]; then
-    echo "'Build' failed for '$solution'"
+    echo "'Build' failed for '$libraryproj'"
     return "$LASTEXITCODE"
   fi
 }
@@ -118,15 +119,15 @@ function Pack {
   logFile="$LogDir/$configuration/pack.binlog"
 
   if [[ -z "$properties" ]]; then
-    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$solution"
+    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$solution"
+    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$libraryproj"
   fi
 
   LASTEXITCODE=$?
 
   if [ "$LASTEXITCODE" != 0 ]; then
-    echo "'Build' failed for '$solution'"
+    echo "'Build' failed for '$libraryproj'"
     return "$LASTEXITCODE"
   fi
 }
@@ -135,15 +136,15 @@ function Restore {
   logFile="$LogDir/$configuration/restore.binlog"
 
   if [[ -z "$properties" ]]; then
-    dotnet restore -v "$verbosity" /bl:"$logFile" /err "$solution"
+    dotnet restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$solution"
+    dotnet restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$libraryproj"
   fi
 
   LASTEXITCODE=$?
 
   if [ "$LASTEXITCODE" != 0 ]; then
-    echo "'Restore' failed for '$solution'"
+    echo "'Restore' failed for '$libraryproj'"
     return "$LASTEXITCODE"
   fi
 }
@@ -152,15 +153,15 @@ function Test {
   logFile="$LogDir/$configuration/test.binlog"
 
   if [[ -z "$properties" ]]; then
-    dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$solution"
+    dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$testproj"
   else
-    dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$solution"
+    dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$testproj"
   fi
 
   LASTEXITCODE=$?
 
   if [ "$LASTEXITCODE" != 0 ]; then
-    echo "'Test' failed for '$solution'"
+    echo "'Test' failed for '$testproj'"
     return "$LASTEXITCODE"
   fi
 }
@@ -183,9 +184,11 @@ fi
 
 RepoRoot="$ScriptRoot/.."
 
-if [[ -z "$solution" ]]; then
-  solution="$RepoRoot/MathSharp.sln"
+if [[ -z "$libraryproj" ]]; then
+  libraryproj="$RepoRoot/sources/MathSharp/MathSharp.csproj"
 fi
+
+testproj = "$RepoRoot/tests/MathSharp.UnitTests/MathSharp.UnitTests.csproj"
 
 ArtifactsDir="$RepoRoot/artifacts"
 CreateDirectory "$ArtifactsDir"
