@@ -33,7 +33,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.ComparisonTests
         [MemberData(nameof(Data))]
         public static void GreaterThan_Theory(Vector128<float> left, Vector128<float> right, bool[] expected)
         {
-            Vector128<int> result1 = Vector.CompareGreaterThan(left, right).Value.AsInt32();
+            Vector128<int> result1 = Vector.CompareGreaterThan(left, right).AsInt32();
 
             Assert.True(AreAllEqual(expected, result1));
         }

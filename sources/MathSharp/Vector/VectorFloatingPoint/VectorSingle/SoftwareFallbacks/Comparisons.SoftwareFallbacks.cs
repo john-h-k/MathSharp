@@ -9,10 +9,10 @@ namespace MathSharp
     using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
-    public static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacks
     {
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
                Helpers.BoolToSimdBoolSingle(Helpers.X(left) == Helpers.X(right)),
@@ -23,7 +23,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareNotEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareNotEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolSingle(Helpers.X(left) != Helpers.X(right)),
@@ -34,7 +34,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareGreaterThan_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareGreaterThan_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolSingle(Helpers.X(left) > Helpers.X(right)),
@@ -45,7 +45,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareLessThan_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareLessThan_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolSingle(Helpers.X(left) < Helpers.X(right)),
@@ -56,7 +56,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareGreaterThanOrEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareGreaterThanOrEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolSingle(Helpers.X(left) >= Helpers.X(right)),
@@ -67,7 +67,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareLessThanOrEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareLessThanOrEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             return Vector128.Create(
                 Helpers.BoolToSimdBoolSingle(Helpers.X(left) <= Helpers.X(right)),

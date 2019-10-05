@@ -1,4 +1,6 @@
-﻿namespace MathSharp.Interactive.Benchmarks.Vector.Single
+﻿using System.Runtime.Intrinsics;
+
+namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     public struct Vector2S
     {
@@ -82,11 +84,11 @@
 
     public static unsafe class VectorTypeExtensions
     {
-        public static HwVector2S Load(this Vector2S vector) => MathSharp.Vector.Load2D(&vector.X);
-        public static HwVector3S Load(this Vector3S vector) => MathSharp.Vector.Load3D(&vector.X);
-        public static HwVector4S Load(this Vector4S vector) => MathSharp.Vector.Load4D(&vector.X);
+        public static Vector128<float> Load(this Vector2S vector) => MathSharp.Vector.Load2D(&vector.X);
+        public static Vector128<float> Load(this Vector3S vector) => MathSharp.Vector.Load3D(&vector.X);
+        public static Vector128<float> Load(this Vector4S vector) => MathSharp.Vector.Load4D(&vector.X);
 
-        public static void Store(this HwVector2S vector, out Vector2S destination)
+        public static void Store(this Vector128<float> vector, out Vector2S destination)
         {
             fixed (void* p = &destination)
             {
@@ -94,7 +96,7 @@
             }
         }
 
-        public static void Store(this HwVector3S vector, out Vector3S destination)
+        public static void Store(this Vector128<float> vector, out Vector3S destination)
         {
             fixed (void* p = &destination)
             {
@@ -102,7 +104,7 @@
             }
         }
 
-        public static void Store(this HwVector4S vector, out Vector4S destination)
+        public static void Store(this Vector128<float> vector, out Vector4S destination)
         {
             fixed (void* p = &destination)
             {

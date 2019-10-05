@@ -48,7 +48,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -60,7 +60,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareNotEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareNotEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -72,7 +72,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareGreaterThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareGreaterThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -84,7 +84,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareLessThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareLessThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -96,7 +96,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareGreaterThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareGreaterThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -108,7 +108,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS CompareLessThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CompareLessThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
