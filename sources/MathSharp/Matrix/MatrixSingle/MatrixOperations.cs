@@ -18,17 +18,22 @@ namespace MathSharp
             0f, 0f, 0f, 1f
         );
 
-        private static readonly HwVector4S IdentityRow0 = Vector128.Create(1f, 0f, 0f, 0f);
-        private static readonly HwVector4S IdentityRow1 = Vector128.Create(0f, 1f, 0f, 0f);
-        private static readonly HwVector4S IdentityRow2 = Vector128.Create(0f, 0f, 1f, 0f);
-        private static readonly HwVector4S IdentityRow3 = Vector128.Create(0f, 0f, 0f, 1f);
+        private static readonly Vector128<float> IdentityRow0 = Vector128.Create(1f, 0f, 0f, 0f);
+        private static readonly Vector128<float> IdentityRow1 = Vector128.Create(0f, 1f, 0f, 0f);
+        private static readonly Vector128<float> IdentityRow2 = Vector128.Create(0f, 0f, 1f, 0f);
+        private static readonly Vector128<float> IdentityRow3 = Vector128.Create(0f, 0f, 0f, 1f);
 
         public static bool IsIdentity(MatrixSingle matrix)
         {
-            Vector128<float> row0 = CompareEqual(matrix._v0, IdentityRow0);
-            Vector128<float> row1 = CompareEqual(matrix._v1, IdentityRow1);
-            Vector128<float> row2 = CompareEqual(matrix._v2, IdentityRow2);
-            Vector128<float> row3 = CompareEqual(matrix._v3, IdentityRow3);
+            return CompareEqual(matrix, Identity);
+        }
+
+        public static bool CompareEqual(MatrixSingle left, MatrixSingle right)
+        {
+            Vector128<float> row0 = Vector.CompareEqual(left._v0, right._v0);
+            Vector128<float> row1 = Vector.CompareEqual(left._v1, right._v1);
+            Vector128<float> row2 = Vector.CompareEqual(left._v2, right._v2);
+            Vector128<float> row3 = Vector.CompareEqual(left._v3, right._v3);
 
             row0 = And(row0, row1);
             row2 = And(row2, row3);
@@ -37,7 +42,7 @@ namespace MathSharp
             return row0.AllTrue();
         }
 
-        public static HwVectorAnyS GetTranslation(MatrixSingle matrix)
+        public static Vector128<float> GetTranslation(MatrixSingle matrix)
         {
             Vector128<float> vec = matrix._v3;
             return And(vec, SingleConstants.MaskW);
@@ -64,30 +69,30 @@ namespace MathSharp
 
         private static readonly Vector4F BillboardEpsilon = Vector128.Create(1e-4f);
 
-        //public static MatrixSingle CreateBillboard(Vector4FParam1_3 objectPosition, Vector4FParam1_3 cameraPosition, Vector4FParam1_3 cameraUpVector, Vector4FParam1_3 cameraForwardVector)
-        //{
-        //    Vector4F z = Vector.Subtract(objectPosition, cameraPosition);
+        public static MatrixSingle CreateBillboard(Vector4FParam1_3 objectPosition, Vector4FParam1_3 cameraPosition, Vector4FParam1_3 cameraUpVector, Vector4FParam1_3 cameraForwardVector)
+        {
+            Vector4F z = Vector.Subtract(objectPosition, cameraPosition);
 
-        //    Vector4F norm = LengthSquared3D(z);
+            Vector4F norm = LengthSquared3D(z);
 
-        //    z = MoveMask(CompareLessThan(norm, BillboardEpsilon)) != 0 ?
-        //        Negate3D(cameraForwardVector)
-        //        : Multiply(z, Divide(SingleConstants.AllBitsSet, Sqrt(norm)));
+            z = MoveMask(CompareLessThan(norm, BillboardEpsilon)) != 0 ?
+                Vector.Negate(cameraForwardVector)
+                : Multiply(z, Divide(SingleConstants.AllBitsSet, Sqrt(norm)));
 
-        //    Vector4F x = Normalize3D(CrossProduct3D(cameraUpVector, z));
+            Vector4F x = Normalize3D(CrossProduct3D(cameraUpVector, z));
 
-        //    Vector4F y = CrossProduct3D(z, x);
+            Vector4F y = CrossProduct3D(z, x);
 
-        //    // We need W to be zero for x, y, and z, and 1.0f for objectPosition. They are currently undefined
-        //    x = Vector.ZeroW(x);
-        //    y = Vector.ZeroW(y);
-        //    z = Vector.ZeroW(z);
+            // We need W to be zero for x, y, and z, and 1.0f for objectPosition. They are currently undefined
+            x = And(x, SingleConstants.MaskW);
+            y = And(y, SingleConstants.MaskW);
+            z = And(z, SingleConstants.MaskW);
 
-        //    // Get objectPosition to be (X, Y, Z, 0) and the mask to be (0, 0, 0, 1.0f) and OR them
-        //    Vector4F newObjectPosition = Vector.ZeroW(objectPosition);
-        //    newObjectPosition = Or(newObjectPosition, And(SingleConstants.MaskXYZ, SingleConstants.AllBitsSet));
+            // Get objectPosition to be (X, Y, Z, 0) and the mask to be (0, 0, 0, 1.0f) and OR them
+            Vector4F newObjectPosition = And(objectPosition, SingleConstants.MaskW);
+            newObjectPosition = Or(newObjectPosition, And(SingleConstants.MaskXYZ, SingleConstants.AllBitsSet));
 
-        //    return new MatrixSingle(x, y, z, newObjectPosition);
-        //}
+            return new MatrixSingle(x, y, z, newObjectPosition);
+        }
     }
 }

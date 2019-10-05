@@ -17,35 +17,36 @@ namespace MathSharp
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyD Permute(in Vector4DParam1_3 vector, byte control)
+        public static Vector256<double> FusedMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
         {
-            if (Avx.IsSupported)
+            if (Fma.IsSupported)
             {
-                return Avx.Permute(vector, control);
+                return Fma.MultiplyAdd(x, y, z);
             }
 
-            return Shuffle(vector, vector, control);
+            return SoftwareFallback(x, y, z);
+
+            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+            {
+                return Vector256.Create(
+                    Math.FusedMultiplyAdd(X(x), X(y), X(z)),
+                    Math.FusedMultiplyAdd(Y(x), Y(y), Y(z)),
+                    Math.FusedMultiplyAdd(Z(x), Z(y), Z(z)),
+                    Math.FusedMultiplyAdd(W(x), W(y), W(z))
+                );
+            }
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyD Shuffle(in Vector4DParam1_3 left, in Vector4DParam1_3 right, byte control)
+        public static Vector256<double> FastMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
         {
-            if (Sse.IsSupported)
+            if (Fma.IsSupported)
             {
-                return Avx.Shuffle(left, right, control);
+                return FusedMultiplyAdd(x, y, z);
             }
 
-            return Shuffle_Software(left, right, control);
+            return Add(Multiply(x, y), z);
         }
-
-        private static void GetLowHigh(Vector4DParam1_3 vector, out Vector128<double> low, out Vector128<double> high)
-        {
-            low = vector.GetLower();
-            high = vector.GetUpper();
-        }
-
-        private static Vector256<double> FromLowHigh(Vector128<double> low, Vector128<double> high)
-            => Vector256.Create(low, high);
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Abs(in Vector4DParam1_3 vector)
@@ -169,40 +170,19 @@ namespace MathSharp
             return Min_Software(left, right);
         }
 
-        public static HwVector2D Negate(HwVector2D vector)
-            => Negate2D(vector);
+        public static Vector4D Negate(in Vector4DParam1_3 vector)
+            => Xor(DoubleConstants.MaskNotSign, vector);
 
-        public static HwVector3D Negate(HwVector3D vector)
-            => Negate3D(vector);
 
-        public static HwVector4D Negate(HwVector4D vector)
-            => Negate4D(vector);
-
+        private static readonly Vector256<double> SinCoefficient0D = Vector256.Create(-0.16666667d, +0.0083333310d, -0.00019840874d, +2.7525562e-06d);
+        private static readonly Vector256<double> SinCoefficient1D = Vector256.Create(-2.3889859e-08d, -0.16665852d, +0.0083139502d, -0.00018524670d);
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Negate2D(in Vector4DParam1_3 vector)
-            => Xor(vector, SignFlip2DDouble);
-
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4D Negate3D(in Vector4DParam1_3 vector)
-            => Xor(vector, SignFlip3DDouble);
-
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4D Negate4D(in Vector4DParam1_3 vector)
-            => Xor(vector, SignFlip4DDouble);
-
-        private static readonly HwVectorAnyD SinCoefficient0D = Vector256.Create(-0.16666667d, +0.0083333310d, -0.00019840874d, +2.7525562e-06d);
-        private static readonly HwVectorAnyD SinCoefficient1D = Vector256.Create(-2.3889859e-08d, -0.16665852d, +0.0083139502d, -0.00018524670d);
-        private static readonly HwVectorAnyD OneElemsD = Vector256.Create(1d, 1d, 1d, 1d);
-
-        [MethodImpl(MaxOpt)]
-        public static HwVectorAnyD Sin(in Vector4DParam1_3 vector)
+        public static Vector256<double> Sin(in Vector4DParam1_3 vector)
         {
             Vector4DParam1_3 vec = Mod2Pi(vector);
 
-            var sign = And(vec, DoubleConstants.SignFlip4D);
+            var sign = And(vec, DoubleConstants.MaskNotSign);
             var tmp = Or(DoubleConstants.Pi, sign); // Pi with the sign from vector
 
             var abs = AndNot(sign, vec); // Gets the absolute of vector
@@ -239,16 +219,16 @@ namespace MathSharp
             constants = Permute(sc0, ShuffleValues._0_0_0_0);
             result = Add(result, constants);
             result = Multiply(result, vectorSquared);
-            result = Add(result, OneElemsD);
+            result = Add(result, DoubleConstants.One);
             result = Multiply(result, vec);
 
             return result;
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyD Mod2Pi(in Vector4DParam1_3 vector)
+        public static Vector256<double> Mod2Pi(in Vector4DParam1_3 vector)
         {
-            HwVectorAnyD result = Multiply(vector, DoubleConstants.OneDiv2Pi);
+            Vector256<double> result = Multiply(vector, DoubleConstants.OneDiv2Pi);
 
             result = Round(result);
             result = Multiply(result, DoubleConstants.Pi2);
@@ -257,7 +237,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyD Round(in Vector4DParam1_3 vector)
+        public static Vector256<double> Round(in Vector4DParam1_3 vector)
         {
             if (Avx.IsSupported)
             {
@@ -272,7 +252,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static HwVectorAnyD SoftwareFallback(in Vector4DParam1_3 vector)
+            static Vector256<double> SoftwareFallback(in Vector4DParam1_3 vector)
             {
                 // TODO is this semantically equivalent to 'roundps'?
                 return Vector256.Create(

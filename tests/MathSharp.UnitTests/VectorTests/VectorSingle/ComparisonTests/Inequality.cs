@@ -26,7 +26,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.ComparisonTests
         [MemberData(nameof(Data))]
         public static void Inequality_Theory(Vector128<float> left, Vector128<float> right, bool[] expected)
         {
-            Vector128<int> result = Vector.CompareNotEqual(left, right).Value.AsInt32();
+            Vector128<int> result = Vector.CompareNotEqual(left, right).AsInt32();
 
             Assert.True(AreAllNotEqual(expected, result));
         }

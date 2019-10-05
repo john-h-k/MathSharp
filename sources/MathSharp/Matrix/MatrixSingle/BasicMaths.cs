@@ -14,11 +14,6 @@ namespace MathSharp
         private const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
 
-        private static readonly Vector128<float> SignFlip2DSingle = Vector128.Create(int.MinValue, int.MinValue, 0, 0).AsSingle();
-        private static readonly Vector128<float> SignFlip3DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, 0).AsSingle();
-        private static readonly Vector128<float> SignFlip4DSingle = Vector128.Create(int.MinValue, int.MinValue, int.MinValue, int.MinValue).AsSingle();
-
-
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right) =>
             new MatrixSingle(
@@ -42,10 +37,10 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Negate(in MatrixSingle matrix) =>
             new MatrixSingle(
-                Vector.Negate4D(matrix._v0),
-                Vector.Negate4D(matrix._v1),
-                Vector.Negate4D(matrix._v2),
-                Vector.Negate4D(matrix._v3)
+                Vector.Negate(matrix._v0),
+                Vector.Negate(matrix._v1),
+                Vector.Negate(matrix._v2),
+                Vector.Negate(matrix._v3)
             );
 
         [MethodImpl(MaxOpt)]

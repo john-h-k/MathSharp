@@ -1,10 +1,7 @@
-﻿using System.Numerics;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using MathSharp.Attributes;
 using MathSharp.Utils;
-using Microsoft.VisualBasic.CompilerServices;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
@@ -13,49 +10,21 @@ namespace MathSharp
 
     public static unsafe partial class Vector
     {
-        [MethodImpl(MaxOpt)]
-        public static byte MoveMask(Vector4F vector)
-        {
-            if (Sse.IsSupported)
-            {
-                return (byte)Sse.MoveMask(vector);
-            }
-
-            return SoftwareFallback(vector);
-
-            static byte SoftwareFallback(Vector4F vector)
-            {
-                float s0 = X(vector);
-                float s1 = Y(vector);
-                float s2 = Z(vector);
-                float s3 = W(vector);
-
-                int e0 = Unsafe.As<float, int>(ref s0);
-                int e1 = Unsafe.As<float, int>(ref s1);
-                int e2 = Unsafe.As<float, int>(ref s2);
-                int e3 = Unsafe.As<float, int>(ref s3);
-
-                return (byte)(SignAsByteBool(e0) | (SignAsByteBool(e1) << 1) | (SignAsByteBool(e2) << 2) | (SignAsByteBool(e3) << 3));
-            }
-
-            static byte SignAsByteBool(int i) => i < 0 ? (byte)1 : (byte)0;
-        }
-
         #region Loads
 
         [MethodImpl(MaxOpt)]
-        public static HwVector4S Load4DAligned(float* p)
+        public static Vector128<float> Load4DAligned(float* p)
             => Load4D(p);
         [MethodImpl(MaxOpt)]
-        public static HwVector3S Load3DAligned(float* p)
-            => (HwVector3S)Load4DAligned(p);
+        public static Vector128<float> Load3DAligned(float* p)
+            => Load4DAligned(p);
         [MethodImpl(MaxOpt)]
-        public static HwVector2S Load2DAligned(float* p) 
-            => (HwVector2S)Load4DAligned(p);
+        public static Vector128<float> Load2DAligned(float* p) 
+            => Load4DAligned(p);
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVector4S Load4D(float* p)
+        public static Vector128<float> Load4D(float* p)
         {
             if (Sse.IsSupported)
             {
@@ -64,34 +33,34 @@ namespace MathSharp
 
             return SoftwareFallback(p);
 
-            static HwVectorAnyS SoftwareFallback(float* p)
+            static Vector128<float> SoftwareFallback(float* p)
             {
                 return Vector128.Create(p[0], p[1], p[2], p[3]);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVector3S Load3D(float* p)
+        public static Vector128<float> Load3D(float* p)
         {
             if (Sse.IsSupported)
             {
                 // Construct 3 separate vectors, each with the first element being the value
                 // and the rest being undefined (shown as ?)
                 Vector4F hi = Sse.LoadScalarVector128(&p[2]);
-                hi = And(hi, MaskYSingle);
+                hi = And(hi, SingleConstants.MaskY);
                 return Sse.LoadLow(hi, p);
             }
 
             return SoftwareFallback(p);
 
-            static HwVectorAnyS SoftwareFallback(float* p)
+            static Vector128<float> SoftwareFallback(float* p)
             {
                 return Vector128.Create(p[0], p[1], p[2], 0);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVector2S Load2D(float* p)
+        public static Vector128<float> Load2D(float* p)
         {
             if (Sse2.IsSupported)
             {
@@ -108,20 +77,20 @@ namespace MathSharp
 
             return SoftwareFallback(p);
 
-            static HwVectorAnyS SoftwareFallback(float* p)
+            static Vector128<float> SoftwareFallback(float* p)
             {
                 return Vector128.Create(p[0], p[1], 0f, 0f);
             }
         }
         
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS LoadScalar(this float scalar)
+        public static Vector128<float> LoadScalar(this float scalar)
         {
             return Vector128.CreateScalar(scalar);
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS LoadScalarBroadcast(this float scalar)
+        public static Vector128<float> LoadScalarBroadcast(this float scalar)
         {
             return Vector128.Create(scalar);
         }
@@ -130,17 +99,17 @@ namespace MathSharp
 
         #region Stores
 
-        public static void Store4DAligned(this HwVector4S vector, float* destination)
+        public static void Store4DAligned(this Vector128<float> vector, float* destination)
             => Store4D(vector, destination);
 
-        public static void Store3DAligned(this HwVector3S vector, float* destination)
-            => Store4DAligned((HwVector4S)vector, destination);
+        public static void Store3DAligned(this Vector128<float> vector, float* destination)
+            => Store4DAligned(vector, destination);
 
-        public static void Store2DAligned(this HwVector2S vector, float* destination) 
-            => Store4DAligned((HwVector4S)vector, destination);
+        public static void Store2DAligned(this Vector128<float> vector, float* destination) 
+            => Store4DAligned(vector, destination);
 
 
-        public static void Store4D(this HwVector4S vector, float* destination)
+        public static void Store4D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -160,7 +129,7 @@ namespace MathSharp
             }
         }
 
-        public static void Store3D(this HwVector3S vector, float* destination)
+        public static void Store3D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -182,7 +151,7 @@ namespace MathSharp
             }
         }
 
-        public static void Store2D(this HwVector2S vector, float* destination)
+        public static void Store2D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -217,7 +186,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS ScalarToVector(Vector4F scalar)
+        public static Vector128<float> ScalarToVector(Vector4F scalar)
         {
             if (Avx2.IsSupported)
             {
@@ -235,7 +204,7 @@ namespace MathSharp
 
             return SoftwareFallback(scalar);
 
-            static HwVectorAnyS SoftwareFallback(Vector4F scalar)
+            static Vector128<float> SoftwareFallback(Vector4F scalar)
             {
                 return Vector128.Create(X(scalar));
             }

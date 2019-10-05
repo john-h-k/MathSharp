@@ -3,6 +3,8 @@ using System;
 using System.Runtime.Intrinsics;
 using static MathSharp.Vector;
 
+#nullable disable
+
 namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     public class SineWaveBenchmark
@@ -12,30 +14,30 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         //The wave's frequency, A4.
         private const float Frequency = 440;
 
-        private float[] audioBufferNormal;
-        private float[] audioBufferVectorized;
+        private float[] _audioBufferNormal;
+        private float[] _audioBufferVectorized;
 
         [GlobalSetup]
         public void Setup()
         {
             //We're going to generate a second of a pure sine.
-            audioBufferNormal = new float[SampleRate];
-            audioBufferVectorized = new float[SampleRate];
+            _audioBufferNormal = new float[SampleRate];
+            _audioBufferVectorized = new float[SampleRate];
         }
 
         [Benchmark]
         public void Normal()
         {
-            var length = audioBufferNormal.Length;
+            var length = _audioBufferNormal.Length;
             for (int i = 0; i < length; i++)
-                audioBufferNormal[i] = MathF.Sin(Tau * Frequency * ((float)i / SampleRate));
+                _audioBufferNormal[i] = MathF.Sin(Tau * Frequency * ((float)i / SampleRate));
         }
 
         [Benchmark]
         public unsafe void MathSharp()
         {
-            var length = audioBufferVectorized.Length;
-            var vecLength = audioBufferVectorized.Length & ~3;
+            var length = _audioBufferVectorized.Length;
+            var vecLength = _audioBufferVectorized.Length & ~3;
 
             var samplePoints = Vector128.Create((float)0, 1, 2, 3);
             var sampleRate = Vector128.Create((float)SampleRate);
@@ -43,11 +45,11 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             var sine = Vector128.Create(Tau * Frequency);
             var i = 0;
 
-            fixed (float* ptr = audioBufferVectorized)
+            fixed (float* ptr = _audioBufferVectorized)
             {
                 while (i < vecLength)
                 {
-                    HwVector4S vector = Divide(samplePoints, sampleRate);
+                    Vector128<float> vector = Divide(samplePoints, sampleRate);
                     vector = Multiply(vector, sine);
                     vector = Sin(vector);
 
@@ -59,7 +61,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             }
             while (i < length)
             {
-                audioBufferVectorized[i] = MathF.Sin(Tau * Frequency * ((float)i / SampleRate));
+                _audioBufferVectorized[i] = MathF.Sin(Tau * Frequency * ((float)i / SampleRate));
             }
         }
         [GlobalCleanup]

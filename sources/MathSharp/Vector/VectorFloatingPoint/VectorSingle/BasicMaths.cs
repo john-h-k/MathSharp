@@ -18,34 +18,44 @@ namespace MathSharp
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Permute(Vector4FParam1_3 vector, byte control)
+        public static Vector128<float> FusedMultiplyAdd(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
         {
-            if (Avx.IsSupported)
+            if (Fma.IsSupported)
             {
-                return Avx.Permute(vector, control);
+                return Fma.MultiplyAdd(x, y, z);
             }
 
-            return Shuffle(vector, vector, control);
+            return SoftwareFallback(x, y, z);
+
+            static Vector128<float> SoftwareFallback(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
+            {
+                return Vector128.Create(
+                    MathF.FusedMultiplyAdd(X(x), X(y), X(z)),
+                    MathF.FusedMultiplyAdd(Y(x), Y(y), Y(z)),
+                    MathF.FusedMultiplyAdd(Z(x), Z(y), Z(z)),
+                    MathF.FusedMultiplyAdd(W(x), W(y), W(z))
+                );
+            }
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Shuffle(Vector4FParam1_3 left, Vector4FParam1_3 right, byte control)
+        public static Vector128<float> FastMultiplyAdd(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
         {
-            if (Sse.IsSupported)
+            if (Fma.IsSupported)
             {
-                return Sse.Shuffle(left, right, control);
+                return FusedMultiplyAdd(x, y, z);
             }
 
-            return Shuffle_Software(left, right, control);
+            return Add(Multiply(x, y), z);
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Abs(Vector4FParam1_3 vector)
-            => Max(Subtract(SingleConstants.Zero, vector), vector);
+        public static Vector128<float> Abs(Vector4FParam1_3 vector)
+            => And(vector, SingleConstants.MaskSign);
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS HorizontalAdd(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> HorizontalAdd(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             /*
              * return Vector128.Create(
@@ -71,8 +81,8 @@ namespace MathSharp
 
             if (Sse.IsSupported)
             {
-                HwVectorAnyS vector1 = Sse.Shuffle(left, right, ShuffleValues._2_0_2_0);
-                HwVectorAnyS vector2 = Sse.Shuffle(left, right, ShuffleValues._3_1_3_1);
+                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues._2_0_2_0);
+                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues._3_1_3_1);
 
                 return Sse.Add(vector1, vector2);
             }
@@ -82,7 +92,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Add(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Add(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -94,12 +104,12 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Add(Vector4FParam1_3 vector, float scalar)
+        public static Vector128<float> Add(Vector4FParam1_3 vector, float scalar)
             => Add(vector, Vector128.Create(scalar));
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Subtract(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Subtract(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -111,12 +121,12 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Subtract(Vector4FParam1_3 vector, float scalar)
+        public static Vector128<float> Subtract(Vector4FParam1_3 vector, float scalar)
             => Subtract(vector, Vector128.Create(scalar));
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Multiply(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Multiply(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -127,12 +137,12 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Multiply(Vector4FParam1_3 vector, float scalar)
+        public static Vector128<float> Multiply(Vector4FParam1_3 vector, float scalar)
             => Multiply(vector, Vector128.Create(scalar));
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Divide(Vector4FParam1_3 dividend, Vector4FParam1_3 divisor)
+        public static Vector128<float> Divide(Vector4FParam1_3 dividend, Vector4FParam1_3 divisor)
         {
             if (Sse.IsSupported)
             {
@@ -144,21 +154,21 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Divide(Vector4FParam1_3 dividend, float scalarDivisor)
+        public static Vector128<float> Divide(Vector4FParam1_3 dividend, float scalarDivisor)
             => Multiply(dividend, Vector128.Create(scalarDivisor));
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
+        public static Vector128<float> Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
         {
-            Debug.Assert(MoveMask(CompareLessThan(low, high)) != 0, "Min (low) argument for clamp is less than max (high)", nameof(low));
+            Debug.Assert(CompareLessThan(low, high).AllTrue(), "Min (low) argument for clamp is more than max (high)", nameof(low));
 
             return Max(Min(vector, high), low);
         }
 
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Sqrt(Vector4FParam1_3 vector)
+        public static Vector128<float> Sqrt(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
@@ -173,7 +183,7 @@ namespace MathSharp
         // TODO We should provide a symmetric alternative to this
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Max(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Max(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -186,7 +196,7 @@ namespace MathSharp
         // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Min(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Min(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
@@ -196,84 +206,97 @@ namespace MathSharp
             return Min_Software(left, right);
         }
 
-        public static HwVector2S Negate(HwVector2S vector)
-            => Negate2D(vector);
-
-        public static HwVector3S Negate(HwVector3S vector)
-            => Negate3D(vector);
-
-        public static HwVector4S Negate(HwVector4S vector)
-            => Negate4D(vector);
-
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Negate(Vector4FParam1_3 vector)
+            => Xor(vector, SingleConstants.MaskNotSign);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Negate2D(Vector4FParam1_3 vector)
-            => Subtract(SingleConstants.Zero, vector);
+        public static Vector128<float> CopySign(Vector128<float> sign, Vector128<float> vector)
+            => Or(ExtractSign(sign), ClearSign(vector));
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Negate3D(Vector4FParam1_3 vector)
-            => Subtract(SingleConstants.Zero, vector);
+        public static Vector128<float> ExtractSign(Vector128<float> vector)
+            => And(vector, SingleConstants.MaskNotSign);
 
         [MethodImpl(MaxOpt)]
-        internal static HwVectorAnyS Negate4D(Vector4FParam1_3 vector)
-            => Subtract(SingleConstants.Zero, vector);
+        public static Vector128<float> ClearSign(Vector128<float> vector)
+            => And(vector, SingleConstants.MaskSign);
 
-        private static readonly HwVectorAnyS SinCoefficient0 = Vector128.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
-        private static readonly HwVectorAnyS SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
-        private static readonly HwVectorAnyS OneElems = Vector128.Create(1f, 1f, 1f, 1f);
+        private static readonly Vector128<float> SinCoefficient0 = Vector128.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
+        private static readonly Vector128<float> SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Sin(Vector4FParam1_3 vector)
+        public static Vector128<float> Sin(Vector4FParam1_3 vector)
         {
-            Vector4FParam1_3 vec = Mod2Pi(vector);
+            Vector128<float> vec = Mod2Pi(vector);
 
-            HwVectorAnyS sign = And(vec, SingleConstants.SignFlip4D);
-            HwVectorAnyS tmp = Or(SingleConstants.Pi, sign); // Pi with the sign from vector
+            Vector128<float> sign = ExtractSign(vec);
+            Vector128<float> tmp = Or(SingleConstants.Pi, sign); // Pi with the sign from vector
 
-            HwVectorAnyS abs = AndNot(sign, vec); // Gets the absolute of vector
+            Vector128<float> abs = AndNot(sign, vec); // Gets the absolute of vector
 
-            HwVectorAnyS neg = Subtract(tmp, vec);
+            Vector128<float> neg = Subtract(tmp, vec);
 
-            HwVectorAnyS comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
+            Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
-            HwVectorAnyS select0 = And(comp, vec);
-            HwVectorAnyS select1 = AndNot(comp, neg);
+            Vector128<float> select0 = SelectWhereTrue(vec, comp);
+            Vector128<float> select1 = SelectWhereFalse( neg, comp);
 
             vec = Or(select0, select1);
 
-            HwVectorAnyS vectorSquared = Multiply(vec, vec);
+            Vector128<float> vectorSquared = Multiply(vec, vec);
 
             // Polynomial approx
-            HwVectorAnyS sc1 = SinCoefficient1;
-            HwVectorAnyS constants = Permute(sc1, ShuffleValues._0_0_0_0);
-            HwVectorAnyS result = Multiply(constants, vectorSquared);
+            Vector128<float> sc1 = SinCoefficient1;
+            Vector128<float> constants = PermuteWithX(sc1);
+            Vector128<float> result = Multiply(constants, vectorSquared);
 
-            HwVectorAnyS sc0 = SinCoefficient0;
-            constants = Permute(sc0, ShuffleValues._3_3_3_3);
+            Vector128<float> sc0 = SinCoefficient0;
+            constants = PermuteWithW(sc0);
             result = Add(result, constants);
             result = Multiply(result, vectorSquared);
 
-            constants = Permute(sc0, ShuffleValues._2_2_2_2);
+            constants = PermuteWithZ(sc0);
             result = Add(result, constants);
             result = Multiply(result, vectorSquared);
 
-            constants = Permute(sc0, ShuffleValues._1_1_1_1);
+            constants = PermuteWithY(sc0);
             result = Add(result, constants);
             result = Multiply(result, vectorSquared);
 
-            constants = Permute(sc0, ShuffleValues._0_0_0_0);
+            constants = PermuteWithX(sc0);
             result = Add(result, constants);
             result = Multiply(result, vectorSquared);
-            result = Add(result, OneElems);
+            result = Add(result, SingleConstants.One);
             result = Multiply(result, vec);
+
+            //Vector128<float> sc1 = SinCoefficient1;
+            //Vector128<float> constants = PermuteWithX(sc1);
+            //Vector128<float> result = Multiply(constants, vectorSquared);
+
+            //Vector128<float> sc0 = SinCoefficient0;
+            //constants = PermuteWithW(sc0);
+            //result = Add(result, constants);
+
+            //constants = PermuteWithZ(sc0);
+            //result = FusedMultiplyAdd(result, vectorSquared, constants);
+
+            //constants = PermuteWithY(sc0);
+            //result = FusedMultiplyAdd(result, vectorSquared, constants);
+
+            //constants = PermuteWithX(sc0);
+            //result = FusedMultiplyAdd(result, vectorSquared, constants);
+
+            //result = FusedMultiplyAdd(result, vectorSquared, SingleConstants.One);
+            //result = Multiply(result, vec);
 
             return result;
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Mod2Pi(Vector4FParam1_3 vector)
+        public static Vector128<float> Mod2Pi(Vector4FParam1_3 vector)
         {
-            HwVectorAnyS result = Multiply(vector, SingleConstants.OneDiv2Pi);
+            Vector128<float> result = Multiply(vector, SingleConstants.OneDiv2Pi);
 
             result = Round(result);
             result = Multiply(result, SingleConstants.Pi2);
@@ -282,7 +305,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Round(Vector4FParam1_3 vector)
+        public static Vector128<float> Round(Vector4FParam1_3 vector)
         {
             if (Sse41.IsSupported)
             {
@@ -292,7 +315,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static HwVectorAnyS SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
             {
                 // TODO is this semantically equivalent to 'roundps'?
                 return Vector128.Create(
@@ -305,30 +328,46 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Remainder(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Remainder(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
-            HwVectorAnyS n = Divide(left, right);
+            Vector128<float> n = Divide(left, right);
             n = Truncate(n);
 
-            HwVectorAnyS y = Multiply(n, right);
+            Vector128<float> y = Multiply(n, right);
 
             return Subtract(left, y);
         }
 
-        public static HwVectorAnyS Remainder(Vector4FParam1_3 left, float right)
+        public static Vector128<float> Remainder(Vector4FParam1_3 left, float right)
             => Remainder(left, Vector128.Create(right));
 
+        private static readonly Vector128<float> NoFraction = Vector128.Create(8388608f);
+
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Truncate(Vector4FParam1_3 vector)
+        public static Vector128<float> Truncate(Vector4FParam1_3 vector)
         {
             if (Sse41.IsSupported)
             {
                 return Sse41.RoundToZero(vector);
             }
 
+            if (Sse2.IsSupported)
+            {
+                Vector128<int> fractionalValues = Abs(vector).AsInt32();
+
+                fractionalValues = CompareLessThan(fractionalValues, NoFraction.AsInt32());
+                var result = Sse2.ConvertToVector128Single(Sse2.ConvertToVector128Int32WithTruncation(vector)); // Roundtrip float->int32->float to truncate
+
+                // Select results for non fractional values, else select the original value
+                result = SelectWhereTrue(result, fractionalValues);
+                fractionalValues = SelectWhereFalse(vector, fractionalValues).AsInt32();
+
+                return Or(result, fractionalValues.AsSingle());
+            }
+
             return SoftwareFallback(vector);
 
-            static HwVectorAnyS SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
             {
                 return Vector128.Create(
                     MathF.Truncate(X(vector)),
@@ -340,7 +379,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static HwVectorAnyS Floor(Vector4FParam1_3 vector)
+        public static Vector128<float> Floor(Vector4FParam1_3 vector)
         {
             if (Sse41.IsSupported)
             {
@@ -349,7 +388,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static HwVectorAnyS SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
             {
                 return Vector128.Create(
                     MathF.Floor(X(vector)),
