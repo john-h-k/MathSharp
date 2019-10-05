@@ -105,7 +105,9 @@ try {
     $solution = Join-Path -Path $RepoRoot -ChildPath "MathSharp.sln"
   }
 
-  $pack = Join-Path -Path $RepoRoot -ChildPath "sources" -AdditionalChildPath "MathSharp", "MathSharp.csproj"
+  $pack = Join-Path -Path $RepoRoot -ChildPath "sources" 
+  $pack = Join-Path -Path $pack -ChildPath "MathSharp"
+  $pack = Join-Path -Path $pack -ChildPath "MathSharp.csproj"
 
   $ArtifactsDir = Join-Path -Path $RepoRoot -ChildPath "artifacts"
   Create-Directory -Path $ArtifactsDir
