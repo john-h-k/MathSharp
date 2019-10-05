@@ -34,17 +34,17 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "../../docs/articles/images/**"
         ]
       }
     ],
     "overwrite": [
       {
         "files": [
-          "apidoc/**.md"
+          "../../docs/articles/apidoc/**.md"
         ],
         "exclude": [
-          "obj/**"
+          "../../docs/articles/obj/**"
         ]
       }
     ],
