@@ -33,7 +33,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.ComparisonTests
         [MemberData(nameof(Data))]
         public static void GreaterThanOrEqualTo_Theory(Vector256<double> left, Vector256<double> right, bool[] expected)
         {
-            Vector256<long> result1 = Vector.GreaterThanOrEqual(left, right).AsInt64();
+            Vector256<long> result1 = Vector.CompareGreaterThanOrEqual(left, right).AsInt64();
 
             Assert.True((bool) AreAllEqual(expected, result1));
         }

@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
@@ -11,76 +12,110 @@ namespace MathSharp
 
     public static partial class Vector
     {
-        
         [MethodImpl(MaxOpt)]
-        public static Vector4F Equality(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static bool AllTrue(this Vector4FParam1_3 vector)
+            => MoveMask(vector) == 0b_1111;
+
+
+        [MethodImpl(MaxOpt)]
+        public static bool AnyTrue(this Vector4FParam1_3 vector)
+            => MoveMask(vector) != 0b_0000;
+
+        [MethodImpl(MaxOpt)]
+        public static bool AllFalse(this Vector4FParam1_3 vector)
+            => MoveMask(vector) == 0b_0000;
+
+
+        [MethodImpl(MaxOpt)]
+        public static bool AnyFalse(this Vector4FParam1_3 vector)
+            => MoveMask(vector) != 0b_1111;
+
+        [MethodImpl(MaxOpt)]
+        public static bool ElementTrue(this Vector4FParam1_3 vector, int elem)
+        {
+            Debug.Assert(elem > 0 && elem < 4);
+
+            return (MoveMask(vector) & (1 << elem)) != 0;
+        }
+
+
+        [MethodImpl(MaxOpt)]
+        public static bool ElementFalse(this Vector4FParam1_3 vector, int elem)
+        {
+            Debug.Assert(elem > 0 && elem < 4);
+
+            return (MoveMask(vector) & (1 << elem)) == 0;
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> CompareEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.CompareEqual(left, right);
             }
 
-            return Equality_Software(left, right);
+            return CompareEqual_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4F Inequality(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static Vector128<float> CompareNotEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.CompareNotEqual(left, right);
             }
 
-            return Inequality_Software(left, right);
+            return CompareNotEqual_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4F GreaterThan(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static Vector128<float> CompareGreaterThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.CompareGreaterThan(left, right);
             }
 
-            return GreaterThan_Software(left, right);
+            return CompareGreaterThan_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4F LessThan(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static Vector128<float> CompareLessThan(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.CompareLessThan(left, right);
             }
 
-            return LessThan_Software(left, right);
+            return CompareLessThan_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4F GreaterThanOrEqual(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static Vector128<float> CompareGreaterThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.CompareGreaterThanOrEqual(left, right);
             }
 
-            return GreaterThanOrEqual_Software(left, right);
+            return CompareGreaterThanOrEqual_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4F LessThanOrEqual(in Vector4FParam1_3 left, in Vector4FParam1_3 right)
+        public static Vector128<float> CompareLessThanOrEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
             if (Sse.IsSupported)
             {
                 return Sse.CompareLessThanOrEqual(left, right);
             }
 
-            return LessThanOrEqual_Software(left, right);
+            return CompareLessThanOrEqual_Software(left, right);
         }
     }
 }

@@ -3,11 +3,15 @@ using System.Runtime.CompilerServices;
 
 namespace MathSharp.Utils
 {
-    public static class ThrowHelper
+    internal static class ThrowHelper
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void ThrowAccessViolationException(string message)
             => throw new AccessViolationException(message);
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentException(string message, string paramName, Exception? inner = null)
+            => throw new ArgumentException(message, paramName, inner);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void ThrowForUnaligned16BPointer(void* p, string message)

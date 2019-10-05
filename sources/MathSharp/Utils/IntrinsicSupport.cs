@@ -105,7 +105,7 @@ namespace MathSharp.Utils
             "\n\n\n" +
             string.Join('\n', typeof(Vector128).Assembly.GetTypes().Where(IsIsaClass).Select(FormatIsa));
 
-        private static bool IsIsaClass(Type isa) => (isa.Namespace!.StartsWith(IntrinsicNamespace)) && isa.GetProperty(IsSupported) is object;
+        private static bool IsIsaClass(Type isa) => (isa.Namespace?.StartsWith(IntrinsicNamespace)).GetValueOrDefault() && isa.GetProperty(IsSupported) is object;
 
         private static string FormatIsa(Type isa) => $"{isa.Namespace!.Split('.').Last().ToUpper()} -- " + // Get ARM or x86
                                                      $"{(isa.IsNested ? $"{isa.DeclaringType!.Name.ToUpper()}-" : string.Empty) + isa.Name.ToUpper()}: " + // E.g SSE or SSE-X64

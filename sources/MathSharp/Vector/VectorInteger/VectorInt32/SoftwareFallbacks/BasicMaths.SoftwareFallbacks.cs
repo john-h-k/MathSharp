@@ -8,7 +8,7 @@ namespace MathSharp
     using Vector4Int32 = Vector128<int>;
     using Vector4Int32Param1_3 = Vector128<int>;
 
-    public static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacks
     {
         #region Vector
 
