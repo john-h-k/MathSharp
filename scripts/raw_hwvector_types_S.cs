@@ -17,7 +17,7 @@ public readonly struct HwVectorAnyS
 }
 
 [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
-public readonly struct HwVector2S
+public readonly struct HwVector2S : IEquatable<HwVector2S>
 {
     public readonly Vector128<float> Value;
     
@@ -29,6 +29,22 @@ public readonly struct HwVector2S
     {
         Value = value;
     }
+
+    public bool AllTrue() => Vector.AllTrue(this);
+    public bool AllFalse() => Vector.AllFalse(this);
+    public bool AnyTrue() => Vector.AnyTrue(this);
+    public bool AnyFalse() => Vector.AnyFalse(this);
+    public bool ElementTrue(int index) => Vector.ElementTrue(this, index);
+    public bool ElementFalse(int index) => Vector.ElementFalse(this, index);
+
+    public override bool Equals(object? obj)
+        => obj is HwVector2S other && Equals(other);
+
+    public override int GetHashCode()
+        => Value.GetHashCode();
+
+    public bool Equals(HwVector2S obj)
+        => (this == obj).AllTrue();
 
     [MethodImpl(AggressiveInlining)]
     public static implicit operator Vector128<float>(HwVector2S vector) => vector.Value;
@@ -46,48 +62,118 @@ public readonly struct HwVector2S
 
     [MethodImpl(AggressiveInlining)]
     public static HwVector2S operator ++(HwVector2S left) => Vector.Add(left, Vector.SingleConstants.One);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector2S operator --(HwVector2S left) => Vector.Subtract(left, Vector.SingleConstants.One);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector2S operator +(HwVector2S left, HwVector2S right) => Vector.Add(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator +(HwVector2S left, float right) => Vector.Add(left, right);
+    public static HwVector2S operator +(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator +(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector2S operator -(HwVector2S left, HwVector2S right) => Vector.Subtract(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator -(HwVector2S left, float right) => Vector.Subtract(left, right);
+    public static HwVector2S operator -(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator -(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector2S operator /(HwVector2S left, HwVector2S right) => Vector.Divide(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator /(HwVector2S left, float right) => Vector.Divide(left, right);
+    public static HwVector2S operator /(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator /(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector2S operator %(HwVector2S left, HwVector2S right) => Vector.Remainder(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator %(HwVector2S left, float right) => Vector.Remainder(left, right);
+    public static HwVector2S operator %(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator *(HwVector2S left, HwVector2S right) => Vector.Multiply(left, right);
+    public static HwVector2S operator %(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator *(HwVector2S left, float right) => Vector.Multiply(left, right);
+    public static HwVector2S operator *(HwVector2S left, HwVector2S right) => Vector.Multiply(left, right); 
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator *(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator *(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector2S operator -(HwVector2S vector) => Vector.Negate(vector);
 
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator &(HwVector2S left, HwVector2S right) => Vector.And(left, right);
+    public static HwVector2S operator &(HwVector2S left, HwVector2S right) => Vector.And<float>(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator &(HwVector2S left, float right) => Vector.And(left, right);
+    public static HwVector2S operator &(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator |(HwVector2S left, HwVector2S right) => Vector.Or(left, right);
+    public static HwVector2S operator &(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator |(HwVector2S left, float right) => Vector.Or(left, right);
+    public static HwVector2S operator |(HwVector2S left, HwVector2S right) => Vector.Or<float>(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator ^(HwVector2S left, HwVector2S right) => Vector.Xor(left, right);
+    public static HwVector2S operator |(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator ^(HwVector2S left, float right) => Vector.Xor(left, right);
+    public static HwVector2S operator |(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector2S operator ~(HwVector2S vector) => Vector.Not(vector);
+    public static HwVector2S operator ^(HwVector2S left, HwVector2S right) => Vector.Xor<float>(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator ^(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator ^(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator ~(HwVector2S vector) => Vector.Not<float>(vector);
+
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator ==(HwVector2S left, HwVector2S right) => Vector.CompareEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator ==(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator ==(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator !=(HwVector2S left, HwVector2S right) => Vector.CompareNotEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator !=(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator !=(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator <(HwVector2S left, HwVector2S right) => Vector.CompareLessThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator <(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator <(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator >(HwVector2S left, HwVector2S right) => Vector.CompareGreaterThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator >(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator >(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator <=(HwVector2S left, HwVector2S right) => Vector.CompareLessThanOrEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator <=(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator <=(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator >=(HwVector2S left, HwVector2S right) => Vector.CompareGreaterThanOrEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator >=(HwVector2S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector2S operator >=(float left, HwVector2S right) => Vector.Add(Vector128.Create(left), right);
+    
 }
+
 [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
-public readonly struct HwVector3S
+public readonly struct HwVector3S : IEquatable<HwVector3S>
 {
     public readonly Vector128<float> Value;
     
@@ -99,6 +185,22 @@ public readonly struct HwVector3S
     {
         Value = value;
     }
+
+    public bool AllTrue() => Vector.AllTrue(this);
+    public bool AllFalse() => Vector.AllFalse(this);
+    public bool AnyTrue() => Vector.AnyTrue(this);
+    public bool AnyFalse() => Vector.AnyFalse(this);
+    public bool ElementTrue(int index) => Vector.ElementTrue(this, index);
+    public bool ElementFalse(int index) => Vector.ElementFalse(this, index);
+
+    public override bool Equals(object? obj)
+        => obj is HwVector3S other && Equals(other);
+
+    public override int GetHashCode()
+        => Value.GetHashCode();
+
+    public bool Equals(HwVector3S obj)
+        => (this == obj).AllTrue();
 
     [MethodImpl(AggressiveInlining)]
     public static implicit operator Vector128<float>(HwVector3S vector) => vector.Value;
@@ -116,48 +218,118 @@ public readonly struct HwVector3S
 
     [MethodImpl(AggressiveInlining)]
     public static HwVector3S operator ++(HwVector3S left) => Vector.Add(left, Vector.SingleConstants.One);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector3S operator --(HwVector3S left) => Vector.Subtract(left, Vector.SingleConstants.One);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector3S operator +(HwVector3S left, HwVector3S right) => Vector.Add(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator +(HwVector3S left, float right) => Vector.Add(left, right);
+    public static HwVector3S operator +(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator +(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector3S operator -(HwVector3S left, HwVector3S right) => Vector.Subtract(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator -(HwVector3S left, float right) => Vector.Subtract(left, right);
+    public static HwVector3S operator -(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator -(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector3S operator /(HwVector3S left, HwVector3S right) => Vector.Divide(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator /(HwVector3S left, float right) => Vector.Divide(left, right);
+    public static HwVector3S operator /(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator /(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector3S operator %(HwVector3S left, HwVector3S right) => Vector.Remainder(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator %(HwVector3S left, float right) => Vector.Remainder(left, right);
+    public static HwVector3S operator %(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator *(HwVector3S left, HwVector3S right) => Vector.Multiply(left, right);
+    public static HwVector3S operator %(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator *(HwVector3S left, float right) => Vector.Multiply(left, right);
+    public static HwVector3S operator *(HwVector3S left, HwVector3S right) => Vector.Multiply(left, right); 
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator *(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator *(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector3S operator -(HwVector3S vector) => Vector.Negate(vector);
 
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator &(HwVector3S left, HwVector3S right) => Vector.And(left, right);
+    public static HwVector3S operator &(HwVector3S left, HwVector3S right) => Vector.And<float>(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator &(HwVector3S left, float right) => Vector.And(left, right);
+    public static HwVector3S operator &(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator |(HwVector3S left, HwVector3S right) => Vector.Or(left, right);
+    public static HwVector3S operator &(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator |(HwVector3S left, float right) => Vector.Or(left, right);
+    public static HwVector3S operator |(HwVector3S left, HwVector3S right) => Vector.Or<float>(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator ^(HwVector3S left, HwVector3S right) => Vector.Xor(left, right);
+    public static HwVector3S operator |(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator ^(HwVector3S left, float right) => Vector.Xor(left, right);
+    public static HwVector3S operator |(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector3S operator ~(HwVector3S vector) => Vector.Not(vector);
+    public static HwVector3S operator ^(HwVector3S left, HwVector3S right) => Vector.Xor<float>(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator ^(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator ^(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator ~(HwVector3S vector) => Vector.Not<float>(vector);
+
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator ==(HwVector3S left, HwVector3S right) => Vector.CompareEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator ==(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator ==(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator !=(HwVector3S left, HwVector3S right) => Vector.CompareNotEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator !=(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator !=(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator <(HwVector3S left, HwVector3S right) => Vector.CompareLessThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator <(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator <(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator >(HwVector3S left, HwVector3S right) => Vector.CompareGreaterThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator >(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator >(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator <=(HwVector3S left, HwVector3S right) => Vector.CompareLessThanOrEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator <=(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator <=(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator >=(HwVector3S left, HwVector3S right) => Vector.CompareGreaterThanOrEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator >=(HwVector3S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector3S operator >=(float left, HwVector3S right) => Vector.Add(Vector128.Create(left), right);
+    
 }
+
 [DebuggerDisplay("{" + nameof(DebuggerString) + "}")]
-public readonly struct HwVector4S
+public readonly struct HwVector4S : IEquatable<HwVector4S>
 {
     public readonly Vector128<float> Value;
     
@@ -169,6 +341,22 @@ public readonly struct HwVector4S
     {
         Value = value;
     }
+
+    public bool AllTrue() => Vector.AllTrue(this);
+    public bool AllFalse() => Vector.AllFalse(this);
+    public bool AnyTrue() => Vector.AnyTrue(this);
+    public bool AnyFalse() => Vector.AnyFalse(this);
+    public bool ElementTrue(int index) => Vector.ElementTrue(this, index);
+    public bool ElementFalse(int index) => Vector.ElementFalse(this, index);
+
+    public override bool Equals(object? obj)
+        => obj is HwVector4S other && Equals(other);
+
+    public override int GetHashCode()
+        => Value.GetHashCode();
+
+    public bool Equals(HwVector4S obj)
+        => (this == obj).AllTrue();
 
     [MethodImpl(AggressiveInlining)]
     public static implicit operator Vector128<float>(HwVector4S vector) => vector.Value;
@@ -186,43 +374,112 @@ public readonly struct HwVector4S
 
     [MethodImpl(AggressiveInlining)]
     public static HwVector4S operator ++(HwVector4S left) => Vector.Add(left, Vector.SingleConstants.One);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector4S operator --(HwVector4S left) => Vector.Subtract(left, Vector.SingleConstants.One);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector4S operator +(HwVector4S left, HwVector4S right) => Vector.Add(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator +(HwVector4S left, float right) => Vector.Add(left, right);
+    public static HwVector4S operator +(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator +(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector4S operator -(HwVector4S left, HwVector4S right) => Vector.Subtract(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator -(HwVector4S left, float right) => Vector.Subtract(left, right);
+    public static HwVector4S operator -(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator -(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector4S operator /(HwVector4S left, HwVector4S right) => Vector.Divide(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator /(HwVector4S left, float right) => Vector.Divide(left, right);
+    public static HwVector4S operator /(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator /(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector4S operator %(HwVector4S left, HwVector4S right) => Vector.Remainder(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator %(HwVector4S left, float right) => Vector.Remainder(left, right);
+    public static HwVector4S operator %(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator *(HwVector4S left, HwVector4S right) => Vector.Multiply(left, right);
+    public static HwVector4S operator %(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator *(HwVector4S left, float right) => Vector.Multiply(left, right);
+    public static HwVector4S operator *(HwVector4S left, HwVector4S right) => Vector.Multiply(left, right); 
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator *(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator *(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
     public static HwVector4S operator -(HwVector4S vector) => Vector.Negate(vector);
 
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator &(HwVector4S left, HwVector4S right) => Vector.And(left, right);
+    public static HwVector4S operator &(HwVector4S left, HwVector4S right) => Vector.And<float>(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator &(HwVector4S left, float right) => Vector.And(left, right);
+    public static HwVector4S operator &(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator |(HwVector4S left, HwVector4S right) => Vector.Or(left, right);
+    public static HwVector4S operator &(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator |(HwVector4S left, float right) => Vector.Or(left, right);
+    public static HwVector4S operator |(HwVector4S left, HwVector4S right) => Vector.Or<float>(left, right);
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator ^(HwVector4S left, HwVector4S right) => Vector.Xor(left, right);
+    public static HwVector4S operator |(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator ^(HwVector4S left, float right) => Vector.Xor(left, right);
+    public static HwVector4S operator |(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
     [MethodImpl(AggressiveInlining)]
-    public static HwVector4S operator ~(HwVector4S vector) => Vector.Not(vector);
+    public static HwVector4S operator ^(HwVector4S left, HwVector4S right) => Vector.Xor<float>(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator ^(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator ^(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator ~(HwVector4S vector) => Vector.Not<float>(vector);
+
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator ==(HwVector4S left, HwVector4S right) => Vector.CompareEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator ==(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator ==(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator !=(HwVector4S left, HwVector4S right) => Vector.CompareNotEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator !=(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator !=(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator <(HwVector4S left, HwVector4S right) => Vector.CompareLessThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator <(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator <(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator >(HwVector4S left, HwVector4S right) => Vector.CompareGreaterThan(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator >(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator >(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator <=(HwVector4S left, HwVector4S right) => Vector.CompareLessThanOrEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator <=(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator <=(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator >=(HwVector4S left, HwVector4S right) => Vector.CompareGreaterThanOrEqual(left, right);
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator >=(HwVector4S left, float right) => Vector.Add(left, Vector128.Create(right));
+    [MethodImpl(AggressiveInlining)]
+    public static HwVector4S operator >=(float left, HwVector4S right) => Vector.Add(Vector128.Create(left), right);
+    
 }
