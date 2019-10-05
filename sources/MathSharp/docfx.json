@@ -6,7 +6,7 @@
           "files": [
             "**.csproj"
           ],
-          "src": "C:\\Users\\johnk\\source\\repos\\MathSharp\\sources\\MathSharp"
+          "src": "/"
         }
       ],
       "dest": "../../docs/api",
@@ -34,17 +34,17 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "../../docs/aimages/**"
         ]
       }
     ],
     "overwrite": [
       {
         "files": [
-          "apidoc/**.md"
+          "../../docs/aapidoc/**.md"
         ],
         "exclude": [
-          "obj/**"
+          "../../docs/aobj/**"
         ]
       }
     ],
