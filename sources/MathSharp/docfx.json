@@ -26,7 +26,7 @@
         "files": [
           "../../docs/articles/**.md",
           "../../docs/articles/**/toc.yml",
-          "toc.yml",
+          "../../docs/toc.yml",
           "../../docs/*.md"
         ]
       }
@@ -34,17 +34,17 @@
     "resource": [
       {
         "files": [
-          "../../docs/aimages/**"
+          "../../docs/images/**"
         ]
       }
     ],
     "overwrite": [
       {
         "files": [
-          "../../docs/aapidoc/**.md"
+          "../../docs/apidoc/**.md"
         ],
         "exclude": [
-          "../../docs/aobj/**"
+          "../../docs/obj/**"
         ]
       }
     ],
