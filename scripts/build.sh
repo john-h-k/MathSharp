@@ -119,15 +119,15 @@ function Pack {
   logFile="$LogDir/$configuration/pack.binlog"
 
   if [[ -z "$properties" ]]; then
-    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$pack"
+    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$pack"
+    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$libraryproj"
   fi
 
   LASTEXITCODE=$?
 
   if [ "$LASTEXITCODE" != 0 ]; then
-    echo "'Build' failed for '$pack'"
+    echo "'Build' failed for '$libraryproj'"
     return "$LASTEXITCODE"
   fi
 }
