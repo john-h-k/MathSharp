@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using MathSharp.Constants;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
 using static MathSharp.Utils.Helpers;
+#pragma warning disable 162
 
 namespace MathSharp
 {
     //using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
     public static partial class Vector
     {
         #region Vector
@@ -41,7 +43,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FastMultiplyAdd(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
         {
-            if (Fma.IsSupported)
+            if (Fma.IsSupported && Options.AllowImpreciseMath)
             {
                 return FusedMultiplyAdd(x, y, z);
             }
@@ -161,7 +163,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
         {
-            Debug.Assert(CompareLessThan(low, high).AllTrue(), "Min (low) argument for clamp is more than max (high)", nameof(low));
+            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), "Min (low) argument for clamp is more than max (high)", nameof(low));
 
             return Max(Min(vector, high), low);
         }
@@ -224,6 +226,7 @@ namespace MathSharp
 
         private static readonly Vector128<float> SinCoefficient0 = Vector128.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
         private static readonly Vector128<float> SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
+        private const float SinCoefficient1Scalar = -2.3889859e-08f;
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Sin(Vector4FParam1_3 vector)
@@ -247,48 +250,23 @@ namespace MathSharp
             Vector128<float> vectorSquared = Multiply(vec, vec);
 
             // Polynomial approx
-            Vector128<float> sc1 = SinCoefficient1;
-            Vector128<float> constants = PermuteWithX(sc1);
-            Vector128<float> result = Multiply(constants, vectorSquared);
-
             Vector128<float> sc0 = SinCoefficient0;
-            constants = PermuteWithW(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
+
+            Vector128<float> constants = Vector128.Create(SinCoefficient1Scalar);
+            Vector128<float> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
 
             constants = PermuteWithZ(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
+            result = FastMultiplyAdd(result, vectorSquared, constants);
 
             constants = PermuteWithY(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
+            result = FastMultiplyAdd(result, vectorSquared, constants);
 
             constants = PermuteWithX(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-            result = Add(result, SingleConstants.One);
+            result = FastMultiplyAdd(result, vectorSquared, constants);
+
+            result = FastMultiplyAdd(result, vectorSquared, SingleConstants.One);
+
             result = Multiply(result, vec);
-
-            //Vector128<float> sc1 = SinCoefficient1;
-            //Vector128<float> constants = PermuteWithX(sc1);
-            //Vector128<float> result = Multiply(constants, vectorSquared);
-
-            //Vector128<float> sc0 = SinCoefficient0;
-            //constants = PermuteWithW(sc0);
-            //result = Add(result, constants);
-
-            //constants = PermuteWithZ(sc0);
-            //result = FusedMultiplyAdd(result, vectorSquared, constants);
-
-            //constants = PermuteWithY(sc0);
-            //result = FusedMultiplyAdd(result, vectorSquared, constants);
-
-            //constants = PermuteWithX(sc0);
-            //result = FusedMultiplyAdd(result, vectorSquared, constants);
-
-            //result = FusedMultiplyAdd(result, vectorSquared, SingleConstants.One);
-            //result = Multiply(result, vec);
 
             return result;
         }

@@ -4,6 +4,7 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using MathSharp.Interactive.Benchmarks.Vector.Single;
 using static MathSharp.Vector;
 
 namespace MathSharp.Interactive
@@ -12,25 +13,7 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            var vector = Vector128.Create(0u, 1u, 2u, 3u).AsSingle();
-            var one = Vector128.Create(1u);
-
-            for (uint i = 0; i < uint.MaxValue; i += 4)
-            {
-                var sin = Sin(vector);
-                var sinFma = SinBenchmark.SinFma(vector);
-
-                var comp = CompareEqual(sin, sinFma);
-
-                if (comp.AnyFalse())
-                {
-                    Console.WriteLine($"With value {vector}: Sin = {sin}, SinFma = {sinFma}");
-                }
-
-                vector = Add(vector.AsUInt32(), one).AsSingle();
-            }
-
-            Console.WriteLine("Done");
+            BenchmarkRunner.Run<SineWaveBenchmark>();
         }
     }
 
@@ -168,18 +151,18 @@ namespace MathSharp.Interactive
 
             Vector128<float> constants = PermuteWithX(sc1);
 
-            Vector128<float> result = FusedMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
+            Vector128<float> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
 
             constants = PermuteWithZ(sc0);
-            result = FusedMultiplyAdd(result, vectorSquared, constants);
+            result = FastMultiplyAdd(result, vectorSquared, constants);
 
             constants = PermuteWithY(sc0);
-            result = FusedMultiplyAdd(result, vectorSquared, constants);
+            result = FastMultiplyAdd(result, vectorSquared, constants);
 
             constants = PermuteWithX(sc0);
-            result = FusedMultiplyAdd(result, vectorSquared, constants);
+            result = FastMultiplyAdd(result, vectorSquared, constants);
 
-            result = FusedMultiplyAdd(result, vectorSquared, SingleConstants.One);
+            result = FastMultiplyAdd(result, vectorSquared, SingleConstants.One);
 
             result = Multiply(result, vec);
 
