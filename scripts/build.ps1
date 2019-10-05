@@ -55,10 +55,10 @@ function Help() {
 
 function Pack() {
   $logFile = Join-Path -Path $LogDir -ChildPath "$configuration\pack.binlog"
-  & dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$solution"
+  & dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$pack"
 
   if ($LastExitCode -ne 0) {
-    throw "'Pack' failed for '$solution'"
+    throw "'Pack' failed for '$pack'"
   }
 }
 
@@ -102,6 +102,8 @@ try {
   if ($solution -eq "") {
     $solution = Join-Path -Path $RepoRoot -ChildPath "MathSharp.sln"
   }
+
+  $pack = Join-Path -Path $RepoRoot -ChildPath "sources" -AdditionalChildPath "MathSharp" "MathSharp.csproj"
 
   $ArtifactsDir = Join-Path -Path $RepoRoot -ChildPath "artifacts"
   Create-Directory -Path $ArtifactsDir

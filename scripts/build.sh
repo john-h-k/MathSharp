@@ -118,15 +118,15 @@ function Pack {
   logFile="$LogDir/$configuration/pack.binlog"
 
   if [[ -z "$properties" ]]; then
-    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$solution"
+    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$pack"
   else
-    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$solution"
+    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$pack"
   fi
 
   LASTEXITCODE=$?
 
   if [ "$LASTEXITCODE" != 0 ]; then
-    echo "'Build' failed for '$solution'"
+    echo "'Build' failed for '$pack'"
     return "$LASTEXITCODE"
   fi
 }
@@ -186,6 +186,8 @@ RepoRoot="$ScriptRoot/.."
 if [[ -z "$solution" ]]; then
   solution="$RepoRoot/MathSharp.sln"
 fi
+
+pack = "$RepoRoot/sources/MathSharp/MathSharp.csproj"
 
 ArtifactsDir="$RepoRoot/artifacts"
 CreateDirectory "$ArtifactsDir"
