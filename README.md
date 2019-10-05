@@ -2,7 +2,7 @@
 MathSharp is a vector and matrix library written in C# using hardware intrinsics. Thanks to hardware acceleration, MathSharp is significantly faster than most mathematics libraries out there, but only supports .NET Core 3.0 and up.
 
 #### Disclaimer
-MathSharp is a library written, managed, and maintained by John Kelly (@johnkellyoxford) with support of The Open Toolkit Project; completely independent of the OpenTK library. OpenTK provides extension libraries enabling interoperability with MathSharp, which can be found in the OpenTK repository. To see other contributors to the MathSharp library, see the [contributors page](https://github.com/opentk/MathSharp/contributors)
+MathSharp is a library written, managed, and maintained by John Kelly ([@john-h-k](https://github.com/john-h-k))
 
 # How to use
 TODO

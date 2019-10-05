@@ -22,17 +22,9 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
         [MemberData(nameof(Data))]
         public void Negate_Theory(Vector128<float> vector, Vector4 expected)
         {
-            Vector128<float> result = Vector.Negate4D(vector);
+            Vector128<float> result = Vector.Negate(vector);
 
             Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
-        }
-
-        [Fact]
-        public void Negate_NegateZero_Passes()
-        {
-            Vector128<float> result = Vector.Negate4D(Vector128.Create(0f));
-
-            Assert.True(result.AsInt32().Equals(Vector128.Create(int.MinValue)));
         }
     }
 }

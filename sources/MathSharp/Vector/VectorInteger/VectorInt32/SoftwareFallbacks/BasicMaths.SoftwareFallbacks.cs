@@ -8,12 +8,12 @@ namespace MathSharp
     using Vector4Int32 = Vector128<int>;
     using Vector4Int32Param1_3 = Vector128<int>;
 
-    public static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacks
     {
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Abs_Software(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Abs_Software(in Vector4Int32Param1_3 vector)
         {
             return Vector128.Create(
                 Math.Abs(X(vector)),
@@ -24,7 +24,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 HorizontalAdd_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 HorizontalAdd_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 X(left) + Y(left),
@@ -35,7 +35,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Add_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 X(left) + X(right),
@@ -46,7 +46,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Add_Software(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4Int32 Add_Software(in Vector4Int32Param1_3 vector, int scalar)
         {
             return Vector128.Create(
                 X(vector) + scalar,
@@ -57,7 +57,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Subtract_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 X(left) - X(right),
@@ -68,7 +68,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Subtract_Software(Vector4Int32Param1_3 vector, int scalar)
+        public static Vector4Int32 Subtract_Software(in Vector4Int32Param1_3 vector, int scalar)
         {
             return Vector128.Create(
                 X(vector) - scalar,
@@ -79,7 +79,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Multiply_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 X(left) * X(right),
@@ -90,7 +90,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Multiply_Software(Vector4Int32Param1_3 left, int scalar)
+        public static Vector4Int32 Multiply_Software(in Vector4Int32Param1_3 left, int scalar)
         {
             return Vector128.Create(
                 X(left) * scalar,
@@ -101,7 +101,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide_Software(Vector4Int32Param1_3 dividend, Vector4Int32Param1_3 divisor)
+        public static Vector4Int32 Divide_Software(in Vector4Int32Param1_3 dividend, in Vector4Int32Param1_3 divisor)
         {
             return Vector128.Create(
                 X(dividend) / X(divisor),
@@ -112,7 +112,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Divide_Software(Vector4Int32Param1_3 dividend, int scalarDivisor)
+        public static Vector4Int32 Divide_Software(in Vector4Int32Param1_3 dividend, int scalarDivisor)
         {
             return Vector128.Create(
                 X(dividend) / scalarDivisor,
@@ -123,7 +123,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Clamp_Software(Vector4Int32Param1_3 vector, Vector4Int32Param1_3 low, Vector4Int32Param1_3 high)
+        public static Vector4Int32 Clamp_Software(in Vector4Int32Param1_3 vector, in Vector4Int32Param1_3 low, in Vector4Int32Param1_3 high)
         {
             return Vector128.Create(
                 Math.Clamp(X(vector), X(low), X(high)),
@@ -134,7 +134,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Sqrt_Software(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Sqrt_Software(in Vector4Int32Param1_3 vector)
         {
             return Vector128.Create(
                 (int)MathF.Sqrt(X(vector)),
@@ -145,7 +145,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Max_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Max_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 Math.Max(X(left), X(right)),
@@ -156,7 +156,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Min_Software(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 Min_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             return Vector128.Create(
                 Math.Min(X(left), X(right)),
@@ -167,7 +167,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate2D_Software(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate2D_Software(in Vector4Int32Param1_3 vector)
         {
             return Vector128.Create(
                 -X(vector),
@@ -178,7 +178,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate3D_Software(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate3D_Software(in Vector4Int32Param1_3 vector)
         {
             return Vector128.Create(
                 -X(vector),
@@ -189,7 +189,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Negate4D_Software(Vector4Int32Param1_3 vector)
+        public static Vector4Int32 Negate4D_Software(in Vector4Int32Param1_3 vector)
         {
             return Vector128.Create(
                 -X(vector),

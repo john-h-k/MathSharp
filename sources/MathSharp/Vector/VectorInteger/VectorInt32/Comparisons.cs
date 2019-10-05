@@ -11,21 +11,21 @@ namespace MathSharp
 
     public static partial class Vector
     {
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Equality(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 CompareEqual(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
                 return Sse2.CompareEqual(left, right);
             }
 
-            return Equality_Software(left, right);
+            return CompareEqual_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 Inequality(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 CompareNotEqual(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -33,36 +33,36 @@ namespace MathSharp
                 return Sse2.Xor(Sse2.CompareEqual(left, right), mask);
             }
 
-            return Inequality_Software(left, right);
+            return CompareNotEqual_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 GreaterThan(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 CompareGreaterThan(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
                 return Sse2.CompareGreaterThan(left, right);
             }
 
-            return GreaterThan_Software(left, right);
+            return CompareGreaterThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 LessThan(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 CompareLessThan(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
                 return Sse2.CompareLessThan(left, right);
             }
 
-            return LessThan_Software(left, right);
+            return CompareLessThan_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 GreaterThanOrEqual(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 CompareGreaterThanOrEqual(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -70,12 +70,12 @@ namespace MathSharp
                 return Sse2.Xor(Sse2.CompareLessThan(left, right), mask);
             }
 
-            return GreaterThanOrEqual_Software(left, right);
+            return CompareGreaterThanOrEqual_Software(left, right);
         }
 
-        [UsesInstructionSet(InstructionSets.Sse2)]
+        
         [MethodImpl(MaxOpt)]
-        public static Vector4Int32 LessThanOrEqual(Vector4Int32Param1_3 left, Vector4Int32Param1_3 right)
+        public static Vector4Int32 CompareLessThanOrEqual(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)
         {
             if (Sse2.IsSupported)
             {
@@ -83,7 +83,7 @@ namespace MathSharp
                 return Sse2.Xor(Sse2.CompareGreaterThan(left, right), mask);
             }
 
-            return LessThanOrEqual_Software(left, right);
+            return CompareLessThanOrEqual_Software(left, right);
         }
     }
 }

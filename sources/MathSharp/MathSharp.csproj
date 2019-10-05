@@ -5,7 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Vector\VectorInteger\VectorInt64\**" />
+    <Compile Remove="Vector\VectorInteger\VectorUInt64\**" />
+    <EmbeddedResource Remove="Vector\VectorInteger\VectorInt64\**" />
+    <EmbeddedResource Remove="Vector\VectorInteger\VectorUInt64\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="obj\Debug\netcoreapp3.0\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="docfx.console" Version="2.45.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

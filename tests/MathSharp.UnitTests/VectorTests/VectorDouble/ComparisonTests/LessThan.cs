@@ -33,9 +33,9 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.ComparisonTests
         [MemberData(nameof(Data))]
         public static void LessThan_Theory(Vector256<double> left, Vector256<double> right, bool[] expected)
         {
-            Vector256<long> result1 = Vector.LessThan(left, right).AsInt64();
+            Vector256<long> result1 = Vector.CompareLessThan(left, right).AsInt64();
 
-            Assert.True((bool) AreAllNotEqual(expected, result1));
+            Assert.True(AreAllNotEqual(expected, result1));
         }
     }
 }

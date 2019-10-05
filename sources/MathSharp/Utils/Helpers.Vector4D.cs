@@ -9,5 +9,14 @@ namespace MathSharp.Utils
     {
         public static readonly double NoBitsSetDouble = 0d;
         public static readonly double AllBitsSetDouble = Unsafe.As<int, double>(ref Unsafe.AsRef(-1));
+
+        public static void GetLowHigh(Vector256<double> vector, out Vector128<double> low, out Vector128<double> high)
+        {
+            low = vector.GetLower();
+            high = vector.GetUpper();
+        }
+
+        public static Vector256<double> FromLowHigh(Vector128<double> low, Vector128<double> high)
+            => Vector256.Create(low, high);
     }
 }

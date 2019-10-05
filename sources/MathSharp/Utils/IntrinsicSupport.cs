@@ -75,17 +75,43 @@
 
 #endif
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+using static System.Runtime.InteropServices.RuntimeInformation;
 
 // ReSharper disable All
 
 namespace MathSharp.Utils
 {
     /// <summary>
-    /// Checks whether it is allowed for the program to use certain intrinsic supports
+    /// Checks whether it is allowed for the program to use certaintrinsic supports
     /// </summary>
     // TODO investigate inlining - ALL of these *should* be inlined to be zero-cost ( do we need AggressiveInlining? - unlikely but possible )
-    internal static class IntrinsicSupport
+    public static class IntrinsicSupport
     {
+        private const string IsSupported = nameof(IsSupported);
+        private const string IntrinsicNamespace = "System.Runtime.Intrinsics";
+
+        public static string SupportSummary { get; } =
+            "System:\n" +
+            $"64 bit: {Environment.Is64BitProcess}\n" +
+            $"Architecture: {ProcessArchitecture}{(ProcessArchitecture == OSArchitecture ? string.Empty : $"-- NOTE: Process arch {{{ProcessArchitecture}}} differs from OS arch {{{OSArchitecture}}}")}\n" +
+            $"OS: {OSDescription}" +
+            "\n\n\n" +
+            string.Join('\n', typeof(Vector128).Assembly.GetTypes().Where(IsIsaClass).Select(FormatIsa));
+
+        private static bool IsIsaClass(Type isa) => (isa.Namespace?.StartsWith(IntrinsicNamespace)).GetValueOrDefault() && isa.GetProperty(IsSupported) is object;
+
+        private static string FormatIsa(Type isa) => $"{isa.Namespace!.Split('.').Last().ToUpper()} -- " + // Get ARM or x86
+                                                     $"{(isa.IsNested ? $"{isa.DeclaringType!.Name.ToUpper()}-" : string.Empty) + isa.Name.ToUpper()}: " + // E.g SSE or SSE-X64
+                                                     $"{((bool)isa.GetProperty(IsSupported)!.GetMethod!.Invoke(null, null)! ? "Supported" : "Unsupported")}";
+
+
         #region X86
 
         #region Vector ISAs

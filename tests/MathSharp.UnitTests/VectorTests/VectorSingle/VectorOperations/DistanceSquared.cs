@@ -30,8 +30,8 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
                 {
                     case VectorDimensions.V2D:
                         {
-                            Vector2 v1 = ByValToSlowVector2(((Vector128<float>)set[0]));
-                            Vector2 v2 = ByValToSlowVector2(((Vector128<float>)set[1]));
+                            Vector2 v1 = ByValToSlowVector2((Vector128<float>)set[0]);
+                            Vector2 v2 = ByValToSlowVector2((Vector128<float>)set[1]);
                             float dot = Vector2.DistanceSquared(v1, v2);
                             set[2] = new Vector2(dot);
                             break;
@@ -39,8 +39,8 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 
                     case VectorDimensions.V3D:
                         {
-                            Vector3 v1 = ByValToSlowVector3(((Vector128<float>)set[0]));
-                            Vector3 v2 = ByValToSlowVector3(((Vector128<float>)set[1]));
+                            Vector3 v1 = ByValToSlowVector3((Vector128<float>)set[0]);
+                            Vector3 v2 = ByValToSlowVector3((Vector128<float>)set[1]);
                             float dot = Vector3.DistanceSquared(v1, v2);
                             set[2] = new Vector3(dot);
                             break;
@@ -48,8 +48,8 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 
                     case VectorDimensions.V4D:
                         {
-                            Vector4 v1 = ByValToSlowVector4(((Vector128<float>)set[0]));
-                            Vector4 v2 = ByValToSlowVector4(((Vector128<float>)set[1]));
+                            Vector4 v1 = ByValToSlowVector4((Vector128<float>)set[0]);
+                            Vector4 v2 = ByValToSlowVector4((Vector128<float>)set[1]);
                             float dot = (v1 - v2).LengthSquared;
                             set[2] = new Vector4(dot);
                             break;

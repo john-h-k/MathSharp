@@ -8,15 +8,15 @@ namespace MathSharp.Utils
         /// <summary>
         /// _MM_SHUFFLE equivalent
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static byte Shuffle(byte a, byte b, byte c, byte d)
-        {
-            return (byte)(
-                (a << 6)
-                | (b << 4)
-                | (c << 2)
-                | d);
-        }
+        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        //public static byte Shuffle(byte a, byte b, byte c, byte d)
+        //{
+        //    return (byte)(
+        //        (a << 6)
+        //        | (b << 4)
+        //        | (c << 2)
+        //        | d);
+        //}
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static float BoolToSimdBoolSingle(bool val) => val ? NoBitsSetSingle : AllBitsSetSingle;
