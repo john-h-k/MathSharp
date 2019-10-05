@@ -1,8 +1,5 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using MathSharp.Interactive.Benchmarks.Vector.Single;
 using static MathSharp.Vector;
@@ -13,11 +10,7 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            Test(0);
-            Test(30);
-            Test(45);
-            Test(60);
-            Test(90);
+            BenchmarkRunner.Run<SinCosBenchmark>();
         }
 
         private static void Test(float f)
@@ -34,10 +27,12 @@ namespace MathSharp.Interactive
             Console.WriteLine($"MathSharp CosEstimate: {CosEstimate(v).ToScalar()}");
 
             SinCos(v, out Vector128<float> sin, out Vector128<float> cos);
+            SinCos_2(v, out Vector128<float> sin2, out Vector128<float> cos2);
             SinCosEstimate(v, out Vector128<float> sinEst, out Vector128<float> cosEst);
 
             Console.WriteLine($"MathF SinCos:             {MathF.Sin(f)}, {MathF.Cos(f)}");
             Console.WriteLine($"MathSharp SinCos:         {sin.ToScalar()}, {cos.ToScalar()}");
+            Console.WriteLine($"MathSharp SinCos_2:       {sin2.ToScalar()}, {cos2.ToScalar()}");
             Console.WriteLine($"MathSharp SinCosEstimate: {sinEst.ToScalar()}, {cosEst.ToScalar()}");
 
             Console.WriteLine("\n");

@@ -116,8 +116,7 @@ namespace MathSharp
             return Sin(vector);
         }
 
-        private static readonly Vector128<float> 
-            CosCoefficient0 = Vector128.Create(-0.5f, +0.041666638f, -0.0013888378f, +2.4760495e-05f);
+        private static readonly Vector128<float> CosCoefficient0 = Vector128.Create(-0.5f, +0.041666638f, -0.0013888378f, +2.4760495e-05f);
         private static readonly Vector128<float> CosCoefficient1 = Vector128.Create(-2.6051615e-07f, -0.49992746f, +0.041493919f, -0.0012712436f);
         private const float CosCoefficient1Scalar = -2.6051615e-07f;
 
@@ -227,6 +226,7 @@ namespace MathSharp
             return Cos(vector);
         }
 
+        [MethodImpl(MaxOpt)]
         public static void SinCos(Vector4FParam1_3 vector, out Vector128<float> sin, out Vector128<float> cos)
         {
             if (Sse.IsSupported)
@@ -306,6 +306,7 @@ namespace MathSharp
             }
         }
 
+        [MethodImpl(MaxOpt)]
         public static void SinCosEstimate(Vector4FParam1_3 vector, out Vector128<float> sin, out Vector128<float> cos)
         {
             if (Sse.IsSupported)

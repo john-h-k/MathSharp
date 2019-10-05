@@ -226,6 +226,7 @@ namespace MathSharp
             return Cos(vector);
         }
 
+        [MethodImpl(MaxOpt)]
         public static void SinCos(Vector4FParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
         {
             if (Sse.IsSupported)
@@ -305,6 +306,7 @@ namespace MathSharp
             }
         }
 
+        [MethodImpl(MaxOpt)]
         public static void SinCosEstimate(Vector4FParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
         {
             if (Sse.IsSupported)
