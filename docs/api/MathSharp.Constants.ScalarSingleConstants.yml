@@ -1,0 +1,568 @@
+### YamlMime:ManagedReference
+items:
+- uid: MathSharp.Constants.ScalarSingleConstants
+  commentId: T:MathSharp.Constants.ScalarSingleConstants
+  id: ScalarSingleConstants
+  parent: MathSharp.Constants
+  children:
+  - MathSharp.Constants.ScalarSingleConstants.OneDiv2Pi
+  - MathSharp.Constants.ScalarSingleConstants.OneDivPi
+  - MathSharp.Constants.ScalarSingleConstants.Pi
+  - MathSharp.Constants.ScalarSingleConstants.Pi2
+  - MathSharp.Constants.ScalarSingleConstants.PiDiv2
+  - MathSharp.Constants.ScalarSingleConstants.PiDiv4
+  langs:
+  - csharp
+  - vb
+  name: ScalarSingleConstants
+  nameWithType: ScalarSingleConstants
+  fullName: MathSharp.Constants.ScalarSingleConstants
+  type: Class
+  source:
+    remote:
+      path: sources/MathSharp/Constants/ScalarSingleConstants.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: ScalarSingleConstants
+    path: Constants/ScalarSingleConstants.cs
+    startLine: 7
+  assemblies:
+  - MathSharp
+  namespace: MathSharp.Constants
+  summary: "\n<xref href=\"System.Single\" data-throw-if-not-resolved=\"false\"></xref> constants used frequently in maths\n"
+  example: []
+  syntax:
+    content: public static class ScalarSingleConstants
+    content.vb: Public Module ScalarSingleConstants
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - static
+  - class
+  modifiers.vb:
+  - Public
+  - Module
+- uid: MathSharp.Constants.ScalarSingleConstants.Pi
+  commentId: F:MathSharp.Constants.ScalarSingleConstants.Pi
+  id: Pi
+  parent: MathSharp.Constants.ScalarSingleConstants
+  langs:
+  - csharp
+  - vb
+  name: Pi
+  nameWithType: ScalarSingleConstants.Pi
+  fullName: MathSharp.Constants.ScalarSingleConstants.Pi
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Constants/ScalarSingleConstants.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Pi
+    path: Constants/ScalarSingleConstants.cs
+    startLine: 12
+  assemblies:
+  - MathSharp
+  namespace: MathSharp.Constants
+  summary: "\nRepresents the ratio of the circumference of a circle to its diameter, specified by the constant, π\n"
+  example: []
+  syntax:
+    content: public const float Pi = 3.14159274F
+    return:
+      type: System.Single
+    content.vb: Public Const Pi As Single = 3.14159274F
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.Constants.ScalarSingleConstants.Pi2
+  commentId: F:MathSharp.Constants.ScalarSingleConstants.Pi2
+  id: Pi2
+  parent: MathSharp.Constants.ScalarSingleConstants
+  langs:
+  - csharp
+  - vb
+  name: Pi2
+  nameWithType: ScalarSingleConstants.Pi2
+  fullName: MathSharp.Constants.ScalarSingleConstants.Pi2
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Constants/ScalarSingleConstants.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Pi2
+    path: Constants/ScalarSingleConstants.cs
+    startLine: 17
+  assemblies:
+  - MathSharp
+  namespace: MathSharp.Constants
+  summary: "\nπ multiplied by 2\n"
+  example: []
+  syntax:
+    content: public const float Pi2 = 6.28318548F
+    return:
+      type: System.Single
+    content.vb: Public Const Pi2 As Single = 6.28318548F
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.Constants.ScalarSingleConstants.OneDivPi
+  commentId: F:MathSharp.Constants.ScalarSingleConstants.OneDivPi
+  id: OneDivPi
+  parent: MathSharp.Constants.ScalarSingleConstants
+  langs:
+  - csharp
+  - vb
+  name: OneDivPi
+  nameWithType: ScalarSingleConstants.OneDivPi
+  fullName: MathSharp.Constants.ScalarSingleConstants.OneDivPi
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Constants/ScalarSingleConstants.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: OneDivPi
+    path: Constants/ScalarSingleConstants.cs
+    startLine: 22
+  assemblies:
+  - MathSharp
+  namespace: MathSharp.Constants
+  summary: "\nThe reciprocal of π, 1 divided by π\n"
+  example: []
+  syntax:
+    content: public const float OneDivPi = 0.318309873F
+    return:
+      type: System.Single
+    content.vb: Public Const OneDivPi As Single = 0.318309873F
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.Constants.ScalarSingleConstants.OneDiv2Pi
+  commentId: F:MathSharp.Constants.ScalarSingleConstants.OneDiv2Pi
+  id: OneDiv2Pi
+  parent: MathSharp.Constants.ScalarSingleConstants
+  langs:
+  - csharp
+  - vb
+  name: OneDiv2Pi
+  nameWithType: ScalarSingleConstants.OneDiv2Pi
+  fullName: MathSharp.Constants.ScalarSingleConstants.OneDiv2Pi
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Constants/ScalarSingleConstants.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: OneDiv2Pi
+    path: Constants/ScalarSingleConstants.cs
+    startLine: 27
+  assemblies:
+  - MathSharp
+  namespace: MathSharp.Constants
+  summary: "\nThe reciprocal of 2π, 1 divided by 2π\n"
+  example: []
+  syntax:
+    content: public const float OneDiv2Pi = 0.159154937F
+    return:
+      type: System.Single
+    content.vb: Public Const OneDiv2Pi As Single = 0.159154937F
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.Constants.ScalarSingleConstants.PiDiv2
+  commentId: F:MathSharp.Constants.ScalarSingleConstants.PiDiv2
+  id: PiDiv2
+  parent: MathSharp.Constants.ScalarSingleConstants
+  langs:
+  - csharp
+  - vb
+  name: PiDiv2
+  nameWithType: ScalarSingleConstants.PiDiv2
+  fullName: MathSharp.Constants.ScalarSingleConstants.PiDiv2
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Constants/ScalarSingleConstants.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: PiDiv2
+    path: Constants/ScalarSingleConstants.cs
+    startLine: 32
+  assemblies:
+  - MathSharp
+  namespace: MathSharp.Constants
+  summary: "\nπ divided by 2\n"
+  example: []
+  syntax:
+    content: public const float PiDiv2 = 1.57079637F
+    return:
+      type: System.Single
+    content.vb: Public Const PiDiv2 As Single = 1.57079637F
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.Constants.ScalarSingleConstants.PiDiv4
+  commentId: F:MathSharp.Constants.ScalarSingleConstants.PiDiv4
+  id: PiDiv4
+  parent: MathSharp.Constants.ScalarSingleConstants
+  langs:
+  - csharp
+  - vb
+  name: PiDiv4
+  nameWithType: ScalarSingleConstants.PiDiv4
+  fullName: MathSharp.Constants.ScalarSingleConstants.PiDiv4
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Constants/ScalarSingleConstants.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: PiDiv4
+    path: Constants/ScalarSingleConstants.cs
+    startLine: 37
+  assemblies:
+  - MathSharp
+  namespace: MathSharp.Constants
+  summary: "\nπ divided by 4\n"
+  example: []
+  syntax:
+    content: public const float PiDiv4 = 0.7853982F
+    return:
+      type: System.Single
+    content.vb: Public Const PiDiv4 As Single = 0.7853982F
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+references:
+- uid: System.Single
+  commentId: T:System.Single
+  parent: System
+  isExternal: true
+  name: Single
+  nameWithType: Single
+  fullName: System.Single
+- uid: MathSharp.Constants
+  commentId: N:MathSharp.Constants
+  name: MathSharp.Constants
+  nameWithType: MathSharp.Constants
+  fullName: MathSharp.Constants
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System

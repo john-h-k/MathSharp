@@ -6,7 +6,7 @@
           "files": [
             "**.csproj"
           ],
-          "src": "/"
+          "src": "../MathSharp"
         }
       ],
       "dest": "../../docs/api",
