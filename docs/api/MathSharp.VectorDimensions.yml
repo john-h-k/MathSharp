@@ -1,0 +1,178 @@
+### YamlMime:ManagedReference
+items:
+- uid: MathSharp.VectorDimensions
+  commentId: T:MathSharp.VectorDimensions
+  id: VectorDimensions
+  parent: MathSharp
+  children:
+  - MathSharp.VectorDimensions.V1D
+  - MathSharp.VectorDimensions.V2D
+  - MathSharp.VectorDimensions.V3D
+  - MathSharp.VectorDimensions.V4D
+  langs:
+  - csharp
+  - vb
+  name: VectorDimensions
+  nameWithType: VectorDimensions
+  fullName: MathSharp.VectorDimensions
+  type: Enum
+  source:
+    remote:
+      path: sources/MathSharp/Vector/VectorDimensions.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: VectorDimensions
+    path: Vector/VectorDimensions.cs
+    startLine: 2
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public enum VectorDimensions
+    content.vb: Public Enum VectorDimensions
+  modifiers.csharp:
+  - public
+  - enum
+  modifiers.vb:
+  - Public
+  - Enum
+- uid: MathSharp.VectorDimensions.V1D
+  commentId: F:MathSharp.VectorDimensions.V1D
+  id: V1D
+  parent: MathSharp.VectorDimensions
+  langs:
+  - csharp
+  - vb
+  name: V1D
+  nameWithType: VectorDimensions.V1D
+  fullName: MathSharp.VectorDimensions.V1D
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Vector/VectorDimensions.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: V1D
+    path: Vector/VectorDimensions.cs
+    startLine: 4
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: V1D = 1
+    return:
+      type: MathSharp.VectorDimensions
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.VectorDimensions.V2D
+  commentId: F:MathSharp.VectorDimensions.V2D
+  id: V2D
+  parent: MathSharp.VectorDimensions
+  langs:
+  - csharp
+  - vb
+  name: V2D
+  nameWithType: VectorDimensions.V2D
+  fullName: MathSharp.VectorDimensions.V2D
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Vector/VectorDimensions.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: V2D
+    path: Vector/VectorDimensions.cs
+    startLine: 5
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: V2D = 2
+    return:
+      type: MathSharp.VectorDimensions
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.VectorDimensions.V3D
+  commentId: F:MathSharp.VectorDimensions.V3D
+  id: V3D
+  parent: MathSharp.VectorDimensions
+  langs:
+  - csharp
+  - vb
+  name: V3D
+  nameWithType: VectorDimensions.V3D
+  fullName: MathSharp.VectorDimensions.V3D
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Vector/VectorDimensions.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: V3D
+    path: Vector/VectorDimensions.cs
+    startLine: 6
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: V3D = 3
+    return:
+      type: MathSharp.VectorDimensions
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: MathSharp.VectorDimensions.V4D
+  commentId: F:MathSharp.VectorDimensions.V4D
+  id: V4D
+  parent: MathSharp.VectorDimensions
+  langs:
+  - csharp
+  - vb
+  name: V4D
+  nameWithType: VectorDimensions.V4D
+  fullName: MathSharp.VectorDimensions.V4D
+  type: Field
+  source:
+    remote:
+      path: sources/MathSharp/Vector/VectorDimensions.cs
+      branch: dev-john
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: V4D
+    path: Vector/VectorDimensions.cs
+    startLine: 7
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: V4D = 4
+    return:
+      type: MathSharp.VectorDimensions
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+references:
+- uid: MathSharp
+  commentId: N:MathSharp
+  name: MathSharp
+  nameWithType: MathSharp
+  fullName: MathSharp
+- uid: MathSharp.VectorDimensions
+  commentId: T:MathSharp.VectorDimensions
+  parent: MathSharp
+  name: VectorDimensions
+  nameWithType: VectorDimensions
+  fullName: MathSharp.VectorDimensions

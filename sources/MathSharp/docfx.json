@@ -6,7 +6,7 @@
           "files": [
             "**.csproj"
           ],
-          "src": "/"
+          "src": "../MathSharp"
         }
       ],
       "dest": "../../docs/api",
@@ -51,7 +51,7 @@
     "dest": "../../docs",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
-    "template": [ "default", "templates/material" ],
+    "template": [ "default", "../../docs/templates/material" ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
