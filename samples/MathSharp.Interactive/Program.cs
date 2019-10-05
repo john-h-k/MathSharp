@@ -13,160 +13,34 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            BenchmarkRunner.Run<SineWaveBenchmark>();
-        }
-    }
-
-    public class SinBenchmark
-    {
-        public static object[] Data => new object[] { Vector128.Create(1f) };
-
-        private static readonly Vector128<float> SinCoefficient0 = Vector128.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
-        private static readonly Vector128<float> SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
-
-        [Benchmark]
-        [ArgumentsSource(nameof(Data))]
-        public Vector128<float> SinNormal(Vector128<float> vector)
-        {
-            Vector128<float> vec = Mod2Pi(vector);
-
-            Vector128<float> sign = ExtractSign(vec);
-            Vector128<float> tmp = Or(SingleConstants.Pi, sign); // Pi with the sign from vector
-
-            Vector128<float> abs = AndNot(sign, vec); // Gets the absolute of vector
-
-            Vector128<float> neg = Subtract(tmp, vec);
-
-            Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
-
-            Vector128<float> select0 = SelectWhereTrue(vec, comp);
-            Vector128<float> select1 = SelectWhereFalse(neg, comp);
-
-            vec = Or(select0, select1);
-
-            Vector128<float> vectorSquared = Multiply(vec, vec);
-
-            // Polynomial approx
-            Vector128<float> sc1 = SinCoefficient1;
-            Vector128<float> constants = PermuteWithX(sc1);
-            Vector128<float> result = Multiply(constants, vectorSquared);
-
-            Vector128<float> sc0 = SinCoefficient0;
-            constants = PermuteWithW(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-
-            constants = PermuteWithZ(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-
-            constants = PermuteWithY(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-
-            constants = PermuteWithX(sc0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-            result = Add(result, SingleConstants.One);
-            result = Multiply(result, vec);
-
-            return result;
+            Test(0);
+            Test(30);
+            Test(45);
+            Test(60);
+            Test(90);
         }
 
-        [Benchmark]
-        [ArgumentsSource(nameof(Data))]
-        public Vector128<float> SinRearranged(Vector128<float> vector)
+        private static void Test(float f)
         {
-            Vector128<float> vec = Mod2Pi(vector);
+            Console.WriteLine($"For value {f}: ");
 
-            Vector128<float> sign = ExtractSign(vec);
-            Vector128<float> tmp = Or(SingleConstants.Pi, sign); // Pi with the sign from vector
+            var v = Vector128.Create(f);
+            Console.WriteLine($"MathF Sin:             {MathF.Sin(f)}");
+            Console.WriteLine($"MathSharp Sin:         {Sin(v).ToScalar()}");
+            Console.WriteLine($"MathSharp SinEstimate: {SinEstimate(v).ToScalar()}");
 
-            Vector128<float> abs = AndNot(sign, vec); // Gets the absolute of vector
+            Console.WriteLine($"MathF Cos:             {MathF.Cos(f)}");
+            Console.WriteLine($"MathSharp Cos:         {Cos(v).ToScalar()}");
+            Console.WriteLine($"MathSharp CosEstimate: {CosEstimate(v).ToScalar()}");
 
-            Vector128<float> neg = Subtract(tmp, vec);
+            SinCos(v, out Vector128<float> sin, out Vector128<float> cos);
+            SinCosEstimate(v, out Vector128<float> sinEst, out Vector128<float> cosEst);
 
-            Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
+            Console.WriteLine($"MathF SinCos:             {MathF.Sin(f)}, {MathF.Cos(f)}");
+            Console.WriteLine($"MathSharp SinCos:         {sin.ToScalar()}, {cos.ToScalar()}");
+            Console.WriteLine($"MathSharp SinCosEstimate: {sinEst.ToScalar()}, {cosEst.ToScalar()}");
 
-            Vector128<float> select0 = SelectWhereTrue(vec, comp);
-            Vector128<float> select1 = SelectWhereFalse(neg, comp);
-
-            vec = Or(select0, select1);
-
-            Vector128<float> vectorSquared = Multiply(vec, vec);
-
-            // Polynomial approx
-            Vector128<float> sc0 = SinCoefficient0;
-            Vector128<float> sc1 = SinCoefficient1;
-
-            Vector128<float> constants = PermuteWithX(sc1);
-            Vector128<float> result = Multiply(constants, vectorSquared);
-            result = Add(result, PermuteWithW(sc0));
-
-            constants = PermuteWithZ(sc0);
-            result = Multiply(result, vectorSquared);
-            result = Add(result, constants);
-
-            constants = PermuteWithY(sc0);
-            result = Multiply(result, vectorSquared);
-            result = Add(result, constants);
-
-            constants = PermuteWithX(sc0);
-            result = Multiply(result, vectorSquared);
-            result = Add(result, constants);
-
-            result = Multiply(result, vectorSquared);
-            result = Add(result, SingleConstants.One);
-
-            result = Multiply(result, vec);
-
-            return result;
-        }
-
-        [Benchmark]
-        [ArgumentsSource(nameof(Data))]
-        public static Vector128<float> SinFma(Vector128<float> vector)
-        {
-            Vector128<float> vec = Mod2Pi(vector);
-
-            Vector128<float> sign = ExtractSign(vec);
-            Vector128<float> tmp = Or(SingleConstants.Pi, sign); // Pi with the sign from vector
-
-            Vector128<float> abs = AndNot(sign, vec); // Gets the absolute of vector
-
-            Vector128<float> neg = Subtract(tmp, vec);
-
-            Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
-
-            Vector128<float> select0 = SelectWhereTrue(vec, comp);
-            Vector128<float> select1 = SelectWhereFalse(neg, comp);
-
-            vec = Or(select0, select1);
-
-            Vector128<float> vectorSquared = Multiply(vec, vec);
-
-            // Polynomial approx
-            Vector128<float> sc0 = SinCoefficient0;
-            Vector128<float> sc1 = SinCoefficient1;
-
-            Vector128<float> constants = PermuteWithX(sc1);
-
-            Vector128<float> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
-
-            constants = PermuteWithZ(sc0);
-            result = FastMultiplyAdd(result, vectorSquared, constants);
-
-            constants = PermuteWithY(sc0);
-            result = FastMultiplyAdd(result, vectorSquared, constants);
-
-            constants = PermuteWithX(sc0);
-            result = FastMultiplyAdd(result, vectorSquared, constants);
-
-            result = FastMultiplyAdd(result, vectorSquared, SingleConstants.One);
-
-            result = Multiply(result, vec);
-
-            return result;
+            Console.WriteLine("\n");
         }
     }
 }

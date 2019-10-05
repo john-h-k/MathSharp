@@ -10,6 +10,8 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     public class SineWaveBenchmark
     {
+        private const bool UseSinEstimate = true;
+
         private const int SampleRate = 44100;
         private const float Tau = MathF.PI * 2;
         //The wave's frequency, A4.
@@ -61,7 +63,6 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
                 {
                     Vector128<float> vector = Divide(samplePoints, sampleRate);
                     vector = Multiply(vector, sine);
-                    vector = Sin(vector);
 
                     vector.Store4D(&ptr[i]);
 

@@ -22,6 +22,12 @@ namespace MathSharp
                 get => Vector128.Create(1f);
             }
 
+            public static Vector128<float> NegativeOne
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector128.Create(-1f);
+            }
+
             // Uses the 'ones idiom', which is where
             // cmpeq xmmN, xmmN
             // is used, and the result is guaranteed to be all ones
@@ -85,6 +91,12 @@ namespace MathSharp
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => Vector256.Create(1d);
+            }
+
+            public static Vector256<double> NegativeOne
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector256.Create(-1d);
             }
 
             // Uses the 'ones idiom', which is where

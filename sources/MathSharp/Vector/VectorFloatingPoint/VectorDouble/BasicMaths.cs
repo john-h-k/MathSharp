@@ -173,57 +173,17 @@ namespace MathSharp
         public static Vector4D Negate(in Vector4DParam1_3 vector)
             => Xor(DoubleConstants.MaskNotSign, vector);
 
-
-        private static readonly Vector256<double> SinCoefficient0D = Vector256.Create(-0.16666667d, +0.0083333310d, -0.00019840874d, +2.7525562e-06d);
-        private static readonly Vector256<double> SinCoefficient1D = Vector256.Create(-2.3889859e-08d, -0.16665852d, +0.0083139502d, -0.00018524670d);
+        [MethodImpl(MaxOpt)]
+        public static Vector4DParam1_3 CopySign(Vector4DParam1_3 sign, Vector4DParam1_3 vector)
+            => Or(ExtractSign(sign), ClearSign(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Sin(in Vector4DParam1_3 vector)
-        {
-            Vector4DParam1_3 vec = Mod2Pi(vector);
+        public static Vector4DParam1_3 ExtractSign(Vector4DParam1_3 vector)
+            => And(vector, DoubleConstants.MaskNotSign);
 
-            var sign = And(vec, DoubleConstants.MaskNotSign);
-            var tmp = Or(DoubleConstants.Pi, sign); // Pi with the sign from vector
-
-            var abs = AndNot(sign, vec); // Gets the absolute of vector
-
-            var neg = Subtract(tmp, vec);
-
-            var comp = CompareLessThanOrEqual(abs, DoubleConstants.PiDiv2);
-
-            var select0 = And(comp, vec);
-            var select1 = AndNot(comp, neg);
-
-            vec = Or(select0, select1);
-
-            var vectorSquared = Multiply(vec, vec);
-
-            // Polynomial approx
-            var sc1 = SinCoefficient1D;
-            var constants = Permute(sc1, ShuffleValues._0_0_0_0);
-            var result = Multiply(constants, vectorSquared);
-
-            var sc0 = SinCoefficient0D;
-            constants = Permute(sc0, ShuffleValues._3_3_3_3);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-
-            constants = Permute(sc0, ShuffleValues._2_2_2_2);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-
-            constants = Permute(sc0, ShuffleValues._1_1_1_1);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-
-            constants = Permute(sc0, ShuffleValues._0_0_0_0);
-            result = Add(result, constants);
-            result = Multiply(result, vectorSquared);
-            result = Add(result, DoubleConstants.One);
-            result = Multiply(result, vec);
-
-            return result;
-        }
+        [MethodImpl(MaxOpt)]
+        public static Vector4DParam1_3 ClearSign(Vector4DParam1_3 vector)
+            => And(vector, DoubleConstants.MaskSign);
 
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Mod2Pi(in Vector4DParam1_3 vector)

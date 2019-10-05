@@ -224,53 +224,6 @@ namespace MathSharp
         public static Vector128<float> ClearSign(Vector128<float> vector)
             => And(vector, SingleConstants.MaskSign);
 
-        private static readonly Vector128<float> SinCoefficient0 = Vector128.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
-        private static readonly Vector128<float> SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
-        private const float SinCoefficient1Scalar = -2.3889859e-08f;
-
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> Sin(Vector4FParam1_3 vector)
-        {
-            Vector128<float> vec = Mod2Pi(vector);
-
-            Vector128<float> sign = ExtractSign(vec);
-            Vector128<float> tmp = Or(SingleConstants.Pi, sign); // Pi with the sign from vector
-
-            Vector128<float> abs = AndNot(sign, vec); // Gets the absolute of vector
-
-            Vector128<float> neg = Subtract(tmp, vec);
-
-            Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
-
-            Vector128<float> select0 = SelectWhereTrue(vec, comp);
-            Vector128<float> select1 = SelectWhereFalse( neg, comp);
-
-            vec = Or(select0, select1);
-
-            Vector128<float> vectorSquared = Multiply(vec, vec);
-
-            // Polynomial approx
-            Vector128<float> sc0 = SinCoefficient0;
-
-            Vector128<float> constants = Vector128.Create(SinCoefficient1Scalar);
-            Vector128<float> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
-
-            constants = PermuteWithZ(sc0);
-            result = FastMultiplyAdd(result, vectorSquared, constants);
-
-            constants = PermuteWithY(sc0);
-            result = FastMultiplyAdd(result, vectorSquared, constants);
-
-            constants = PermuteWithX(sc0);
-            result = FastMultiplyAdd(result, vectorSquared, constants);
-
-            result = FastMultiplyAdd(result, vectorSquared, SingleConstants.One);
-
-            result = Multiply(result, vec);
-
-            return result;
-        }
-
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Mod2Pi(Vector4FParam1_3 vector)
         {
