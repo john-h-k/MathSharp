@@ -1,0 +1,28 @@
+### YamlMime:ManagedReference
+items:
+- uid: MathSharp.Utils
+  commentId: N:MathSharp.Utils
+  id: MathSharp.Utils
+  children:
+  - MathSharp.Utils.IntrinsicSupport
+  - MathSharp.Utils.ShuffleValues
+  langs:
+  - csharp
+  - vb
+  name: MathSharp.Utils
+  nameWithType: MathSharp.Utils
+  fullName: MathSharp.Utils
+  type: Namespace
+  assemblies:
+  - MathSharp
+references:
+- uid: MathSharp.Utils.IntrinsicSupport
+  commentId: T:MathSharp.Utils.IntrinsicSupport
+  name: IntrinsicSupport
+  nameWithType: IntrinsicSupport
+  fullName: MathSharp.Utils.IntrinsicSupport
+- uid: MathSharp.Utils.ShuffleValues
+  commentId: T:MathSharp.Utils.ShuffleValues
+  name: ShuffleValues
+  nameWithType: ShuffleValues
+  fullName: MathSharp.Utils.ShuffleValues

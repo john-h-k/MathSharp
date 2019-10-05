@@ -1,0 +1,1005 @@
+### YamlMime:ManagedReference
+items:
+- uid: MathSharp.Matrix
+  commentId: T:MathSharp.Matrix
+  id: Matrix
+  parent: MathSharp
+  children:
+  - MathSharp.Matrix.Add(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  - MathSharp.Matrix.CompareEqual(MathSharp.MatrixSingle,MathSharp.MatrixSingle)
+  - MathSharp.Matrix.CreateBillboard(System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single})
+  - MathSharp.Matrix.GetTranslation(MathSharp.MatrixSingle)
+  - MathSharp.Matrix.Identity
+  - MathSharp.Matrix.IsIdentity(MathSharp.MatrixSingle)
+  - MathSharp.Matrix.Negate(MathSharp.MatrixSingle@)
+  - MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle@,System.Runtime.Intrinsics.Vector128{System.Single})
+  - MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle@,System.Single)
+  - MathSharp.Matrix.SetTranslation(MathSharp.MatrixSingle,System.Runtime.Intrinsics.Vector128{System.Single})
+  - MathSharp.Matrix.Subtract(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  - MathSharp.Matrix.Transpose(MathSharp.MatrixSingle@)
+  langs:
+  - csharp
+  - vb
+  name: Matrix
+  nameWithType: Matrix
+  fullName: MathSharp.Matrix
+  type: Class
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/MatrixOperations.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Matrix
+    path: Matrix/MatrixSingle/MatrixOperations.cs
+    startLine: 11
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static class Matrix
+    content.vb: Public Module Matrix
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - static
+  - class
+  modifiers.vb:
+  - Public
+  - Module
+- uid: MathSharp.Matrix.Add(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  commentId: M:MathSharp.Matrix.Add(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  id: Add(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: Add(MatrixSingle, MatrixSingle)
+  nameWithType: Matrix.Add(MatrixSingle, MatrixSingle)
+  fullName: MathSharp.Matrix.Add(MathSharp.MatrixSingle, MathSharp.MatrixSingle)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/BasicMaths.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Add
+    path: Matrix/MatrixSingle/BasicMaths.cs
+    startLine: 16
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right)
+    parameters:
+    - id: left
+      type: MathSharp.MatrixSingle
+    - id: right
+      type: MathSharp.MatrixSingle
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function Add(ByRef left As MatrixSingle, ByRef right As MatrixSingle) As MatrixSingle
+  overload: MathSharp.Matrix.Add*
+  nameWithType.vb: Matrix.Add(ByRef MatrixSingle, ByRef MatrixSingle)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.Add(ByRef MathSharp.MatrixSingle, ByRef MathSharp.MatrixSingle)
+  name.vb: Add(ByRef MatrixSingle, ByRef MatrixSingle)
+- uid: MathSharp.Matrix.Subtract(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  commentId: M:MathSharp.Matrix.Subtract(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  id: Subtract(MathSharp.MatrixSingle@,MathSharp.MatrixSingle@)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: Subtract(MatrixSingle, MatrixSingle)
+  nameWithType: Matrix.Subtract(MatrixSingle, MatrixSingle)
+  fullName: MathSharp.Matrix.Subtract(MathSharp.MatrixSingle, MathSharp.MatrixSingle)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/BasicMaths.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Subtract
+    path: Matrix/MatrixSingle/BasicMaths.cs
+    startLine: 26
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right)
+    parameters:
+    - id: left
+      type: MathSharp.MatrixSingle
+    - id: right
+      type: MathSharp.MatrixSingle
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function Subtract(ByRef left As MatrixSingle, ByRef right As MatrixSingle) As MatrixSingle
+  overload: MathSharp.Matrix.Subtract*
+  nameWithType.vb: Matrix.Subtract(ByRef MatrixSingle, ByRef MatrixSingle)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.Subtract(ByRef MathSharp.MatrixSingle, ByRef MathSharp.MatrixSingle)
+  name.vb: Subtract(ByRef MatrixSingle, ByRef MatrixSingle)
+- uid: MathSharp.Matrix.Negate(MathSharp.MatrixSingle@)
+  commentId: M:MathSharp.Matrix.Negate(MathSharp.MatrixSingle@)
+  id: Negate(MathSharp.MatrixSingle@)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: Negate(MatrixSingle)
+  nameWithType: Matrix.Negate(MatrixSingle)
+  fullName: MathSharp.Matrix.Negate(MathSharp.MatrixSingle)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/BasicMaths.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Negate
+    path: Matrix/MatrixSingle/BasicMaths.cs
+    startLine: 36
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle Negate(in MatrixSingle matrix)
+    parameters:
+    - id: matrix
+      type: MathSharp.MatrixSingle
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function Negate(ByRef matrix As MatrixSingle) As MatrixSingle
+  overload: MathSharp.Matrix.Negate*
+  nameWithType.vb: Matrix.Negate(ByRef MatrixSingle)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.Negate(ByRef MathSharp.MatrixSingle)
+  name.vb: Negate(ByRef MatrixSingle)
+- uid: MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle@,System.Runtime.Intrinsics.Vector128{System.Single})
+  commentId: M:MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle@,System.Runtime.Intrinsics.Vector128{System.Single})
+  id: ScalarMultiply(MathSharp.MatrixSingle@,System.Runtime.Intrinsics.Vector128{System.Single})
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: ScalarMultiply(MatrixSingle, Vector128<Single>)
+  nameWithType: Matrix.ScalarMultiply(MatrixSingle, Vector128<Single>)
+  fullName: MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle, System.Runtime.Intrinsics.Vector128<System.Single>)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/BasicMaths.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: ScalarMultiply
+    path: Matrix/MatrixSingle/BasicMaths.cs
+    startLine: 45
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle ScalarMultiply(in MatrixSingle left, Vector128<float> vectorOfScalar)
+    parameters:
+    - id: left
+      type: MathSharp.MatrixSingle
+    - id: vectorOfScalar
+      type: System.Runtime.Intrinsics.Vector128{System.Single}
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function ScalarMultiply(ByRef left As MatrixSingle, vectorOfScalar As Vector128(Of Single)) As MatrixSingle
+  overload: MathSharp.Matrix.ScalarMultiply*
+  nameWithType.vb: Matrix.ScalarMultiply(ByRef MatrixSingle, Vector128(Of Single))
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.ScalarMultiply(ByRef MathSharp.MatrixSingle, System.Runtime.Intrinsics.Vector128(Of System.Single))
+  name.vb: ScalarMultiply(ByRef MatrixSingle, Vector128(Of Single))
+- uid: MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle@,System.Single)
+  commentId: M:MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle@,System.Single)
+  id: ScalarMultiply(MathSharp.MatrixSingle@,System.Single)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: ScalarMultiply(MatrixSingle, Single)
+  nameWithType: Matrix.ScalarMultiply(MatrixSingle, Single)
+  fullName: MathSharp.Matrix.ScalarMultiply(MathSharp.MatrixSingle, System.Single)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/BasicMaths.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: ScalarMultiply
+    path: Matrix/MatrixSingle/BasicMaths.cs
+    startLine: 55
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle ScalarMultiply(in MatrixSingle left, float scalar)
+    parameters:
+    - id: left
+      type: MathSharp.MatrixSingle
+    - id: scalar
+      type: System.Single
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function ScalarMultiply(ByRef left As MatrixSingle, scalar As Single) As MatrixSingle
+  overload: MathSharp.Matrix.ScalarMultiply*
+  nameWithType.vb: Matrix.ScalarMultiply(ByRef MatrixSingle, Single)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.ScalarMultiply(ByRef MathSharp.MatrixSingle, System.Single)
+  name.vb: ScalarMultiply(ByRef MatrixSingle, Single)
+- uid: MathSharp.Matrix.Transpose(MathSharp.MatrixSingle@)
+  commentId: M:MathSharp.Matrix.Transpose(MathSharp.MatrixSingle@)
+  id: Transpose(MathSharp.MatrixSingle@)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: Transpose(MatrixSingle)
+  nameWithType: Matrix.Transpose(MatrixSingle)
+  fullName: MathSharp.Matrix.Transpose(MathSharp.MatrixSingle)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/BasicMaths.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Transpose
+    path: Matrix/MatrixSingle/BasicMaths.cs
+    startLine: 60
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle Transpose(in MatrixSingle matrix)
+    parameters:
+    - id: matrix
+      type: MathSharp.MatrixSingle
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function Transpose(ByRef matrix As MatrixSingle) As MatrixSingle
+  overload: MathSharp.Matrix.Transpose*
+  nameWithType.vb: Matrix.Transpose(ByRef MatrixSingle)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.Transpose(ByRef MathSharp.MatrixSingle)
+  name.vb: Transpose(ByRef MatrixSingle)
+- uid: MathSharp.Matrix.Identity
+  commentId: P:MathSharp.Matrix.Identity
+  id: Identity
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: Identity
+  nameWithType: Matrix.Identity
+  fullName: MathSharp.Matrix.Identity
+  type: Property
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/MatrixOperations.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: Identity
+    path: Matrix/MatrixSingle/MatrixOperations.cs
+    startLine: 13
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle Identity { get; }
+    parameters: []
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared ReadOnly Property Identity As MatrixSingle
+  overload: MathSharp.Matrix.Identity*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: MathSharp.Matrix.IsIdentity(MathSharp.MatrixSingle)
+  commentId: M:MathSharp.Matrix.IsIdentity(MathSharp.MatrixSingle)
+  id: IsIdentity(MathSharp.MatrixSingle)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: IsIdentity(MatrixSingle)
+  nameWithType: Matrix.IsIdentity(MatrixSingle)
+  fullName: MathSharp.Matrix.IsIdentity(MathSharp.MatrixSingle)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/MatrixOperations.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: IsIdentity
+    path: Matrix/MatrixSingle/MatrixOperations.cs
+    startLine: 25
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static bool IsIdentity(MatrixSingle matrix)
+    parameters:
+    - id: matrix
+      type: MathSharp.MatrixSingle
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function IsIdentity(matrix As MatrixSingle) As Boolean
+  overload: MathSharp.Matrix.IsIdentity*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: MathSharp.Matrix.CompareEqual(MathSharp.MatrixSingle,MathSharp.MatrixSingle)
+  commentId: M:MathSharp.Matrix.CompareEqual(MathSharp.MatrixSingle,MathSharp.MatrixSingle)
+  id: CompareEqual(MathSharp.MatrixSingle,MathSharp.MatrixSingle)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: CompareEqual(MatrixSingle, MatrixSingle)
+  nameWithType: Matrix.CompareEqual(MatrixSingle, MatrixSingle)
+  fullName: MathSharp.Matrix.CompareEqual(MathSharp.MatrixSingle, MathSharp.MatrixSingle)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/MatrixOperations.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: CompareEqual
+    path: Matrix/MatrixSingle/MatrixOperations.cs
+    startLine: 30
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static bool CompareEqual(MatrixSingle left, MatrixSingle right)
+    parameters:
+    - id: left
+      type: MathSharp.MatrixSingle
+    - id: right
+      type: MathSharp.MatrixSingle
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function CompareEqual(left As MatrixSingle, right As MatrixSingle) As Boolean
+  overload: MathSharp.Matrix.CompareEqual*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: MathSharp.Matrix.GetTranslation(MathSharp.MatrixSingle)
+  commentId: M:MathSharp.Matrix.GetTranslation(MathSharp.MatrixSingle)
+  id: GetTranslation(MathSharp.MatrixSingle)
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: GetTranslation(MatrixSingle)
+  nameWithType: Matrix.GetTranslation(MatrixSingle)
+  fullName: MathSharp.Matrix.GetTranslation(MathSharp.MatrixSingle)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/MatrixOperations.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: GetTranslation
+    path: Matrix/MatrixSingle/MatrixOperations.cs
+    startLine: 44
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static Vector128<float> GetTranslation(MatrixSingle matrix)
+    parameters:
+    - id: matrix
+      type: MathSharp.MatrixSingle
+    return:
+      type: System.Runtime.Intrinsics.Vector128{System.Single}
+    content.vb: Public Shared Function GetTranslation(matrix As MatrixSingle) As Vector128(Of Single)
+  overload: MathSharp.Matrix.GetTranslation*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: MathSharp.Matrix.SetTranslation(MathSharp.MatrixSingle,System.Runtime.Intrinsics.Vector128{System.Single})
+  commentId: M:MathSharp.Matrix.SetTranslation(MathSharp.MatrixSingle,System.Runtime.Intrinsics.Vector128{System.Single})
+  id: SetTranslation(MathSharp.MatrixSingle,System.Runtime.Intrinsics.Vector128{System.Single})
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: SetTranslation(MatrixSingle, Vector128<Single>)
+  nameWithType: Matrix.SetTranslation(MatrixSingle, Vector128<Single>)
+  fullName: MathSharp.Matrix.SetTranslation(MathSharp.MatrixSingle, System.Runtime.Intrinsics.Vector128<System.Single>)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/MatrixOperations.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: SetTranslation
+    path: Matrix/MatrixSingle/MatrixOperations.cs
+    startLine: 50
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle SetTranslation(MatrixSingle matrix, Vector128<float> translation)
+    parameters:
+    - id: matrix
+      type: MathSharp.MatrixSingle
+    - id: translation
+      type: System.Runtime.Intrinsics.Vector128{System.Single}
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function SetTranslation(matrix As MatrixSingle, translation As Vector128(Of Single)) As MatrixSingle
+  overload: MathSharp.Matrix.SetTranslation*
+  nameWithType.vb: Matrix.SetTranslation(MatrixSingle, Vector128(Of Single))
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.SetTranslation(MathSharp.MatrixSingle, System.Runtime.Intrinsics.Vector128(Of System.Single))
+  name.vb: SetTranslation(MatrixSingle, Vector128(Of Single))
+- uid: MathSharp.Matrix.CreateBillboard(System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single})
+  commentId: M:MathSharp.Matrix.CreateBillboard(System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single})
+  id: CreateBillboard(System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single},System.Runtime.Intrinsics.Vector128{System.Single})
+  parent: MathSharp.Matrix
+  langs:
+  - csharp
+  - vb
+  name: CreateBillboard(Vector128<Single>, Vector128<Single>, Vector128<Single>, Vector128<Single>)
+  nameWithType: Matrix.CreateBillboard(Vector128<Single>, Vector128<Single>, Vector128<Single>, Vector128<Single>)
+  fullName: MathSharp.Matrix.CreateBillboard(System.Runtime.Intrinsics.Vector128<System.Single>, System.Runtime.Intrinsics.Vector128<System.Single>, System.Runtime.Intrinsics.Vector128<System.Single>, System.Runtime.Intrinsics.Vector128<System.Single>)
+  type: Method
+  source:
+    remote:
+      path: sources/MathSharp/Matrix/MatrixSingle/MatrixOperations.cs
+      branch: remove-wrapper-types
+      repo: https://github.com/johnkellyoxford/MathSharp.git
+    id: CreateBillboard
+    path: Matrix/MatrixSingle/MatrixOperations.cs
+    startLine: 71
+  assemblies:
+  - MathSharp
+  namespace: MathSharp
+  syntax:
+    content: public static MatrixSingle CreateBillboard(Vector128<float> objectPosition, Vector128<float> cameraPosition, Vector128<float> cameraUpVector, Vector128<float> cameraForwardVector)
+    parameters:
+    - id: objectPosition
+      type: System.Runtime.Intrinsics.Vector128{System.Single}
+    - id: cameraPosition
+      type: System.Runtime.Intrinsics.Vector128{System.Single}
+    - id: cameraUpVector
+      type: System.Runtime.Intrinsics.Vector128{System.Single}
+    - id: cameraForwardVector
+      type: System.Runtime.Intrinsics.Vector128{System.Single}
+    return:
+      type: MathSharp.MatrixSingle
+    content.vb: Public Shared Function CreateBillboard(objectPosition As Vector128(Of Single), cameraPosition As Vector128(Of Single), cameraUpVector As Vector128(Of Single), cameraForwardVector As Vector128(Of Single)) As MatrixSingle
+  overload: MathSharp.Matrix.CreateBillboard*
+  nameWithType.vb: Matrix.CreateBillboard(Vector128(Of Single), Vector128(Of Single), Vector128(Of Single), Vector128(Of Single))
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: MathSharp.Matrix.CreateBillboard(System.Runtime.Intrinsics.Vector128(Of System.Single), System.Runtime.Intrinsics.Vector128(Of System.Single), System.Runtime.Intrinsics.Vector128(Of System.Single), System.Runtime.Intrinsics.Vector128(Of System.Single))
+  name.vb: CreateBillboard(Vector128(Of Single), Vector128(Of Single), Vector128(Of Single), Vector128(Of Single))
+references:
+- uid: MathSharp
+  commentId: N:MathSharp
+  name: MathSharp
+  nameWithType: MathSharp
+  fullName: MathSharp
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MathSharp.Matrix.Add*
+  commentId: Overload:MathSharp.Matrix.Add
+  name: Add
+  nameWithType: Matrix.Add
+  fullName: MathSharp.Matrix.Add
+- uid: MathSharp.MatrixSingle
+  commentId: T:MathSharp.MatrixSingle
+  parent: MathSharp
+  name: MatrixSingle
+  nameWithType: MatrixSingle
+  fullName: MathSharp.MatrixSingle
+- uid: MathSharp.Matrix.Subtract*
+  commentId: Overload:MathSharp.Matrix.Subtract
+  name: Subtract
+  nameWithType: Matrix.Subtract
+  fullName: MathSharp.Matrix.Subtract
+- uid: MathSharp.Matrix.Negate*
+  commentId: Overload:MathSharp.Matrix.Negate
+  name: Negate
+  nameWithType: Matrix.Negate
+  fullName: MathSharp.Matrix.Negate
+- uid: MathSharp.Matrix.ScalarMultiply*
+  commentId: Overload:MathSharp.Matrix.ScalarMultiply
+  name: ScalarMultiply
+  nameWithType: Matrix.ScalarMultiply
+  fullName: MathSharp.Matrix.ScalarMultiply
+- uid: System.Runtime.Intrinsics.Vector128{System.Single}
+  commentId: T:System.Runtime.Intrinsics.Vector128{System.Single}
+  parent: System.Runtime.Intrinsics
+  definition: System.Runtime.Intrinsics.Vector128`1
+  name: Vector128<Single>
+  nameWithType: Vector128<Single>
+  fullName: System.Runtime.Intrinsics.Vector128<System.Single>
+  nameWithType.vb: Vector128(Of Single)
+  fullName.vb: System.Runtime.Intrinsics.Vector128(Of System.Single)
+  name.vb: Vector128(Of Single)
+  spec.csharp:
+  - uid: System.Runtime.Intrinsics.Vector128`1
+    name: Vector128
+    nameWithType: Vector128
+    fullName: System.Runtime.Intrinsics.Vector128
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Single
+    name: Single
+    nameWithType: Single
+    fullName: System.Single
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Runtime.Intrinsics.Vector128`1
+    name: Vector128
+    nameWithType: Vector128
+    fullName: System.Runtime.Intrinsics.Vector128
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.Single
+    name: Single
+    nameWithType: Single
+    fullName: System.Single
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Runtime.Intrinsics.Vector128`1
+  commentId: T:System.Runtime.Intrinsics.Vector128`1
+  isExternal: true
+  name: Vector128<T>
+  nameWithType: Vector128<T>
+  fullName: System.Runtime.Intrinsics.Vector128<T>
+  nameWithType.vb: Vector128(Of T)
+  fullName.vb: System.Runtime.Intrinsics.Vector128(Of T)
+  name.vb: Vector128(Of T)
+  spec.csharp:
+  - uid: System.Runtime.Intrinsics.Vector128`1
+    name: Vector128
+    nameWithType: Vector128
+    fullName: System.Runtime.Intrinsics.Vector128
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Runtime.Intrinsics.Vector128`1
+    name: Vector128
+    nameWithType: Vector128
+    fullName: System.Runtime.Intrinsics.Vector128
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Runtime.Intrinsics
+  commentId: N:System.Runtime.Intrinsics
+  isExternal: true
+  name: System.Runtime.Intrinsics
+  nameWithType: System.Runtime.Intrinsics
+  fullName: System.Runtime.Intrinsics
+- uid: System.Single
+  commentId: T:System.Single
+  parent: System
+  isExternal: true
+  name: Single
+  nameWithType: Single
+  fullName: System.Single
+- uid: MathSharp.Matrix.Transpose*
+  commentId: Overload:MathSharp.Matrix.Transpose
+  name: Transpose
+  nameWithType: Matrix.Transpose
+  fullName: MathSharp.Matrix.Transpose
+- uid: MathSharp.Matrix.Identity*
+  commentId: Overload:MathSharp.Matrix.Identity
+  name: Identity
+  nameWithType: Matrix.Identity
+  fullName: MathSharp.Matrix.Identity
+- uid: MathSharp.Matrix.IsIdentity*
+  commentId: Overload:MathSharp.Matrix.IsIdentity
+  name: IsIdentity
+  nameWithType: Matrix.IsIdentity
+  fullName: MathSharp.Matrix.IsIdentity
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: MathSharp.Matrix.CompareEqual*
+  commentId: Overload:MathSharp.Matrix.CompareEqual
+  name: CompareEqual
+  nameWithType: Matrix.CompareEqual
+  fullName: MathSharp.Matrix.CompareEqual
+- uid: MathSharp.Matrix.GetTranslation*
+  commentId: Overload:MathSharp.Matrix.GetTranslation
+  name: GetTranslation
+  nameWithType: Matrix.GetTranslation
+  fullName: MathSharp.Matrix.GetTranslation
+- uid: MathSharp.Matrix.SetTranslation*
+  commentId: Overload:MathSharp.Matrix.SetTranslation
+  name: SetTranslation
+  nameWithType: Matrix.SetTranslation
+  fullName: MathSharp.Matrix.SetTranslation
+- uid: MathSharp.Matrix.CreateBillboard*
+  commentId: Overload:MathSharp.Matrix.CreateBillboard
+  name: CreateBillboard
+  nameWithType: Matrix.CreateBillboard
+  fullName: MathSharp.Matrix.CreateBillboard
