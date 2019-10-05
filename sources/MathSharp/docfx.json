@@ -52,9 +52,7 @@
     "dest": "../../docs",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
-    "template": [
-      "default"
-    ],
+    "template": [ "default", "templates/material" ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
