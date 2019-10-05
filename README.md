@@ -1,4 +1,7 @@
 # MathSharp
+
+[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)
+
 MathSharp is a vector and matrix library written in C# using hardware intrinsics. Thanks to hardware acceleration, MathSharp is significantly faster than most mathematics libraries out there, but only supports .NET Core 3.0 and up.
 
 #### Disclaimer
