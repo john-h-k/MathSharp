@@ -16,6 +16,7 @@ help=false
 pack=false
 restore=false
 libraryproj=''
+testproj=''
 test=false
 verbosity='minimal'
 properties=''
