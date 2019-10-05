@@ -1,7 +1,7 @@
 # MathSharp
 
 |Configuration|Windows x86|Windows x64|Ubuntu 1604 x64|
-|:--:|:--:|:--:|:--:|:--:|
+|:--:|:--:|:--:|:--:|
 |**Debug**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
 |**Release**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
 
