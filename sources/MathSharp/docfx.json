@@ -6,7 +6,7 @@
           "files": [
             "**.csproj"
           ],
-          "src": "C:\\Users\\johnk\\source\\repos\\MathSharp\\sources\\MathSharp"
+          "src": "/"
         }
       ],
       "dest": "../../docs/api",
@@ -26,7 +26,7 @@
         "files": [
           "../../docs/articles/**.md",
           "../../docs/articles/**/toc.yml",
-          "toc.yml",
+          "../../docs/toc.yml",
           "../../docs/*.md"
         ]
       }
@@ -34,17 +34,17 @@
     "resource": [
       {
         "files": [
-          "../../docs/articles/images/**"
+          "../../docs/images/**"
         ]
       }
     ],
     "overwrite": [
       {
         "files": [
-          "../../docs/articles/apidoc/**.md"
+          "../../docs/apidoc/**.md"
         ],
         "exclude": [
-          "../../docs/articles/obj/**"
+          "../../docs/obj/**"
         ]
       }
     ],
