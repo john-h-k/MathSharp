@@ -133,7 +133,7 @@ namespace MathSharp
         {
             if (Sse.IsSupported)
             {
-                Vector4F hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues._2_2_2_2);
+                Vector4F hiBroadcast = Sse.Shuffle(vector, vector, DeprecatedShuffleValues._2_2_2_2);
 
                 Sse.StoreLow(destination, vector);
                 Sse.StoreScalar(&destination[3], hiBroadcast);

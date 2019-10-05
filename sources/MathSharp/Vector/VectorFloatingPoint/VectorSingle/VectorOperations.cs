@@ -99,11 +99,11 @@ namespace MathSharp
             {
                 Vector4F mul = Sse.Multiply(left, right);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
+                Vector4F temp = Sse.Shuffle(mul, mul, DeprecatedShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
+                mul = Sse.Shuffle(mul, mul, DeprecatedShuffleValues._0_0_0_0);
 
                 return mul;
             }
@@ -142,15 +142,15 @@ namespace MathSharp
                 Vector4F mul = Sse.Multiply(left, right);
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._2_1_2_1);
+                Vector4F temp = Sse.Shuffle(mul, mul, DeprecatedShuffleValues._2_1_2_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
+                temp = Sse.Shuffle(temp, temp, DeprecatedShuffleValues._1_1_1_1);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
+                return Sse.Shuffle(mul, mul, DeprecatedShuffleValues._0_0_0_0);
             }
 
             return DotProduct3D_Software(left, right);
@@ -181,12 +181,12 @@ namespace MathSharp
                 // Multiply the two vectors to get all the needed elements
                 Vector4F mul = Sse.Multiply(left, copy);
                 
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._1_0_0_0);
+                copy = Sse.Shuffle(copy, mul, DeprecatedShuffleValues._1_0_0_0);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_3_0_0);
+                mul = Sse.Shuffle(mul, copy, DeprecatedShuffleValues._0_3_0_0);
                 mul = Sse.AddScalar(mul, copy);
 
-                return Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
+                return Sse.Shuffle(mul, mul, DeprecatedShuffleValues._2_2_2_2);
             }
 
             return DotProduct4D_Software(left, right);
@@ -208,20 +208,20 @@ namespace MathSharp
             if (Sse.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                Vector4F permute = Sse.Shuffle(right, right, ShuffleValues._0_1_0_1);
+                Vector4F permute = Sse.Shuffle(right, right, DeprecatedShuffleValues._0_1_0_1);
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Sse.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector4F temp = Sse.Shuffle(permute, permute, ShuffleValues._0_0_0_1);
+                Vector4F temp = Sse.Shuffle(permute, permute, DeprecatedShuffleValues._0_0_0_1);
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Sse.Subtract(permute, temp);
 
                 // Fill the vector with it (like DotProduct)
-                return Sse.Shuffle(permute, permute, ShuffleValues._0_0_0_0);
+                return Sse.Shuffle(permute, permute, DeprecatedShuffleValues._0_0_0_0);
             }
 
             return CrossProduct2D_Software(left, right);
@@ -253,8 +253,8 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                Vector4F leftHandSide1 = Sse.Shuffle(left, left, ShuffleValues._3_0_2_1);
-                Vector4F rightHandSide1 = Sse.Shuffle(right, right, ShuffleValues._3_1_0_2);
+                Vector4F leftHandSide1 = Sse.Shuffle(left, left, DeprecatedShuffleValues._3_0_2_1);
+                Vector4F rightHandSide1 = Sse.Shuffle(right, right, DeprecatedShuffleValues._3_1_0_2);
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
@@ -262,8 +262,8 @@ namespace MathSharp
                  */
 
 
-                Vector4F leftHandSide2 = Sse.Shuffle(left, left, ShuffleValues._3_1_0_2);
-                Vector4F rightHandSide2 = Sse.Shuffle(right, right, ShuffleValues._3_0_2_1);
+                Vector4F leftHandSide2 = Sse.Shuffle(left, left, DeprecatedShuffleValues._3_1_0_2);
+                Vector4F rightHandSide2 = Sse.Shuffle(right, right, DeprecatedShuffleValues._3_0_2_1);
 
                 Vector4F mul1 = Sse.Multiply(leftHandSide1, rightHandSide1);
 

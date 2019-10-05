@@ -106,7 +106,7 @@ namespace MathSharp
             else if (Sse2.IsSupported)
             {
                 Vector2D tmp = Sse2.Multiply(left.GetLower(), right.GetLower());
-                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues._0_1_0_1);
+                Vector2D shuf = Sse2.Shuffle(tmp, tmp, DeprecatedShuffleValues._0_1_0_1);
                 return Helpers.DuplicateToVector256(Sse2.Add(tmp, shuf));
             }
 
@@ -175,20 +175,20 @@ namespace MathSharp
             if (Avx.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                Vector4D permute = Avx.Shuffle(right, right, ShuffleValues._0_1_0_1);
+                Vector4D permute = Avx.Shuffle(right, right, DeprecatedShuffleValues._0_1_0_1);
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Avx.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector4D temp = Avx.Shuffle(permute, permute, ShuffleValues._0_0_0_1);
+                Vector4D temp = Avx.Shuffle(permute, permute, DeprecatedShuffleValues._0_0_0_1);
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Avx.Subtract(permute, temp);
 
                 // Fill the vector with it (like DotProduct)
-                return Avx.Shuffle(permute, permute, ShuffleValues._0_0_0_0);
+                return Avx.Shuffle(permute, permute, DeprecatedShuffleValues._0_0_0_0);
             }
 
             return CrossProduct2D_Software(left, right);
@@ -227,16 +227,16 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                Vector4D leftHandSide1 = Avx2.Permute4x64(left, ShuffleValues._3_0_2_1);
-                Vector4D rightHandSide1 = Avx2.Permute4x64(right, ShuffleValues._3_1_0_2);
+                Vector4D leftHandSide1 = Avx2.Permute4x64(left, DeprecatedShuffleValues._3_0_2_1);
+                Vector4D rightHandSide1 = Avx2.Permute4x64(right, DeprecatedShuffleValues._3_1_0_2);
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
                  * rhs2 goes from x, y, z, _ to y, z, x, _
                  */
 
-                Vector4D leftHandSide2 = Avx2.Permute4x64(left, ShuffleValues._3_1_0_2);
-                Vector4D rightHandSide2 = Avx2.Permute4x64(right, ShuffleValues._3_0_2_1);
+                Vector4D leftHandSide2 = Avx2.Permute4x64(left, DeprecatedShuffleValues._3_1_0_2);
+                Vector4D rightHandSide2 = Avx2.Permute4x64(right, DeprecatedShuffleValues._3_0_2_1);
 
                 Vector4D mul1 = Avx.Multiply(leftHandSide1, rightHandSide1);
 

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace MathSharp.Utils
 {
-    public static class ThrowHelper
+    internal static class ThrowHelper
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void ThrowAccessViolationException(string message)

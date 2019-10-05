@@ -7,7 +7,7 @@ namespace MathSharp
     using Vector4Int32 = Vector128<int>;
     using Vector4Int32Param1_3 = Vector128<int>;
 
-    public static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacks
     {
         [MethodImpl(MaxOpt)]
         public static Vector4Int32 CompareEqual_Software(in Vector4Int32Param1_3 left, in Vector4Int32Param1_3 right)

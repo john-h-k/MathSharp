@@ -10,7 +10,8 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            BenchmarkRunner.Run<SinCosBenchmark>();
+            Console.WriteLine((float.MaxValue * 2) + -float.MaxValue);
+            Console.WriteLine(MathF.FusedMultiplyAdd(float.MaxValue, 2, -float.MaxValue));
         }
 
         private static void Test(float f)
@@ -27,12 +28,10 @@ namespace MathSharp.Interactive
             Console.WriteLine($"MathSharp CosEstimate: {CosEstimate(v).ToScalar()}");
 
             SinCos(v, out Vector128<float> sin, out Vector128<float> cos);
-            SinCos_2(v, out Vector128<float> sin2, out Vector128<float> cos2);
             SinCosEstimate(v, out Vector128<float> sinEst, out Vector128<float> cosEst);
 
             Console.WriteLine($"MathF SinCos:             {MathF.Sin(f)}, {MathF.Cos(f)}");
             Console.WriteLine($"MathSharp SinCos:         {sin.ToScalar()}, {cos.ToScalar()}");
-            Console.WriteLine($"MathSharp SinCos_2:       {sin2.ToScalar()}, {cos2.ToScalar()}");
             Console.WriteLine($"MathSharp SinCosEstimate: {sinEst.ToScalar()}, {cosEst.ToScalar()}");
 
             Console.WriteLine("\n");

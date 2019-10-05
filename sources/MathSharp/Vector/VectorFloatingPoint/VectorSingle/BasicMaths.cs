@@ -83,8 +83,8 @@ namespace MathSharp
 
             if (Sse.IsSupported)
             {
-                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues._2_0_2_0);
-                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues._3_1_3_1);
+                Vector128<float> vector1 = Sse.Shuffle(left, right, DeprecatedShuffleValues._2_0_2_0);
+                Vector128<float> vector2 = Sse.Shuffle(left, right, DeprecatedShuffleValues._3_1_3_1);
 
                 return Sse.Add(vector1, vector2);
             }
