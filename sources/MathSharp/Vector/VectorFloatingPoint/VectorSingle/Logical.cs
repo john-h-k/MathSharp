@@ -25,19 +25,19 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> PermuteWithX(Vector4FParam1_3 vector)
-            => Permute(vector, DeprecatedShuffleValues._0_0_0_0);
+            => Permute(vector, ShuffleValues._0_0_0_0);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> PermuteWithY(Vector4FParam1_3 vector)
-            => Permute(vector, DeprecatedShuffleValues._1_1_1_1);
+            => Permute(vector, ShuffleValues._1_1_1_1);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> PermuteWithZ(Vector4FParam1_3 vector)
-            => Permute(vector, DeprecatedShuffleValues._2_2_2_2);
+            => Permute(vector, ShuffleValues._2_2_2_2);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> PermuteWithW(Vector4FParam1_3 vector)
-            => Permute(vector, DeprecatedShuffleValues._3_3_3_3);
+            => Permute(vector, ShuffleValues._3_3_3_3);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Shuffle(Vector4FParam1_3 left, Vector4FParam1_3 right, byte control)

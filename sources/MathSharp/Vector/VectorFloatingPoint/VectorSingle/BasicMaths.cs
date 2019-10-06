@@ -51,8 +51,8 @@ namespace MathSharp
 
             if (Sse.IsSupported)
             {
-                Vector128<float> vector1 = Sse.Shuffle(left, right, DeprecatedShuffleValues._2_0_2_0);
-                Vector128<float> vector2 = Sse.Shuffle(left, right, DeprecatedShuffleValues._3_1_3_1);
+                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues._0_2_0_2);
+                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues._1_3_1_3);
 
                 return Sse.Add(vector1, vector2);
             }
@@ -284,6 +284,27 @@ namespace MathSharp
                     MathF.Truncate(Y(vector)),
                     MathF.Truncate(Z(vector)),
                     MathF.Truncate(W(vector))
+                );
+            }
+        }
+
+        // TODO move to proper Int32 file
+        private static Vector128<int> CompareLessThan(Vector128<int> left, Vector128<int> right)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse2.CompareLessThan(left, right);
+            }
+
+            return SoftwareFallback(left, right);
+
+            static Vector128<int> SoftwareFallback(Vector128<int> left, Vector128<int> right)
+            {
+                return Vector128.Create(
+                    BoolToSimdBoolInt32(X(left) < X(right)),
+                    BoolToSimdBoolInt32(X(left) < X(right)),
+                    BoolToSimdBoolInt32(X(left) < X(right)),
+                    BoolToSimdBoolInt32(X(left) < X(right))
                 );
             }
         }

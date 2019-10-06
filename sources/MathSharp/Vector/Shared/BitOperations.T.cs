@@ -234,64 +234,6 @@ namespace MathSharp
         }
 
         /// <summary>
-        /// Compare 2 <see cref="Vector128{T}"/>s for bitwise equality
-        /// </summary>
-        /// <typeparam name="T">The type of each element in the <paramref name="left"/> vector</typeparam>
-        /// <typeparam name="U">The type of each element in the <paramref name="right"/> vector</typeparam>
-        /// <param name="left">The left vector which will be compared with <paramref name="right"/></param>
-        /// <param name="right">The right vector which will be compared with <paramref name="left"/></param>
-        /// <returns>A new <see cref="Vector128{T}"/> containing all ones for each element that was equal between <paramref name="left"/>
-        /// and <paramref name="right"/>, else all zeroes</returns>
-        [MethodImpl(MaxOpt)]
-        public static Vector128<T> CompareBitwiseEqual<T, U>(Vector128<T> left, Vector128<U> right)
-            where T : struct where U : struct
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.CompareEqual(left.AsByte(), right.AsByte()).As<byte, T>();
-            }
-
-            return SoftwareFallback(left.As<T, long>(), right.As<U, long>());
-
-            static Vector128<T> SoftwareFallback(Vector128<long> left, Vector128<long> right)
-            {
-                return Vector128.Create(
-                    BoolToSimdBoolInt64(X(left) == X(right)),
-                    BoolToSimdBoolInt64(Y(left) == Y(right))
-                ).As<long, T>();
-            }
-        }
-
-        /// <summary>
-        /// Compare 2 <see cref="Vector128{T}"/>s for bitwise inequality
-        /// </summary>
-        /// <typeparam name="T">The type of each element in the <paramref name="left"/> vector</typeparam>
-        /// <typeparam name="U">The type of each element in the <paramref name="right"/> vector</typeparam>
-        /// <param name="left">The left vector which will be compared with <paramref name="right"/></param>
-        /// <param name="right">The right vector which will be compared with <paramref name="left"/></param>
-        /// <returns>A new <see cref="Vector128{T}"/> containing all ones for each element that was not equal between <paramref name="left"/>
-        /// and <paramref name="right"/>, else all zeroes</returns>
-        [MethodImpl(MaxOpt)]
-        public static Vector128<T> CompareBitwiseNotEqual<T, U>(Vector128<T> left, Vector128<U> right)
-            where T : struct where U : struct
-        {
-            if (Sse2.IsSupported)
-            {
-                return Not(Sse2.CompareEqual(left.AsByte(), right.AsByte()).As<byte, T>());
-            }
-
-            return SoftwareFallback(left.As<T, long>(), right.As<U, long>());
-
-            static Vector128<T> SoftwareFallback(Vector128<long> left, Vector128<long> right)
-            {
-                return Vector128.Create(
-                    BoolToSimdBoolInt64(X(left) != X(right)),
-                    BoolToSimdBoolInt64(Y(left) != Y(right))
-                ).As<long, T>();
-            }
-        }
-
-        /// <summary>
         /// Select elements from 2 vectors, <paramref name="left"/> and <paramref name="right"/>, based off of the vector <paramref name="selector"/>
         /// </summary>
         /// <typeparam name="T">The type of each element in <paramref name="left"/> and <paramref name="right"/></typeparam>
@@ -480,68 +422,6 @@ namespace MathSharp
         public static Vector256<T> Not<T>(Vector256<T> vector) where T : struct
         {
             return Xor(vector, DoubleConstants.AllBitsSet.As<double, T>());
-        }
-
-        /// <summary>
-        /// Compare 2 <see cref="Vector256{T}"/>s for bitwise equality
-        /// </summary>
-        /// <typeparam name="T">The type of each element in the <paramref name="left"/> vector</typeparam>
-        /// <typeparam name="U">The type of each element in the <paramref name="right"/> vector</typeparam>
-        /// <param name="left">The left vector which will be compared with <paramref name="right"/></param>
-        /// <param name="right">The right vector which will be compared with <paramref name="left"/></param>
-        /// <returns>A new <see cref="Vector256{T}"/> containing all ones for each element that was equal between <paramref name="left"/>
-        /// and <paramref name="right"/>, else all zeroes</returns>
-        [MethodImpl(MaxOpt)]
-        public static Vector256<T> CompareBitwiseEqual<T, U>(Vector256<T> left, Vector256<U> right)
-            where T : struct where U : struct
-        {
-            if (Avx2.IsSupported)
-            {
-                return Avx2.CompareEqual(left.AsByte(), right.AsByte()).As<byte, T>();
-            }
-
-            return SoftwareFallback(left.As<T, long>(), right.As<U, long>());
-
-            static Vector256<T> SoftwareFallback(Vector256<long> left, Vector256<long> right)
-            {
-                return Vector256.Create(
-                    BoolToSimdBoolInt64(X(left) == X(right)),
-                    BoolToSimdBoolInt64(Y(left) == Y(right)),
-                    BoolToSimdBoolInt64(Z(left) == Z(right)),
-                    BoolToSimdBoolInt64(W(left) == W(right))
-                ).As<long, T>();
-            }
-        }
-
-        /// <summary>
-        /// Compare 2 <see cref="Vector256{T}"/>s for bitwise inequality
-        /// </summary>
-        /// <typeparam name="T">The type of each element in the <paramref name="left"/> vector</typeparam>
-        /// <typeparam name="U">The type of each element in the <paramref name="right"/> vector</typeparam>
-        /// <param name="left">The left vector which will be compared with <paramref name="right"/></param>
-        /// <param name="right">The right vector which will be compared with <paramref name="left"/></param>
-        /// <returns>A new <see cref="Vector256{T}"/> containing all ones for each element that was not equal between <paramref name="left"/>
-        /// and <paramref name="right"/>, else all zeroes</returns>
-        [MethodImpl(MaxOpt)]
-        public static Vector256<T> CompareBitwiseNotEqual<T, U>(Vector256<T> left, Vector256<U> right)
-            where T : struct where U : struct
-        {
-            if (Avx2.IsSupported)
-            {
-                return Not(Avx2.CompareEqual(left.AsByte(), right.AsByte()).As<byte, T>());
-            }
-
-            return SoftwareFallback(left.As<T, long>(), right.As<U, long>());
-
-            static Vector256<T> SoftwareFallback(Vector256<long> left, Vector256<long> right)
-            {
-                return Vector256.Create(
-                    BoolToSimdBoolInt64(X(left) != X(right)),
-                    BoolToSimdBoolInt64(Y(left) != Y(right)),
-                    BoolToSimdBoolInt64(Z(left) != Z(right)),
-                    BoolToSimdBoolInt64(W(left) != W(right))
-                ).As<long, T>();
-            }
         }
     }
 }

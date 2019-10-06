@@ -6,13 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Vector\VectorInteger\VectorInt64\**" />
-    <Compile Remove="Vector\VectorInteger\VectorUInt64\**" />
-    <EmbeddedResource Remove="Vector\VectorInteger\VectorInt64\**" />
-    <EmbeddedResource Remove="Vector\VectorInteger\VectorUInt64\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Content Include="Vector\VectorFloatingPoint\VectorDouble\TrigAccuracy.txt" />
     <Content Include="Vector\VectorFloatingPoint\VectorSingle\TrigAccuracy.txt" />
   </ItemGroup>
 

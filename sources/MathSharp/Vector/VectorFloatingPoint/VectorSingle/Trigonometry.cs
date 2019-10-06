@@ -248,7 +248,7 @@ namespace MathSharp
                 var t0 = PermuteWithX(TanCoefficients0);
 
                 var vbIsEven = And(vb, SingleConstants.Epsilon).AsInt32();
-                vbIsEven = CompareBitwiseEqual(vbIsEven, Vector128<int>.Zero);
+                vbIsEven = CompareBitwiseEqualInt32(vbIsEven, Vector128<int>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
@@ -287,6 +287,27 @@ namespace MathSharp
                     MathF.Tan(Y(vector)),
                     MathF.Tan(Z(vector)),
                     MathF.Tan(W(vector))
+                );
+            }
+        }
+
+        [MethodImpl(MaxOpt)]
+        private static Vector128<int> CompareBitwiseEqualInt32(Vector128<int> left, Vector128<int> right)
+        {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.CompareEqual(left, right);
+            }
+
+            return SoftwareFallback(left, right);
+
+            static Vector128<int> SoftwareFallback(Vector128<int> left, Vector128<int> right)
+            {
+                return Vector128.Create(
+                    BoolToSimdBoolInt32(X(left) == X(right)),
+                    BoolToSimdBoolInt32(Y(left) == Y(right)),
+                    BoolToSimdBoolInt32(Z(left) == Z(right)),
+                    BoolToSimdBoolInt32(W(left) == W(right))
                 );
             }
         }

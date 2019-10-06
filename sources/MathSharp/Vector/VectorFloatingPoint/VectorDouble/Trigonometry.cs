@@ -13,10 +13,13 @@ namespace MathSharp
     // TRIG
     public static partial class Vector
     {
-        private static readonly Vector256<double> SinCoefficient0D = Vector256.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
-        private static readonly Vector256<double> SinCoefficient1D = Vector256.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
-        private const double SinCoefficient1DScalar = -2.3889859e-08f;
+        private static readonly Vector256<double> SinCoefficient0D = Vector256.Create(-0.16666667d, +0.0083333310d, -0.00019840874d, +2.7525562e-06d);
+        private static readonly Vector256<double> SinCoefficient1D = Vector256.Create(-2.3889859e-08d, -0.16665852d, +0.0083139502d, -0.00018524670d);
+        private const double SinCoefficient1DScalar = -2.3889859e-08d;
 
+        private const string DoNotUse = "DO NOT USE!! Double precision trig is currently non-working";
+
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Sin(Vector4DParam1_3 vector)
         {
@@ -71,6 +74,7 @@ namespace MathSharp
             }
         }
 
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static Vector256<double> SinApprox(Vector4DParam1_3 vector)
         {
@@ -109,10 +113,11 @@ namespace MathSharp
             return Sin(vector);
         }
 
-        private static readonly Vector256<double> CosCoefficient0D = Vector256.Create(-0.5f, +0.041666638f, -0.0013888378f, +2.4760495e-05f);
-        private static readonly Vector256<double> CosCoefficient1D = Vector256.Create(-2.6051615e-07f, -0.49992746f, +0.041493919f, -0.0012712436f);
-        private const double CosCoefficient1DScalar = -2.6051615e-07f;
+        private static readonly Vector256<double> CosCoefficient0D = Vector256.Create(-0.5d, +0.041666638d, -0.0013888378d, +2.4760495e-05d);
+        private static readonly Vector256<double> CosCoefficient1D = Vector256.Create(-2.6051615e-07d, -0.49992746d, +0.041493919d, -0.0012712436d);
+        private const double CosCoefficient1DScalar = -2.6051615e-07d;
 
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Cos(Vector4DParam1_3 vector)
         {
@@ -170,6 +175,7 @@ namespace MathSharp
             }
         }
 
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static Vector256<double> CosApprox(Vector4DParam1_3 vector)
         {
@@ -211,9 +217,11 @@ namespace MathSharp
             return Cos(vector);
         }
 
-        private static readonly Vector256<double> TanCoefficients0D = Vector256.Create(1.0f, -4.667168334e-1f, 2.566383229e-2f, -3.118153191e-4f);
-        private static readonly Vector256<double> TanCoefficients1D = Vector256.Create(4.981943399e-7f, -1.333835001e-1f, 3.424887824e-3f, -1.786170734e-5f);
-        private static readonly Vector256<double> TanConstantsD = Vector256.Create(1.570796371f, 6.077100628e-11f, 0.000244140625f, 0.63661977228f);
+        private static readonly Vector256<double> TanCoefficients0D = Vector256.Create(1.0d, -4.667168334e-1d, 2.566383229e-2d, -3.118153191e-4d);
+        private static readonly Vector256<double> TanCoefficients1D = Vector256.Create(4.981943399e-7d, -1.333835001e-1d, 3.424887824e-3d, -1.786170734e-5d);
+        private static readonly Vector256<double> TanConstantsD = Vector256.Create(1.570796371d, 6.077100628e-11d, 0.000244140625d, 0.63661977228d);
+        
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Tan(Vector4DParam1_3 vector)
         {
@@ -247,8 +255,8 @@ namespace MathSharp
                 var t1 = PermuteWithY(TanCoefficients0D);
                 var t0 = PermuteWithX(TanCoefficients0D);
 
-                var vbIsEven = And(vb, DoubleConstants.Epsilon).AsInt32();
-                vbIsEven = CompareBitwiseEqual<int, int>(vbIsEven, Vector256<int>.Zero);
+                var vbIsEven = And(vb, DoubleConstants.Epsilon).AsInt64();
+                vbIsEven = CompareBitwiseEqualInt64(vbIsEven, Vector256<long>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
@@ -291,7 +299,31 @@ namespace MathSharp
             }
         }
 
-        private static readonly Vector256<double> TanEstCoefficientsD = Vector256.Create(2.484f, -1.954923183e-1f, 2.467401101f, ScalarDoubleConstants.OneDivPi);
+        [Obsolete(DoNotUse, true)]
+        [MethodImpl(MaxOpt)]
+        private static Vector256<long> CompareBitwiseEqualInt64(Vector256<long> left, Vector256<long> right)
+        {
+            if (Avx2.IsSupported)
+            {
+                return Avx2.CompareEqual(left, right);
+            }
+
+            return SoftwareFallback(left, right);
+
+            static Vector256<long> SoftwareFallback(Vector256<long> left, Vector256<long> right)
+            {
+                return Vector256.Create(
+                    BoolToSimdBoolInt64(X(left) == X(right)),
+                    BoolToSimdBoolInt64(Y(left) == Y(right)),
+                    BoolToSimdBoolInt64(Z(left) == Z(right)),
+                    BoolToSimdBoolInt64(W(left) == W(right))
+                );
+            }
+        }
+
+        private static readonly Vector256<double> TanEstCoefficientsD = Vector256.Create(2.484d, -1.954923183e-1d, 2.467401101d, ScalarDoubleConstants.OneDivPi);
+        
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static Vector256<double> TanApprox(Vector4DParam1_3 vector)
         {
@@ -322,6 +354,7 @@ namespace MathSharp
             return Tan(vector);
         }
 
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static void SinCos(Vector4DParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
         {
@@ -399,6 +432,7 @@ namespace MathSharp
             }
         }
 
+        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         public static void SinCosApprox(Vector4DParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
         {
