@@ -138,7 +138,7 @@ function Restore {
   if [[ -z "$properties" ]]; then
     dotnet restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet "$libraryproj" restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" 
+    dotnet restore "$libraryproj" -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" 
   fi
 
   LASTEXITCODE=$?
