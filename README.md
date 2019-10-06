@@ -1,31 +1,15 @@
 # MathSharp
 
-|Configuration|Windows x86|Windows x64|Ubuntu 1604 x64|
-|:--:|:--:|:--:|:--:|
-|**Debug**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
-|**Release**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
+|Configuration|Windows x86|Windows x64|Ubuntu 1604 x64|Mac OS x64|
+|:--:|:--:|:--:|:--:|:--:|
+|**Debug**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=macOS_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
+|**Release**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=macOS_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
 
 MathSharp is a vector and matrix library written in C# using hardware intrinsics. Thanks to hardware acceleration, MathSharp is significantly faster than most mathematics libraries out there, but only supports .NET Core 3.0 and up.
 
 MathSharp beats out all alternative for speed. Comparing it to the `System.Numerics` types and the `OpenTk.Math` types shows just how fast it is:
 
-## Vector addition
-
-### Operation
-
-```cs
-Vector4 + Vector4;
-```
-
-### Results
-
-![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)
-
-|         Method |      Mean |     Error |    StdDev |
-|--------------- |----------:|----------:|----------:|
-|         OpenTk | 6.5341 ns | 0.0392 ns | 0.0367 ns |
-| SystemNumerics | 0.0510 ns | 0.0080 ns | 0.0075 ns |
-|      MathSharp | 0.0426 ns | 0.0043 ns | 0.0040 ns |
+[All benchmarks were taken using BenchmarkDotNet on an i3-8350k at stock speeds with minimal background activity, with .NET Core 3.0.100]
 
 ## Matrix Equality
 
@@ -37,7 +21,10 @@ Matrix4x4 == Matrix4x4
 
 ### Results
 
-![Matrix Equality Benchmark](assets/Benchmarks/MatrixEqualityBenchmark-barplot.png)
+<!-- ![Matrix Equality Benchmark](assets/Benchmarks/MatrixEqualityBenchmark-barplot.png =250x250)-->
+<img src="assets/Benchmarks/MatrixEqualityBenchmark-barplot.png" width="500" height="500">
+
+
 
 |         Method |      Mean |     Error |    StdDev |
 |--------------- |----------:|----------:|----------:|
@@ -55,7 +42,8 @@ Transpose(Matrix4x4)
 
 ### Results
 
-![Matrix Transpose Benchmark](assets/Benchmarks/MatrixTransposeBenchmark-barplot.png)
+<!--![Matrix Transpose Benchmark](assets/Benchmarks/MatrixTransposeBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/MatrixTransposeBenchmark-barplot.png" width="500" height="500">
 
 |         Method |      Mean |     Error |    StdDev |
 |--------------- |----------:|----------:|----------:|
@@ -74,13 +62,14 @@ const float Frequency = 440;
 
 for (var i = 0; i < waveInputs.Length; i++)
 {
-    waveInputs[i] = MathF.Sin(Tau * Frequency * ((float)i / SampleRate));
+    waveInputs[i] = Sin(Tau * Frequency * ((float)i / SampleRate));
 }
 ```
 
 ### Results
 
-![Sine Wave Benchmark](assets/Benchmarks/SineWaveBenchmark-barplot.png)
+<!--![Sine Wave Benchmark](assets/Benchmarks/SineWaveBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/SineWaveBenchmark-barplot.png" width="500" height="500">
 
 |      Method |      Mean |     Error |    StdDev |
 |------------ |----------:|----------:|----------:|
@@ -105,13 +94,32 @@ deltaT *= Anchor;
 
 ### Results
 
-![Anchored Scale Benchmark](assets/Benchmarks/AnchoredScaleBenchmark-barplot.png)
+<!--![Anchored Scale Benchmark](assets/Benchmarks/AnchoredScaleBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/AnchoredScaleBenchmark-barplot.png" width="500" height="500">
 
 |         Method |       Mean |     Error |    StdDev | Rank |
 |--------------- |-----------:|----------:|----------:|-----:|
 |      MathSharp |  0.8542 ns | 0.0084 ns | 0.0079 ns |    1 |
 | SystemNumerics |  2.0281 ns | 0.0123 ns | 0.0115 ns |    2 |
 |         OpenTk | 37.4250 ns | 0.1585 ns | 0.1483 ns |    3 |
+
+## Vector addition
+
+### Operation
+
+```cs
+Vector4 + Vector4;
+```
+
+### Results (within margin of error between MathSharp and System.Numerics)
+
+![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)
+
+|         Method |      Mean |     Error |    StdDev |
+|--------------- |----------:|----------:|----------:|
+|         OpenTk | 6.5341 ns | 0.0392 ns | 0.0367 ns |
+| SystemNumerics | 0.0510 ns | 0.0080 ns | 0.0075 ns |
+|      MathSharp | 0.0426 ns | 0.0043 ns | 0.0040 ns |
 
 ## Disclaimer
 

@@ -10,6 +10,10 @@ namespace MathSharp.Utils
             => throw new AccessViolationException(message);
 
         [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void ThrowPlatformNotSupportedException(string message)
+            => throw new PlatformNotSupportedException(message);
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void ThrowArgumentException(string message, string paramName, Exception? inner = null)
             => throw new ArgumentException(message, paramName, inner);
 

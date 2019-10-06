@@ -12,7 +12,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
     [RPlotExporter]
     public class SineWaveBenchmark
     {
-        private const bool UseSinEstimate = true;
+        private const bool UseSinApprox = true;
 
         private const int SampleRate = 44100;
         private const float Tau = MathF.PI * 2;
