@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Vector\VectorFloatingPoint\VectorSingle\TrigAccuracy.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="obj\Debug\netcoreapp3.0\" />
   </ItemGroup>
 </Project>
