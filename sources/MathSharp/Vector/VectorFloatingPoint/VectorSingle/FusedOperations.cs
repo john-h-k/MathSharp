@@ -17,9 +17,9 @@ namespace MathSharp
             => Fma.IsSupported && Options.AllowImpreciseMath;
 
         private static void ThrowPlatformNotSupported() =>
-            ThrowHelper.ThrowPlatformNotSupportedException(FmaGetPlatformNotSupportedMessage());
+            ThrowHelper.ThrowPlatformNotSupportedException(FmaRequiredPlatformNotSupportedMessage());
 
-        private static string FmaGetPlatformNotSupportedMessage()
+        private static string FmaRequiredPlatformNotSupportedMessage()
             => "Platform not supported for operation as it does not support FMA instructions";
 
         [MethodImpl(MaxOpt)]
