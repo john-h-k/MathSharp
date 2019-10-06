@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Intrinsics;
 using BenchmarkDotNet.Running;
+using MathSharp.Interactive.Benchmarks.MatrixTests.Single;
 using MathSharp.Interactive.Benchmarks.Vector.Single;
 using static MathSharp.Vector;
 
@@ -10,8 +11,7 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            Console.WriteLine((float.MaxValue * 2) + -float.MaxValue);
-            Console.WriteLine(MathF.FusedMultiplyAdd(float.MaxValue, 2, -float.MaxValue));
+            BenchmarkRunner.Run<VectorAdditionBenchmark>();
         }
 
         private static void Test(float f)
