@@ -38,7 +38,7 @@ Matrix4x4 == Matrix4x4
 ### Results
 
 <!-- ![Matrix Equality Benchmark](assets/Benchmarks/MatrixEqualityBenchmark-barplot.png =250x250)-->
-<img src="assets/Benchmarks/MatrixEqualityBenchmark-barplot.png" width="250" height="250">
+<img src="assets/Benchmarks/MatrixEqualityBenchmark-barplot.png" width="500" height="500">
 
 
 
