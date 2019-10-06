@@ -74,7 +74,7 @@ const float Frequency = 440;
 
 for (var i = 0; i < waveInputs.Length; i++)
 {
-    waveInputs[i] = MathF.Sin(Tau * Frequency * ((float)i / SampleRate));
+    waveInputs[i] = Sin(Tau * Frequency * ((float)i / SampleRate));
 }
 ```
 
