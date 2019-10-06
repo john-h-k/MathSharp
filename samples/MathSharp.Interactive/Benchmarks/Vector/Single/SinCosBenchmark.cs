@@ -38,9 +38,9 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         }
 
         [Benchmark]
-        public void MathSharp_Estimate()
+        public void MathSharp_Approx()
         {
-            Vector.SinCosEstimate(MathSharpVector, out _sin, out _cos);
+            Vector.SinCosApprox(MathSharpVector, out _sin, out _cos);
         }
     }
 }

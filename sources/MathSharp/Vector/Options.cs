@@ -1,7 +1,7 @@
 ﻿namespace MathSharp
 {
-    internal static class Options
+    public static class Options
     {
-        public const bool AllowImpreciseMath = true;
+        public static bool AllowImpreciseMath => true;
     }
 }
