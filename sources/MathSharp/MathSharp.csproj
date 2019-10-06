@@ -14,12 +14,4 @@
   <ItemGroup>
     <Folder Include="obj\Debug\netcoreapp3.0\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.45.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
 </Project>
