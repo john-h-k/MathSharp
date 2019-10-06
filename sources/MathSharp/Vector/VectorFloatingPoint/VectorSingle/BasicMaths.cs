@@ -298,6 +298,49 @@ namespace MathSharp
             }
         }
 
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Reciprocal(Vector128<float> vector)
+        {
+            return Divide(SingleConstants.One, vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> ReciprocalSqrt(Vector128<float> vector)
+        {
+            return Divide(SingleConstants.One, Sqrt(vector));
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> ReciprocalApprox(Vector128<float> vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Reciprocal(vector);
+            }
+
+            return Reciprocal(vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> ReciprocalSqrtApprox(Vector128<float> vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.ReciprocalSqrt(vector);
+            }
+
+            return ReciprocalSqrt(vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> InBounds(Vector4F vector, Vector4F bound)
+        {
+            var lessThan = CompareLessThanOrEqual(vector, bound);
+            var greaterThan = CompareGreaterThanOrEqual(vector, Negate(bound));
+
+            return And(lessThan, greaterThan);
+        }
+
         #endregion
     }
 }

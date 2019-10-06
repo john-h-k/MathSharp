@@ -9,24 +9,6 @@ MathSharp is a vector and matrix library written in C# using hardware intrinsics
 
 MathSharp beats out all alternative for speed. Comparing it to the `System.Numerics` types and the `OpenTk.Math` types shows just how fast it is:
 
-## Vector addition
-
-### Operation
-
-```cs
-Vector4 + Vector4;
-```
-
-### Results
-
-![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)
-
-|         Method |      Mean |     Error |    StdDev |
-|--------------- |----------:|----------:|----------:|
-|         OpenTk | 6.5341 ns | 0.0392 ns | 0.0367 ns |
-| SystemNumerics | 0.0510 ns | 0.0080 ns | 0.0075 ns |
-|      MathSharp | 0.0426 ns | 0.0043 ns | 0.0040 ns |
-
 ## Matrix Equality
 
 ### Operation
@@ -112,6 +94,24 @@ deltaT *= Anchor;
 |      MathSharp |  0.8542 ns | 0.0084 ns | 0.0079 ns |    1 |
 | SystemNumerics |  2.0281 ns | 0.0123 ns | 0.0115 ns |    2 |
 |         OpenTk | 37.4250 ns | 0.1585 ns | 0.1483 ns |    3 |
+
+## Vector addition
+
+### Operation
+
+```cs
+Vector4 + Vector4;
+```
+
+### Results (within margin of error between MathSharp and System.Numerics)
+
+![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)
+
+|         Method |      Mean |     Error |    StdDev |
+|--------------- |----------:|----------:|----------:|
+|         OpenTk | 6.5341 ns | 0.0392 ns | 0.0367 ns |
+| SystemNumerics | 0.0510 ns | 0.0080 ns | 0.0075 ns |
+|      MathSharp | 0.0426 ns | 0.0043 ns | 0.0040 ns |
 
 ## Disclaimer
 

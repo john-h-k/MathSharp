@@ -96,8 +96,7 @@ namespace MathSharp
 
             static Vector128<float> SoftwareFallback(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
             {
-                ThrowPlatformNotSupported();
-                return default;
+                return FusedMultiplyAdd(x, y, Negate(z));
             }
         }
 

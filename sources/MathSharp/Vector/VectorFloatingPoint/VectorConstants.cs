@@ -28,6 +28,12 @@ namespace MathSharp
                 get => Vector128.Create(-1f);
             }
 
+            public static Vector128<float> Epsilon
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector128.Create(float.Epsilon);
+            }
+
             // Uses the 'ones idiom', which is where
             // cmpeq xmmN, xmmN
             // is used, and the result is guaranteed to be all ones
@@ -76,6 +82,7 @@ namespace MathSharp
             public static readonly Vector128<float> UnitZ = Vector128.Create(0f, 0f, 1f, 0f);
             public static readonly Vector128<float> UnitW = Vector128.Create(0f, 0f, 0f, 1f);
 
+            public static readonly Vector128<float> OneDivPi = Vector128.Create(ScalarSingleConstants.OneDivPi);
             public static readonly Vector128<float> OneDiv2Pi = Vector128.Create(ScalarSingleConstants.OneDiv2Pi);
             public static readonly Vector128<float> Pi2 = Vector128.Create(ScalarSingleConstants.Pi2);
             public static readonly Vector128<float> Pi = Vector128.Create(ScalarSingleConstants.Pi);
@@ -100,6 +107,12 @@ namespace MathSharp
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => Vector256.Create(-1d);
+            }
+
+            public static Vector256<double> Epsilon
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector256.Create(double.Epsilon);
             }
 
             // Uses the 'ones idiom', which is where
@@ -153,6 +166,7 @@ namespace MathSharp
             public static readonly Vector256<double> UnitZ = Vector256.Create(0f, 0f, 1f, 0f);
             public static readonly Vector256<double> UnitW = Vector256.Create(0f, 0f, 0f, 1f);
 
+            public static readonly Vector256<double> OneDivPi = Vector256.Create(ScalarDoubleConstants.OneDivPi);
             public static readonly Vector256<double> OneDiv2Pi = Vector256.Create(ScalarDoubleConstants.OneDiv2Pi);
             public static readonly Vector256<double> Pi2 = Vector256.Create(ScalarDoubleConstants.Pi2);
             public static readonly Vector256<double> Pi = Vector256.Create(ScalarDoubleConstants.Pi);

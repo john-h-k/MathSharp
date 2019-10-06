@@ -8,6 +8,20 @@ namespace MathSharp
     public static partial class Vector
     {
         /// <summary>
+        /// Select elements from 2 vectors, <paramref name="left"/> and <paramref name="right"/>, based off of the vector <paramref name="selector"/>
+        /// </summary>
+        /// <typeparam name="T">The type of each element in <paramref name="left"/> and <paramref name="right"/></typeparam>
+        /// <typeparam name="U">The type of each element in <paramref name="selector"/></typeparam>
+        /// <param name="left">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is false</param>
+        /// <param name="right">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is true</param>
+        /// <param name="selector">The selector used to select elements from <paramref name="left"/> and <paramref name="right"/></param>
+        /// <returns></returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector128<T> Select<T, U>(Vector128<T> left, Vector128<T> right, Vector128<U> selector)
+            where T : struct where U : struct 
+            => Or(And(selector.As<U, T>(), right), AndNot(selector.As<U, T>(), left));
+
+        /// <summary>
         /// Select the elements from <paramref name="vector"/> where the equivalent element in
         /// <paramref name="selector"/> is true
         /// </summary>

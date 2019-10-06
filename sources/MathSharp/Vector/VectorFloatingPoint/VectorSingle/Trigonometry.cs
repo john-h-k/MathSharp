@@ -76,7 +76,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> SinEstimate(Vector4FParam1_3 vector)
+        public static Vector128<float> SinApprox(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
@@ -183,7 +183,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CosEstimate(Vector4FParam1_3 vector)
+        public static Vector128<float> CosApprox(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
@@ -235,8 +235,6 @@ namespace MathSharp
         {
             var twoDivPi = PermuteWithW(TanConstants);
 
-            var zero = Vector128<float>.Zero;
-
             var tc0 = PermuteWithX(TanConstants);
             var tc1 = PermuteWithY(TanConstants);
             var epsilon = PermuteWithZ(TanConstants);
@@ -246,13 +244,78 @@ namespace MathSharp
 
             var vc = FastNegateMultiplyAdd(va, tc0, vector);
 
-            throw new NotImplementedException();
+            var vb = Abs(va);
+
+            vc = FastNegateMultiplyAdd(va, tc1, vc);
+
+            vb = ConvertToInt32(vb).AsSingle();
+
+            var vc2 = Multiply(vc, vc);
+
+            var t7 = PermuteWithW(TanCoefficients1);
+            var t6 = PermuteWithZ(TanCoefficients1);
+            var t4 = PermuteWithX(TanCoefficients1);
+            var t3 = PermuteWithW(TanCoefficients0);
+            var t5 = PermuteWithY(TanCoefficients1);
+            var t2 = PermuteWithZ(TanCoefficients0);
+            var t1 = PermuteWithY(TanCoefficients0);
+            var t0 = PermuteWithX(TanCoefficients0);
+
+            var vbIsEven = And(vb, SingleConstants.Epsilon).AsInt32();
+            vbIsEven = CompareEqual(vbIsEven, Vector128<int>.Zero);
+
+            var n = FastMultiplyAdd(vc2, t7, t6);
+            var d = FastMultiplyAdd(vc2, t4, t3);
+            n = FastMultiplyAdd(vc2, n, t5);
+            d = FastMultiplyAdd(vc2, d, t2);
+            n = Multiply(vc2, n);
+            d = FastMultiplyAdd(vc2, d, t1);
+            n = FastMultiplyAdd(vc, n, vc);
+
+            var nearZero = InBounds(vc, epsilon);
+
+            d = FastMultiplyAdd(vc2, d, t0);
+
+            n = Select(n, vc, nearZero);
+            d = Select(d, SingleConstants.One, nearZero);
+
+            var r0 = Negate(n);
+            var r1 = Divide(n, d);
+            r0 = Divide(d, r0);
+
+            var isZero = CompareEqual(vector, Vector128<float>.Zero);
+
+            var result = Select(r0, r1, vbIsEven);
+
+            result = Select(result, Vector128<float>.Zero, isZero);
+
+            return result;
         }
 
+        private static readonly Vector128<float> TanEstCoefficients = Vector128.Create(2.484f, -1.954923183e-1f, 2.467401101f, ScalarSingleConstants.OneDivPi);
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> TanEstimate(Vector4FParam1_3 vector)
+        public static Vector128<float> TanApprox(Vector4FParam1_3 vector)
         {
-            throw new NotImplementedException();
+            var oneDivPi = PermuteWithZ(TanEstCoefficients);
+
+            var v1 = Multiply(vector, oneDivPi);
+            v1 = Round(v1);
+
+            v1 = FastNegateMultiplyAdd(SingleConstants.Pi, v1, vector);
+
+            var t0 = PermuteWithX(TanEstCoefficients);
+            var t1 = PermuteWithY(TanEstCoefficients);
+            var t2 = PermuteWithZ(TanEstCoefficients);
+
+            var v2T2 = FastNegateMultiplyAdd(v1, v1, t2);
+            var v2 = Multiply(v1, v1);
+            var v1T0 = Multiply(v1, t0);
+            var v1T1 = Multiply(v1, t1);
+
+            var d = ReciprocalApprox(v2T2);
+            var n = FastMultiplyAdd(v2, v1T1, v1T0);
+
+            return Multiply(n, d);
         }
 
         [MethodImpl(MaxOpt)]
@@ -336,7 +399,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void SinCosEstimate(Vector4FParam1_3 vector, out Vector128<float> sin, out Vector128<float> cos)
+        public static void SinCosApprox(Vector4FParam1_3 vector, out Vector128<float> sin, out Vector128<float> cos)
         {
             if (Sse.IsSupported)
             {
