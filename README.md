@@ -121,7 +121,7 @@ Vector4 + Vector4;
 | SystemNumerics | 0.0510 ns | 0.0080 ns | 0.0075 ns |
 |      MathSharp | 0.0426 ns | 0.0043 ns | 0.0040 ns |
 
-## Disclaimer
+## Authors
 
 MathSharp is a library written, managed, and maintained by John Kelly ([@john-h-k](https://github.com/john-h-k))
 
