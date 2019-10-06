@@ -21,7 +21,10 @@ Matrix4x4 == Matrix4x4
 
 ### Results
 
-![Matrix Equality Benchmark](assets/Benchmarks/MatrixEqualityBenchmark-barplot.png)
+<!-- ![Matrix Equality Benchmark](assets/Benchmarks/MatrixEqualityBenchmark-barplot.png =250x250)-->
+<img src="assets/Benchmarks/MatrixEqualityBenchmark-barplot.png" width="500" height="500">
+
+
 
 |         Method |      Mean |     Error |    StdDev |
 |--------------- |----------:|----------:|----------:|
@@ -39,7 +42,8 @@ Transpose(Matrix4x4)
 
 ### Results
 
-![Matrix Transpose Benchmark](assets/Benchmarks/MatrixTransposeBenchmark-barplot.png)
+<!--![Matrix Transpose Benchmark](assets/Benchmarks/MatrixTransposeBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/MatrixTransposeBenchmark-barplot.png" width="500" height="500">
 
 |         Method |      Mean |     Error |    StdDev |
 |--------------- |----------:|----------:|----------:|
@@ -64,7 +68,8 @@ for (var i = 0; i < waveInputs.Length; i++)
 
 ### Results
 
-![Sine Wave Benchmark](assets/Benchmarks/SineWaveBenchmark-barplot.png)
+<!--![Sine Wave Benchmark](assets/Benchmarks/SineWaveBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/SineWaveBenchmark-barplot.png" width="500" height="500">
 
 |      Method |      Mean |     Error |    StdDev |
 |------------ |----------:|----------:|----------:|
@@ -89,7 +94,8 @@ deltaT *= Anchor;
 
 ### Results
 
-![Anchored Scale Benchmark](assets/Benchmarks/AnchoredScaleBenchmark-barplot.png)
+<!--![Anchored Scale Benchmark](assets/Benchmarks/AnchoredScaleBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/AnchoredScaleBenchmark-barplot.png" width="500" height="500">
 
 |         Method |       Mean |     Error |    StdDev | Rank |
 |--------------- |-----------:|----------:|----------:|-----:|
