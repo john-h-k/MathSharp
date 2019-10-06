@@ -9,6 +9,7 @@ using OpenTK;
 namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     using Vector = MathSharp.Vector;
+    using SysVector2 = System.Numerics.Vector2;
 
     [CoreJob]
     [RPlotExporter]
@@ -21,13 +22,18 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         private Vector2 _openTkScale;
         private Vector2 _openTkAmount;
 
+        private SysVector2 _sysTranslation;
+        private SysVector2 _sysAnchor;
+        private SysVector2 _sysScale;
+        private SysVector2 _sysAmount;
+
         private Vector128<float> _mathSharpTranslation;
         private Vector128<float> _mathSharpAnchor;
         private Vector128<float> _mathSharpScale;
         private Vector128<float> _mathSharpAmount;
 
-
         private Vector2 _result;
+        private SysVector2 _sysResult;
 
         [GlobalSetup]
         public void Setup()
@@ -36,6 +42,11 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             _openTkAnchor = new Vector2(1.0f, 0.0f);
             _openTkScale = new Vector2(7.0f, 3.6f);
             _openTkAmount = new Vector2(0.5f, 0.25f);
+
+            _sysTranslation = new SysVector2(1.7f, 2.3f);
+            _sysAnchor = new SysVector2(1.0f, 0.0f);
+            _sysScale = new SysVector2(7.0f, 3.6f);
+            _sysAmount = new SysVector2(0.5f, 0.25f);
 
             _mathSharpTranslation = Vector128.Create(1.7f, 2.3f, 0f, 0f);
             _mathSharpAnchor = Vector128.Create(1.0f, 0.0f, 0f, 0f);
@@ -55,7 +66,16 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         }
 
         [Benchmark]
-        public void OpenTkMath()
+        public void SystemNumerics()
+        {
+            SysVector2 newScale = _sysScale * _sysAmount;
+            SysVector2 deltaT = _sysScale * (SysVector2.One - _sysAmount);
+            deltaT *= _sysAnchor;
+            _sysResult = (_sysTranslation + deltaT) * newScale;
+        }
+
+        [Benchmark]
+        public void OpenTk()
         {
             Vector2 newScale = _openTkScale * _openTkAmount;
             Vector2 deltaT = _openTkScale * (Vector2.One - _openTkAmount);

@@ -2,12 +2,14 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using OpenTK;
 using static MathSharp.Vector;
 
 #nullable disable
 
 namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
+    [RPlotExporter]
     public class SineWaveBenchmark
     {
         private const bool UseSinEstimate = true;
@@ -29,13 +31,13 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 
             Constants = (Vector128<float>*)Marshal.AllocHGlobal(sizeof(Vector128<float>) * 4);
             Constants[0] = Vector128.Create(0f, 1f, 2f, 3f);
-            Constants[1] = Vector128.Create((float) SampleRate);
+            Constants[1] = Vector128.Create((float)SampleRate);
             Constants[2] = Vector128.Create(4f);
             Constants[3] = Vector128.Create(Tau * Frequency);
         }
 
         [Benchmark]
-        public void Normal()
+        public void SystemMathF()
         {
             var length = _audioBufferNormal.Length;
             for (int i = 0; i < length; i++)
@@ -64,6 +66,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
                     Vector128<float> vector = Divide(samplePoints, sampleRate);
                     vector = Multiply(vector, sine);
 
+                    vector = Sin(vector);
                     vector.Store4D(&ptr[i]);
 
                     i += 4;
