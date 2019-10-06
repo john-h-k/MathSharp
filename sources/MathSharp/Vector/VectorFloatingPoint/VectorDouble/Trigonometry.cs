@@ -75,7 +75,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> SinEstimate(Vector4FParam1_3 vector)
+        public static Vector256<double> SinApprox(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
@@ -182,7 +182,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> CosEstimate(Vector4FParam1_3 vector)
+        public static Vector256<double> CosApprox(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
             {
@@ -307,7 +307,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void SinCosEstimate(Vector4FParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
+        public static void SinCosApprox(Vector4FParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
         {
             if (Sse.IsSupported)
             {

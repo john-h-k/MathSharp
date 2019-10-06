@@ -28,6 +28,12 @@ namespace MathSharp
                 get => Vector128.Create(-1f);
             }
 
+            public static Vector128<float> Epsilon
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector128.Create(float.Epsilon);
+            }
+
             // Uses the 'ones idiom', which is where
             // cmpeq xmmN, xmmN
             // is used, and the result is guaranteed to be all ones
@@ -53,12 +59,15 @@ namespace MathSharp
             public static readonly Vector128<float> MaskSign = Vector128.Create(int.MaxValue).AsSingle();
             public static readonly Vector128<float> MaskNotSign = Vector128.Create(~int.MaxValue).AsSingle();
 
+            // ReSharper disable InconsistentNaming
+            public static readonly Vector128<float> MaskNotSignXZ = Vector128.Create(~int.MaxValue, 0, ~int.MaxValue, 0).AsSingle();
+            public static readonly Vector128<float> MaskNotSignYW = Vector128.Create(0, ~int.MaxValue, 0, ~int.MaxValue).AsSingle();
+
             public static readonly Vector128<float> MaskX = Vector128.Create(+0, -1, -1, -1).AsSingle();
             public static readonly Vector128<float> MaskY = Vector128.Create(-1, +0, -1, -1).AsSingle();
             public static readonly Vector128<float> MaskZ = Vector128.Create(-1, -1, +0, -1).AsSingle();
             public static readonly Vector128<float> MaskW = Vector128.Create(-1, -1, -1, +0).AsSingle();
 
-            // ReSharper disable InconsistentNaming
             public static readonly Vector128<float> MaskXY = Vector128.Create(+0, +0, -1, -1).AsSingle();
             public static readonly Vector128<float> MaskZW = Vector128.Create(-1, -1, +0, +0).AsSingle();
 
@@ -73,6 +82,7 @@ namespace MathSharp
             public static readonly Vector128<float> UnitZ = Vector128.Create(0f, 0f, 1f, 0f);
             public static readonly Vector128<float> UnitW = Vector128.Create(0f, 0f, 0f, 1f);
 
+            public static readonly Vector128<float> OneDivPi = Vector128.Create(ScalarSingleConstants.OneDivPi);
             public static readonly Vector128<float> OneDiv2Pi = Vector128.Create(ScalarSingleConstants.OneDiv2Pi);
             public static readonly Vector128<float> Pi2 = Vector128.Create(ScalarSingleConstants.Pi2);
             public static readonly Vector128<float> Pi = Vector128.Create(ScalarSingleConstants.Pi);
@@ -97,6 +107,12 @@ namespace MathSharp
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => Vector256.Create(-1d);
+            }
+
+            public static Vector256<double> Epsilon
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector256.Create(double.Epsilon);
             }
 
             // Uses the 'ones idiom', which is where
@@ -124,6 +140,10 @@ namespace MathSharp
             public static readonly Vector256<double> MaskSign = Vector256.Create(long.MaxValue).AsDouble();
             public static readonly Vector256<double> MaskNotSign = Vector256.Create(~long.MaxValue).AsDouble();
 
+            // ReSharper disable InconsistentNaming
+            public static readonly Vector256<double> MaskNotSignXZ = Vector256.Create(~long.MaxValue, 0, ~long.MaxValue, 0).AsDouble();
+            public static readonly Vector256<double> MaskNotSignYW = Vector256.Create(0, ~long.MaxValue, 0, ~long.MaxValue).AsDouble();
+
             public static readonly Vector256<double> MaskLo128 = Vector256.Create(Vector128.Create(+0), Vector128.Create(-1)).AsDouble();
             public static readonly Vector256<double> MaskHi128 = Vector256.Create(Vector128.Create(-1), Vector128.Create(+0)).AsDouble();
 
@@ -132,7 +152,6 @@ namespace MathSharp
             public static readonly Vector256<double> MaskZ = Vector256.Create(-1, -1, +0, -1).AsDouble();
             public static readonly Vector256<double> MaskW = Vector256.Create(-1, -1, -1, 0).AsDouble();
 
-            // ReSharper disable InconsistentNaming
             public static readonly Vector256<double> MaskXY = Vector256.Create(+0, +0, -1, -1).AsDouble();
             public static readonly Vector256<double> MaskZW = Vector256.Create(-1, -1, +0, +0).AsDouble();
 
@@ -147,6 +166,7 @@ namespace MathSharp
             public static readonly Vector256<double> UnitZ = Vector256.Create(0f, 0f, 1f, 0f);
             public static readonly Vector256<double> UnitW = Vector256.Create(0f, 0f, 0f, 1f);
 
+            public static readonly Vector256<double> OneDivPi = Vector256.Create(ScalarDoubleConstants.OneDivPi);
             public static readonly Vector256<double> OneDiv2Pi = Vector256.Create(ScalarDoubleConstants.OneDiv2Pi);
             public static readonly Vector256<double> Pi2 = Vector256.Create(ScalarDoubleConstants.Pi2);
             public static readonly Vector256<double> Pi = Vector256.Create(ScalarDoubleConstants.Pi);

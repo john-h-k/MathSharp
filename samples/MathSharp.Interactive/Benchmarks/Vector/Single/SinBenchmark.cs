@@ -30,9 +30,9 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         }
 
         [Benchmark]
-        public Vector128<float> MathSharp_Estimate()
+        public Vector128<float> MathSharp_Approx()
         {
-            return Vector.SinEstimate(MathSharpVector);
+            return Vector.SinApprox(MathSharpVector);
         }
     }
 }
