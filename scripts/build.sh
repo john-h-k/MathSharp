@@ -188,7 +188,7 @@ if [[ -z "$libraryproj" ]]; then
   libraryproj="$RepoRoot/sources/MathSharp/MathSharp.csproj"
 fi
 
-testproj = "$RepoRoot/tests/MathSharp.UnitTests/MathSharp.UnitTests.csproj"
+testproj="$RepoRoot/tests/MathSharp.UnitTests/MathSharp.UnitTests.csproj"
 
 ArtifactsDir="$RepoRoot/artifacts"
 CreateDirectory "$ArtifactsDir"
