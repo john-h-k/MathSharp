@@ -9,7 +9,7 @@ MathSharp is a vector and matrix library written in C# using hardware intrinsics
 
 MathSharp beats out all alternative for speed. Comparing it to the `System.Numerics` types and the `OpenTk.Math` types shows just how fast it is:
 
-[All benchmarks were taken using BenchmarkDotNet on an i3-8350k at stock speeds with minimal background activity]
+[All benchmarks were taken using BenchmarkDotNet on an i3-8350k at stock speeds with minimal background activity, with .NET Core 3.0.100]
 
 ## Matrix Equality
 
