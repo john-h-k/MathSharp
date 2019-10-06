@@ -37,7 +37,7 @@ Matrix4x4 == Matrix4x4
 
 ### Results
 
-![Matrix Equality Benchmark](assets/Benchmarks/MatrixEqualityBenchmark-barplot.png)
+![Matrix Equality Benchmark](assets/Benchmarks/MatrixEqualityBenchmark-barplot.png = 250x250)
 
 |         Method |      Mean |     Error |    StdDev |
 |--------------- |----------:|----------:|----------:|
