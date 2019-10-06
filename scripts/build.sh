@@ -77,7 +77,7 @@ function Build {
   if [[ -z "$properties" ]]; then
     dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet build -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$libraryproj"
+    dotnet build "$libraryproj" -c "$configuration" --no-restore -v "$verbosity" /bl:"$logFile" /err ${properties[@]}
   fi
 
   LASTEXITCODE=$?
@@ -121,7 +121,7 @@ function Pack {
   if [[ -z "$properties" ]]; then
     dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet pack -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$libraryproj"
+    dotnet pack "$libraryproj" -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err ${properties[@]}
   fi
 
   LASTEXITCODE=$?
@@ -138,7 +138,7 @@ function Restore {
   if [[ -z "$properties" ]]; then
     dotnet restore -v "$verbosity" /bl:"$logFile" /err "$libraryproj"
   else
-    dotnet restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$libraryproj"
+    dotnet restore "$libraryproj" -v "$verbosity" /bl:"$logFile" /err ${properties[@]}
   fi
 
   LASTEXITCODE=$?
@@ -155,7 +155,7 @@ function Test {
   if [[ -z "$properties" ]]; then
     dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$testproj"
   else
-    dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "${properties[@]}" "$testproj"
+    dotnet test "$testproj" -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err ${properties[@]}
   fi
 
   LASTEXITCODE=$?
@@ -188,7 +188,7 @@ if [[ -z "$libraryproj" ]]; then
   libraryproj="$RepoRoot/sources/MathSharp/MathSharp.csproj"
 fi
 
-testproj = "$RepoRoot/tests/MathSharp.UnitTests/MathSharp.UnitTests.csproj"
+testproj="$RepoRoot/tests/MathSharp.UnitTests/MathSharp.UnitTests.csproj"
 
 ArtifactsDir="$RepoRoot/artifacts"
 CreateDirectory "$ArtifactsDir"
