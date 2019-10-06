@@ -11,47 +11,13 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    //using Vector4F = Vector128<float>;
+    using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
     public static partial class Vector
     {
         #region Vector
-
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> FusedMultiplyAdd(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
-        {
-            if (Fma.IsSupported)
-            {
-                return Fma.MultiplyAdd(x, y, z);
-            }
-
-            return SoftwareFallback(x, y, z);
-
-            static Vector128<float> SoftwareFallback(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
-            {
-                return Vector128.Create(
-                    MathF.FusedMultiplyAdd(X(x), X(y), X(z)),
-                    MathF.FusedMultiplyAdd(Y(x), Y(y), Y(z)),
-                    MathF.FusedMultiplyAdd(Z(x), Z(y), Z(z)),
-                    MathF.FusedMultiplyAdd(W(x), W(y), W(z))
-                );
-            }
-        }
-
-        private static bool FastMultiplyAddIsAccelerated => Fma.IsSupported && Options.AllowImpreciseMath;
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> FastMultiplyAdd(Vector4FParam1_3 x, Vector4FParam1_3 y, Vector4FParam1_3 z)
-        {
-            if (FastMultiplyAddIsAccelerated)
-            {
-                // FMA is faster than Add-Mul where it compiles to the native instruction, but it is not exactly semantically equivalent
-                return FusedMultiplyAdd(x, y, z);
-            }
-
-            return Add(Multiply(x, y), z);
-        }
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Abs(Vector4FParam1_3 vector)

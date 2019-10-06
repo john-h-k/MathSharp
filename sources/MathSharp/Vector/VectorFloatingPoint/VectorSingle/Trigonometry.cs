@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using MathSharp.Constants;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
@@ -224,6 +225,34 @@ namespace MathSharp
             }
 
             return Cos(vector);
+        }
+
+        private static readonly Vector128<float> TanCoefficients0 =  Vector128.Create(1.0f, -4.667168334e-1f, 2.566383229e-2f, -3.118153191e-4f);
+        private static readonly Vector128<float> TanCoefficients1 = Vector128.Create(4.981943399e-7f, -1.333835001e-1f, 3.424887824e-3f, -1.786170734e-5f);
+        private static readonly Vector128<float> TanConstants = Vector128.Create(1.570796371f, 6.077100628e-11f, 0.000244140625f, 0.63661977228f);
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Tan(Vector4FParam1_3 vector)
+        {
+            var twoDivPi = PermuteWithW(TanConstants);
+
+            var zero = Vector128<float>.Zero;
+
+            var tc0 = PermuteWithX(TanConstants);
+            var tc1 = PermuteWithY(TanConstants);
+            var epsilon = PermuteWithZ(TanConstants);
+
+            var va = Multiply(vector, twoDivPi);
+            va = Round(va);
+
+            var vc = FastNegateMultiplyAdd(va, tc0, vector);
+
+            throw new NotImplementedException();
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> TanEstimate(Vector4FParam1_3 vector)
+        {
+            throw new NotImplementedException();
         }
 
         [MethodImpl(MaxOpt)]

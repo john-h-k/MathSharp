@@ -17,38 +17,6 @@ namespace MathSharp
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FusedMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
-        {
-            if (Fma.IsSupported)
-            {
-                return Fma.MultiplyAdd(x, y, z);
-            }
-
-            return SoftwareFallback(x, y, z);
-
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
-            {
-                return Vector256.Create(
-                    Math.FusedMultiplyAdd(X(x), X(y), X(z)),
-                    Math.FusedMultiplyAdd(Y(x), Y(y), Y(z)),
-                    Math.FusedMultiplyAdd(Z(x), Z(y), Z(z)),
-                    Math.FusedMultiplyAdd(W(x), W(y), W(z))
-                );
-            }
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector256<double> FastMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
-        {
-            if (Fma.IsSupported)
-            {
-                return FusedMultiplyAdd(x, y, z);
-            }
-
-            return Add(Multiply(x, y), z);
-        }
-
-        [MethodImpl(MaxOpt)]
         public static Vector4D Abs(in Vector4DParam1_3 vector)
             => Max(Subtract(Vector4D.Zero, vector), vector);
 
