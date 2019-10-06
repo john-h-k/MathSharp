@@ -107,6 +107,17 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
+        public static Vector128<float> Square(Vector4FParam1_3 vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Multiply(vector, vector);
+            }
+
+            return Multiply_Software(vector, vector);
+        }
+
+        [MethodImpl(MaxOpt)]
         public static Vector128<float> Multiply(Vector4FParam1_3 vector, float scalar)
             => Multiply(vector, Vector128.Create(scalar));
 

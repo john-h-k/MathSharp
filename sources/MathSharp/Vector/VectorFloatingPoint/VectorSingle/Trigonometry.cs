@@ -34,7 +34,7 @@ namespace MathSharp
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
                 vec = Select(neg, vec, comp);
 
-                Vector128<float> vectorSquared = Multiply(vec, vec);
+                Vector128<float> vectorSquared = Square(vec);
 
                 // Polynomial approx
                 Vector128<float> sc0 = SinCoefficient0;
@@ -88,7 +88,7 @@ namespace MathSharp
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
                 vec = Select(neg, vec, comp);
 
-                Vector128<float> vectorSquared = Multiply(vec, vec);
+                Vector128<float> vectorSquared = Square(vec);
 
                 // Fast polynomial approx
                 var sc1 = SinCoefficient1;
@@ -131,7 +131,7 @@ namespace MathSharp
 
                 vec = Select(neg, vec, comp);
 
-                Vector128<float> vectorSquared = Multiply(vec, vec);
+                Vector128<float> vectorSquared = Square(vec);
 
                 vec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
 
@@ -188,7 +188,7 @@ namespace MathSharp
 
                 vec = Select(neg, vec, comp);
                 
-                Vector128<float> vectorSquared = Multiply(vec, vec);
+                Vector128<float> vectorSquared = Square(vec);
 
                 vec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
 
@@ -236,7 +236,7 @@ namespace MathSharp
 
                 vb = ConvertToInt32(vb).AsSingle();
 
-                var vc2 = Multiply(vc, vc);
+                var vc2 = Square(vc);
 
                 var t7 = PermuteWithW(TanCoefficients1);
                 var t6 = PermuteWithZ(TanCoefficients1);
@@ -248,7 +248,7 @@ namespace MathSharp
                 var t0 = PermuteWithX(TanCoefficients0);
 
                 var vbIsEven = And(vb, SingleConstants.Epsilon).AsInt32();
-                vbIsEven = CompareEqual(vbIsEven, Vector128<int>.Zero);
+                vbIsEven = CompareBitwiseEqual(vbIsEven, Vector128<int>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
@@ -309,7 +309,7 @@ namespace MathSharp
                 var t2 = PermuteWithZ(TanEstCoefficients);
 
                 var v2T2 = FastNegateMultiplyAdd(v1, v1, t2);
-                var v2 = Multiply(v1, v1);
+                var v2 = Square(v1);
                 var v1T0 = Multiply(v1, t0);
                 var v1T1 = Multiply(v1, t1);
 
@@ -340,7 +340,7 @@ namespace MathSharp
 
                 vec = Select(neg, vec, comp);
 
-                Vector128<float> vectorSquared = Multiply(vec, vec);
+                Vector128<float> vectorSquared = Square(vec);
 
                 var cosVec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
 
@@ -416,7 +416,7 @@ namespace MathSharp
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
                 vec = Select(neg, vec, comp);
-                Vector128<float> vectorSquared = Multiply(vec, vec);
+                Vector128<float> vectorSquared = Square(vec);
 
                 var cosVec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
 
