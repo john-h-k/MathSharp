@@ -8,7 +8,7 @@ namespace MathSharp.Utils
     internal static partial class Helpers
     {
         public static readonly double NoBitsSetDouble = 0d;
-        public static readonly double AllBitsSetDouble = Unsafe.As<int, double>(ref Unsafe.AsRef(-1));
+        public static readonly double AllBitsSetDouble = BitConverter.Int64BitsToDouble(-1);
 
         public static void GetLowHigh(Vector256<double> vector, out Vector128<double> low, out Vector128<double> high)
         {

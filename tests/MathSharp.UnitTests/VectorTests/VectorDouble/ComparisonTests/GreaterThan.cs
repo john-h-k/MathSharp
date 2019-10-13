@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Intrinsics;
 using Xunit;
 using static MathSharp.UnitTests.TestHelpers;
@@ -35,7 +36,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.ComparisonTests
         {
             Vector256<long> result1 = Vector.CompareGreaterThan(left, right).AsInt64();
 
-            Assert.True((bool) AreAllEqual(expected, result1));
+            Assert.True(AreAllEqual(expected, result1), $"Expected {string.Join(' ', expected.Select(b => b.ToString()))}, got {result1}");
         }
     }
 }
