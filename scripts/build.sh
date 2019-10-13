@@ -150,35 +150,35 @@ function Restore {
 }
 
 function Test {
-  export EnableSSE=0
-  export EnableSSE2=0
-  export EnableSSE3=0
-  export EnableSSSE3=0
-  export EnableSSE41=0
-  export EnableSSE42=0
-  export EnableAVX=0
-  export EnableFMA=0
-  export EnableAVX2=0
+  export COMPlus_EnableSSE=0
+  export COMPlus_EnableSSE2=0
+  export COMPlus_EnableSSE3=0
+  export COMPlus_EnableSSSE3=0
+  export COMPlus_EnableSSE41=0
+  export COMPlus_EnableSSE42=0
+  export COMPlus_EnableAVX=0
+  export COMPlus_EnableFMA=0
+  export COMPlus_EnableAVX2=0
 
   RunTestIteration
 
-  export EnableSSE=1
+  export COMPlus_EnableSSE=1
   RunTestIteration
-  export EnableSSE2=1
+  export COMPlus_EnableSSE2=1
   RunTestIteration
-  export EnableSSE3=1
+  export COMPlus_EnableSSE3=1
   RunTestIteration
-  export EnableSSSE3=1
+  export COMPlus_EnableSSSE3=1
   RunTestIteration
-  export EnableSSE41=1
+  export COMPlus_EnableSSE41=1
   RunTestIteration
-  export EnableSSE42=1
+  export COMPlus_EnableSSE42=1
   RunTestIteration
-  export EnableAVX=1
+  export COMPlus_EnableAVX=1
   RunTestIteration
-  export EnableFMA=1
+  export COMPlus_EnableFMA=1
   RunTestIteration
-  export EnableAVX2=1
+  export COMPlus_EnableAVX2=1
   RunTestIteration
 }
 

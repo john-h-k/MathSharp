@@ -14,7 +14,7 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            Console.WriteLine(IntrinsicSupport.SupportSummary);
+            Console.WriteLine(Add(default, 0f));
         }
 
         public static Vector128<float> Foo()

@@ -85,7 +85,7 @@ function Test() {
   foreach ($isa in $isas)
   {
     Write-Output "`n`nEnabled ISA '$isa'"
-    [System.Environment]::SetEnvironmentVariable($("Enable" + $isa), 1)
+    [System.Environment]::SetEnvironmentVariable($("COMPlus_Enable" + $isa), 1)
     RunTestIteration
   }
 }
