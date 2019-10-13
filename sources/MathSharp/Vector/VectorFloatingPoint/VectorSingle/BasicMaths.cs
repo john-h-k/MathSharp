@@ -361,7 +361,7 @@ namespace MathSharp
                 return Sse.ReciprocalSqrt(vector);
             }
 
-            return ReciprocalSqrt(vector);
+            return ReciprocalSqrtApprox(vector);
         }
 
         [MethodImpl(MaxOpt)]
