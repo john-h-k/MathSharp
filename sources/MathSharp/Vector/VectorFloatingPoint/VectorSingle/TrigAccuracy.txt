@@ -22,7 +22,7 @@ MathSharp Cos:         -0.75968766
 MathSharp CosApprox:   -0.75969386
 MathF Tan:             -0.8559934
 MathSharp Tan:         -0.85599416
-MathSharp TanApprox:   -19.774023
+MathSharp TanApprox:   -0.859247
 MathF SinCos:             0.65028787, -0.7596879
 MathSharp SinCos:         0.65028816, -0.75968766
 MathSharp SinCosApprox:   0.6502887, -0.75969386
@@ -37,7 +37,7 @@ MathSharp Cos:         0.1542501
 MathSharp CosApprox:   0.15425733
 MathF Tan:             -6.405331
 MathSharp Tan:         -6.405366
-MathSharp TanApprox:   -39.56673
+MathSharp TanApprox:   -6.403187
 MathF SinCos:             -0.9880316, 0.15425146
 MathSharp SinCos:         -0.98803186, 0.1542501
 MathSharp SinCosApprox:   -0.98803294, 0.15425733
@@ -52,7 +52,7 @@ MathSharp Cos:         0.5253242
 MathSharp CosApprox:   0.52531654
 MathF Tan:             1.6197752
 MathSharp Tan:         1.6197705
-MathSharp TanApprox:   -59.364853
+MathSharp TanApprox:   1.6215404
 MathF SinCos:             0.8509035, 0.52532196
 MathSharp SinCos:         0.85090214, 0.5253242
 MathSharp SinCosApprox:   0.85090125, 0.52531654
@@ -67,7 +67,7 @@ MathSharp Cos:         -0.9524138
 MathSharp CosApprox:   -0.9524192
 MathF Tan:             0.32004037
 MathSharp Tan:         0.3200386
-MathSharp TanApprox:   -79.15186
+MathSharp TanApprox:   0.32194883
 MathF SinCos:             -0.3048106, -0.95241296
 MathSharp SinCos:         -0.30480814, -0.9524138
 MathSharp SinCosApprox:   -0.30480832, -0.9524192
@@ -82,7 +82,7 @@ MathSharp Cos:         0.9217512
 MathSharp CosApprox:   0.92175883
 MathF Tan:             -0.42070094
 MathSharp Tan:         -0.42070344
-MathSharp TanApprox:   -98.964325
+MathSharp TanApprox:   -0.42301822
 MathF SinCos:             -0.38778165, 0.92175126
 MathSharp SinCos:         -0.38778183, 0.9217512
 MathSharp SinCosApprox:   -0.38778216, 0.92175883
@@ -97,7 +97,7 @@ MathSharp Cos:         -0.44806877
 MathSharp CosApprox:   -0.44805956
 MathF Tan:             -1.9952004
 MathSharp Tan:         -1.9952128
-MathSharp TanApprox:   -118.74197
+MathSharp TanApprox:   -1.996347
 MathF SinCos:             0.89399666, -0.44807363
 MathSharp SinCos:         0.8939991, -0.44806877
 MathSharp SinCosApprox:   0.89399797, -0.44805956

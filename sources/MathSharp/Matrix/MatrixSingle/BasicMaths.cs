@@ -99,26 +99,26 @@ namespace MathSharp
 
 
             // x1, y1, x2, y2
-            Vector128<float> xAndY1 = Vector.Shuffle(matrix._v0, matrix._v1, DeprecatedShuffleValues._1_0_1_0);
+            Vector128<float> xAndY1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues._0_1_0_1);
 
             // z1, w1, z2, w2
-            Vector128<float> zAndW1 = Vector.Shuffle(matrix._v0, matrix._v1, DeprecatedShuffleValues._3_2_3_2);
+            Vector128<float> zAndW1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues._2_3_2_3);
 
             // x3, y3, x4, y4
-            Vector128<float> xAndY2 = Vector.Shuffle(matrix._v2, matrix._v3, DeprecatedShuffleValues._1_0_1_0);
+            Vector128<float> xAndY2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues._0_1_0_1);
 
             // z3, w3, z4, w4
-            Vector128<float> zAndW2 = Vector.Shuffle(matrix._v2, matrix._v3, DeprecatedShuffleValues._3_2_3_2);
+            Vector128<float> zAndW2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues._2_3_2_3);
 
             return new MatrixSingle(
                 // x1, x2, x3, x4
-                Vector.Shuffle(xAndY1, xAndY2, DeprecatedShuffleValues._2_0_2_0),
+                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues._0_2_0_2),
                 // y1, y2, y3, y4
-                Vector.Shuffle(xAndY1, xAndY2, DeprecatedShuffleValues._3_1_3_1),
+                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues._1_3_1_3),
                 // z1, z2, z3, z4
-                Vector.Shuffle(zAndW1, zAndW2, DeprecatedShuffleValues._2_0_2_0),
+                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues._0_2_0_2),
                 // w1, w2, w3, w4
-                Vector.Shuffle(zAndW1, zAndW2, DeprecatedShuffleValues._3_1_3_1)
+                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues._1_3_1_3)
             );
         }
     }
