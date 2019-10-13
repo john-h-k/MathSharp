@@ -18,10 +18,10 @@ namespace MathSharp.Utils
         //}
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static float BoolToSimdBoolSingle(bool val) => val ? NoBitsSetSingle : AllBitsSetSingle;
+        public static float BoolToSimdBoolSingle(bool val) => val ? AllBitsSetSingle : NoBitsSetSingle;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static double BoolToSimdBoolDouble(bool val) => val ? NoBitsSetDouble : AllBitsSetDouble;
+        public static double BoolToSimdBoolDouble(bool val) => val ? AllBitsSetDouble : NoBitsSetDouble;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static int BoolToSimdBoolInt32(bool val) => val ? -1 : 0;

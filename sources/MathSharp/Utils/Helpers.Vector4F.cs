@@ -48,6 +48,6 @@ namespace MathSharp.Utils
         public static T W<T>(Vector256<T> vector) where T : struct => vector.GetElement(3);
 
         public static readonly float NoBitsSetSingle = 0f; 
-        public static readonly float AllBitsSetSingle = Unsafe.As<int, float>(ref Unsafe.AsRef(-1));
+        public static readonly float AllBitsSetSingle = BitConverter.Int32BitsToSingle(-1);
     }
 }

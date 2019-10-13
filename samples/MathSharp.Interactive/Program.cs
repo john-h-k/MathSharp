@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using BenchmarkDotNet.Running;
 using MathSharp.Interactive.Benchmarks.MatrixTests.Single;
 using MathSharp.Interactive.Benchmarks.Vector.Single;
@@ -14,7 +15,6 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            Console.WriteLine(IntrinsicSupport.SupportSummary);
         }
 
         public static Vector128<float> Foo()

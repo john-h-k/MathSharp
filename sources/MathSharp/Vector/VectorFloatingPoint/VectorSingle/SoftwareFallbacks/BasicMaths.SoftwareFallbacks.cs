@@ -85,22 +85,52 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Max_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
+            float lX = X(left), rX = X(right);
+            float lY = Y(left), rY = Y(right);
+            float lZ = Z(left), rZ = Z(right);
+            float lW = W(left), rW = W(right);
+
+            if (float.IsNaN(lX)) lX = rX;
+            if (float.IsNaN(lY)) lY = rY;
+            if (float.IsNaN(lZ)) lZ = rZ;
+            if (float.IsNaN(lW)) lW = rW;
+
+            if (float.IsNaN(rX)) rX = lX;
+            if (float.IsNaN(rY)) rY = lY;
+            if (float.IsNaN(rZ)) rZ = lZ;
+            if (float.IsNaN(rW)) rW = lW;
+
             return Vector128.Create(
-                MathF.Max(X(left), X(right)),
-                MathF.Max(Y(left), Y(right)),
-                MathF.Max(Z(left), Z(right)),
-                MathF.Max(W(left), W(right))
+                MathF.Max(lX, rX),
+                MathF.Max(lY, rY),
+                MathF.Max(lZ, rZ),
+                MathF.Max(lW, rW)
             );
         }
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Min_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {
+            float lX = X(left), rX = X(right);
+            float lY = Y(left), rY = Y(right);
+            float lZ = Z(left), rZ = Z(right);
+            float lW = W(left), rW = W(right);
+
+            if (float.IsNaN(lX)) lX = rX;
+            if (float.IsNaN(lY)) lY = rY;
+            if (float.IsNaN(lZ)) lZ = rZ;
+            if (float.IsNaN(lW)) lW = rW;
+
+            if (float.IsNaN(rX)) rX = lX;
+            if (float.IsNaN(rY)) rY = lY;
+            if (float.IsNaN(rZ)) rZ = lZ;
+            if (float.IsNaN(rW)) rW = lW;
+
             return Vector128.Create(
-                MathF.Min(X(left), X(right)),
-                MathF.Min(Y(left), Y(right)),
-                MathF.Min(Z(left), Z(right)),
-                MathF.Min(W(left), W(right))
+                MathF.Min(lX, rX),
+                MathF.Min(lY, rY),
+                MathF.Min(lZ, rZ),
+                MathF.Min(lW, rW)
             );
         }
 
