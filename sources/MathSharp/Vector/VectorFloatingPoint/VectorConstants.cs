@@ -16,6 +16,12 @@ namespace MathSharp
                 get => Vector128<float>.Zero;
             }
 
+            public static Vector128<float> NegativeZero
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Negate(Zero);
+            }
+
             public static Vector128<float> One
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -87,6 +93,8 @@ namespace MathSharp
             public static readonly Vector128<float> Pi2 = Vector128.Create(ScalarSingleConstants.Pi2);
             public static readonly Vector128<float> Pi = Vector128.Create(ScalarSingleConstants.Pi);
             public static readonly Vector128<float> PiDiv2 = Vector128.Create(ScalarSingleConstants.PiDiv2);
+            public static readonly Vector128<float> PiDiv4 = Vector128.Create(ScalarSingleConstants.PiDiv4);
+            public static readonly Vector128<float> ThreePiDiv4 = Vector128.Create(ScalarSingleConstants.ThreePiDiv4);
         }
 
         public static class DoubleConstants
@@ -171,6 +179,8 @@ namespace MathSharp
             public static readonly Vector256<double> Pi2 = Vector256.Create(ScalarDoubleConstants.Pi2);
             public static readonly Vector256<double> Pi = Vector256.Create(ScalarDoubleConstants.Pi);
             public static readonly Vector256<double> PiDiv2 = Vector256.Create(ScalarDoubleConstants.PiDiv2);
+            public static readonly Vector256<double> PiDiv4 = Vector256.Create(ScalarDoubleConstants.PiDiv4);
+            public static readonly Vector256<double> ThreePiDiv4 = Vector256.Create(ScalarDoubleConstants.ThreePiDiv4);
         }
     }
 }

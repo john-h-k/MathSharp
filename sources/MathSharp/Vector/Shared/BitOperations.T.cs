@@ -1,6 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using System.Threading;
+using static MathSharp.Utils.Helpers;
+
 // ReSharper disable InconsistentNaming
 
 namespace MathSharp
@@ -15,10 +18,10 @@ namespace MathSharp
         /// <param name="left">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is false</param>
         /// <param name="right">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is true</param>
         /// <param name="selector">The selector used to select elements from <paramref name="left"/> and <paramref name="right"/></param>
-        /// <returns></returns>
+        /// <returns>A new <see cref="Vector128{T}"/> with the elements selected by <paramref name="selector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<T> Select<T, U>(Vector128<T> left, Vector128<T> right, Vector128<U> selector)
-            where T : struct where U : struct 
+            where T : struct where U : struct
             => Or(And(selector.As<U, T>(), right), AndNot(selector.As<U, T>(), left));
 
         /// <summary>
@@ -66,7 +69,7 @@ namespace MathSharp
                     return Sse.And(left.AsSingle(), right.AsSingle()).As<float, T>();
                 }
             }
-            
+
             if (typeof(T) == typeof(double))
             {
                 if (Sse2.IsSupported)
@@ -229,6 +232,20 @@ namespace MathSharp
         {
             return Xor(vector, SingleConstants.AllBitsSet.As<float, T>());
         }
+
+        /// <summary>
+        /// Select elements from 2 vectors, <paramref name="left"/> and <paramref name="right"/>, based off of the vector <paramref name="selector"/>
+        /// </summary>
+        /// <typeparam name="T">The type of each element in <paramref name="left"/> and <paramref name="right"/></typeparam>
+        /// <typeparam name="U">The type of each element in <paramref name="selector"/></typeparam>
+        /// <param name="left">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is false</param>
+        /// <param name="right">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is true</param>
+        /// <param name="selector">The selector used to select elements from <paramref name="left"/> and <paramref name="right"/></param>
+        /// <returns>A new <see cref="Vector256{T}"/> with the elements selected by <paramref name="selector"/> retained and the others zeroed</returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector256<T> Select<T, U>(Vector256<T> left, Vector256<T> right, Vector256<U> selector)
+            where T : struct where U : struct
+            => Or(And(selector.As<U, T>(), right), AndNot(selector.As<U, T>(), left));
 
         /// <summary>
         /// Select the elements from <paramref name="vector"/> where the equivalent element in

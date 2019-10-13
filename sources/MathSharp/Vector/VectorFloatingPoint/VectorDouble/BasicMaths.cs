@@ -77,6 +77,17 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
+        public static Vector4D Square(Vector4DParam1_3 vector)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Multiply(vector, vector);
+            }
+
+            return Multiply_Software(vector, vector);
+        }
+
+        [MethodImpl(MaxOpt)]
         public static Vector4D Multiply(in Vector4DParam1_3 vector, double scalar)
             => Multiply(vector, Vector256.Create(scalar));
 
@@ -229,6 +240,39 @@ namespace MathSharp
                     Math.Truncate(W(vector))
                 );
             }
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D Reciprocal(Vector4D vector)
+        {
+            return Divide(DoubleConstants.One, vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D ReciprocalSqrt(Vector4D vector)
+        {
+            return Divide(DoubleConstants.One, Sqrt(vector));
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D ReciprocalApprox(Vector4D vector)
+        {
+            return Reciprocal(vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D ReciprocalSqrtApprox(Vector4D vector)
+        {
+            return ReciprocalSqrt(vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector4D InBounds(Vector4D vector, Vector4D bound)
+        {
+            var lessThan = CompareLessThanOrEqual(vector, bound);
+            var greaterThan = CompareGreaterThanOrEqual(vector, Negate(bound));
+
+            return And(lessThan, greaterThan);
         }
 
         #endregion

@@ -51,8 +51,8 @@ namespace MathSharp
 
             if (Sse.IsSupported)
             {
-                Vector128<float> vector1 = Sse.Shuffle(left, right, DeprecatedShuffleValues._2_0_2_0);
-                Vector128<float> vector2 = Sse.Shuffle(left, right, DeprecatedShuffleValues._3_1_3_1);
+                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues._0_2_0_2);
+                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues._1_3_1_3);
 
                 return Sse.Add(vector1, vector2);
             }
@@ -104,6 +104,17 @@ namespace MathSharp
             }
 
             return Multiply_Software(left, right);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Square(Vector4FParam1_3 vector)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Multiply(vector, vector);
+            }
+
+            return Multiply_Software(vector, vector);
         }
 
         [MethodImpl(MaxOpt)]
@@ -277,6 +288,27 @@ namespace MathSharp
             }
         }
 
+        // TODO move to proper Int32 file
+        private static Vector128<int> CompareLessThan(Vector128<int> left, Vector128<int> right)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse2.CompareLessThan(left, right);
+            }
+
+            return SoftwareFallback(left, right);
+
+            static Vector128<int> SoftwareFallback(Vector128<int> left, Vector128<int> right)
+            {
+                return Vector128.Create(
+                    BoolToSimdBoolInt32(X(left) < X(right)),
+                    BoolToSimdBoolInt32(X(left) < X(right)),
+                    BoolToSimdBoolInt32(X(left) < X(right)),
+                    BoolToSimdBoolInt32(X(left) < X(right))
+                );
+            }
+        }
+
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Floor(Vector4FParam1_3 vector)
         {
@@ -342,5 +374,10 @@ namespace MathSharp
         }
 
         #endregion
+
+        private static readonly Vector128<float> FiniteComparison0 = Vector128.Create(0x7FFFFFFF).AsSingle();
+        private static readonly Vector128<float> FiniteComparison1 = Vector128.Create(0x7F800000).AsSingle();
+        private static Vector128<float> IsFinite(Vector128<float> vector) => CompareLessThan(And(vector, FiniteComparison0), FiniteComparison1);
+        private static Vector128<float> IsInfinite(Vector128<float> vector) => CompareEqual(And(vector, FiniteComparison0), FiniteComparison1);
     }
 }

@@ -13,10 +13,13 @@ namespace MathSharp
     public static partial class Vector
     {
         // Whether 'Fastxxx' operations use 'Fusedxxx' operations or not
-        private static bool CanFuseOperations 
-            => Fma.IsSupported && Options.AllowImpreciseMath;
+        private static bool CanFuseOperations
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => Fma.IsSupported && Options.AllowImpreciseMath;
+        }
 
-        private static void ThrowPlatformNotSupported() =>
+    private static void ThrowPlatformNotSupported() =>
             ThrowHelper.ThrowPlatformNotSupportedException(FmaRequiredPlatformNotSupportedMessage());
 
         private static string FmaRequiredPlatformNotSupportedMessage()

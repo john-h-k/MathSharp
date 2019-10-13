@@ -170,7 +170,7 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-               var hiBroadcast = Sse2.Shuffle(vector.GetLower(), vector.GetLower(), DeprecatedShuffleValues._2_2_2_2);
+               var hiBroadcast = Sse2.Shuffle(vector.GetLower(), vector.GetLower(), ShuffleValues._2_2_2_2);
 
                 Sse2.Store(destination, vector.GetLower());
                 Sse2.StoreScalar(&destination[3], hiBroadcast);

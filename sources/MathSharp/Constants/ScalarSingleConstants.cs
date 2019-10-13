@@ -36,5 +36,10 @@ namespace MathSharp.Constants
         /// π divided by 4
         /// </summary>
         public const float PiDiv4 = Pi / 4f;
+
+        /// <summary>
+        /// 3π divided by 4
+        /// </summary>
+        public const float ThreePiDiv4 = 3f * Pi / 4f;
     }
 }
