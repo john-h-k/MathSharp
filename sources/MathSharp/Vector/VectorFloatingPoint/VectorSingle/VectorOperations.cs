@@ -20,6 +20,11 @@ namespace MathSharp
 
         #region Normalize
 
+        // Normalizing a Vector is
+        // vector / Sqrt(Length(vector)
+        // which can be estimated as
+        // vector * ReciprocalSqrt(Length(vector))
+
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Normalize2D(Vector4FParam1_3 vector)
             => Divide(vector, Length2D(vector));
@@ -31,6 +36,22 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Normalize4D(Vector4FParam1_3 vector)
             => Divide(vector, Length4D(vector));
+
+        #endregion
+
+        #region NormalizeApprox
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> NormalizeApprox2D(Vector4FParam1_3 vector)
+            => Multiply(vector, ReciprocalSqrtApprox(LengthSquared2D(vector)));
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> NormalizeApprox3D(Vector4FParam1_3 vector)
+            => Multiply(vector, ReciprocalSqrtApprox(LengthSquared3D(vector)));
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> NormalizeApprox4D(Vector4FParam1_3 vector)
+            => Multiply(vector, ReciprocalSqrtApprox(LengthSquared4D(vector)));
 
         #endregion
 
