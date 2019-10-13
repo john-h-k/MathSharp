@@ -76,7 +76,7 @@ function Test() {
   
   foreach ($isa in $isas)
   {
-    [System.Environment]::SetEnvironmentVariable($("Enable" + $isa), 0)
+    [System.Environment]::SetEnvironmentVariable($("COMPlus_Enable" + $isa), 0)
   }
 
   Write-Output "`n`nRunning intrinsic free tests"
