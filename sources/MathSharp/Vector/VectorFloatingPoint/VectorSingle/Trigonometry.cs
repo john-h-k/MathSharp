@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Constants;
+using MathSharp.Utils;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
@@ -187,7 +188,7 @@ namespace MathSharp
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
                 vec = Select(neg, vec, comp);
-                
+
                 Vector128<float> vectorSquared = Square(vec);
 
                 vec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
@@ -211,7 +212,7 @@ namespace MathSharp
             return Cos(vector);
         }
 
-        private static readonly Vector128<float> TanCoefficients0 =  Vector128.Create(1.0f, -4.667168334e-1f, 2.566383229e-2f, -3.118153191e-4f);
+        private static readonly Vector128<float> TanCoefficients0 = Vector128.Create(1.0f, -4.667168334e-1f, 2.566383229e-2f, -3.118153191e-4f);
         private static readonly Vector128<float> TanCoefficients1 = Vector128.Create(4.981943399e-7f, -1.333835001e-1f, 3.424887824e-3f, -1.786170734e-5f);
         private static readonly Vector128<float> TanConstants = Vector128.Create(1.570796371f, 6.077100628e-11f, 0.000244140625f, 0.63661977228f);
         [MethodImpl(MaxOpt)]
@@ -476,6 +477,127 @@ namespace MathSharp
             }
 
             SinCos(vector, out sin, out cos);
+        }
+
+        private static readonly Vector128<float> ATan2Constants = Vector128.Create(
+                ScalarSingleConstants.Pi,
+                ScalarSingleConstants.PiDiv2,
+                ScalarSingleConstants.PiDiv4,
+                ScalarSingleConstants.Pi * 3.0f / 4.0f
+        );
+
+        public static Vector128<float> ATan2(Vector128<float> left, Vector128<float> right)
+        {
+            if (Sse.IsSupported)
+            {
+                var aTanResultValid = SingleConstants.AllBitsSet;
+
+                var pi = SingleConstants.Pi;
+                var piDiv2 = SingleConstants.PiDiv2;
+                var piDiv4 = SingleConstants.PiDiv4;
+                var threePiDiv4 = SingleConstants.ThreePiDiv4;
+
+                var yEqualsZero = CompareEqual(left, SingleConstants.Zero);
+                var xEqualsZero = CompareEqual(right, SingleConstants.Zero);
+                var rightIsPositive = ExtractSign(right);
+                rightIsPositive = CompareBitwiseEqualInt32(rightIsPositive.AsInt32(), Vector128<int>.Zero).AsSingle();
+                var yEqualsInfinity = IsInfinite(left);
+                var xEqualsInfinity = IsInfinite(right);
+
+                var ySign = And(left, SingleConstants.NegativeZero);
+                pi = Or(pi, ySign);
+                piDiv2 = Or(piDiv2, ySign);
+                piDiv4 = Or(piDiv4, ySign);
+                threePiDiv4 = Or(threePiDiv4, ySign);
+
+                var r1 = Select(pi, ySign, rightIsPositive);
+                var r2 = Select(aTanResultValid, piDiv2, xEqualsZero);
+                var r3 = Select(r2, r1, yEqualsZero);
+                var r4 = Select(threePiDiv4, piDiv4, rightIsPositive);
+                var r5 = Select(piDiv2, r4, xEqualsInfinity);
+                var result = Select(r3, r5, yEqualsInfinity);
+                aTanResultValid = CompareBitwiseEqualInt32(result.AsInt32(), aTanResultValid.AsInt32()).AsSingle();
+
+                var v = Divide(left, right);
+
+                var r0 = ATan(v);
+
+                r1 = Select(pi, SingleConstants.NegativeZero, rightIsPositive);
+                r2 = Add(r0, r1);
+
+                return Select(result, r2, aTanResultValid);
+            }
+
+            return SoftwareFallback(left, right);
+
+            static Vector128<float> SoftwareFallback(Vector128<float> left, Vector128<float> right)
+            {
+                return Vector128.Create(
+                    MathF.Atan2(X(left), X(right)),
+                    MathF.Atan2(Y(left), Y(right)),
+                    MathF.Atan2(Z(left), Z(right)),
+                    MathF.Atan2(W(left), W(right))
+                );
+            }
+        }
+
+        public static readonly Vector128<float> ATanCoefficients0 = Vector128.Create(-0.3333314528f, +0.1999355085f, -0.1420889944f, +0.1065626393f);
+        public static readonly Vector128<float> ATanCoefficients1 = Vector128.Create(-0.0752896400f, +0.0429096138f, -0.0161657367f, +0.0028662257f);
+        public static Vector128<float> ATan(Vector128<float> vector)
+        {
+            var abs = Abs(vector);
+            var inv = Divide(SingleConstants.One, vector);
+            var comp = CompareGreaterThan(vector, SingleConstants.One);
+            var sign = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
+
+            comp = CompareLessThanOrEqual(abs, SingleConstants.One);
+
+            sign = Select(sign, SingleConstants.Zero, comp);
+
+            var vec = Select(inv, vector, comp);
+
+            var vecSquared = Square(vec);
+
+            var tc1 = ATanCoefficients1;
+
+            var constants1 = PermuteWithZ(tc1);
+
+            var result = FastMultiplyAdd(PermuteWithW(tc1), vecSquared, constants1);
+
+            constants1 = PermuteWithY(tc1);
+
+            result = FastMultiplyAdd(result, vecSquared, constants1);
+
+            constants1 = PermuteWithX(tc1);
+
+            result = FastMultiplyAdd(result, vecSquared, constants1);
+
+            var tC0 = ATanCoefficients0;
+            constants1 = PermuteWithW(tC0);
+
+            result = FastMultiplyAdd(result, vecSquared, constants1);
+
+            constants1 = PermuteWithZ(tC0);
+
+            result = FastMultiplyAdd(result, vecSquared, constants1);
+
+            constants1 = PermuteWithY(tC0);
+
+            result = FastMultiplyAdd(result, vecSquared, constants1);
+            
+            constants1 = PermuteWithX(tC0);
+
+            result = FastMultiplyAdd(result, vecSquared, constants1);
+
+            result = FastMultiplyAdd(result, vecSquared, SingleConstants.One);
+
+            result = Multiply(result, vec);
+
+            var result1 = FastMultiplySubtract(sign, SingleConstants.PiDiv2, result);
+
+            comp = CompareEqual(sign, SingleConstants.Zero);
+            result = Select(result1, result, comp);
+            return result;
         }
     }
 }

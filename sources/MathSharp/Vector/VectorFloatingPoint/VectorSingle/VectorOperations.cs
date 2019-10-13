@@ -328,6 +328,19 @@ namespace MathSharp
         #region Lerp
 
         [MethodImpl(MaxOpt)]
+        public static Vector128<float> Lerp(Vector4FParam1_3 from, Vector4FParam1_3 to, Vector4FParam1_3 weight)
+        {
+            Debug.Assert(CompareLessThanOrEqual(weight, Vector128.Create(1f)).AllTrue() 
+                                  && CompareGreaterThanOrEqual(weight, Vector4F.Zero).AllTrue());
+
+            // Lerp (Linear interpolate) interpolates between two values (here, vectors)
+            // The general formula for it is 'from + (to - from) * weight'
+            Vector4F offset = Subtract(to, from);
+            offset = Multiply(offset, weight);
+            return Add(from, offset);
+        }
+
+        [MethodImpl(MaxOpt)]
         public static Vector128<float> Lerp(Vector4FParam1_3 from, Vector4FParam1_3 to, float weight)
         {
             Debug.Assert(weight <= 1 && weight >= 0);
@@ -335,7 +348,7 @@ namespace MathSharp
             // Lerp (Linear interpolate) interpolates between two values (here, vectors)
             // The general formula for it is 'from + (to - from) * weight'
             Vector4F offset = Subtract(to, from);
-            offset = Multiply(offset, weight.LoadScalarBroadcast());
+            offset = Multiply(offset, Vector128.Create(weight));
             return Add(from, offset);
         }
 

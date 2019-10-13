@@ -10,7 +10,7 @@ namespace MathSharp.Interactive
         public static void Test(float f)
             => Test(f, true, true, true, true);
 
-        public static void Test(float f, bool doSin = false, bool doCos = false, bool doTan = false, bool doSinCos = false)
+        public static void Test(float f, bool doSin = false, bool doCos = false, bool doTan = false, bool doSinCos = false, bool doATan = false, bool doATan2 = false)
         {
             Console.WriteLine($"For value {f}: ");
 
@@ -45,6 +45,20 @@ namespace MathSharp.Interactive
                 Console.WriteLine($"MathF SinCos:             {MathF.Sin(f)}, {MathF.Cos(f)}");
                 Console.WriteLine($"MathSharp SinCos:         {sin.ToScalar()}, {cos.ToScalar()}");
                 Console.WriteLine($"MathSharp SinCosApprox:   {sinEst.ToScalar()}, {cosEst.ToScalar()}");
+            }
+
+            if (doATan)
+            {
+                Console.WriteLine($"MathF ATan:             {MathF.Atan(f)}");
+                Console.WriteLine($"MathSharp ATan:         {ATan(v).ToScalar()}");
+                //Console.WriteLine($"MathSharp ATanApprox:   {ATanApprox(v).ToScalar()}");
+            }
+
+            if (doATan2)
+            {
+                Console.WriteLine($"MathF ATan2:             {MathF.Atan2(f, f)}");
+                Console.WriteLine($"MathSharp ATan2:         {ATan2(v, v).ToScalar()}");
+                //Console.WriteLine($"MathSharp ATan2Approx:   {TanApprox(v).ToScalar()}");
             }
 
             Console.WriteLine("\n");

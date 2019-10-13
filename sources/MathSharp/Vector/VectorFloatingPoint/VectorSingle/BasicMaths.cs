@@ -374,5 +374,10 @@ namespace MathSharp
         }
 
         #endregion
+
+        private static readonly Vector128<float> FiniteComparison0 = Vector128.Create(0x7FFFFFFF).AsSingle();
+        private static readonly Vector128<float> FiniteComparison1 = Vector128.Create(0x7F800000).AsSingle();
+        private static Vector128<float> IsFinite(Vector128<float> vector) => CompareLessThan(And(vector, FiniteComparison0), FiniteComparison1);
+        private static Vector128<float> IsInfinite(Vector128<float> vector) => CompareEqual(And(vector, FiniteComparison0), FiniteComparison1);
     }
 }
