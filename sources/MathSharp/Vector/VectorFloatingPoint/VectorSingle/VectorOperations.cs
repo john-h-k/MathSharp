@@ -107,10 +107,10 @@ namespace MathSharp
             {
                 Vector4F mul = Sse.Multiply(left, right);
 
-                // Set W and Z to zero
+                // Set W to zero
                 Vector4F result = Sse.And(mul, SingleConstants.MaskW);
 
-                // Add X and Y horizontally, leaving the vector as (X+Y, Y, X+Y. ?)
+                // Add X and Y horizontally, leaving the vector as (X+Y, Z+0, X+Y. Z+0)
                 result = Sse3.HorizontalAdd(result, result);
 
                 // MoveLowAndDuplicate makes a new vector from (X, Y, Z, W) to (X, X, Z, Z)
@@ -205,7 +205,7 @@ namespace MathSharp
                 copy = Sse.Shuffle(copy, mul, ShuffleValues._0_0_0_1);
                 copy = Sse.Add(copy, mul);
                 mul = Sse.Shuffle(mul, copy, ShuffleValues._0_0_3_0);
-                mul = Sse.AddScalar(mul, copy);
+                mul = Sse.Add(mul, copy);
 
                 return Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
             }

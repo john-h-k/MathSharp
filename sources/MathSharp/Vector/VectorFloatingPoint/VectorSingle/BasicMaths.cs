@@ -142,7 +142,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
         {
-            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), "Min (low) argument for clamp is more than max (high)", nameof(low));
+            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), $"Low argument for clamp ({low}) is more than high ({high})", nameof(low));
 
             return Max(Min(vector, high), low);
         }

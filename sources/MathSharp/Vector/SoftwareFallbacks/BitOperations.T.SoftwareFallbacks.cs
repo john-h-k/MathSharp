@@ -3,7 +3,7 @@ using System.Runtime.Intrinsics;
 
 namespace MathSharp
 {
-    internal static partial class SoftwareFallbacks
+    public static partial class SoftwareFallbacks
     {
         #region Vector128
 

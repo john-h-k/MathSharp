@@ -10,7 +10,7 @@ namespace MathSharp
     using Vector4UInt64 = Vector256<ulong>;
     using Vector4UInt64Param1_3 = Vector256<ulong>;
 
-    internal static partial class SoftwareFallbacks
+    public static partial class SoftwareFallbacks
     {
         #region Vector128
 

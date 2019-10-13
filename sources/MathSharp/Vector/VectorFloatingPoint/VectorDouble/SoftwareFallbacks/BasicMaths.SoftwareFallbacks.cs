@@ -9,7 +9,7 @@ namespace MathSharp
     using Vector4D = Vector256<double>;
     using Vector4DParam1_3 = Vector256<double>;
 
-    internal static unsafe partial class SoftwareFallbacks
+    public static unsafe partial class SoftwareFallbacks
     {
         #region Vector
 
@@ -148,22 +148,52 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector4D Max_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
+            double lX = X(left), rX = X(right);
+            double lY = Y(left), rY = Y(right);
+            double lZ = Z(left), rZ = Z(right);
+            double lW = W(left), rW = W(right);
+
+            if (double.IsNaN(lX)) lX = rX;
+            if (double.IsNaN(lY)) lY = rY;
+            if (double.IsNaN(lZ)) lZ = rZ;
+            if (double.IsNaN(lW)) lW = rW;
+
+            if (double.IsNaN(rX)) rX = lX;
+            if (double.IsNaN(rY)) rY = lY;
+            if (double.IsNaN(rZ)) rZ = lZ;
+            if (double.IsNaN(rW)) rW = lW;
+
             return Vector256.Create(
-                Math.Max(X(left), X(right)),
-                Math.Max(Y(left), Y(right)),
-                Math.Max(Z(left), Z(right)),
-                Math.Max(W(left), W(right))
+                Math.Max(lX, rX),
+                Math.Max(lY, rY),
+                Math.Max(lZ, rZ),
+                Math.Max(lW, rW)
             );
         }
 
         [MethodImpl(MaxOpt)]
         public static Vector4D Min_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
         {
+            double lX = X(left), rX = X(right);
+            double lY = Y(left), rY = Y(right);
+            double lZ = Z(left), rZ = Z(right);
+            double lW = W(left), rW = W(right);
+
+            if (double.IsNaN(lX)) lX = rX;
+            if (double.IsNaN(lY)) lY = rY;
+            if (double.IsNaN(lZ)) lZ = rZ;
+            if (double.IsNaN(lW)) lW = rW;
+
+            if (double.IsNaN(rX)) rX = lX;
+            if (double.IsNaN(rY)) rY = lY;
+            if (double.IsNaN(rZ)) rZ = lZ;
+            if (double.IsNaN(rW)) rW = lW;
+
             return Vector256.Create(
-                Math.Min(X(left), X(right)),
-                Math.Min(Y(left), Y(right)),
-                Math.Min(Z(left), Z(right)),
-                Math.Min(W(left), W(right))
+                Math.Min(lX, rX),
+                Math.Min(lY, rY),
+                Math.Min(lZ, rZ),
+                Math.Min(lW, rW)
             );
         }
 
