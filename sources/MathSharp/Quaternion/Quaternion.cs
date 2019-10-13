@@ -1,8 +1,5 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics;
+﻿using System.Runtime.Intrinsics;
 using MathSharp.Utils;
-using Microsoft.VisualBasic;
 
 namespace MathSharp.Quaternion
 {
@@ -13,6 +10,7 @@ namespace MathSharp.Quaternion
 
         public static Vector128<float> Length(Vector128<float> quaternion)
             => Vector.Length4D(quaternion);
+
         public static Vector128<float> Normalize(Vector128<float> quaternion)
             => Vector.Normalize4D(quaternion);
 
@@ -102,13 +100,7 @@ namespace MathSharp.Quaternion
 
         public static Vector128<float> Concatenate(Vector128<float> left, Vector128<float> right)
             => Multiply(right, left); // order reversed
-
-        // ReSharper disable InconsistentNaming, IdentifierTypo
-        private static readonly Vector128<float> ControlWZYX = Vector128.Create(1.0f, -1.0f, 1.0f, -1.0f);
-        private static readonly Vector128<float> ControlZWXY = Vector128.Create(1.0f, 1.0f, -1.0f, -1.0f);
-        private static readonly Vector128<float> ControlYXWZ = Vector128.Create(-1.0f, 1.0f, 1.0f, -1.0f);
-        // ReSharper restore InconsistentNaming, IdentifierTypo
-
+        
         public static Vector128<float> Multiply(in Vector128<float> right, in Vector128<float> left)
         {
             var q2X = right;
@@ -145,5 +137,11 @@ namespace MathSharp.Quaternion
             result = Vector.Add(result, q2Y);
             return result;
         }
+
+        // ReSharper disable InconsistentNaming, IdentifierTypo
+        private static readonly Vector128<float> ControlWZYX = Vector128.Create(1.0f, -1.0f, 1.0f, -1.0f);
+        private static readonly Vector128<float> ControlZWXY = Vector128.Create(1.0f, 1.0f, -1.0f, -1.0f);
+        private static readonly Vector128<float> ControlYXWZ = Vector128.Create(-1.0f, 1.0f, 1.0f, -1.0f);
+        // ReSharper restore InconsistentNaming, IdentifierTypo
     }
 }

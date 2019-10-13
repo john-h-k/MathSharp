@@ -5,9 +5,8 @@ namespace MathSharp.Utils
 {
     internal static partial class Helpers
     {
-        /// <summary>
-        /// _MM_SHUFFLE equivalent
-        /// </summary>
+        // Has christ awful performance because JIT doesn't properly recognise it as producing a constant
+        // when all 4 args are constant so generates a jump table. Do NOT use
         //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         //public static byte Shuffle(byte a, byte b, byte c, byte d)
         //{

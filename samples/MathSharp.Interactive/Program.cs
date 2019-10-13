@@ -3,6 +3,7 @@ using System.Runtime.Intrinsics;
 using BenchmarkDotNet.Running;
 using MathSharp.Interactive.Benchmarks.MatrixTests.Single;
 using MathSharp.Interactive.Benchmarks.Vector.Single;
+using MathSharp.Utils;
 using static MathSharp.Vector;
 
 using static MathSharp.Interactive.TrigTest;
@@ -13,10 +14,7 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            Test(0, doATan: true, doATan2: true);
-            Test(30, doATan: true, doATan2: true);
-            Test(60, doATan: true, doATan2: true);
-            Test(100f, doATan: true, doATan2: true);
+            Console.WriteLine(IntrinsicSupport.SupportSummary);
         }
 
         public static Vector128<float> Foo()

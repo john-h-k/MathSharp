@@ -72,6 +72,25 @@ function Restore() {
 }
 
 function Test() {
+  $isas = "SSE", "SSE2", "SSE3", "SSSE3", "SSE41", "SSE42", "AVX", "FMA", "AVX2"
+  
+  foreach ($isa in $isas)
+  {
+    [System.Environment]::SetEnvironmentVariable($("Enable" + $isa), 0)
+  }
+
+  Write-Output "`n`nRunning intrinsic free tests"
+  RunTestIteration
+
+  foreach ($isa in $isas)
+  {
+    Write-Output "`n`nEnabled ISA '$isa'"
+    [System.Environment]::SetEnvironmentVariable($("Enable" + $isa), 1)
+    RunTestIteration
+  }
+}
+
+function RunTestIteration() {
   $logFile = Join-Path -Path $LogDir -ChildPath "$configuration\test.binlog"
   & dotnet test -c "$configuration" --no-build --no-restore -v "$verbosity" /bl:"$logFile" /err "$properties" "$testproj"
 

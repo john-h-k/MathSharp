@@ -88,6 +88,19 @@ using static System.Runtime.InteropServices.RuntimeInformation;
 
 namespace MathSharp.Utils
 {
+    public enum Isa
+    {
+        Sse,
+        Sse2,
+        Sse3,
+        Ssse3,
+        Sse41,
+        Sse42,
+        Avx,
+        Avx2,
+        Fma
+    }
+
     /// <summary>
     /// Checks whether it is allowed for the program to use certaintrinsic supports
     /// </summary>
@@ -112,214 +125,214 @@ namespace MathSharp.Utils
                                                      $"{((bool)isa.GetProperty(IsSupported)!.GetMethod!.Invoke(null, null)! ? "Supported" : "Unsupported")}";
 
 
-        #region X86
+//        #region X86
 
-        #region Vector ISAs
+//        #region Vector ISAs
 
-        public static bool Avx512 =>
-#if !AVX512
-            false;
-#else
-            false;
-#error AVX512 unsupported at the moment
-#endif
+//        public static bool Avx512 =>
+//#if !AVX512
+//            false;
+//#else
+//            false;
+//#error AVX512 unsupported at the moment
+//#endif
 
-        public static bool Avx2 =>
-#if !AVX2
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Avx2.IsSupported;
-#endif
+//        public static bool Avx2 =>
+//#if !AVX2
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Avx2.IsSupported;
+//#endif
 
-        public static bool Avx =>
-#if !AVX
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Avx.IsSupported;
-#endif
+//        public static bool Avx =>
+//#if !AVX
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Avx.IsSupported;
+//#endif
 
 
-        public static bool Sse42 =>
-#if !SSE42
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse42.IsSupported;
-#endif
+//        public static bool Sse42 =>
+//#if !SSE42
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse42.IsSupported;
+//#endif
 
-        public static bool Sse41 =>
-#if !SSE41
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse41.IsSupported;
-#endif
+//        public static bool Sse41 =>
+//#if !SSE41
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse41.IsSupported;
+//#endif
 
-        public static bool Sse3 =>
-#if !SSE3
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse3.IsSupported;
-#endif
+//        public static bool Sse3 =>
+//#if !SSE3
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse3.IsSupported;
+//#endif
 
-        public static bool Sse2 =>
-#if !SSE2
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse2.IsSupported;
-#endif
+//        public static bool Sse2 =>
+//#if !SSE2
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse2.IsSupported;
+//#endif
 
-        public static bool Sse =>
-#if !SSE
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse.IsSupported;
-#endif
+//        public static bool Sse =>
+//#if !SSE
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse.IsSupported;
+//#endif
 
-        public static bool Sse42_X64 =>
-#if !SSE42_X64
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse42.X64.IsSupported;
-#endif
+//        public static bool Sse42_X64 =>
+//#if !SSE42_X64
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse42.X64.IsSupported;
+//#endif
 
-        public static bool Sse41_X64 =>
-#if !SSE41_X64
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse41.X64.IsSupported;
-#endif
+//        public static bool Sse41_X64 =>
+//#if !SSE41_X64
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse41.X64.IsSupported;
+//#endif
 
-        public static bool Sse2_X64 =>
-#if !SSE2_X64
-            false;
-#else
-        System.Runtime.Intrinsics.X86.Sse2.X64.IsSupported;
-#endif
+//        public static bool Sse2_X64 =>
+//#if !SSE2_X64
+//            false;
+//#else
+//        System.Runtime.Intrinsics.X86.Sse2.X64.IsSupported;
+//#endif
 
-        public static bool Sse_X64 =>
-#if !SSE_X64
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Sse.X64.IsSupported;
-#endif
+//        public static bool Sse_X64 =>
+//#if !SSE_X64
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Sse.X64.IsSupported;
+//#endif
 
-        public static bool Ssse3 =>
-#if !SSSE3
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Ssse3.IsSupported;
-#endif
+//        public static bool Ssse3 =>
+//#if !SSSE3
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Ssse3.IsSupported;
+//#endif
 
-        #endregion
+//        #endregion
 
-        #region Bit Manipulation ISAs
+//        #region Bit Manipulation ISAs
 
-        public static bool Bmi1 =>
-#if !BMI1
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Bmi1.IsSupported;
-#endif
+//        public static bool Bmi1 =>
+//#if !BMI1
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Bmi1.IsSupported;
+//#endif
 
-        public static bool Bmi2 =>
-#if !BMI2
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Bmi2.IsSupported;
-#endif
+//        public static bool Bmi2 =>
+//#if !BMI2
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Bmi2.IsSupported;
+//#endif
 
-        public static bool Bmi1_X64 =>
-#if !BMI1_X64
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Bmi1.X64.IsSupported;
-#endif
+//        public static bool Bmi1_X64 =>
+//#if !BMI1_X64
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Bmi1.X64.IsSupported;
+//#endif
 
-        public static bool Bmi2_X64 =>
-#if !BMI2_X64
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Bmi2.X64.IsSupported;
-#endif
+//        public static bool Bmi2_X64 =>
+//#if !BMI2_X64
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Bmi2.X64.IsSupported;
+//#endif
 
-        public static bool Lzcnt =>
-#if !LZCNT
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Lzcnt.IsSupported;
-#endif
+//        public static bool Lzcnt =>
+//#if !LZCNT
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Lzcnt.IsSupported;
+//#endif
 
-        public static bool Popcnt =>
-#if !POPCNT
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Popcnt.IsSupported;
-#endif
+//        public static bool Popcnt =>
+//#if !POPCNT
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Popcnt.IsSupported;
+//#endif
 
-        public static bool Lzcnt_X64 =>
-#if !LZCNT_X64
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Lzcnt.X64.IsSupported;
-#endif
+//        public static bool Lzcnt_X64 =>
+//#if !LZCNT_X64
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Lzcnt.X64.IsSupported;
+//#endif
 
-        public static bool Popcnt_X64 =>
-#if !POPCNT_X64
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Popcnt.X64.IsSupported;
-#endif
+//        public static bool Popcnt_X64 =>
+//#if !POPCNT_X64
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Popcnt.X64.IsSupported;
+//#endif
 
-        #endregion
+//        #endregion
 
-        #region Floating point ISAs
+//        #region Floating point ISAs
 
-        public static bool Fma =>
-#if !FMA
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Fma.IsSupported;
-#endif
+//        public static bool Fma =>
+//#if !FMA
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Fma.IsSupported;
+//#endif
 
-        #endregion
+//        #endregion
 
-        #region Integer ISAs
+//        #region Integer ISAs
 
-        public static bool Pclmulqdq =>
-#if !PCLMULQDQ
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Pclmulqdq.IsSupported;
-#endif
+//        public static bool Pclmulqdq =>
+//#if !PCLMULQDQ
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Pclmulqdq.IsSupported;
+//#endif
 
-        #endregion
+//        #endregion
 
-        #region Encryption ISAs
+//        #region Encryption ISAs
 
-        public static bool Aes =>
-#if !AES
-            false;
-#else
-            System.Runtime.Intrinsics.X86.Aes.IsSupported;
-#endif
+//        public static bool Aes =>
+//#if !AES
+//            false;
+//#else
+//            System.Runtime.Intrinsics.X86.Aes.IsSupported;
+//#endif
 
-        #endregion
+//        #endregion
 
-        #endregion
+//        #endregion
 
-        #region ARM
+//        #region ARM
 
-        #region Vector ISAs
+//        #region Vector ISAs
 
-        public static bool Neon =>
-#if !NEON
-            false;
-#else
-    false;
-#error NEON unsupported at the moment
-#endif
+//        public static bool Neon =>
+//#if !NEON
+//            false;
+//#else
+//    false;
+//#error NEON unsupported at the moment
+//#endif
 
-        #endregion
+//        #endregion
 
-        #endregion
+//        #endregion
     }
 }
