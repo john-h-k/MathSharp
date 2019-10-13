@@ -9,7 +9,7 @@ namespace MathSharp
     using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
-    public static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacks
     {
         #region Vector Maths
 

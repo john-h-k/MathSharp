@@ -8,7 +8,7 @@ namespace MathSharp
     using Vector4D = Vector256<double>;
     using Vector4DParam1_3 = Vector256<double>;
 
-    public static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacks
     {
         [MethodImpl(MaxOpt)]
         public static Vector256<double> CompareEqual_Software(Vector4DParam1_3 left, Vector4DParam1_3 right)

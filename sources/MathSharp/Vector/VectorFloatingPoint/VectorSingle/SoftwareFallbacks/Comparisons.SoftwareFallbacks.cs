@@ -9,7 +9,7 @@ namespace MathSharp
     using Vector4F = Vector128<float>;
     using Vector4FParam1_3 = Vector128<float>;
 
-    public static partial class SoftwareFallbacks
+    internal static partial class SoftwareFallbacks
     {
         [MethodImpl(MaxOpt)]
         public static Vector128<float> CompareEqual_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)

@@ -15,12 +15,6 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            Console.WriteLine(float.NaN > 1);
-            Console.WriteLine(
-                SoftwareFallbacks.CompareLessThanOrEqual_Software(Vector128.Create(float.NaN), Vector128.Create(0f)).AsInt32());
-            Console.WriteLine(
-                Sse.CompareLessThanOrEqual(Vector128.Create(float.NaN), Vector128.Create(0f)).AsInt32());
-
         }
 
         public static Vector128<float> Foo()
