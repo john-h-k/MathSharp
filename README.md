@@ -1,11 +1,14 @@
 # MathSharp
 
+[![Buy Me A Coffee](/assets/buymecoffee.png)](https://www.buymeacoffee.com/giJrYhNAG)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/)
+[![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/issues/)
+
 |Configuration|Windows x86|Windows x64|Ubuntu 1604 x64|Mac OS x64|
 |:--:|:--:|:--:|:--:|:--:|
 |**Debug**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=macOS_debug_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
 |**Release**|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x86)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=windows_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=ubuntu_1604_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|[![Build Status](https://johnkellyoxford.visualstudio.com/MathSharp/_apis/build/status/scripts/john-h-k.MathSharp?branchName=master&jobName=macOS_release_x64)](https://johnkellyoxford.visualstudio.com/MathSharp/_build/latest?definitionId=3&branchName=master)|
-
-[![Buy Me A Coffee](/assets/buymecoffee.png)](https://www.buymeacoffee.com/giJrYhNAG)
 
 MathSharp is a vector and matrix library written in C# using hardware intrinsics. Thanks to hardware acceleration, MathSharp is significantly faster than most mathematics libraries out there, but only supports .NET Core 3.0 and up.
 
