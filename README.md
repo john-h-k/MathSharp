@@ -1,11 +1,11 @@
 # MathSharp
 
 [![Buy Me A Coffee](/assets/buymecoffee.png)](https://www.buymeacoffee.com/giJrYhNAG)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/john-h-k/MathSharp/blob/master/LICENSE)
 
-[![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/)
+[![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/john-h-k/MathSharp/stargazers/)
 
-[![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/issues/)
+[![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/john-h-k/MathSharp/issues/)
 
 |Configuration|Windows x86|Windows x64|Ubuntu 1604 x64|Mac OS x64|
 |:--:|:--:|:--:|:--:|:--:|
