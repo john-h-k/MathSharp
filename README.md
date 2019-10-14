@@ -1,8 +1,7 @@
 # MathSharp
 
 [![Buy Me A Coffee](/assets/buymecoffee.png)](https://www.buymeacoffee.com/giJrYhNAG)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/john-h-k/MathSharp/blob/master/LICENSE)
-
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![GitHub stars](https://img.shields.io/github/stars/john-h-k/MathSharp.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/john-h-k/MathSharp/stargazers/)
 
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/john-h-k/MathSharp/issues/)
