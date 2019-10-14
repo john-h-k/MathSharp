@@ -4,7 +4,7 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/john-h-k/MathSharp/blob/master/LICENSE)
 
 
-[![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/john-h-k/MathSharp/issues/)
+[![GitHub issues](https://img.shields.io/github/issues/john-h-k/MathSharp.svg)](https://GitHub.com/john-h-k/MathSharp/issues/)
 
 [![GitHub stars](https://img.shields.io/github/stars/john-h-k/MathSharp.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/john-h-k/MathSharp/stargazers/)
 
