@@ -15,9 +15,9 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Permute(Vector4DParam1_3 vector, byte control)
         {
-            if (Avx.IsSupported)
+            if (Avx2.IsSupported)
             {
-                return Avx.Permute(vector, control);
+                return Avx2.Permute4x64(vector, control);
             }
 
             return Shuffle(vector, vector, control);
@@ -42,10 +42,11 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Shuffle(Vector4DParam1_3 left, Vector4DParam1_3 right, byte control)
         {
-            if (Avx.IsSupported)
-            {
-                return Avx.Shuffle(left, right, control);
-            }
+            //There is a way to do Permute4x64 with a few AVX instructions but haven't figured it out yet
+            //if (Avx.IsSupported)
+            //{
+            //    return Avx.Shuffle(left, right, control);
+            //}
 
             return Shuffle_Software(left, right, control);
         }
