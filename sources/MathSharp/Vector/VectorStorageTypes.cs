@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 
 namespace MathSharp
 {
@@ -125,6 +127,76 @@ namespace MathSharp
             Y = y;
             Z = z;
             W = w;
+        }
+    }
+
+    public static unsafe class VectorExtensions
+    {
+        public static Vector128<float> Load(ref this Vector2 vector) => Vector.Load2D(in vector.X);
+        public static Vector128<float> Load(Vector2* p) => Vector.Load2D((float*)p);
+
+        public static Vector128<float> Load(ref this Vector3 vector) => Vector.Load3D(in vector.X); 
+        public static Vector128<float> Load(Vector3* p) => Vector.Load3D((float*)p);
+
+        public static Vector128<float> Load(ref this Vector4 vector) => Vector.Load4D(in vector.X);
+        public static Vector128<float> Load(Vector4* p) => Vector.Load4D((float*)p);
+
+        public static Vector128<float> Load(ref this Vector2Aligned vector) => Vector.Load2DAligned(in vector.X);
+        public static Vector128<float> Load(ref this Vector3Aligned vector) => Vector.Load3DAligned(in vector.X);
+        public static Vector128<float> Load(ref this Vector4Aligned vector) => Vector.Load4DAligned(in vector.X);
+
+        public static void Store(this Vector128<float> vector, Vector2* destination) => Vector.Store2D(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, out Vector2 destination)
+        {
+            fixed (Vector2* p = &destination)
+            {
+                Store(vector, p);
+            }
+        }
+
+        public static void Store(this Vector128<float> vector, Vector3* destination) => Vector.Store3D(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, out Vector3 destination)
+        {
+            fixed (Vector3* p = &destination)
+            {
+                Store(vector, p);
+            }
+        }
+
+        public static void Store(this Vector128<float> vector, Vector4* destination) => Vector.Store4D(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, out Vector4 destination)
+        {
+            fixed (Vector4* p = &destination)
+            {
+                Store(vector, p);
+            }
+        }
+
+        public static void Store(this Vector128<float> vector, Vector2Aligned* destination) => Vector.Store2DAligned(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, out Vector2Aligned destination)
+        {
+            fixed (Vector2Aligned* p = &destination)
+            {
+                Store(vector, p);
+            }
+        }
+
+        public static void Store(this Vector128<float> vector, Vector3Aligned* destination) => Vector.Store3DAligned(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, out Vector3Aligned destination)
+        {
+            fixed (Vector3Aligned* p = &destination)
+            {
+                Store(vector, p);
+            }
+        }
+
+        public static void Store(this Vector128<float> vector, Vector4Aligned* destination) => Vector.Store4DAligned(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, out Vector4Aligned destination)
+        {
+            fixed (Vector4Aligned* p = &destination)
+            {
+                Store(vector, p);
+            }
         }
     }
 }
