@@ -81,7 +81,7 @@ namespace MathSharp
         }
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 16]
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
     public readonly struct Vector3Aligned
     {
         public readonly float X, Y, Z;
