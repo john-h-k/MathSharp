@@ -63,7 +63,7 @@ namespace MathSharp
         }
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 32)]
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
     public readonly struct Vector2Aligned
     {
         public readonly float X, Y;
@@ -81,7 +81,7 @@ namespace MathSharp
         }
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 32)]
+    [StructLayout(LayoutKind.Sequential, Size = 16]
     public readonly struct Vector3Aligned
     {
         public readonly float X, Y, Z;
@@ -102,7 +102,7 @@ namespace MathSharp
     }
 
 
-    [StructLayout(LayoutKind.Sequential, Size = 32)]
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
     public readonly struct Vector4Aligned
     {
         public readonly float X, Y, Z, W;
