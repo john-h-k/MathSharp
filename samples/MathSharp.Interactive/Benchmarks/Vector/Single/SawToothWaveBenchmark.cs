@@ -116,45 +116,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 
                 while (i < length)
                 {
-                    ptr[i] = (Frequency * ((float)i / SampleRate) % 2 - 1);
-                    i++;
-                }
-            }
-        }
-
-        [Benchmark]
-        public unsafe void MathSharp256()
-        {
-            var length = Size;
-            var vecLength = Size & ~7;
-
-            var time = Constants256[0];
-            var sampleRate = Constants256[1];
-            var frequency = Constants256[2];
-            var two = Constants256[3];
-            var sampleIterator = Constants256[4];
-
-            var i = 0;
-
-            fixed (float* ptr = AudioBufferVectorized)
-            {
-                while (i < vecLength)
-                {
-                    Vector256<float> vector = time;
-                    vector = Divide(vector, sampleRate);
-                    vector = Multiply(frequency, vector);
-                    vector = Remainder(vector, two);
-                    vector = Subtract(vector, SingleConstants256.One);
-
-                    vector.Store8D(&ptr[i]);
-
-                    i += 8;
-                    time = Add(time, sampleIterator);
-                }
-
-                while (i < length)
-                {
-                    ptr[i] = (Frequency * ((float)i / SampleRate) % 2 - 1);
+                    ptr[i] = (Frequency * ((float) i / SampleRate) % 2 - 1);
                     i++;
                 }
             }

@@ -164,22 +164,22 @@ namespace MathSharp
 
         #region Stores
 
-        public static void Store8DAligned(Vector256<float> vector, float* destination)
+        public static void Store8DAligned(this Vector256<float> vector, float* destination)
             => Store8D(vector, destination);
 
-        public static void Store4DAligned(Vector128<float> vector, out float destination)
+        public static void Store4DAligned(this Vector128<float> vector, out float destination)
             => Store4D(vector, out destination);
-        public static void Store4DAligned(Vector128<float> vector, float* destination)
+        public static void Store4DAligned(this Vector128<float> vector, float* destination)
             => Store4D(vector, destination);
 
-        public static void Store3DAligned(Vector128<float> vector, out float destination)
+        public static void Store3DAligned(this Vector128<float> vector, out float destination)
             => Store4DAligned(vector, out destination);
-        public static void Store3DAligned(Vector128<float> vector, float* destination)
+        public static void Store3DAligned(this Vector128<float> vector, float* destination)
             => Store4DAligned(vector, destination);
 
-        public static void Store2DAligned(Vector128<float> vector, out float destination)
+        public static void Store2DAligned(this Vector128<float> vector, out float destination)
             => Store4DAligned(vector, out destination);
-        public static void Store2DAligned(Vector128<float> vector, float* destination) 
+        public static void Store2DAligned(this Vector128<float> vector, float* destination) 
             => Store4DAligned(vector, destination);
 
         [MethodImpl(MaxOpt)]
@@ -216,14 +216,14 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store4D(Vector128<float> vector, out float destination)
+        public static void Store4D(this Vector128<float> vector, out float destination)
         {
             fixed (void* _ = &destination) { } // TODO use Unsafe.SkipInit<T>(out T);
             Unsafe.As<float, Vector128<float>>(ref destination) = vector;
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store4D(Vector128<float> vector, float* destination)
+        public static void Store4D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -244,7 +244,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store3D(Vector128<float> vector, ref float destination)
+        public static void Store3D(this Vector128<float> vector, ref float destination)
         {
             fixed (float* p = &destination)
             {
@@ -253,7 +253,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store3D(Vector128<float> vector, float* destination)
+        public static void Store3D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -276,7 +276,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store2D(Vector128<float> vector, ref float destination)
+        public static void Store2D(this Vector128<float> vector, ref float destination)
         {
             fixed (float* p = &destination)
             {
@@ -285,7 +285,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store2D(Vector128<float> vector, float* destination)
+        public static void Store2D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {

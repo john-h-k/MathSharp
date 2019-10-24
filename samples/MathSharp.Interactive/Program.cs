@@ -1,3 +1,4 @@
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using MathSharp.Interactive.Benchmarks.Vector.Single;
 
@@ -7,7 +8,6 @@ namespace MathSharp.Interactive
     {
         private static void Main()
         {
-            BenchmarkRunner.Run<SineWaveBenchmark>();
         }
     }
 }
