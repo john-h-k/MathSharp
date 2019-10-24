@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using MathSharp.Constants;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
 using static MathSharp.Utils.Helpers;
@@ -12,7 +13,9 @@ using static MathSharp.Utils.Helpers;
 namespace MathSharp
 {
     using Vector4F = Vector128<float>;
+    using Vector8F = Vector256<float>;
     using Vector4FParam1_3 = Vector128<float>;
+    using Vector8FParam1_3 = Vector256<float>;
 
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
     public static partial class Vector
@@ -22,6 +25,10 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Abs(Vector4FParam1_3 vector)
             => And(vector, SingleConstants.MaskSign);
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Abs(Vector8FParam1_3 vector)
+            => And(vector, SingleConstants256.MaskSign);
 
 
         [MethodImpl(MaxOpt)]
@@ -77,6 +84,17 @@ namespace MathSharp
         public static Vector128<float> Add(Vector4FParam1_3 vector, float scalar)
             => Add(vector, Vector128.Create(scalar));
 
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Add(Vector8FParam1_3 left, Vector8FParam1_3 right)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Add(left, right);
+            }
+
+            return FromLowHigh(Add(left.GetLower(), right.GetLower()), Add(left.GetUpper(), right.GetLower()));
+        }
+
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Subtract(Vector4FParam1_3 left, Vector4FParam1_3 right)
@@ -89,6 +107,16 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Subtract(Vector8FParam1_3 left, Vector8FParam1_3 right)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Subtract(left, right);
+            }
+
+            return FromLowHigh(Subtract(left.GetLower(), right.GetLower()), Subtract(left.GetUpper(), right.GetLower()));
+        }
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Subtract(Vector4FParam1_3 vector, float scalar)
@@ -107,6 +135,17 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
+        public static Vector256<float> Multiply(Vector8FParam1_3 left, Vector8FParam1_3 right)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Multiply(left, right);
+            }
+
+            return FromLowHigh(Subtract(left.GetLower(), right.GetLower()), Subtract(left.GetUpper(), right.GetLower()));
+        }
+
+        [MethodImpl(MaxOpt)]
         public static Vector128<float> Square(Vector4FParam1_3 vector)
         {
             if (Sse.IsSupported)
@@ -115,6 +154,17 @@ namespace MathSharp
             }
 
             return Multiply_Software(vector, vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Square(Vector8FParam1_3 vector)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Multiply(vector, vector);
+            }
+
+            return Multiply(vector, vector);
         }
 
         [MethodImpl(MaxOpt)]
@@ -131,6 +181,17 @@ namespace MathSharp
             }
 
             return Divide_Software(dividend, divisor);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Divide(Vector8FParam1_3 dividend, Vector8FParam1_3 divisor)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Divide(dividend, divisor);
+            }
+
+            return FromLowHigh(Subtract(dividend.GetLower(), divisor.GetLower()), Subtract(dividend.GetUpper(), divisor.GetLower()));
         }
 
 
@@ -192,16 +253,16 @@ namespace MathSharp
             => Xor(vector, SingleConstants.MaskNotSign);
 
         [MethodImpl(MaxOpt)]
+        public static Vector256<float> Negate(Vector8FParam1_3 vector)
+            => Xor(vector, SingleConstants256.MaskNotSign);
+
+        [MethodImpl(MaxOpt)]
         public static Vector128<float> CopySign(Vector128<float> sign, Vector128<float> vector)
-            => Or(ExtractSign(sign), ClearSign(vector));
+            => Or(ExtractSign(sign), Abs(vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> ExtractSign(Vector128<float> vector)
             => And(vector, SingleConstants.MaskNotSign);
-
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> ClearSign(Vector128<float> vector)
-            => And(vector, SingleConstants.MaskSign);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Mod2Pi(Vector4FParam1_3 vector)
@@ -212,6 +273,17 @@ namespace MathSharp
             result = Multiply(result, SingleConstants.Pi2);
 
             return Subtract(vector, result);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Mod2PiScalar(Vector128<float> vector)
+        {
+            Vector128<float> result = Sse.MultiplyScalar(vector,  Vector128.CreateScalarUnsafe(ScalarSingleConstants.OneDiv2Pi));
+
+            result = Sse41.RoundToNearestIntegerScalar(result);
+            result = Sse.MultiplyScalar(result, Vector128.CreateScalarUnsafe(ScalarSingleConstants.Pi2));
+
+            return Sse.SubtractScalar(vector, result);
         }
 
         [MethodImpl(MaxOpt)]
@@ -244,6 +316,17 @@ namespace MathSharp
             n = Truncate(n);
 
             Vector128<float> y = Multiply(n, right);
+
+            return Subtract(left, y);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Remainder(Vector8FParam1_3 left, Vector8FParam1_3 right)
+        {
+            Vector256<float> n = Divide(left, right);
+            n = Truncate(n);
+
+            Vector256<float> y = Multiply(n, right);
 
             return Subtract(left, y);
         }
@@ -286,6 +369,17 @@ namespace MathSharp
                     MathF.Truncate(W(vector))
                 );
             }
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Truncate(Vector8FParam1_3 vector)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.RoundToZero(vector);
+            }
+
+            return FromLowHigh(Truncate(vector.GetLower()), Truncate(vector.GetUpper()));
         }
 
         // TODO move to proper Int32 file

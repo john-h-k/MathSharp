@@ -152,15 +152,11 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector4DParam1_3 CopySign(Vector4DParam1_3 sign, Vector4DParam1_3 vector)
-            => Or(ExtractSign(sign), ClearSign(vector));
+            => Or(ExtractSign(sign), Abs(vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector4DParam1_3 ExtractSign(Vector4DParam1_3 vector)
             => And(vector, DoubleConstants.MaskNotSign);
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4DParam1_3 ClearSign(Vector4DParam1_3 vector)
-            => And(vector, DoubleConstants.MaskSign);
 
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Mod2Pi(in Vector4DParam1_3 vector)

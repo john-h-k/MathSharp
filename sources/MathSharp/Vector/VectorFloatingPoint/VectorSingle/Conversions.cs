@@ -2,6 +2,7 @@
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Utils;
+using Microsoft.VisualBasic.CompilerServices;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
@@ -21,6 +22,27 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Load2DAligned(float* p) 
             => Load4DAligned(p);
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Load8D(float* p)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.LoadVector256(p);
+            }
+
+            if (Sse.IsSupported)
+            {
+                return FromLowHigh(Sse.LoadVector128(p), Sse.LoadVector128(p + 4));
+            }
+
+            return SoftwareFallback(p);
+
+            static Vector256<float> SoftwareFallback(float* p)
+            {
+                return Vector256.Create(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
+            }
+        }
 
 
         [MethodImpl(MaxOpt)]
@@ -99,6 +121,9 @@ namespace MathSharp
 
         #region Stores
 
+        public static void Store8DAligned(this Vector256<float> vector, float* destination)
+            => Store8D(vector, destination);
+
         public static void Store4DAligned(this Vector128<float> vector, float* destination)
             => Store4D(vector, destination);
 
@@ -108,7 +133,40 @@ namespace MathSharp
         public static void Store2DAligned(this Vector128<float> vector, float* destination) 
             => Store4DAligned(vector, destination);
 
+        [MethodImpl(MaxOpt)]
+        public static void Store8D(this Vector256<float> vector, float* destination)
+        {
+            if (Avx.IsSupported)
+            {
+                Avx.Store(destination, vector);
 
+                return;
+            }
+
+            if (Sse.IsSupported)
+            {
+                vector.GetLower().Store4D(destination);
+                vector.GetUpper().Store4D(destination + 4);
+
+                return;
+            }
+
+            SoftwareFallback(vector, destination);
+
+            static void SoftwareFallback(Vector256<float> vector, float* destination)
+            {
+                destination[0] = vector.GetElement(0);
+                destination[1] = vector.GetElement(1);
+                destination[2] = vector.GetElement(2);
+                destination[3] = vector.GetElement(3);
+                destination[4] = vector.GetElement(4);
+                destination[5] = vector.GetElement(5);
+                destination[6] = vector.GetElement(6);
+                destination[7] = vector.GetElement(7);
+            }
+        }
+
+        [MethodImpl(MaxOpt)]
         public static void Store4D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
@@ -122,13 +180,14 @@ namespace MathSharp
 
             static void SoftwareFallback(Vector128<float> vector, float* destination)
             {
-                destination[0] = X(vector);
-                destination[1] = Y(vector);
-                destination[2] = Z(vector);
-                destination[3] = W(vector);
+                destination[0] = vector.GetElement(0);
+                destination[1] = vector.GetElement(1);
+                destination[2] = vector.GetElement(2);
+                destination[3] = vector.GetElement(3);
             }
         }
 
+        [MethodImpl(MaxOpt)]
         public static void Store3D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
@@ -145,12 +204,13 @@ namespace MathSharp
 
             static void SoftwareFallback(Vector128<float> vector, float* destination)
             {
-                destination[0] = X(vector);
-                destination[1] = Y(vector);
-                destination[2] = Z(vector);
+                destination[0] = vector.GetElement(0);
+                destination[1] = vector.GetElement(1);
+                destination[2] = vector.GetElement(2);
             }
         }
 
+        [MethodImpl(MaxOpt)]
         public static void Store2D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
@@ -164,17 +224,19 @@ namespace MathSharp
 
             static void SoftwareFallback(Vector128<float> vector, float* destination)
             {
-                destination[0] = X(vector);
-                destination[1] = Y(vector);
+                destination[0] = vector.GetElement(0);
+                destination[1] = vector.GetElement(1);
             }
         }
 
+        [MethodImpl(MaxOpt)]
         public static void StoreScalar(this Vector128<float> scalar, float* destination)
         {
             *destination = scalar.ToScalar();
         }
 
         // remove pinning codegen as is unnecessary
+        [MethodImpl(MaxOpt)]
         public static void StoreScalar(this Vector128<float> scalar, out float destination)
         {
             destination = scalar.ToScalar();

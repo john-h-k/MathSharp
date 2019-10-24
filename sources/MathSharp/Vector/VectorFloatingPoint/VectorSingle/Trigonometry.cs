@@ -18,6 +18,7 @@ namespace MathSharp
         private static readonly Vector128<float> SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
         private const float SinCoefficient1Scalar = -2.3889859e-08f;
 
+
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Sin(Vector4FParam1_3 vector)
         {

@@ -4,6 +4,7 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Attributes;
 using static MathSharp.SoftwareFallbacks;
+using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
@@ -58,7 +59,18 @@ namespace MathSharp
             return CompareEqual_Software(left, right);
         }
 
-        
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> CompareEqual(Vector256<float> left, Vector256<float> right)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Compare(left, right, FloatComparisonMode.UnorderedEqualNonSignaling);
+            }
+
+            return FromLowHigh(CompareEqual(left.GetLower(), right.GetLower()),
+                CompareEqual(left.GetUpper(), right.GetUpper()));
+        }
+
         [MethodImpl(MaxOpt)]
         public static Vector128<float> CompareNotEqual(Vector4FParam1_3 left, Vector4FParam1_3 right)
         {

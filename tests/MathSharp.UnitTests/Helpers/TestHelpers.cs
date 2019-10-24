@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using static MathSharp.Utils.Helpers;
 using MathSharp.Utils;
@@ -9,6 +11,50 @@ namespace MathSharp.UnitTests
 {
     public static class TestHelpers
     {
+        public static bool IsNegative(float f) => (BitConverter.SingleToInt32Bits(f) & (1u << 31)) != 0;
+
+        public static unsafe Vector128<T> ForEach<T>(Vector128<T> vector, Func<T, T> transform) where T : unmanaged
+        {
+            T* pool = stackalloc T[Vector128<T>.Count];
+
+            for (var i = 0; i < Vector128<T>.Count; i++)
+            {
+                pool[i] = transform(vector.GetElement(i));
+            }
+
+            return Unsafe.Read<Vector128<T>>(pool);
+        }
+
+        public static bool PerElemCheck(Vector128<float> a, Func<float, bool> check)
+        {
+            for (var i = 0; i < Vector128<float>.Count; i++)
+            {
+                if (!check(a.GetElement(i))) return false;
+            }
+
+            return true;
+        }
+
+        public static bool PerElemCheck(Vector128<float> a, Vector128<float> b, Func<float, float, bool> check)
+        {
+            for (var i = 0; i < Vector128<float>.Count; i++)
+            {
+                if (!check(a.GetElement(i), b.GetElement(i))) return false;
+            }
+
+            return true;
+        }
+
+        public static bool PerElemCheck(Vector128<float> a, Vector128<float> b, Vector128<float> c, Func<float, float, float, bool> check)
+        {
+            for (var i = 0; i < Vector128<float>.Count; i++)
+            {
+                if (!check(a.GetElement(i), b.GetElement(i), c.GetElement(i))) return false;
+            }
+
+            return true;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static Vector2 ByValToSlowVector2(Vector128<float> vec)
         {
