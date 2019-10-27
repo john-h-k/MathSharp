@@ -20,6 +20,34 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle
             1f, -1f, 3.14159265f, 2.71828183f, 1.41421356f
         };
 
+        public static float[] RoundingValues =
+        {
+            0f, 1f, 5f, 100000f, 1000000000f,
+            -0f, -1f, -5f, -100000f, -1000000000f,
+            0.0001f, 1.0001f, 5.0001f, 100000.0001f, 1000000000.0001f,
+            -0.0001f, -1.0001f, -5.0001f, -100000.0001f, -1000000000.0001f,
+            0.5f, 1.5f, 5.5f, 100000.5f, 1000000000.5f,
+            -0.5f, -1.5f, -5.5f, -100000.5f, -1000000000.5f,
+            -0.50001f, -1.50001f, -5.50001f, -100000.50001f, -1000000000.50001f,
+            -0.49999f, -1.49999f, -5.49999f, -100000.49999f, -1000000000.49999f,
+            -0.99999f, -1.99999f, -5.99999f, -100000.99999f, -1000000000.99999f
+        };
+
+        public static IEnumerable<object[]> CreateRoundingDataSet(Func<float, float> correctTransformation)
+        {
+            foreach(var value in SpecialValues)
+            {
+                yield return CreateUnarySingleDataSet(value);
+            }
+
+            foreach (var value in RoundingValues)
+            {
+                yield return CreateUnarySingleDataSet(value);
+            }
+
+            object[] CreateUnarySingleDataSet(float f) => new object[] { Vector128.Create(f), Vector128.Create(correctTransformation(f)) };
+        }
+        
         public static IEnumerable<object[]> CreateUnaryDataSet(Func<float, float> correctTransformation)
         {
             foreach (var value in SpecialValues)

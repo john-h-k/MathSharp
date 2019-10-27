@@ -17,7 +17,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
         {
             a = Vector.CopySign(a, b);
 
-            Assert.True(PerElemCheck(a, expected, (f, exp) => f == exp));
+            Assert.True(PerElemCheck(a, expected, (f, exp) => f.Equals(exp)));
         }
     }
 }

@@ -257,7 +257,7 @@ namespace MathSharp
             => Xor(vector, SingleConstants256.MaskNotSign);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CopySign(Vector128<float> sign, Vector128<float> vector)
+        public static Vector128<float> CopySign(Vector128<float> vector, Vector128<float> sign)
             => Or(ExtractSign(sign), Abs(vector));
 
         [MethodImpl(MaxOpt)]
@@ -342,20 +342,6 @@ namespace MathSharp
             if (Sse41.IsSupported)
             {
                 return Sse41.RoundToZero(vector);
-            }
-
-            if (Sse2.IsSupported)
-            {
-                Vector128<int> fractionalValues = Abs(vector).AsInt32();
-
-                fractionalValues = CompareLessThan(fractionalValues, NoFraction.AsInt32());
-                var result = Sse2.ConvertToVector128Single(Sse2.ConvertToVector128Int32WithTruncation(vector)); // Roundtrip float->int32->float to truncate
-
-                // Select results for non fractional values, else select the original value
-                result = SelectWhereTrue(result, fractionalValues);
-                fractionalValues = SelectWhereFalse(vector, fractionalValues).AsInt32();
-
-                return Or(result, fractionalValues.AsSingle());
             }
 
             return SoftwareFallback(vector);

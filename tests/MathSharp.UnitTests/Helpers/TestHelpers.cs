@@ -105,6 +105,25 @@ namespace MathSharp.UnitTests
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static bool AreApproxEqual(Vector128<float> left, Vector128<float> right, float tolerance)
+        {
+            for (int i = 0; i < Vector128<float>.Count; i++)
+            {
+                var l = left.GetElement(i);
+                var r = right.GetElement(i);
+
+                var diff = MathF.Abs(l - r);
+
+                if (diff < tolerance || l.Equals(r))
+                {
+                    continue;
+                }
+            }
+
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static bool AreEqual(Vector4 left, Vector128<float> right)
             => left.X.Equals(X(right)) && left.Y.Equals(Y(right)) && left.Z.Equals(Z(right)) && left.W.Equals(W(right));
 
@@ -158,6 +177,8 @@ namespace MathSharp.UnitTests
         {
             return AreApproxEqual(left, X(right));
         }
+
+        
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static bool AreAllEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)

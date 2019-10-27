@@ -57,7 +57,7 @@ namespace MathSharp.Quaternion
             var lhs = Vector.Multiply(mAmount, left);
             var rhs = Vector.Multiply(vAmount, right);
 
-            rhs = Vector.CopySign(dot, rhs);
+            rhs = Vector.CopySign(rhs, dot);
 
             var result = Add(lhs, rhs);
 
