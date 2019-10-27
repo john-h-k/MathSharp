@@ -17,6 +17,7 @@ namespace MathSharp
         private static readonly Vector128<float> SinCoefficient0 = Vector128.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
         private static readonly Vector128<float> SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
         private const float SinCoefficient1Scalar = -2.3889859e-08f;
+        private static readonly Vector128<float> SinCoefficient1Broadcast = Vector128.Create(SinCoefficient1Scalar);
 
 
         [MethodImpl(MaxOpt)]
@@ -41,7 +42,7 @@ namespace MathSharp
                 // Polynomial approx
                 Vector128<float> sc0 = SinCoefficient0;
 
-                Vector128<float> constants = Vector128.Create(SinCoefficient1Scalar);
+                Vector128<float> constants = SinCoefficient1Broadcast;
                 Vector128<float> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
 
                 constants = PermuteWithZ(sc0);
@@ -72,7 +73,6 @@ namespace MathSharp
                 );
             }
         }
-
         [MethodImpl(MaxOpt)]
         public static Vector128<float> SinApprox(Vector4FParam1_3 vector)
         {
@@ -110,6 +110,7 @@ namespace MathSharp
 
             return Sin(vector);
         }
+
 
         private static readonly Vector128<float> CosCoefficient0 = Vector128.Create(-0.5f, +0.041666638f, -0.0013888378f, +2.4760495e-05f);
         private static readonly Vector128<float> CosCoefficient1 = Vector128.Create(-2.6051615e-07f, -0.49992746f, +0.041493919f, -0.0012712436f);
@@ -585,7 +586,7 @@ namespace MathSharp
             constants1 = PermuteWithY(tC0);
 
             result = FastMultiplyAdd(result, vecSquared, constants1);
-            
+
             constants1 = PermuteWithX(tC0);
 
             result = FastMultiplyAdd(result, vecSquared, constants1);

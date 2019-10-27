@@ -26,10 +26,16 @@ namespace MathSharp
         public static bool AllFalse(this Vector4FParam1_3 vector)
             => MoveMask(vector) == 0b_0000;
 
-
         [MethodImpl(MaxOpt)]
         public static bool AnyFalse(this Vector4FParam1_3 vector)
             => MoveMask(vector) != 0b_1111;
+
+        [MethodImpl(MaxOpt)]
+        public static bool Mixed(this Vector4FParam1_3 vector)
+        {
+            var mask = MoveMask(vector);
+            return mask != 0 && mask != 0b_1111;
+        }
 
         [MethodImpl(MaxOpt)]
         public static bool ElementTrue(this Vector4FParam1_3 vector, int elem)

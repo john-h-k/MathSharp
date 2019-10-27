@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics;
+﻿using System;
+using System.Runtime.Intrinsics;
 using MathSharp.Utils;
 
 namespace MathSharp.Quaternion
@@ -13,6 +14,9 @@ namespace MathSharp.Quaternion
 
         public static Vector128<float> Normalize(Vector128<float> quaternion)
             => Vector.Normalize4D(quaternion);
+
+        public static Vector128<float> NormalizeApprox(Vector128<float> quaternion)
+            => Vector.NormalizeApprox4D(quaternion);
 
         public static Vector128<float> Conjugate(Vector128<float> quaternion)
             => Vector.Xor(quaternion, SingleConstants.SignMaskXYZ);
@@ -136,6 +140,17 @@ namespace MathSharp.Quaternion
 
             result = Vector.Add(result, q2Y);
             return result;
+        }
+        
+        // TODO 2D and 4D transform quaternion methods
+
+        public static Vector128<float> Transform3D(Vector128<float> value, Vector128<float> quaternion)
+        {
+            value = Vector.And(value, Vector.SingleConstants.MaskW);
+            var result = Multiply(quaternion, value);
+            var conjugate = Conjugate(quaternion);
+
+            return Multiply(result, conjugate);
         }
 
         // ReSharper disable InconsistentNaming, IdentifierTypo

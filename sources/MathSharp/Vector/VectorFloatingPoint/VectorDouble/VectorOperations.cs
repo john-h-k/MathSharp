@@ -258,7 +258,7 @@ namespace MathSharp
         {
             // hardware
 
-            return CrossProduct4D_Software(one, two, three);
+            return SoftwareFallbacks.CrossProduct4D_Software(one, two, three);
         }
 
         #endregion

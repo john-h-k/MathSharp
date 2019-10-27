@@ -91,6 +91,19 @@ namespace MathSharp.UnitTests
             return new Vector4d(X(vec), Y(vec), Z(vec), W(vec));
         }
 
+        public static bool AreEqual(Vector128<float> left, Vector128<float> right)
+        {
+            for (int i = 0; i < Vector128<float>.Count; i++)
+            {
+                int l = left.AsInt32().GetElement(i);
+                int r = right.AsInt32().GetElement(i);
+
+                if (l != r) return false;
+            }
+
+            return true;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static bool AreEqual(Vector4 left, Vector128<float> right)
             => left.X.Equals(X(right)) && left.Y.Equals(Y(right)) && left.Z.Equals(Z(right)) && left.W.Equals(W(right));
@@ -151,7 +164,7 @@ namespace MathSharp.UnitTests
         {
             for (var i = 0; i < 4; i++)
             {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0
+                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1
                     || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0)
                     return false;
             }
@@ -165,7 +178,7 @@ namespace MathSharp.UnitTests
             for (var i = 0; i < 4; i++)
             {
                 if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0)
+                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1)
                     return false;
             }
 
@@ -177,7 +190,7 @@ namespace MathSharp.UnitTests
         {
             for (var i = 0; i < 4; i++)
             {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0
+                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1
                     || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0)
                     return false;
             }
@@ -191,7 +204,7 @@ namespace MathSharp.UnitTests
             for (var i = 0; i < 4; i++)
             {
                 if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0)
+                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1)
                     return false;
             }
 

@@ -304,10 +304,63 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> CrossProduct4D(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
         {
-            // hardware
+            if (Sse.IsSupported)
+            {
+                //float xTmp1 = z2 * w3 - w2 * z3;
+                //float yTmp1 = w2 * z3 - z2 * w3;
+                //float zTmp1 = y2 * w3 - w2 * y3;
+                //float wTmp1 = z2 * y3 - y2 * z3;
+
+                var shuf1 = Permute(two, ShuffleValues.ZWYZ);
+                var shuf2 = Permute(three, ShuffleValues.WZWY);
+                var shuf3 = Permute(two, ShuffleValues.WZWY);
+                var shuf4 = Permute(three, ShuffleValues.ZWYZ);
+
+                var tmp1 = Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4));
+
+                //float xTmp2 = y1 - (y2 * w3 - w2 * y3);
+                //float yTmp2 = x1 - (w2 * x3 - x2 * w3);
+                //float zTmp2 = x1 - (x2 * w3 - w2 * x3);
+                //float wTmp2 = x1 - (z2 * x3 - x2 * z3);
+
+                var shuf0 = Permute(one, ShuffleValues.YXXX);
+                shuf1 = Permute(two, ShuffleValues.YWXZ);
+                shuf2 = Permute(three, ShuffleValues.WXWX);
+                shuf3 = Permute(two, ShuffleValues.WXWX);
+                shuf4 = Permute(three, ShuffleValues.YWXZ);
+
+                var tmp2 = Subtract(shuf0, Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4)));
+
+                //float xTmp3 = z1 + (y2 * z3 - z2 * y3);
+                //float yTmp3 = z1 + (z2 * x3 - x2 * z3);
+                //float zTmp3 = y1 + (x2 * y3 - y2 * x3);
+                //float wTmp3 = y1 + (y2 * x3 - x2 * y3);
+
+                shuf0 = Permute(one, ShuffleValues.ZZYY);
+                shuf1 = Permute(two, ShuffleValues.YZXY);
+                shuf2 = Permute(three, ShuffleValues.ZXYX);
+                shuf3 = Permute(two, ShuffleValues.ZXYX);
+                shuf4 = Permute(three, ShuffleValues.YZXY);
+
+                var tmp3 = Add(shuf0, Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4)));
+
+                //float x = xTmp1 * xTmp2 * xTmp3 * w1;
+                //float y = yTmp1 * yTmp2 * yTmp3 * w1;
+                //float z = zTmp1 * zTmp2 * zTmp3 * w1;
+                //float w = wTmp1 * wTmp2 * wTmp3 * z1;
+
+                var result = Multiply(tmp1, tmp2);
+                result = Multiply(result, tmp3);
+
+                return Multiply(result, Permute(one, ShuffleValues.WWWZ));
+            }
 
             return CrossProduct4D_Software(one, two, three);
         }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> CrossProduct4D_Software(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three) 
+            => SoftwareFallbacks.CrossProduct4D_Software(one, two, three);
 
         #endregion
 

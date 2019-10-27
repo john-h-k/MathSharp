@@ -16,10 +16,11 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Load4DAligned(in float p)
         {
-            fixed (float* pp = &p)
-            {
-                return Load4DAligned(pp);
-            }
+            return Unsafe.As<float, Vector128<float>>(ref Unsafe.AsRef(in p));
+            //fixed (float* pp = &p)
+            //{
+            //    return Load4DAligned(pp);
+            //}
         }
 
         [MethodImpl(MaxOpt)]
@@ -42,10 +43,11 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Load2DAligned(in float p)
         {
-            fixed (float* pp = &p)
-            {
-                return Load2DAligned(pp);
-            }
+            return Load4DAligned(in p);
+            //fixed (float* pp = &p)
+            //{
+            //    return Load2DAligned(pp);
+            //}
         }
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Load2DAligned(float* p) 
@@ -130,10 +132,11 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Load2D(in float p)
         {
-            fixed (float* pp = &p)
-            {
-                return Load2D(pp);
-            }
+            return Vector128.CreateScalarUnsafe(Unsafe.As<float, double>(ref Unsafe.AsRef(in p))).AsSingle();
+            //fixed (float* pp = &p)
+            //{
+            //    return Load2D(pp);
+            //}
         }
 
         [MethodImpl(MaxOpt)]

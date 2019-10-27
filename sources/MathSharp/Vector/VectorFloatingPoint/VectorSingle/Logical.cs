@@ -13,6 +13,18 @@ namespace MathSharp
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]
+        public static float GetX(Vector128<float> vector) => vector.GetElement(0);
+
+        [MethodImpl(MaxOpt)]
+        public static float GetY(Vector128<float> vector) => vector.GetElement(1);
+
+        [MethodImpl(MaxOpt)]
+        public static float GetZ(Vector128<float> vector) => vector.GetElement(2);
+
+        [MethodImpl(MaxOpt)]
+        public static float GetW(Vector128<float> vector) => vector.GetElement(3);
+
+        [MethodImpl(MaxOpt)]
         public static Vector128<float> Permute(Vector4FParam1_3 vector, byte control)
         {
             if (Avx.IsSupported)

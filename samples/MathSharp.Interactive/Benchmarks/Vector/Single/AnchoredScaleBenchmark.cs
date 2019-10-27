@@ -4,12 +4,16 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography.X509Certificates;
 using BenchmarkDotNet.Attributes;
+using MathSharp.StorageTypes;
 using OpenTK;
 
 namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     using Vector = MathSharp.Vector;
     using SysVector2 = System.Numerics.Vector2;
+
+    using MathSharpVector2 = Vector2F;
+    using MathSharpVector2Aligned = Vector2FAligned;
 
     [CoreJob]
     [RPlotExporter]
@@ -32,7 +36,19 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         private Vector128<float> _mathSharpScale;
         private Vector128<float> _mathSharpAmount;
 
+        private MathSharpVector2 _storageMathSharpTranslation;
+        private MathSharpVector2 _storageMathSharpAnchor;
+        private MathSharpVector2 _storageMathSharpScale;
+        private MathSharpVector2 _storageMathSharpAmount;
+
+        private MathSharpVector2Aligned _alignedMathSharpTranslation;
+        private MathSharpVector2Aligned _alignedMathSharpAnchor;
+        private MathSharpVector2Aligned _alignedMathSharpScale;
+        private MathSharpVector2Aligned _alignedMathSharpAmount;
+
         private Vector2 _result;
+        private MathSharpVector2 _mathSharpResult;
+        private MathSharpVector2Aligned _alignedMathSharpResult;
         private SysVector2 _sysResult;
 
         [GlobalSetup]
@@ -52,6 +68,16 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             _mathSharpAnchor = Vector128.Create(1.0f, 0.0f, 0f, 0f);
             _mathSharpScale = Vector128.Create(7.0f, 3.6f, 0f, 0f);
             _mathSharpAmount = Vector128.Create(0.5f, 0.25f, 0f, 0f);
+
+            _storageMathSharpTranslation = new MathSharpVector2(1.7f, 2.3f);
+            _storageMathSharpAnchor = new MathSharpVector2(1.0f, 0.0f);
+            _storageMathSharpScale = new MathSharpVector2(7.0f, 3.6f);
+            _storageMathSharpAmount = new MathSharpVector2(0.5f, 0.25f);
+
+            _alignedMathSharpTranslation = new MathSharpVector2Aligned(1.7f, 2.3f);
+            _alignedMathSharpAnchor = new MathSharpVector2Aligned(1.0f, 0.0f);
+            _alignedMathSharpScale = new MathSharpVector2Aligned(7.0f, 3.6f);
+            _alignedMathSharpAmount = new MathSharpVector2Aligned(0.5f, 0.25f);
         }
 
         [Benchmark]
@@ -62,7 +88,39 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             deltaT = Vector.Multiply(deltaT, _mathSharpAnchor);
             Vector128<float> result = Vector.Multiply((Vector.Add(_mathSharpTranslation, deltaT)), newScale);
 
-            result.Store(out _result);
+            result.Store(out _mathSharpResult);
+        }
+
+        [Benchmark]
+        public void MathSharpWithStorageTypes()
+        {
+            var scale = _storageMathSharpScale.Load();
+            var amount = _storageMathSharpAmount.Load();
+            var anchor = _storageMathSharpAnchor.Load();
+            var translation = _storageMathSharpTranslation.Load();
+
+            Vector128<float> newScale = Vector.Multiply(scale, amount);
+            Vector128<float> deltaT = Vector.Multiply(scale, Vector.Subtract(Vector.SingleConstants.One, amount));
+            deltaT = Vector.Multiply(deltaT, anchor);
+            Vector128<float> result = Vector.Multiply((Vector.Add(translation, deltaT)), newScale);
+
+            result.Store(out _mathSharpResult);
+        }
+
+        [Benchmark]
+        public void MathSharpWithAlignedStorageTypes()
+        {
+            var scale = _alignedMathSharpScale.Load();
+            var amount = _alignedMathSharpAmount.Load();
+            var anchor = _alignedMathSharpAnchor.Load();
+            var translation = _alignedMathSharpTranslation.Load();
+
+            Vector128<float> newScale = Vector.Multiply(scale, amount);
+            Vector128<float> deltaT = Vector.Multiply(scale, Vector.Subtract(Vector.SingleConstants.One, amount));
+            deltaT = Vector.Multiply(deltaT, anchor);
+            Vector128<float> result = Vector.Multiply((Vector.Add(translation, deltaT)), newScale);
+
+            result.Store(out _alignedMathSharpResult);
         }
 
         [Benchmark]

@@ -145,7 +145,7 @@ namespace MathSharp.StorageTypes
         public static Vector128<float> Load(ref this Vector3FAligned vector) => Vector.Load3DAligned(in vector.X);
         public static Vector128<float> Load(ref this Vector4FAligned vector) => Vector.Load4DAligned(in vector.X);
 
-        public static void Store(this Vector128<float> vector, Vector2F* destination) => Vector.Store2D(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, Vector2F* destination) => vector.Store2D((float*)destination);
         public static void Store(this Vector128<float> vector, out Vector2F destination)
         {
             fixed (Vector2F* p = &destination)
@@ -154,7 +154,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void Store(this Vector128<float> vector, Vector3F* destination) => Vector.Store3D(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, Vector3F* destination) => vector.Store3D((float*)destination);
         public static void Store(this Vector128<float> vector, out Vector3F destination)
         {
             fixed (Vector3F* p = &destination)
@@ -163,7 +163,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void Store(this Vector128<float> vector, Vector4F* destination) => Vector.Store4D(vector, (float*)destination);
+        public static void Store(this Vector128<float> vector, Vector4F* destination) => vector.Store4D((float*)destination);
         public static void Store(this Vector128<float> vector, out Vector4F destination)
         {
             fixed (Vector4F* p = &destination)
