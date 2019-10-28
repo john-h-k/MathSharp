@@ -86,6 +86,19 @@ namespace MathSharp.UnitTests
             return true;
         }
 
+        public static bool AreEqual(Vector256<double> left, Vector256<double> right)
+        {
+            for (int i = 0; i < Vector256<double>.Count; i++)
+            {
+                long l = left.AsInt64().GetElement(i);
+                long r = right.AsInt64().GetElement(i);
+
+                if (l != r) return false;
+            }
+
+            return true;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static bool AreApproxEqual(Vector128<float> left, Vector128<float> right, float tolerance)
         {
