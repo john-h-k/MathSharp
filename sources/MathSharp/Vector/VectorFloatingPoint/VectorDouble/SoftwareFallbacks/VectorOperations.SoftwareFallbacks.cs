@@ -76,8 +76,8 @@ namespace MathSharp
         public static Vector256<double> DotProduct2D_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
-                X(left) * X(right) +
-                +Y(left) * Y(right)
+                X(left) * X(right) 
+                + Y(left) * Y(right)
             );
         }
 

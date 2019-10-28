@@ -38,7 +38,7 @@ namespace MathSharp
 
             for (var i = 0; i < Vector128<float>.Count; i++)
             {
-                result = left.WithElement(i, left.GetElement(i) + right.GetElement(i));
+                result = result.WithElement(i, left.GetElement(i) + right.GetElement(i));
             }
 
             return result;

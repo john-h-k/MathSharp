@@ -107,7 +107,10 @@ namespace MathSharp
             {
                 Vector2D tmp = Sse2.Multiply(left.GetLower(), right.GetLower());
                 Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues.YXYX);
-                return Helpers.DuplicateToVector256(Sse2.Add(tmp, shuf));
+
+                var dot = Sse2.Add(tmp, shuf);
+
+                return dot.ToVector256Unsafe().WithUpper(dot);
             }
 
             return DotProduct2D_Software(left, right);
