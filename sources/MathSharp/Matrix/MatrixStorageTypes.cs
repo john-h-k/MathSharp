@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.ComTypes;
 using MathSharp.StorageTypes;
 // ReSharper disable InvokeAsExtensionMethod
 
 namespace MathSharp
 {
     // ReSharper disable InconsistentNaming
-    public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
+    public readonly struct Matrix4x4F : IEquatable<Matrix4x4F>
     {
         public readonly float E11;
         public readonly float E12;
@@ -29,7 +28,7 @@ namespace MathSharp
         public readonly float E43;
         public readonly float E44;
 
-        public Matrix4x4(float e11, float e12, float e13, float e14, float e21, float e22, float e23, float e24, float e31, float e32, float e33, float e34, float e41, float e42, float e43, float e44)
+        public Matrix4x4F(float e11, float e12, float e13, float e14, float e21, float e22, float e23, float e24, float e31, float e32, float e33, float e34, float e41, float e42, float e43, float e44)
         {
             E11 = e11;
             E12 = e12;
@@ -49,7 +48,7 @@ namespace MathSharp
             E44 = e44;
         }
 
-        public Matrix4x4(Vector4F e1, Vector4F e2, Vector4F e3, Vector4F e4)
+        public Matrix4x4F(Vector4F e1, Vector4F e2, Vector4F e3, Vector4F e4)
         {
             // TODO use Unsafe.SkipInit<T>(out T)
             this = default;
@@ -59,7 +58,7 @@ namespace MathSharp
             Unsafe.As<float, Vector4F>(ref Unsafe.AsRef(in E41)) = e4;
         }
 
-        public bool Equals(Matrix4x4 other)
+        public bool Equals(Matrix4x4F other)
         {
             return E11.Equals(other.E11) 
                    && E12.Equals(other.E12) 
@@ -79,7 +78,7 @@ namespace MathSharp
                    && E44.Equals(other.E44);
         }
 
-        public override bool Equals(object? obj) => obj is Matrix4x4 other && Equals(other);
+        public override bool Equals(object? obj) => obj is Matrix4x4F other && Equals(other);
 
         public override int GetHashCode()
         {
@@ -108,7 +107,7 @@ namespace MathSharp
 
     public static unsafe partial class MatrixExtensions
     {
-        public static void ToMatrix4x4(MatrixSingle matrix, Matrix4x4* destination)
+        public static void ToMatrix4x4(MatrixSingle matrix, Matrix4x4F* destination)
         {
             float* p = (float*)destination;
 
@@ -118,9 +117,9 @@ namespace MathSharp
             Vector.ToVector4D(matrix._v3, &p[12]);
         }
 
-        public static void ToMatrix4x4(MatrixSingle matrix, out Matrix4x4 destination)
+        public static void ToMatrix4x4(MatrixSingle matrix, out Matrix4x4F destination)
         {
-            fixed (Matrix4x4* p = &destination)
+            fixed (Matrix4x4F* p = &destination)
             {
                 ToMatrix4x4(matrix, p);
             }

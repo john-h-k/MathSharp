@@ -25,22 +25,5 @@ namespace MathSharp
                 );
             }
         }
-
-        public static Vector256<int> ConvertToInt32(Vector256<double> vector)
-        {
-            return SoftwareFallback(vector);
-
-            static Vector256<int> SoftwareFallback(Vector256<double> vector)
-            {
-                var v = Vector128.Create(
-                    (int)X(vector),
-                    (int)Y(vector),
-                    (int)Z(vector),
-                    (int)W(vector)
-                );
-
-                return Vector256.Create(v, v);
-            }
-        }
     }
 }

@@ -5,8 +5,6 @@ using MathSharp.Attributes;
 
 namespace MathSharp
 {
-    using VectorF = Vector128<float>;
-
     [Hva]
     [Aligned(16)]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -17,7 +15,7 @@ namespace MathSharp
         internal Vector128<float> _v2;
         internal Vector128<float> _v3;
 
-        internal VectorF this[uint index]
+        internal Vector128<float> this[uint index]
         {
             get => Unsafe.Add(ref _v0, (int)index);
 
@@ -37,6 +35,13 @@ namespace MathSharp
             _v1 = v1;
             _v2 = v2;
             _v3 = v3;
+        }
+        internal MatrixSingle(Vector128<float> v)
+        {
+            _v0 = v;
+            _v1 = v;
+            _v2 = v;
+            _v3 = v;
         }
 
         internal MatrixSingle(
@@ -62,7 +67,7 @@ namespace MathSharp
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static MatrixSingle Create(Vector128<float> v)
         {
-            return new MatrixSingle(v, v, v, v);
+            return new MatrixSingle(v);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
