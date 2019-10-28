@@ -24,8 +24,8 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.BasicMathsTests
         [MemberData(nameof(Data))]
         public unsafe void Remainder_Theory(Vector4d left, Vector4d right)
         {
-            var l = Vector.Load4D(&left.X);
-            var r = Vector.Load4D(&right.X);
+            var l = Vector.FromVector4D(&left.X);
+            var r = Vector.FromVector4D(&right.X);
 
             var remainder = Vector.Remainder(l, r);
             var expected = new Vector4d(left.X % right.X, left.Y % right.Y, left.Z % right.Z, left.W % right.W);

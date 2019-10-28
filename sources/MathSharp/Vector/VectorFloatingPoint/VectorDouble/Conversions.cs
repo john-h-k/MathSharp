@@ -14,18 +14,18 @@ namespace MathSharp
         #region Loads
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Load4DAligned(double* p) 
-            => Load4D(p);
+        public static Vector256<double> FromVector4DAligned(double* p) 
+            => FromVector4D(p);
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Load3DAligned(double* p) 
-            => Load4DAligned(p);
+        public static Vector256<double> FromVector3DAligned(double* p) 
+            => FromVector4DAligned(p);
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Load2DAligned(double* p) 
-            => Load4DAligned(p);
+        public static Vector256<double> FromVector2DAligned(double* p) 
+            => FromVector4DAligned(p);
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Load4D(double* p)
+        public static Vector256<double> FromVector4D(double* p)
         {
             if (Avx.IsSupported)
             {
@@ -50,7 +50,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Load3D(double* p)
+        public static Vector256<double> FromVector3D(double* p)
         {
             if (Sse2.IsSupported)
             {
@@ -83,7 +83,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Load2D(double* p)
+        public static Vector256<double> FromVector2D(double* p)
         {
             if (Sse2.IsSupported)
             {
@@ -121,17 +121,17 @@ namespace MathSharp
 
         #region Stores
 
-        public static void Store4DAligned(this Vector256<double> vector, double* destination) 
-            => Store4D(vector, destination);
+        public static void ToVector4DAligned(this Vector256<double> vector, double* destination) 
+            => ToVector4D(vector, destination);
 
-        public static void Store3DAligned(this Vector256<double> vector, double* destination)
-            => Store4DAligned(vector, destination);
+        public static void ToVector3DAligned(this Vector256<double> vector, double* destination)
+            => ToVector4DAligned(vector, destination);
 
-        public static void Store2DAligned(this Vector256<double> vector, double* destination)
-            => Store4DAligned(vector, destination);
+        public static void ToVector2DAligned(this Vector256<double> vector, double* destination)
+            => ToVector4DAligned(vector, destination);
 
 
-        public static void Store4D(this Vector256<double> vector, double* destination)
+        public static void ToVector4D(this Vector256<double> vector, double* destination)
         {
             if (Avx.IsSupported)
             {
@@ -166,7 +166,7 @@ namespace MathSharp
             }
         }
 
-        public static void Store3D(this Vector256<double> vector, double* destination)
+        public static void ToVector3D(this Vector256<double> vector, double* destination)
         {
             if (Avx.IsSupported)
             {
@@ -188,7 +188,7 @@ namespace MathSharp
             }
         }
 
-        public static void Store2D(this Vector256<double> vector, double* destination)
+        public static void ToVector2D(this Vector256<double> vector, double* destination)
         {
             if (Sse2.IsSupported)
             {

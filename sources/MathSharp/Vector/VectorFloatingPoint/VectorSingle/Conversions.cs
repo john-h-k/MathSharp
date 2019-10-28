@@ -13,78 +13,56 @@ namespace MathSharp
         #region Loads
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load4DAligned(in float p)
+        public static Vector128<float> FromVector4DAligned(in float p)
         {
             return Unsafe.As<float, Vector128<float>>(ref Unsafe.AsRef(in p));
             //fixed (float* pp = &p)
             //{
-            //    return Load4DAligned(pp);
+            //    return FromVector4DAligned(pp);
             //}
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load4DAligned(float* p)
-            => Load4D(p);
+        public static Vector128<float> FromVector4DAligned(float* p)
+            => FromVector4D(p);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load3DAligned(in float p)
+        public static Vector128<float> FromVector3DAligned(in float p)
         {
             fixed (float* pp = &p)
             {
-                return Load3DAligned(pp);
+                return FromVector3DAligned(pp);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load3DAligned(float* p)
-            => Load4DAligned(p);
+        public static Vector128<float> FromVector3DAligned(float* p)
+            => FromVector4DAligned(p);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load2DAligned(in float p)
+        public static Vector128<float> FromVector2DAligned(in float p)
         {
-            return Load4DAligned(in p);
+            return FromVector4DAligned(in p);
             //fixed (float* pp = &p)
             //{
-            //    return Load2DAligned(pp);
+            //    return FromVector2DAligned(pp);
             //}
         }
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load2DAligned(float* p) 
-            => Load4DAligned(p);
+        public static Vector128<float> FromVector2DAligned(float* p) 
+            => FromVector4DAligned(p);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<float> Load8D(float* p)
-        {
-            if (Avx.IsSupported)
-            {
-                return Avx.LoadVector256(p);
-            }
-
-            if (Sse.IsSupported)
-            {
-                return FromLowHigh(Sse.LoadVector128(p), Sse.LoadVector128(p + 4));
-            }
-
-            return SoftwareFallback(p);
-
-            static Vector256<float> SoftwareFallback(float* p)
-            {
-                return Vector256.Create(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
-            }
-        }
-
-
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load4D(in float p)
+        public static Vector128<float> FromVector4D(in float p)
         {
             fixed (float* pp = &p)
             {
-                return Load4D(pp);
+                return FromVector4D(pp);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load4D(float* p)
+        public static Vector128<float> FromVector4D(float* p)
         {
             if (Sse.IsSupported)
             {
@@ -100,16 +78,16 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load3D(in float p)
+        public static Vector128<float> FromVector3D(in float p)
         {
             fixed (float* pp = &p)
             {
-                return Load3D(pp);
+                return FromVector3D(pp);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load3D(float* p)
+        public static Vector128<float> FromVector3D(float* p)
         {
             if (Sse.IsSupported)
             {
@@ -129,17 +107,17 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load2D(in float p)
+        public static Vector128<float> FromVector2D(in float p)
         {
             return Vector128.CreateScalarUnsafe(Unsafe.As<float, double>(ref Unsafe.AsRef(in p))).AsSingle();
             //fixed (float* pp = &p)
             //{
-            //    return Load2D(pp);
+            //    return FromVector2D(pp);
             //}
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load2D(float* p)
+        public static Vector128<float> FromVector2D(float* p)
         {
             if (Sse2.IsSupported)
             {
@@ -166,66 +144,30 @@ namespace MathSharp
 
         #region Stores
 
-        public static void Store8DAligned(this Vector256<float> vector, float* destination)
-            => Store8D(vector, destination);
+        public static void ToVector4DAligned(this Vector128<float> vector, out float destination)
+            => ToVector4D(vector, out destination);
+        public static void ToVector4DAligned(this Vector128<float> vector, float* destination)
+            => ToVector4D(vector, destination);
 
-        public static void Store4DAligned(this Vector128<float> vector, out float destination)
-            => Store4D(vector, out destination);
-        public static void Store4DAligned(this Vector128<float> vector, float* destination)
-            => Store4D(vector, destination);
+        public static void ToVector3DAligned(this Vector128<float> vector, out float destination)
+            => ToVector4DAligned(vector, out destination);
+        public static void ToVector3DAligned(this Vector128<float> vector, float* destination)
+            => ToVector4DAligned(vector, destination);
 
-        public static void Store3DAligned(this Vector128<float> vector, out float destination)
-            => Store4DAligned(vector, out destination);
-        public static void Store3DAligned(this Vector128<float> vector, float* destination)
-            => Store4DAligned(vector, destination);
-
-        public static void Store2DAligned(this Vector128<float> vector, out float destination)
-            => Store4DAligned(vector, out destination);
-        public static void Store2DAligned(this Vector128<float> vector, float* destination) 
-            => Store4DAligned(vector, destination);
+        public static void ToVector2DAligned(this Vector128<float> vector, out float destination)
+            => ToVector4DAligned(vector, out destination);
+        public static void ToVector2DAligned(this Vector128<float> vector, float* destination) 
+            => ToVector4DAligned(vector, destination);
 
         [MethodImpl(MaxOpt)]
-        public static void Store8D(Vector256<float> vector, float* destination)
-        {
-            if (Avx.IsSupported)
-            {
-                Avx.Store(destination, vector);
-
-                return;
-            }
-
-            if (Sse.IsSupported)
-            {
-                Store4D(vector.GetLower(), destination);
-                Store4D(vector.GetUpper(), destination + 4);
-
-                return;
-            }
-
-            SoftwareFallback(vector, destination);
-
-            static void SoftwareFallback(Vector256<float> vector, float* destination)
-            {
-                destination[0] = vector.GetElement(0);
-                destination[1] = vector.GetElement(1);
-                destination[2] = vector.GetElement(2);
-                destination[3] = vector.GetElement(3);
-                destination[4] = vector.GetElement(4);
-                destination[5] = vector.GetElement(5);
-                destination[6] = vector.GetElement(6);
-                destination[7] = vector.GetElement(7);
-            }
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static void Store4D(this Vector128<float> vector, out float destination)
+        public static void ToVector4D(this Vector128<float> vector, out float destination)
         {
             fixed (void* _ = &destination) { } // TODO use Unsafe.SkipInit<T>(out T);
             Unsafe.As<float, Vector128<float>>(ref destination) = vector;
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store4D(this Vector128<float> vector, float* destination)
+        public static void ToVector4D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -246,16 +188,16 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store3D(this Vector128<float> vector, ref float destination)
+        public static void ToVector3D(this Vector128<float> vector, ref float destination)
         {
             fixed (float* p = &destination)
             {
-                Store3D(vector, p);
+                ToVector3D(vector, p);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store3D(this Vector128<float> vector, float* destination)
+        public static void ToVector3D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {
@@ -278,16 +220,16 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store2D(this Vector128<float> vector, ref float destination)
+        public static void ToVector2D(this Vector128<float> vector, ref float destination)
         {
             fixed (float* p = &destination)
             {
-                Store2D(vector, p);
+                ToVector2D(vector, p);
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static void Store2D(this Vector128<float> vector, float* destination)
+        public static void ToVector2D(this Vector128<float> vector, float* destination)
         {
             if (Sse.IsSupported)
             {

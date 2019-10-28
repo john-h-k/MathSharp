@@ -86,39 +86,39 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             deltaT = Vector.Multiply(deltaT, _mathSharpAnchor);
             Vector128<float> result = Vector.Multiply((Vector.Add(_mathSharpTranslation, deltaT)), newScale);
 
-            result.Store(out _mathSharpResult);
+            result.StoreToVector(out _mathSharpResult);
         }
 
         [Benchmark]
         public void MathSharpWithStorageTypes()
         {
-            var scale = _storageMathSharpScale.Load();
-            var amount = _storageMathSharpAmount.Load();
-            var anchor = _storageMathSharpAnchor.Load();
-            var translation = _storageMathSharpTranslation.Load();
+            var scale = _storageMathSharpScale.LoadToVector128();
+            var amount = _storageMathSharpAmount.LoadToVector128();
+            var anchor = _storageMathSharpAnchor.LoadToVector128();
+            var translation = _storageMathSharpTranslation.LoadToVector128();
 
             Vector128<float> newScale = Vector.Multiply(scale, amount);
             Vector128<float> deltaT = Vector.Multiply(scale, Vector.Subtract(Vector.SingleConstants.One, amount));
             deltaT = Vector.Multiply(deltaT, anchor);
             Vector128<float> result = Vector.Multiply((Vector.Add(translation, deltaT)), newScale);
 
-            result.Store(out _mathSharpResult);
+            result.StoreToVector(out _mathSharpResult);
         }
 
         [Benchmark]
         public void MathSharpWithAlignedStorageTypes()
         {
-            var scale = _alignedMathSharpScale.Load();
-            var amount = _alignedMathSharpAmount.Load();
-            var anchor = _alignedMathSharpAnchor.Load();
-            var translation = _alignedMathSharpTranslation.Load();
+            var scale = _alignedMathSharpScale.LoadToVector128();
+            var amount = _alignedMathSharpAmount.LoadToVector128();
+            var anchor = _alignedMathSharpAnchor.LoadToVector128();
+            var translation = _alignedMathSharpTranslation.LoadToVector128();
 
             Vector128<float> newScale = Vector.Multiply(scale, amount);
             Vector128<float> deltaT = Vector.Multiply(scale, Vector.Subtract(Vector.SingleConstants.One, amount));
             deltaT = Vector.Multiply(deltaT, anchor);
             Vector128<float> result = Vector.Multiply((Vector.Add(translation, deltaT)), newScale);
 
-            result.Store(out _alignedMathSharpResult);
+            result.StoreToVector(out _alignedMathSharpResult);
         }
 
         [Benchmark]

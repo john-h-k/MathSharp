@@ -107,7 +107,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
                     vector = Remainder(vector, two);
                     vector = Subtract(vector, SingleConstants.One);
 
-                    vector.Store4D(&ptr[i]);
+                    vector.ToVector4D(&ptr[i]);
 
                     i += 4;
                     time = Add(time, sampleIterator);
