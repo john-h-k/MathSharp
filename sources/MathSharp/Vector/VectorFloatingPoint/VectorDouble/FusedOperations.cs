@@ -7,14 +7,14 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
-    using Vector4DParam1_3 = Vector256<double>;
+    
+    
 
     public static partial class Vector
     {
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FusedMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FusedMultiplyAdd(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (Fma.IsSupported)
             {
@@ -23,7 +23,7 @@ namespace MathSharp
 
             return SoftwareFallback(x, y, z);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+            static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
                 return Vector256.Create(
                     Math.FusedMultiplyAdd(X(x), X(y), X(z)),
@@ -35,7 +35,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FastMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FastMultiplyAdd(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (CanFuseOperations)
             {
@@ -47,7 +47,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FusedNegateMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FusedNegateMultiplyAdd(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (Fma.IsSupported)
             {
@@ -56,7 +56,7 @@ namespace MathSharp
 
             return SoftwareFallback(x, y, z);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+            static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
                 ThrowPlatformNotSupported();
                 return default;
@@ -64,7 +64,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FastNegateMultiplyAdd(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FastNegateMultiplyAdd(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (CanFuseOperations)
             {
@@ -76,7 +76,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FusedMultiplySubtract(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FusedMultiplySubtract(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (Fma.IsSupported)
             {
@@ -85,7 +85,7 @@ namespace MathSharp
 
             return SoftwareFallback(x, y, z);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+            static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
                 ThrowPlatformNotSupported();
                 return default;
@@ -93,7 +93,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FastMultiplySubtract(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FastMultiplySubtract(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (CanFuseOperations)
             {
@@ -104,7 +104,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FusedNegateMultiplySubtract(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FusedNegateMultiplySubtract(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (Fma.IsSupported)
             {
@@ -113,7 +113,7 @@ namespace MathSharp
 
             return SoftwareFallback(x, y, z);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+            static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
                 ThrowPlatformNotSupported();
                 return default;
@@ -121,7 +121,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FastNegateMultiplySubtract(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FastNegateMultiplySubtract(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (CanFuseOperations)
             {
@@ -132,7 +132,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FusedMultiplyAddSubtractAlternating(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FusedMultiplyAddSubtractAlternating(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (Fma.IsSupported)
             {
@@ -141,7 +141,7 @@ namespace MathSharp
 
             return SoftwareFallback(x, y, z);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+            static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
                 return FusedMultiplyAdd(x, y, Xor(z, DoubleConstants.MaskNotSignYW));
             }
@@ -149,7 +149,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FastMultiplyAddSubtractAlternating(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FastMultiplyAddSubtractAlternating(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (CanFuseOperations)
             {
@@ -162,7 +162,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FusedMultiplySubtractAddAlternating(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FusedMultiplySubtractAddAlternating(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (Fma.IsSupported)
             {
@@ -171,14 +171,14 @@ namespace MathSharp
 
             return SoftwareFallback(x, y, z);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+            static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
                 return FusedMultiplyAdd(x, y, Xor(z, DoubleConstants.MaskNotSignXZ));
             }
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> FastMultiplySubtractAddAlternating(Vector4DParam1_3 x, Vector4DParam1_3 y, Vector4DParam1_3 z)
+        public static Vector256<double> FastMultiplySubtractAddAlternating(Vector256<double> x, Vector256<double> y, Vector256<double> z)
         {
             if (CanFuseOperations)
             {

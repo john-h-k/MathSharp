@@ -7,7 +7,7 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4F = Vector128<float>;
+    
 
     public static unsafe partial class Vector
     {
@@ -116,7 +116,7 @@ namespace MathSharp
             {
                 // Construct 3 separate vectors, each with the first element being the value
                 // and the rest being undefined (shown as ?)
-                Vector4F hi = Sse.LoadScalarVector128(&p[2]);
+                Vector128<float> hi = Sse.LoadScalarVector128(&p[2]);
                 hi = And(hi, SingleConstants.MaskY);
                 return Sse.LoadLow(hi, p);
             }
@@ -150,7 +150,7 @@ namespace MathSharp
             {
                 // Construct 2 separate vectors, each having the first element being the value
                 // and the rest being undefined
-                Vector4F upper = SingleConstants.Zero;
+                Vector128<float> upper = SingleConstants.Zero;
 
                 return Sse.LoadLow(upper, p);
             }
@@ -260,7 +260,7 @@ namespace MathSharp
         {
             if (Sse.IsSupported)
             {
-                Vector4F hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues._2_2_2_2);
+                Vector128<float> hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues._2_2_2_2);
 
                 Sse.StoreLow(destination, vector);
                 Sse.StoreScalar(&destination[3], hiBroadcast);
@@ -325,7 +325,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> ScalarToVector(Vector4F scalar)
+        public static Vector128<float> ScalarToVector(Vector128<float> scalar)
         {
             if (Avx2.IsSupported)
             {
@@ -343,7 +343,7 @@ namespace MathSharp
 
             return SoftwareFallback(scalar);
 
-            static Vector128<float> SoftwareFallback(Vector4F scalar)
+            static Vector128<float> SoftwareFallback(Vector128<float> scalar)
             {
                 return Vector128.Create(X(scalar));
             }

@@ -105,7 +105,7 @@ namespace MathSharp.Quaternion
         public static Vector128<float> Concatenate(Vector128<float> left, Vector128<float> right)
             => Multiply(right, left); // order reversed
         
-        public static Vector128<float> Multiply(in Vector128<float> right, in Vector128<float> left)
+        public static Vector128<float> Multiply(Vector128<float> right, Vector128<float> left)
         {
             var q2X = right;
             var q2Y = right;

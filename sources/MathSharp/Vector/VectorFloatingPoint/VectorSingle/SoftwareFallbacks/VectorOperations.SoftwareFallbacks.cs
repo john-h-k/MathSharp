@@ -6,8 +6,8 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4F = Vector128<float>;
-    using Vector4FParam1_3 = Vector128<float>;
+    
+    
 
     internal static partial class SoftwareFallbacks
     {
@@ -16,7 +16,7 @@ namespace MathSharp
         #region DotProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct2D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct2D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) * X(right) +
@@ -25,7 +25,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct3D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct3D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) * X(right)
@@ -35,7 +35,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct4D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct4D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) * X(right)
@@ -50,13 +50,13 @@ namespace MathSharp
         #region CrossProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct2D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CrossProduct2D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create((X(left) * Y(right) - Y(left) * X(right)));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct3D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CrossProduct3D_Software(Vector128<float> left, Vector128<float> right)
         {
             /* Cross product of A(x, y, z, _) and B(x, y, z, _) is
              *
@@ -72,7 +72,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct4D_Software(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
+        public static Vector128<float> CrossProduct4D_Software(Vector128<float> one, Vector128<float> two, Vector128<float> three)
         {
             var x1 = X(one);
             var x2 = X(two);

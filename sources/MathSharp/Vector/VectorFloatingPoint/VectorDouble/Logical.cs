@@ -7,13 +7,13 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
-    using Vector4DParam1_3 = Vector256<double>;
+    
+    
 
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Permute(Vector4DParam1_3 vector, byte control)
+        public static Vector256<double> Permute(Vector256<double> vector, byte control)
         {
             if (Avx.IsSupported)
             {
@@ -24,23 +24,23 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithX(Vector4DParam1_3 vector)
+        public static Vector256<double> PermuteWithX(Vector256<double> vector)
             => Permute(vector, ShuffleValues._0_0_0_0);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithY(Vector4DParam1_3 vector)
+        public static Vector256<double> PermuteWithY(Vector256<double> vector)
             => Permute(vector, ShuffleValues._1_1_1_1);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithZ(Vector4DParam1_3 vector)
+        public static Vector256<double> PermuteWithZ(Vector256<double> vector)
             => Permute(vector, ShuffleValues._2_2_2_2);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithW(Vector4DParam1_3 vector)
+        public static Vector256<double> PermuteWithW(Vector256<double> vector)
             => Permute(vector, ShuffleValues._3_3_3_3);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Shuffle(Vector4DParam1_3 left, Vector4DParam1_3 right, byte control)
+        public static Vector256<double> Shuffle(Vector256<double> left, Vector256<double> right, byte control)
         {
             if (Avx.IsSupported)
             {
@@ -51,7 +51,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static byte MoveMask(Vector4D vector)
+        public static byte MoveMask(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -60,7 +60,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static byte SoftwareFallback(Vector4D vector)
+            static byte SoftwareFallback(Vector256<double> vector)
             {
                 double s0 = X(vector);
                 double s1 = Y(vector);
