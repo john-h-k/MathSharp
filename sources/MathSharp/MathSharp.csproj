@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Vector\VectorFloatingPoint\VectorDouble\TrigAccuracy.txt" />
-    <Content Include="Vector\VectorFloatingPoint\VectorSingle\TrigAccuracy.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="obj\Debug\netcoreapp3.0\" />
   </ItemGroup>
 </Project>

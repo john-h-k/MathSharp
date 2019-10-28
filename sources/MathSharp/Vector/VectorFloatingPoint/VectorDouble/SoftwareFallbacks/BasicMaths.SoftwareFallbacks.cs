@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
-    using Vector4DParam1_3 = Vector256<double>;
-
     internal static unsafe partial class SoftwareFallbacks
     {
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Abs_Software(in Vector4DParam1_3 vector)
+        public static Vector256<double> Abs_Software(Vector256<double> vector)
         {
             return Vector256.Create(
                 Math.Abs(X(vector)),
@@ -25,7 +21,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D HorizontalAdd_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> HorizontalAdd_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
                 X(left) + Y(left),
@@ -36,7 +32,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Add_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Add_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
                 X(left) + X(right),
@@ -47,7 +43,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Add_Software(in Vector4DParam1_3 vector, double scalar)
+        public static Vector256<double> Add_Software(Vector256<double> vector, double scalar)
         {
             return Vector256.Create(
                 X(vector) + scalar,
@@ -58,7 +54,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Subtract_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Subtract_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
                 X(left) - X(right),
@@ -69,7 +65,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Subtract_Software(in Vector4DParam1_3 vector, double scalar)
+        public static Vector256<double> Subtract_Software(Vector256<double> vector, double scalar)
         {
             return Vector256.Create(
                 X(vector) - scalar,
@@ -80,7 +76,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Multiply_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Multiply_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
                 X(left) * X(right),
@@ -91,7 +87,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Multiply_Software(in Vector4DParam1_3 left, double scalar)
+        public static Vector256<double> Multiply_Software(Vector256<double> left, double scalar)
         {
             return Vector256.Create(
                 X(left) * scalar,
@@ -102,7 +98,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Divide_Software(in Vector4DParam1_3 dividend, in Vector4DParam1_3 divisor)
+        public static Vector256<double> Divide_Software(Vector256<double> dividend, Vector256<double> divisor)
         {
             return Vector256.Create(
                 X(dividend) / X(divisor),
@@ -113,7 +109,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Divide_Software(in Vector4DParam1_3 dividend, double scalarDivisor)
+        public static Vector256<double> Divide_Software(Vector256<double> dividend, double scalarDivisor)
         {
             return Vector256.Create(
                 X(dividend) / scalarDivisor,
@@ -124,7 +120,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Clamp_Software(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high)
+        public static Vector256<double> Clamp_Software(Vector256<double> vector, Vector256<double> low, Vector256<double> high)
         {
             return Vector256.Create(
                 Math.Clamp(X(vector), X(low), X(high)),
@@ -135,7 +131,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Sqrt_Software(in Vector4DParam1_3 vector)
+        public static Vector256<double> Sqrt_Software(Vector256<double> vector)
         {
             return Vector256.Create(
                 Math.Sqrt(X(vector)),
@@ -146,7 +142,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Max_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Max_Software(Vector256<double> left, Vector256<double> right)
         {
             double lX = X(left), rX = X(right);
             double lY = Y(left), rY = Y(right);
@@ -172,7 +168,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Min_Software(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Min_Software(Vector256<double> left, Vector256<double> right)
         {
             double lX = X(left), rX = X(right);
             double lY = Y(left), rY = Y(right);
@@ -194,39 +190,6 @@ namespace MathSharp
                 Math.Min(lY, rY),
                 Math.Min(lZ, rZ),
                 Math.Min(lW, rW)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4D Negate2D_Software(in Vector4DParam1_3 vector)
-        {
-            return Vector256.Create(
-                -X(vector),
-                -Y(vector),
-                +Z(vector),
-                +W(vector)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4D Negate3D_Software(in Vector4DParam1_3 vector)
-        {
-            return Vector256.Create(
-                -X(vector),
-                -Y(vector),
-                -Z(vector),
-                +W(vector)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector4D Negate4D_Software(in Vector4DParam1_3 vector)
-        {
-            return Vector256.Create(
-                -X(vector),
-                -Y(vector),
-                -Z(vector),
-                -W(vector)
             );
         }
 

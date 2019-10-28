@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4F = Vector128<float>;
-    using Vector4FParam1_3 = Vector128<float>;
-
     internal static partial class SoftwareFallbacks
     {
         private const MethodImplOptions MaxOpt =
@@ -17,7 +13,7 @@ namespace MathSharp
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> HorizontalAdd_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> HorizontalAdd_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) + Y(left),
@@ -28,18 +24,27 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Add_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Add_Software(Vector128<float> left, Vector128<float> right)
         {
-            return Vector128.Create(
-                X(left) + X(right),
-                Y(left) + Y(right),
-                Z(left) + Z(right),
-                W(left) + W(right)
-            );
+            //return Vector128.Create(
+            //    X(left) + X(right),
+            //    Y(left) + Y(right),
+            //    Z(left) + Z(right),
+            //    W(left) + W(right)
+            //);
+
+            Vector128<float> result = default;
+
+            for (var i = 0; i < Vector128<float>.Count; i++)
+            {
+                result = result.WithElement(i, left.GetElement(i) + right.GetElement(i));
+            }
+
+            return result;
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Subtract_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Subtract_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) - X(right),
@@ -50,7 +55,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Multiply_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Multiply_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) * X(right),
@@ -61,7 +66,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Divide_Software(Vector4FParam1_3 dividend, Vector4FParam1_3 divisor)
+        public static Vector128<float> Divide_Software(Vector128<float> dividend, Vector128<float> divisor)
         {
             return Vector128.Create(
                 X(dividend) / X(divisor),
@@ -72,7 +77,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Sqrt_Software(Vector4FParam1_3 vector)
+        public static Vector128<float> Sqrt_Software(Vector128<float> vector)
         {
             return Vector128.Create(
                 MathF.Sqrt(X(vector)),
@@ -83,7 +88,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Max_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Max_Software(Vector128<float> left, Vector128<float> right)
         {
             float lX = X(left), rX = X(right);
             float lY = Y(left), rY = Y(right);
@@ -109,7 +114,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Min_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Min_Software(Vector128<float> left, Vector128<float> right)
         {
             float lX = X(left), rX = X(right);
             float lY = Y(left), rY = Y(right);

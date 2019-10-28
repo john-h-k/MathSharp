@@ -1,11 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-using MathSharp.Attributes;
 using MathSharp.Utils;
-using Microsoft.VisualBasic.CompilerServices;
-using static MathSharp.SoftwareFallbacks;
-using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
@@ -88,37 +83,31 @@ namespace MathSharp
              * ---------------
              *
              * We use Shuffle(Vector FirstVec, Vector SecondVec, byte control)
-             * Shuffle takes a byte control which consists of 4 numbers (here part of the field). They work back to front like this
-             * _a_b_c_d
-             * d - the element from FirstVec, which should be in the first element of the returned vector
-             * c - the element from FirstVec, which should be in the second element of the returned vector
-             * b - the element from SecondVec, which should be in the third element of the returned vector
-             * a - the element from SecondVec, which should be in the fourth element of the returned vector
              *
              */
 
 
             // x1, y1, x2, y2
-            Vector128<float> xAndY1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues._0_1_0_1);
+            Vector128<float> xAndY1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues.XYXY);
 
             // z1, w1, z2, w2
-            Vector128<float> zAndW1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues._2_3_2_3);
+            Vector128<float> zAndW1 = Vector.Shuffle(matrix._v0, matrix._v1, ShuffleValues.ZWZW);
 
             // x3, y3, x4, y4
-            Vector128<float> xAndY2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues._0_1_0_1);
+            Vector128<float> xAndY2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues.XYXY);
 
             // z3, w3, z4, w4
-            Vector128<float> zAndW2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues._2_3_2_3);
+            Vector128<float> zAndW2 = Vector.Shuffle(matrix._v2, matrix._v3, ShuffleValues.ZWZW);
 
             return new MatrixSingle(
                 // x1, x2, x3, x4
-                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues._0_2_0_2),
+                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues.XZXZ),
                 // y1, y2, y3, y4
-                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues._1_3_1_3),
+                Vector.Shuffle(xAndY1, xAndY2, ShuffleValues.YWYW),
                 // z1, z2, z3, z4
-                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues._0_2_0_2),
+                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues.XZXZ),
                 // w1, w2, w3, w4
-                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues._1_3_1_3)
+                Vector.Shuffle(zAndW1, zAndW2, ShuffleValues.YWYW)
             );
         }
     }

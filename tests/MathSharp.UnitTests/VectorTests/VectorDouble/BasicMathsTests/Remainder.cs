@@ -1,6 +1,5 @@
 ﻿using OpenTK;
 using System.Collections.Generic;
-using System.Runtime.Intrinsics.X86;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorTests.VectorDouble.BasicMathsTests

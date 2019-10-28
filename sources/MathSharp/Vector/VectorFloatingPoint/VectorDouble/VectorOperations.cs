@@ -1,17 +1,15 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using MathSharp.Attributes;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
+    
     using Vector2D = Vector128<double>;
-    using Vector4DParam1_3 = Vector256<double>;
+    
 
     public static partial class Vector
     {
@@ -38,15 +36,15 @@ namespace MathSharp
         #region Normalize
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Normalize2D(in Vector4DParam1_3 vector)
+        public static Vector256<double> Normalize2D(Vector256<double> vector)
             => Divide(vector, Length2D(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Normalize3D(in Vector4DParam1_3 vector)
+        public static Vector256<double> Normalize3D(Vector256<double> vector)
             => Divide(vector, Length3D(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Normalize4D(in Vector4DParam1_3 vector)
+        public static Vector256<double> Normalize4D(Vector256<double> vector)
             => Divide(vector, Length4D(vector));
 
         #endregion
@@ -54,15 +52,15 @@ namespace MathSharp
         #region Length
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Length2D(in Vector4DParam1_3 vector)
+        public static Vector256<double> Length2D(Vector256<double> vector)
             => Sqrt(DotProduct2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Length3D(in Vector4DParam1_3 vector)
+        public static Vector256<double> Length3D(Vector256<double> vector)
             => Sqrt(DotProduct3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Length4D(in Vector4DParam1_3 vector)
+        public static Vector256<double> Length4D(Vector256<double> vector)
             => Sqrt(DotProduct4D(vector, vector));
 
         #endregion
@@ -70,15 +68,15 @@ namespace MathSharp
         #region LengthSquared
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D LengthSquared2D(in Vector4DParam1_3 vector)
+        public static Vector256<double> LengthSquared2D(Vector256<double> vector)
             => DotProduct2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D LengthSquared3D(in Vector4DParam1_3 vector)
+        public static Vector256<double> LengthSquared3D(Vector256<double> vector)
             => DotProduct3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D LengthSquared4D(in Vector4DParam1_3 vector)
+        public static Vector256<double> LengthSquared4D(Vector256<double> vector)
             => DotProduct4D(vector, vector);
 
         #endregion
@@ -87,7 +85,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D DotProduct2D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> DotProduct2D(Vector256<double> left, Vector256<double> right)
         {
             // SSE4.1 has a native dot product instruction, dppd
             if (Sse41.IsSupported)
@@ -106,8 +104,11 @@ namespace MathSharp
             else if (Sse2.IsSupported)
             {
                 Vector2D tmp = Sse2.Multiply(left.GetLower(), right.GetLower());
-                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues._1_0_1_0);
-                return Helpers.DuplicateToVector256(Sse2.Add(tmp, shuf));
+                Vector2D shuf = Sse2.Shuffle(tmp, tmp, ShuffleValues.YXYX);
+
+                var dot = Sse2.Add(tmp, shuf);
+
+                return dot.ToVector256Unsafe().WithUpper(dot);
             }
 
             return DotProduct2D_Software(left, right);
@@ -115,15 +116,15 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D DotProduct3D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> DotProduct3D(Vector256<double> left, Vector256<double> right)
         {
             // We can use AVX to vectorize the multiplication
             if (Avx.IsSupported)
             {
-                Vector4D mul = Avx.Multiply(left, right);
+                Vector256<double> mul = Avx.Multiply(left, right);
 
                 // Set W to zero
-                Vector4D result = Avx.And(mul, DoubleConstants.MaskW);
+                Vector256<double> result = Avx.And(mul, DoubleConstants.MaskW);
 
                 // We now have (X, Y, Z, 0) correctly, and want to add them together and fill with that result
                 result = Avx.HorizontalAdd(result, result);
@@ -140,7 +141,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D DotProduct4D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> DotProduct4D(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -165,7 +166,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D CrossProduct2D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CrossProduct2D(Vector256<double> left, Vector256<double> right)
         {
             /* Cross product of A(x, y, _, _) and B(x, y, _, _) is
              * 'E = (Ax * By) - (Ay * Bx)'
@@ -175,20 +176,20 @@ namespace MathSharp
             if (Avx.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                Vector4D permute = Avx.Shuffle(right, right, ShuffleValues._1_0_1_0);
+                Vector256<double> permute = Avx.Shuffle(right, right, ShuffleValues.YXYX);
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Avx.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector4D temp = Avx.Shuffle(permute, permute, ShuffleValues._1_0_0_0);
+                Vector256<double> temp = Avx.Shuffle(permute, permute, ShuffleValues.YXXX);
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Avx.Subtract(permute, temp);
 
                 // Fill the vector with it (like DotProduct)
-                return Avx.Shuffle(permute, permute, ShuffleValues._0_0_0_0);
+                return Avx.Shuffle(permute, permute, ShuffleValues.XXXX);
             }
 
             return CrossProduct2D_Software(left, right);
@@ -196,7 +197,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D CrossProduct3D(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CrossProduct3D(Vector256<double> left, Vector256<double> right)
         {
             if (Avx2.IsSupported)
             {
@@ -227,22 +228,21 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                Vector4D leftHandSide1 = Avx2.Permute4x64(left, ShuffleValues._1_2_0_3);
-                Vector4D rightHandSide1 = Avx2.Permute4x64(right, ShuffleValues._2_0_1_3);
-
+                Vector256<double> leftHandSide1 = Avx2.Permute4x64(left, ShuffleValues.YZXW);
+                Vector256<double> rightHandSide1 = Avx2.Permute4x64(right, ShuffleValues.ZXYW);
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
                  * rhs2 goes from x, y, z, _ to y, z, x, _
                  */
 
-                Vector4D leftHandSide2 = Avx2.Permute4x64(left, ShuffleValues._2_0_1_3);
-                Vector4D rightHandSide2 = Avx2.Permute4x64(right, ShuffleValues._1_2_0_3);
+                Vector256<double> leftHandSide2 = Avx2.Permute4x64(left, ShuffleValues.ZXYW);
+                Vector256<double> rightHandSide2 = Avx2.Permute4x64(right, ShuffleValues.YZXW);
 
-                Vector4D mul1 = Avx.Multiply(leftHandSide1, rightHandSide1);
+                Vector256<double> mul1 = Avx.Multiply(leftHandSide1, rightHandSide1);
 
-                Vector4D mul2 = Avx.Multiply(leftHandSide2, rightHandSide2);
+                Vector256<double> mul2 = Avx.Multiply(leftHandSide2, rightHandSide2);
 
-                Vector4D resultNonMaskedW = Avx.Subtract(mul1, mul2);
+                Vector256<double> resultNonMaskedW = Avx.Subtract(mul1, mul2);
 
                 return Avx.And(resultNonMaskedW, DoubleConstants.MaskW);
 
@@ -254,11 +254,11 @@ namespace MathSharp
 
         // TODO 
         [MethodImpl(MaxOpt)]
-        public static Vector4D CrossProduct4D(in Vector4DParam1_3 one, in Vector4DParam1_3 two, in Vector4DParam1_3 three)
+        public static Vector256<double> CrossProduct4D(Vector256<double> one, Vector256<double> two, Vector256<double> three)
         {
             // hardware
 
-            return CrossProduct4D_Software(one, two, three);
+            return SoftwareFallbacks.CrossProduct4D_Software(one, two, three);
         }
 
         #endregion
@@ -266,18 +266,18 @@ namespace MathSharp
         #region Distance
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Distance2D(in Vector256<double> left, in Vector256<double> right)
+        public static Vector256<double> Distance2D(Vector256<double> left, Vector256<double> right)
             => Length2D(Subtract(left, right));
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Distance3D(in Vector256<double> left, in Vector256<double> right)
+        public static Vector256<double> Distance3D(Vector256<double> left, Vector256<double> right)
             => Length3D(Subtract(left, right));
 
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Distance4D(in Vector256<double> left, in Vector256<double> right)
+        public static Vector256<double> Distance4D(Vector256<double> left, Vector256<double> right)
             => Length4D(Subtract(left, right));
 
         #endregion
@@ -285,17 +285,17 @@ namespace MathSharp
         #region DistanceSquared
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> DistanceSquared2D(in Vector256<double> left, in Vector256<double> right)
+        public static Vector256<double> DistanceSquared2D(Vector256<double> left, Vector256<double> right)
             => LengthSquared2D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> DistanceSquared3D(in Vector256<double> left, in Vector256<double> right)
+        public static Vector256<double> DistanceSquared3D(Vector256<double> left, Vector256<double> right)
             => LengthSquared3D(Subtract(left, right));
 
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> DistanceSquared4D(in Vector256<double> left, in Vector256<double> right)
+        public static Vector256<double> DistanceSquared4D(Vector256<double> left, Vector256<double> right)
             => LengthSquared4D(Subtract(left, right));
 
         #endregion
@@ -303,7 +303,7 @@ namespace MathSharp
         #region Lerp
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Lerp(in Vector256<double> from, in Vector256<double> to, double weight)
+        public static Vector256<double> Lerp(Vector256<double> from, Vector256<double> to, double weight)
         {
             Debug.Assert(weight <= 1 && weight >= 0);
 
@@ -318,7 +318,7 @@ namespace MathSharp
 
         #region Reflect
 
-        public static Vector256<double> Reflect2D(in Vector256<double> incident, in Vector256<double> normal)
+        public static Vector256<double> Reflect2D(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector256<double> tmp = DotProduct2D(incident, normal);
@@ -327,7 +327,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        public static Vector256<double> Reflect3D(in Vector256<double> incident, in Vector256<double> normal)
+        public static Vector256<double> Reflect3D(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector256<double> tmp = DotProduct3D(incident, normal);
@@ -336,7 +336,7 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
-        public static Vector256<double> Reflect4D(in Vector256<double> incident, in Vector256<double> normal)
+        public static Vector256<double> Reflect4D(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
             Vector256<double> tmp = DotProduct4D(incident, normal);

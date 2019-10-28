@@ -28,7 +28,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.ComparisonTests
         {
             Vector256<long> result = Vector.CompareNotEqual(left, right).AsInt64();
 
-            Assert.True((bool) AreAllNotEqual(expected, result));
+            Assert.True(AreAllNotEqual(expected, result));
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿ using System;
 using System.Runtime.Intrinsics;
 using BenchmarkDotNet.Attributes;
-using OpenTK;
 
-namespace MathSharp.Interactive.Benchmarks.Vector.Single
+ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     using Vector = MathSharp.Vector;
+    using Vector3 = OpenTK.Vector3;
+
     public class CameraClassBenchmark
     {
         private float _pitch;

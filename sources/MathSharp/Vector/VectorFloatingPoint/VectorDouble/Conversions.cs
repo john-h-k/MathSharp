@@ -6,7 +6,7 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
+    
     using Vector2D = Vector128<double>;
 
     public static unsafe partial class Vector
@@ -170,7 +170,7 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-               var hiBroadcast = Sse2.Shuffle(vector.GetLower(), vector.GetLower(), ShuffleValues._2_2_2_2);
+               var hiBroadcast = Sse2.Shuffle(vector.GetLower(), vector.GetLower(), ShuffleValues.ZZZZ);
 
                 Sse2.Store(destination, vector.GetLower());
                 Sse2.StoreScalar(&destination[3], hiBroadcast);
@@ -230,7 +230,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> ScalarToVector(Vector4D scalar)
+        public static Vector256<double> ScalarToVector(Vector256<double> scalar)
         {
             if (Avx2.IsSupported)
             {
@@ -244,7 +244,7 @@ namespace MathSharp
 
             return SoftwareFallback(scalar);
 
-            static Vector256<double> SoftwareFallback(Vector4D scalar)
+            static Vector256<double> SoftwareFallback(Vector256<double> scalar)
             {
                 return Vector256.Create(X(scalar));
             }

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using MathSharp.Attributes;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
-using static MathSharp.Vector.SingleConstants;
-using static MathSharp.Vector.DoubleConstants;
 
 namespace MathSharp
 {
-    using Vector4F = Vector128<float>;
-    using Vector4FParam1_3 = Vector128<float>;
+    
+    
 
     public static partial class Vector
     {
@@ -26,15 +22,15 @@ namespace MathSharp
         // vector * ReciprocalSqrt(Length(vector))
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Normalize2D(Vector4FParam1_3 vector)
+        public static Vector128<float> Normalize2D(Vector128<float> vector)
             => Divide(vector, Length2D(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Normalize3D(Vector4FParam1_3 vector)
+        public static Vector128<float> Normalize3D(Vector128<float> vector)
             => Divide(vector, Length3D(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Normalize4D(Vector4FParam1_3 vector)
+        public static Vector128<float> Normalize4D(Vector128<float> vector)
             => Divide(vector, Length4D(vector));
 
         #endregion
@@ -42,15 +38,15 @@ namespace MathSharp
         #region NormalizeApprox
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> NormalizeApprox2D(Vector4FParam1_3 vector)
+        public static Vector128<float> NormalizeApprox2D(Vector128<float> vector)
             => Multiply(vector, ReciprocalSqrtApprox(LengthSquared2D(vector)));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> NormalizeApprox3D(Vector4FParam1_3 vector)
+        public static Vector128<float> NormalizeApprox3D(Vector128<float> vector)
             => Multiply(vector, ReciprocalSqrtApprox(LengthSquared3D(vector)));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> NormalizeApprox4D(Vector4FParam1_3 vector)
+        public static Vector128<float> NormalizeApprox4D(Vector128<float> vector)
             => Multiply(vector, ReciprocalSqrtApprox(LengthSquared4D(vector)));
 
         #endregion
@@ -58,15 +54,15 @@ namespace MathSharp
         #region Length
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Length2D(Vector4FParam1_3 vector)
+        public static Vector128<float> Length2D(Vector128<float> vector)
             => Sqrt(DotProduct2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Length3D(Vector4FParam1_3 vector)
+        public static Vector128<float> Length3D(Vector128<float> vector)
             => Sqrt(DotProduct3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Length4D(Vector4FParam1_3 vector)
+        public static Vector128<float> Length4D(Vector128<float> vector)
             => Sqrt(DotProduct4D(vector, vector));
 
         #endregion
@@ -74,15 +70,15 @@ namespace MathSharp
         #region LengthSquared
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> LengthSquared2D(Vector4FParam1_3 vector)
+        public static Vector128<float> LengthSquared2D(Vector128<float> vector)
             => DotProduct2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> LengthSquared3D(Vector4FParam1_3 vector)
+        public static Vector128<float> LengthSquared3D(Vector128<float> vector)
             => DotProduct3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> LengthSquared4D(Vector4FParam1_3 vector)
+        public static Vector128<float> LengthSquared4D(Vector128<float> vector)
             => DotProduct4D(vector, vector);
 
         #endregion
@@ -91,7 +87,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct2D(Vector128<float> left, Vector128<float> right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -105,10 +101,10 @@ namespace MathSharp
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector128<float> mul = Sse.Multiply(left, right);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, SingleConstants.MaskW);
+                Vector128<float> result = Sse.And(mul, SingleConstants.MaskW);
 
                 // Add X and Y horizontally, leaving the vector as (X+Y, Z+0, X+Y. Z+0)
                 result = Sse3.HorizontalAdd(result, result);
@@ -118,13 +114,13 @@ namespace MathSharp
             }
             else if (Sse.IsSupported)
             {
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector128<float> mul = Sse.Multiply(left, right);
 
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
+                Vector128<float> temp = Sse.Shuffle(mul, mul, ShuffleValues.YYYY);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
+                mul = Sse.Shuffle(mul, mul, ShuffleValues.XXXX);
 
                 return mul;
             }
@@ -134,7 +130,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct3D(Vector128<float> left, Vector128<float> right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -148,10 +144,10 @@ namespace MathSharp
             // on SSE3 vs SSE1
             else if (Sse3.IsSupported)
             {
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector128<float> mul = Sse.Multiply(left, right);
 
                 // Set W to zero
-                Vector4F result = Sse.And(mul, SingleConstants.MaskW);
+                Vector128<float> result = Sse.And(mul, SingleConstants.MaskW);
 
                 // Doubly horizontally adding fills the final vector with the sum
                 result = Sse3.HorizontalAdd(result, result);
@@ -160,18 +156,18 @@ namespace MathSharp
             else if (Sse.IsSupported)
             {
                 // Multiply to get the needed values
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector128<float> mul = Sse.Multiply(left, right);
 
                 // Shuffle around the values and AddScalar them
-                Vector4F temp = Sse.Shuffle(mul, mul, ShuffleValues._1_2_1_2);
+                Vector128<float> temp = Sse.Shuffle(mul, mul, ShuffleValues.YZYZ);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
+                temp = Sse.Shuffle(temp, temp, ShuffleValues.YYYY);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
+                return Sse.Shuffle(mul, mul, ShuffleValues.XXXX);
             }
 
             return DotProduct3D_Software(left, right);
@@ -179,7 +175,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct4D(Vector128<float> left, Vector128<float> right)
         {
             if (Sse41.IsSupported)
             {
@@ -190,7 +186,7 @@ namespace MathSharp
             else if (Sse3.IsSupported)
             {
                 // Multiply the two vectors to get all the needed elements
-                Vector4F mul = Sse.Multiply(left, right);
+                Vector128<float> mul = Sse.Multiply(left, right);
 
                 // Double horizontal add is the same as broadcasting the sum of all 4
                 mul = Sse3.HorizontalAdd(mul, mul);
@@ -198,16 +194,16 @@ namespace MathSharp
             }
             else if (Sse.IsSupported)
             {
-                Vector4F copy = right;
+                Vector128<float> copy = right;
                 // Multiply the two vectors to get all the needed elements
-                Vector4F mul = Sse.Multiply(left, copy);
+                Vector128<float> mul = Sse.Multiply(left, copy);
                 
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._0_0_0_1);
+                copy = Sse.Shuffle(copy, mul, ShuffleValues.XXXY);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_0_3_0);
+                mul = Sse.Shuffle(mul, copy, ShuffleValues.XXWX);
                 mul = Sse.Add(mul, copy);
 
-                return Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
+                return Sse.Shuffle(mul, mul, ShuffleValues.ZZZZ);
             }
 
             return DotProduct4D_Software(left, right);
@@ -219,7 +215,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CrossProduct2D(Vector128<float> left, Vector128<float> right)
         {
             /* Cross product of A(x, y, _, _) and B(x, y, _, _) is
              * 'E = (Ax * By) - (Ay * Bx)'
@@ -229,20 +225,20 @@ namespace MathSharp
             if (Sse.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                Vector4F permute = Sse.Shuffle(right, right, ShuffleValues._1_0_1_0);
+                Vector128<float> permute = Sse.Shuffle(right, right, ShuffleValues.YXYX);
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Sse.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector4F temp = Sse.Shuffle(permute, permute, ShuffleValues._1_0_0_0);
+                Vector128<float> temp = Sse.Shuffle(permute, permute, ShuffleValues.YXXX);
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Sse.Subtract(permute, temp);
 
                 // Fill the vector with it (like DotProduct)
-                return Sse.Shuffle(permute, permute, ShuffleValues._0_0_0_0);
+                return Sse.Shuffle(permute, permute, ShuffleValues.XXXX);
             }
 
             return CrossProduct2D_Software(left, right);
@@ -250,7 +246,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CrossProduct3D(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
             {
@@ -274,8 +270,8 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                Vector4F leftHandSide1 = Sse.Shuffle(left, left, ShuffleValues._1_2_0_3);
-                Vector4F rightHandSide1 = Sse.Shuffle(right, right, ShuffleValues._2_0_1_3);
+                Vector128<float> leftHandSide1 = Sse.Shuffle(left, left, ShuffleValues.YZXW);
+                Vector128<float> rightHandSide1 = Sse.Shuffle(right, right, ShuffleValues.ZXYW);
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
@@ -283,14 +279,14 @@ namespace MathSharp
                  */
 
 
-                Vector4F leftHandSide2 = Sse.Shuffle(left, left, ShuffleValues._2_0_1_3);
-                Vector4F rightHandSide2 = Sse.Shuffle(right, right, ShuffleValues._1_2_0_3);
+                Vector128<float> leftHandSide2 = Sse.Shuffle(left, left, ShuffleValues.ZXYW);
+                Vector128<float> rightHandSide2 = Sse.Shuffle(right, right, ShuffleValues.YZXW);
 
-                Vector4F mul1 = Sse.Multiply(leftHandSide1, rightHandSide1);
+                Vector128<float> mul1 = Sse.Multiply(leftHandSide1, rightHandSide1);
 
-                Vector4F mul2 = Sse.Multiply(leftHandSide2, rightHandSide2);
+                Vector128<float> mul2 = Sse.Multiply(leftHandSide2, rightHandSide2);
 
-                Vector4F resultNonMaskedW = Sse.Subtract(mul1, mul2);
+                Vector128<float> resultNonMaskedW = Sse.Subtract(mul1, mul2);
 
                 return Sse.And(resultNonMaskedW, SingleConstants.MaskW);
 
@@ -302,30 +298,83 @@ namespace MathSharp
 
         // TODO 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct4D(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
+        public static Vector128<float> CrossProduct4D(Vector128<float> one, Vector128<float> two, Vector128<float> three)
         {
-            // hardware
+            if (Sse.IsSupported)
+            {
+                //float xTmp1 = z2 * w3 - w2 * z3;
+                //float yTmp1 = w2 * z3 - z2 * w3;
+                //float zTmp1 = y2 * w3 - w2 * y3;
+                //float wTmp1 = z2 * y3 - y2 * z3;
+
+                var shuf1 = Shuffle(two, ShuffleValues.ZWYZ);
+                var shuf2 = Shuffle(three, ShuffleValues.WZWY);
+                var shuf3 = Shuffle(two, ShuffleValues.WZWY);
+                var shuf4 = Shuffle(three, ShuffleValues.ZWYZ);
+
+                var tmp1 = Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4));
+
+                //float xTmp2 = y1 - (y2 * w3 - w2 * y3);
+                //float yTmp2 = x1 - (w2 * x3 - x2 * w3);
+                //float zTmp2 = x1 - (x2 * w3 - w2 * x3);
+                //float wTmp2 = x1 - (z2 * x3 - x2 * z3);
+
+                var shuf0 = Shuffle(one, ShuffleValues.YXXX);
+                shuf1 = Shuffle(two, ShuffleValues.YWXZ);
+                shuf2 = Shuffle(three, ShuffleValues.WXWX);
+                shuf3 = Shuffle(two, ShuffleValues.WXWX);
+                shuf4 = Shuffle(three, ShuffleValues.YWXZ);
+
+                var tmp2 = Subtract(shuf0, Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4)));
+
+                //float xTmp3 = z1 + (y2 * z3 - z2 * y3);
+                //float yTmp3 = z1 + (z2 * x3 - x2 * z3);
+                //float zTmp3 = y1 + (x2 * y3 - y2 * x3);
+                //float wTmp3 = y1 + (y2 * x3 - x2 * y3);
+
+                shuf0 = Shuffle(one, ShuffleValues.ZZYY);
+                shuf1 = Shuffle(two, ShuffleValues.YZXY);
+                shuf2 = Shuffle(three, ShuffleValues.ZXYX);
+                shuf3 = Shuffle(two, ShuffleValues.ZXYX);
+                shuf4 = Shuffle(three, ShuffleValues.YZXY);
+
+                var tmp3 = Add(shuf0, Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4)));
+
+                //float x = xTmp1 * xTmp2 * xTmp3 * w1;
+                //float y = yTmp1 * yTmp2 * yTmp3 * w1;
+                //float z = zTmp1 * zTmp2 * zTmp3 * w1;
+                //float w = wTmp1 * wTmp2 * wTmp3 * z1;
+
+                var result = Multiply(tmp1, tmp2);
+                result = Multiply(result, tmp3);
+
+                return Multiply(result, Shuffle(one, ShuffleValues.WWWZ));
+            }
 
             return CrossProduct4D_Software(one, two, three);
         }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> CrossProduct4D_Software(Vector128<float> one, Vector128<float> two, Vector128<float> three) 
+            => SoftwareFallbacks.CrossProduct4D_Software(one, two, three);
 
         #endregion
 
         #region Distance
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Distance2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Distance2D(Vector128<float> left, Vector128<float> right)
             => Length2D(Subtract(left, right));
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Distance3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Distance3D(Vector128<float> left, Vector128<float> right)
             => Length3D(Subtract(left, right));
 
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Distance4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Distance4D(Vector128<float> left, Vector128<float> right)
             => Length4D(Subtract(left, right));
 
         #endregion
@@ -333,15 +382,15 @@ namespace MathSharp
         #region DistanceSquared
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DistanceSquared2D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DistanceSquared2D(Vector128<float> left, Vector128<float> right)
             => LengthSquared2D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DistanceSquared3D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DistanceSquared3D(Vector128<float> left, Vector128<float> right)
             => LengthSquared3D(Subtract(left, right));
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DistanceSquared4D(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DistanceSquared4D(Vector128<float> left, Vector128<float> right)
             => LengthSquared4D(Subtract(left, right));
 
         #endregion
@@ -349,26 +398,26 @@ namespace MathSharp
         #region Lerp
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Lerp(Vector4FParam1_3 from, Vector4FParam1_3 to, Vector4FParam1_3 weight)
+        public static Vector128<float> Lerp(Vector128<float> from, Vector128<float> to, Vector128<float> weight)
         {
             Debug.Assert(CompareLessThanOrEqual(weight, Vector128.Create(1f)).AllTrue() 
-                                  && CompareGreaterThanOrEqual(weight, Vector4F.Zero).AllTrue());
+                                  && CompareGreaterThanOrEqual(weight, Vector128<float>.Zero).AllTrue());
 
             // Lerp (Linear interpolate) interpolates between two values (here, vectors)
             // The general formula for it is 'from + (to - from) * weight'
-            Vector4F offset = Subtract(to, from);
+            Vector128<float> offset = Subtract(to, from);
             offset = Multiply(offset, weight);
             return Add(from, offset);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Lerp(Vector4FParam1_3 from, Vector4FParam1_3 to, float weight)
+        public static Vector128<float> Lerp(Vector128<float> from, Vector128<float> to, float weight)
         {
             Debug.Assert(weight <= 1 && weight >= 0);
 
             // Lerp (Linear interpolate) interpolates between two values (here, vectors)
             // The general formula for it is 'from + (to - from) * weight'
-            Vector4F offset = Subtract(to, from);
+            Vector128<float> offset = Subtract(to, from);
             offset = Multiply(offset, Vector128.Create(weight));
             return Add(from, offset);
         }
@@ -377,28 +426,28 @@ namespace MathSharp
 
         #region Reflect
 
-        public static Vector128<float> Reflect2D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        public static Vector128<float> Reflect2D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector4F tmp = DotProduct2D(incident, normal);
+            Vector128<float> tmp = DotProduct2D(incident, normal);
             tmp = Add(tmp, tmp);
             tmp = Multiply(tmp, normal);
             return Subtract(incident, tmp);
         }
 
-        public static Vector128<float> Reflect3D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        public static Vector128<float> Reflect3D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector4F tmp = DotProduct3D(incident, normal);
+            Vector128<float> tmp = DotProduct3D(incident, normal);
             tmp = Add(tmp, tmp);
             tmp = Multiply(tmp, normal);
             return Subtract(incident, tmp);
         }
 
-        public static Vector128<float> Reflect4D(Vector4FParam1_3 incident, Vector4FParam1_3 normal)
+        public static Vector128<float> Reflect4D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector4F tmp = DotProduct4D(incident, normal);
+            Vector128<float> tmp = DotProduct4D(incident, normal);
             tmp = Add(tmp, tmp);
             tmp = Multiply(tmp, normal);
             return Subtract(incident, tmp);

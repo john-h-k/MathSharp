@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Constants;
@@ -95,6 +94,90 @@ namespace MathSharp
             public static readonly Vector128<float> PiDiv2 = Vector128.Create(ScalarSingleConstants.PiDiv2);
             public static readonly Vector128<float> PiDiv4 = Vector128.Create(ScalarSingleConstants.PiDiv4);
             public static readonly Vector128<float> ThreePiDiv4 = Vector128.Create(ScalarSingleConstants.ThreePiDiv4);
+        }
+
+        public static class SingleConstants256
+        {
+            public static Vector256<float> Zero
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector256<float>.Zero;
+            }
+
+            public static Vector256<float> NegativeZero
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Negate(Zero);
+            }
+
+            public static Vector256<float> One
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector256.Create(1f);
+            }
+
+            public static Vector256<float> NegativeOne
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector256.Create(-1f);
+            }
+
+            public static Vector256<float> Epsilon
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => Vector256.Create(float.Epsilon);
+            }
+
+            // Uses the 'ones idiom', which is where
+            // cmpeq xmmN, xmmN
+            // is used, and the result is guaranteed to be all ones
+            // it has no dependencies and is useful
+            // For anyone looking at codegen, it is actually
+            // [v]cmpps xmm0, xmm0, xmm0, 0x0
+            // which is functionally identical
+            public static Vector256<float> AllBitsSet
+            {
+                [MethodImpl(MaxOpt)]
+                get
+                {
+                    if (Sse.IsSupported)
+                    {
+                        Vector256<float> v = Zero;
+                        return CompareEqual(v, v);
+                    }
+
+                    return Vector256.Create(-1).AsSingle();
+                }
+            }
+
+            public static readonly Vector256<float> MaskSign = Vector256.Create(int.MaxValue).AsSingle();
+            public static readonly Vector256<float> MaskNotSign = Vector256.Create(~int.MaxValue).AsSingle();
+
+            // ReSharper disable InconsistentNaming
+            public static readonly Vector256<float> MaskNotSignXZ = Vector256.Create(~int.MaxValue, 0, ~int.MaxValue, 0).AsSingle();
+            public static readonly Vector256<float> MaskNotSignYW = Vector256.Create(0, ~int.MaxValue, 0, ~int.MaxValue).AsSingle();
+
+            public static readonly Vector256<float> MaskX = Vector256.Create(+0, -1, -1, -1, -1, -1, -1, -1).AsSingle();
+            public static readonly Vector256<float> MaskY = Vector256.Create(-1, +0, -1, -1, -1, -1, -1, -1).AsSingle();
+            public static readonly Vector256<float> MaskZ = Vector256.Create(-1, -1, +0, -1, -1, -1, -1, -1).AsSingle();
+            public static readonly Vector256<float> MaskW = Vector256.Create(-1, -1, -1, +0, -1, -1, -1, -1).AsSingle();
+
+            public static readonly Vector256<float> MaskXY = Vector256.Create(+0, +0, -1, -1, -1, -1, -1, -1).AsSingle();
+            public static readonly Vector256<float> MaskZW = Vector256.Create(-1, -1, +0, +0, -1, -1, -1, -1).AsSingle();
+
+            public static readonly Vector256<float> MaskXYZ = Vector256.Create(+0, +0, +0, -1, -1, -1, -1, -1).AsSingle();
+            public static readonly Vector256<float> MaskYZW = Vector256.Create(-1, +0, +0, +0, -1, -1, -1, -1).AsSingle();
+
+            public static readonly Vector256<float> MaskXYZW = Vector256.Create(0).AsSingle();
+            // ReSharper restore InconsistentNaming
+
+            public static readonly Vector256<float> OneDivPi = Vector256.Create(ScalarSingleConstants.OneDivPi);
+            public static readonly Vector256<float> OneDiv2Pi = Vector256.Create(ScalarSingleConstants.OneDiv2Pi);
+            public static readonly Vector256<float> Pi2 = Vector256.Create(ScalarSingleConstants.Pi2);
+            public static readonly Vector256<float> Pi = Vector256.Create(ScalarSingleConstants.Pi);
+            public static readonly Vector256<float> PiDiv2 = Vector256.Create(ScalarSingleConstants.PiDiv2);
+            public static readonly Vector256<float> PiDiv4 = Vector256.Create(ScalarSingleConstants.PiDiv4);
+            public static readonly Vector256<float> ThreePiDiv4 = Vector256.Create(ScalarSingleConstants.ThreePiDiv4);
         }
 
         public static class DoubleConstants

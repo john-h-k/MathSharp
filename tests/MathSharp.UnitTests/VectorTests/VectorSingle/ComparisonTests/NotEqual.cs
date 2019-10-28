@@ -5,7 +5,7 @@ using static MathSharp.UnitTests.TestHelpers;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.ComparisonTests
 {
-    public class Inequality
+    public class NotEqual
     {
         public static IEnumerable<object[]> Data =>
             new[]

@@ -1,26 +1,16 @@
 using System;
 using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-using BenchmarkDotNet.Running;
-using MathSharp.Interactive.Benchmarks.MatrixTests.Single;
-using MathSharp.Interactive.Benchmarks.Vector.Single;
-using MathSharp.Utils;
-using static MathSharp.Vector;
-
-using static MathSharp.Interactive.TrigTest;
+using MathSharp.StorageTypes;
 
 namespace MathSharp.Interactive
 {
     internal class Program
     {
-        private static void Main()
+        public static void Main()
         {
+            Console.WriteLine(Vector.ToString(Vector128.Create(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16), elemCount: 15));
         }
 
-        public static Vector128<float> Foo()
-        {
-            var v = default(Vector128<float>);
-            return Multiply(v, v);
-        }
+        public static bool Equal(Vector2F left, Vector2F right) => left.Equals(right);
     }
 }
