@@ -11,7 +11,7 @@
 //        {
 //            var vector = new Vector4d(1, 2, 3, 4);
 
-//            Vector256<double> loaded = vector.Load();
+//            Vector256<double> loaded = vector.ToVector128();
 //            Assert.True(MathSharp.UnitTests.TestHelpers.AreEqual(vector, loaded));
 //        }
 
@@ -20,7 +20,7 @@
 //        {
 //            var vector = new Vector3d(1, 2, 3);
 
-//            Vector256<double> loaded = vector.Load();
+//            Vector256<double> loaded = vector.ToVector128();
 //            Assert.True(MathSharp.UnitTests.TestHelpers.AreEqual(vector, loaded));
 //        }
 
@@ -30,7 +30,7 @@
 //            var vector = new Vector3d(1, 2, 3);
 //            var scalar = 4324d;
 
-//            Vector256<double> loaded = vector.Load(scalar);
+//            Vector256<double> loaded = vector.ToVector128(scalar);
 //            Assert.True(MathSharp.UnitTests.TestHelpers.AreEqual(new Vector4d(vector, scalar), loaded));
 //        }
 
@@ -39,7 +39,7 @@
 //        {
 //            var vector = new Vector2d(1, 2);
 
-//            Vector256<double> loaded = vector.Load();
+//            Vector256<double> loaded = vector.ToVector128();
 //            Assert.True(MathSharp.UnitTests.TestHelpers.AreEqual(vector, loaded));
 //        }
 
