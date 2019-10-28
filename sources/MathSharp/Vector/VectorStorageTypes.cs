@@ -1,10 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace MathSharp.StorageTypes
 {
-    public readonly struct Vector2F
+    public readonly struct Vector2F : IEquatable<Vector2F>, IEquatable<Vector2FAligned>
     {
         public readonly float X, Y;
 
@@ -19,6 +21,51 @@ namespace MathSharp.StorageTypes
             X = x;
             Y = y;
         }
+
+        public override bool Equals(object? obj)
+            => obj is Vector2F other && Equals(other);
+
+        public override int GetHashCode() => (X.GetHashCode() * 397) ^ Y.GetHashCode();
+
+        public override string ToString()
+        {
+            return Vector.ToString(this.Load(), elemCount: 2);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe bool Equals(Vector2F other)
+        {
+            if (Sse2.IsSupported)
+            {
+                var ld = this.Load();
+                var rd = other.Load();
+
+                // If they are FP equal (handles +0.0 == -0.0) or bitwise equal (handles NaN == NaN), the elements are equal
+                var cmp = Vector.CompareEqual(ld, rd);
+                var nan = Vector.CompareEqualBitwise32(ld, rd).AsSingle();
+
+                return Vector.Or(cmp, nan).AllTrue(Vector.CompareMask.XY);
+            }
+
+            if (Sse2.IsSupported)
+            {
+                fixed (float* pThis = &X)
+                {
+                    var ld = Sse2.LoadScalarVector128((double*)pThis).AsSingle();
+                    var rd = Sse2.LoadScalarVector128((double*)&other.X).AsSingle();
+
+                    // If they are FP equal (handles +0.0 == -0.0) or bitwise equal (handles NaN == NaN), the elements are equal
+                    var cmp = Sse.CompareEqual(ld, rd);
+                    var nan = Sse2.CompareEqual(ld.AsInt32(), rd.AsInt32()).AsSingle();
+
+                    return (Sse.MoveMask(Sse.Or(cmp, nan)) & 0b_11) == 0b_11;
+                }
+            }
+
+            return X.Equals(other.X) && Y.Equals(other.Y);
+        }
+
+        public bool Equals(Vector2FAligned other) => Equals(new Vector2F(other));
     }
     public readonly struct Vector3F
     {
@@ -132,18 +179,18 @@ namespace MathSharp.StorageTypes
 
     public static unsafe class VectorExtensions
     {
-        public static Vector128<float> Load(ref this Vector2F vector) => Vector.Load2D(in vector.X);
+        public static Vector128<float> Load(this Vector2F vector) => Vector.Load2D(in vector.X);
         public static Vector128<float> Load(Vector2F* p) => Vector.Load2D((float*)p);
 
-        public static Vector128<float> Load(ref this Vector3F vector) => Vector.Load3D(in vector.X); 
+        public static Vector128<float> Load(in this Vector3F vector) => Vector.Load3D(in vector.X);
         public static Vector128<float> Load(Vector3F* p) => Vector.Load3D((float*)p);
 
-        public static Vector128<float> Load(ref this Vector4F vector) => Vector.Load4D(in vector.X);
+        public static Vector128<float> Load(in this Vector4F vector) => Vector.Load4D(in vector.X);
         public static Vector128<float> Load(Vector4F* p) => Vector.Load4D((float*)p);
 
-        public static Vector128<float> Load(ref this Vector2FAligned vector) => Vector.Load2DAligned(in vector.X);
-        public static Vector128<float> Load(ref this Vector3FAligned vector) => Vector.Load3DAligned(in vector.X);
-        public static Vector128<float> Load(ref this Vector4FAligned vector) => Vector.Load4DAligned(in vector.X);
+        public static Vector128<float> Load(in this Vector2FAligned vector) => Vector.Load2DAligned(in vector.X);
+        public static Vector128<float> Load(in this Vector3FAligned vector) => Vector.Load3DAligned(in vector.X);
+        public static Vector128<float> Load(in this Vector4FAligned vector) => Vector.Load4DAligned(in vector.X);
 
         public static void Store(this Vector128<float> vector, Vector2F* destination) => vector.Store2D((float*)destination);
         public static void Store(this Vector128<float> vector, out Vector2F destination)
