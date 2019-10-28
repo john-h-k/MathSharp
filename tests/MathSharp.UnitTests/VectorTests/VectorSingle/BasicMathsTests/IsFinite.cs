@@ -7,7 +7,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
     public class IsFinite
     {
         public static IEnumerable<object[]> Data =>
-            DataSets.CreateUnaryDataSet(x => float.IsFinite(x) ? Utils.Helpers.AllBitsSetSingle : 0f);
+            DataSets.Single.CreateUnaryDataSet(x => float.IsFinite(x) ? Utils.Helpers.AllBitsSetSingle : 0f);
 
         [Theory]
         [MemberData(nameof(Data))]

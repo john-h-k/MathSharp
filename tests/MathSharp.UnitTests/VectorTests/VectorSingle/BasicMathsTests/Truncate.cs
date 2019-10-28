@@ -7,7 +7,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class Truncate
     {
-        public static IEnumerable<object[]> Data { get; } = DataSets.CreateRoundingDataSet(MathF.Truncate);
+        public static IEnumerable<object[]> Data { get; } = DataSets.Single.CreateRoundingDataSet(MathF.Truncate);
 
         [Theory]
         [MemberData(nameof(Data))]

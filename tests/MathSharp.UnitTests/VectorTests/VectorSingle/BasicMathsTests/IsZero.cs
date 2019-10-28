@@ -6,7 +6,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class IsZero
     {
-        public static IEnumerable<object[]> Data => DataSets.CreateUnaryDataSet(x => x == 0 ? Utils.Helpers.AllBitsSetSingle : 0f);
+        public static IEnumerable<object[]> Data => DataSets.Single.CreateUnaryDataSet(x => x == 0 ? Utils.Helpers.AllBitsSetSingle : 0f);
 
         [Theory]
         [MemberData(nameof(Data))]

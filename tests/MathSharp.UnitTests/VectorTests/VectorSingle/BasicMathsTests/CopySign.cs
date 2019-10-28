@@ -9,7 +9,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class CopySign
     {
-        public static IEnumerable<object[]> Data => DataSets.CreateBinaryDataSet(MathF.CopySign);
+        public static IEnumerable<object[]> Data => DataSets.Single.CreateBinaryDataSet(MathF.CopySign);
 
         [Theory]
         [MemberData(nameof(Data))]

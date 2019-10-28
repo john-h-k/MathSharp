@@ -9,7 +9,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class ExtractSign
     {
-        public static IEnumerable<object[]> Data => DataSets.CreateUnaryDataSet(x => IsNegative(x) ? -0f : 0f);
+        public static IEnumerable<object[]> Data => DataSets.Single.CreateUnaryDataSet(x => IsNegative(x) ? -0f : 0f);
 
         [Theory]
         [MemberData(nameof(Data))]

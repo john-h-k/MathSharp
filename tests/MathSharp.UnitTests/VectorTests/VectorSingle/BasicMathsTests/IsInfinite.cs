@@ -6,7 +6,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class IsInfinite
     {
-        public static IEnumerable<object[]> Data => DataSets.CreateUnaryDataSet(x => float.IsInfinity(x) ? Utils.Helpers.AllBitsSetSingle : 0f);
+        public static IEnumerable<object[]> Data => DataSets.Single.CreateUnaryDataSet(x => float.IsInfinity(x) ? Utils.Helpers.AllBitsSetSingle : 0f);
 
         [Theory]
         [MemberData(nameof(Data))]

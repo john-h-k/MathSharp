@@ -7,18 +7,15 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class Round
     {
-        public class Floor
+        public static IEnumerable<object[]> Data { get; } = DataSets.Single.CreateRoundingDataSet(MathF.Round);
+
+        [Theory]
+        [MemberData(nameof(Data))]
+        public static void Round_Theory(Vector128<float> value, Vector128<float> expected)
         {
-            public static IEnumerable<object[]> Data { get; } = DataSets.CreateRoundingDataSet(MathF.Round);
+            value = Vector.Round(value);
 
-            [Theory]
-            [MemberData(nameof(Data))]
-            public static void Round_Theory(Vector128<float> value, Vector128<float> expected)
-            {
-                value = Vector.Round(value);
-
-                Assert.True(TestHelpers.AreEqual(value, expected));
-            }
+            Assert.True(TestHelpers.AreEqual(value, expected));
         }
     }
 }

@@ -6,7 +6,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class Reciprocal
     {
-        public static IEnumerable<object[]> Data => DataSets.CreateUnaryDataSet(x => 1 / x);
+        public static IEnumerable<object[]> Data => DataSets.Single.CreateUnaryDataSet(x => 1 / x);
 
         [Theory]
         [MemberData(nameof(Data))]

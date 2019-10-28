@@ -7,7 +7,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class ReciprocalSqrt
     {
-        public static IEnumerable<object[]> Data => DataSets.CreateUnaryDataSet(x => 1 / MathF.Sqrt(x));
+        public static IEnumerable<object[]> Data => DataSets.Single.CreateUnaryDataSet(x => 1 / MathF.Sqrt(x));
 
         [Theory]
         [MemberData(nameof(Data))]

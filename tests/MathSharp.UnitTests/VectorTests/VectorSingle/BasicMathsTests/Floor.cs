@@ -7,7 +7,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests
 {
     public class Floor
     {
-        public static IEnumerable<object[]> Data { get; } = DataSets.CreateRoundingDataSet(MathF.Floor);
+        public static IEnumerable<object[]> Data { get; } = DataSets.Single.CreateRoundingDataSet(MathF.Floor);
 
         [Theory]
         [MemberData(nameof(Data))]
