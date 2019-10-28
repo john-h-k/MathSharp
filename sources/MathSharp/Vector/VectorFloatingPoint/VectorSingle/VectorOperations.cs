@@ -120,11 +120,11 @@ namespace MathSharp
             {
                 Vector128<float> mul = Sse.Multiply(left, right);
 
-                Vector128<float> temp = Sse.Shuffle(mul, mul, ShuffleValues._1_1_1_1);
+                Vector128<float> temp = Sse.Shuffle(mul, mul, ShuffleValues.YYYY);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                mul = Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
+                mul = Sse.Shuffle(mul, mul, ShuffleValues.XXXX);
 
                 return mul;
             }
@@ -163,15 +163,15 @@ namespace MathSharp
                 Vector128<float> mul = Sse.Multiply(left, right);
 
                 // Shuffle around the values and AddScalar them
-                Vector128<float> temp = Sse.Shuffle(mul, mul, ShuffleValues._1_2_1_2);
+                Vector128<float> temp = Sse.Shuffle(mul, mul, ShuffleValues.YZYZ);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                temp = Sse.Shuffle(temp, temp, ShuffleValues._1_1_1_1);
+                temp = Sse.Shuffle(temp, temp, ShuffleValues.YYYY);
 
                 mul = Sse.AddScalar(mul, temp);
 
-                return Sse.Shuffle(mul, mul, ShuffleValues._0_0_0_0);
+                return Sse.Shuffle(mul, mul, ShuffleValues.XXXX);
             }
 
             return DotProduct3D_Software(left, right);
@@ -202,12 +202,12 @@ namespace MathSharp
                 // Multiply the two vectors to get all the needed elements
                 Vector128<float> mul = Sse.Multiply(left, copy);
                 
-                copy = Sse.Shuffle(copy, mul, ShuffleValues._0_0_0_1);
+                copy = Sse.Shuffle(copy, mul, ShuffleValues.XXXY);
                 copy = Sse.Add(copy, mul);
-                mul = Sse.Shuffle(mul, copy, ShuffleValues._0_0_3_0);
+                mul = Sse.Shuffle(mul, copy, ShuffleValues.XXWX);
                 mul = Sse.Add(mul, copy);
 
-                return Sse.Shuffle(mul, mul, ShuffleValues._2_2_2_2);
+                return Sse.Shuffle(mul, mul, ShuffleValues.ZZZZ);
             }
 
             return DotProduct4D_Software(left, right);
@@ -229,20 +229,20 @@ namespace MathSharp
             if (Sse.IsSupported)
             {
                 // Transform B(x, y, ?, ?) to (y, x, y, x)
-                Vector128<float> permute = Sse.Shuffle(right, right, ShuffleValues._1_0_1_0);
+                Vector128<float> permute = Sse.Shuffle(right, right, ShuffleValues.YXYX);
 
                 // Multiply A(x, y, ?, ?) by B(y, x, y, x)
                 // Resulting in (Ax * By, Ay * Bx, ?, ?)
                 permute = Sse.Multiply(left, permute);
 
                 // Create a vector of (Ay * Bx, ?, ?, ?, ?)
-                Vector128<float> temp = Sse.Shuffle(permute, permute, ShuffleValues._1_0_0_0);
+                Vector128<float> temp = Sse.Shuffle(permute, permute, ShuffleValues.YXXX);
 
                 // Subtract it to get ((Ax * By) - (Ay * Bx), ?, ?, ?) the desired result
                 permute = Sse.Subtract(permute, temp);
 
                 // Fill the vector with it (like DotProduct)
-                return Sse.Shuffle(permute, permute, ShuffleValues._0_0_0_0);
+                return Sse.Shuffle(permute, permute, ShuffleValues.XXXX);
             }
 
             return CrossProduct2D_Software(left, right);
@@ -274,8 +274,8 @@ namespace MathSharp
                  * rhs1 goes from x, y, z, _ to z, x, y, _
                  */
 
-                Vector128<float> leftHandSide1 = Sse.Shuffle(left, left, ShuffleValues._1_2_0_3);
-                Vector128<float> rightHandSide1 = Sse.Shuffle(right, right, ShuffleValues._2_0_1_3);
+                Vector128<float> leftHandSide1 = Sse.Shuffle(left, left, ShuffleValues.YZXW);
+                Vector128<float> rightHandSide1 = Sse.Shuffle(right, right, ShuffleValues.ZXYW);
 
                 /*
                  * lhs2 goes from x, y, z, _ to z, x, y, _
@@ -283,8 +283,8 @@ namespace MathSharp
                  */
 
 
-                Vector128<float> leftHandSide2 = Sse.Shuffle(left, left, ShuffleValues._2_0_1_3);
-                Vector128<float> rightHandSide2 = Sse.Shuffle(right, right, ShuffleValues._1_2_0_3);
+                Vector128<float> leftHandSide2 = Sse.Shuffle(left, left, ShuffleValues.ZXYW);
+                Vector128<float> rightHandSide2 = Sse.Shuffle(right, right, ShuffleValues.YZXW);
 
                 Vector128<float> mul1 = Sse.Multiply(leftHandSide1, rightHandSide1);
 
@@ -311,10 +311,10 @@ namespace MathSharp
                 //float zTmp1 = y2 * w3 - w2 * y3;
                 //float wTmp1 = z2 * y3 - y2 * z3;
 
-                var shuf1 = Permute(two, ShuffleValues.ZWYZ);
-                var shuf2 = Permute(three, ShuffleValues.WZWY);
-                var shuf3 = Permute(two, ShuffleValues.WZWY);
-                var shuf4 = Permute(three, ShuffleValues.ZWYZ);
+                var shuf1 = Shuffle(two, ShuffleValues.ZWYZ);
+                var shuf2 = Shuffle(three, ShuffleValues.WZWY);
+                var shuf3 = Shuffle(two, ShuffleValues.WZWY);
+                var shuf4 = Shuffle(three, ShuffleValues.ZWYZ);
 
                 var tmp1 = Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4));
 
@@ -323,11 +323,11 @@ namespace MathSharp
                 //float zTmp2 = x1 - (x2 * w3 - w2 * x3);
                 //float wTmp2 = x1 - (z2 * x3 - x2 * z3);
 
-                var shuf0 = Permute(one, ShuffleValues.YXXX);
-                shuf1 = Permute(two, ShuffleValues.YWXZ);
-                shuf2 = Permute(three, ShuffleValues.WXWX);
-                shuf3 = Permute(two, ShuffleValues.WXWX);
-                shuf4 = Permute(three, ShuffleValues.YWXZ);
+                var shuf0 = Shuffle(one, ShuffleValues.YXXX);
+                shuf1 = Shuffle(two, ShuffleValues.YWXZ);
+                shuf2 = Shuffle(three, ShuffleValues.WXWX);
+                shuf3 = Shuffle(two, ShuffleValues.WXWX);
+                shuf4 = Shuffle(three, ShuffleValues.YWXZ);
 
                 var tmp2 = Subtract(shuf0, Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4)));
 
@@ -336,11 +336,11 @@ namespace MathSharp
                 //float zTmp3 = y1 + (x2 * y3 - y2 * x3);
                 //float wTmp3 = y1 + (y2 * x3 - x2 * y3);
 
-                shuf0 = Permute(one, ShuffleValues.ZZYY);
-                shuf1 = Permute(two, ShuffleValues.YZXY);
-                shuf2 = Permute(three, ShuffleValues.ZXYX);
-                shuf3 = Permute(two, ShuffleValues.ZXYX);
-                shuf4 = Permute(three, ShuffleValues.YZXY);
+                shuf0 = Shuffle(one, ShuffleValues.ZZYY);
+                shuf1 = Shuffle(two, ShuffleValues.YZXY);
+                shuf2 = Shuffle(three, ShuffleValues.ZXYX);
+                shuf3 = Shuffle(two, ShuffleValues.ZXYX);
+                shuf4 = Shuffle(three, ShuffleValues.YZXY);
 
                 var tmp3 = Add(shuf0, Subtract(Multiply(shuf1, shuf2), Multiply(shuf3, shuf4)));
 
@@ -352,7 +352,7 @@ namespace MathSharp
                 var result = Multiply(tmp1, tmp2);
                 result = Multiply(result, tmp3);
 
-                return Multiply(result, Permute(one, ShuffleValues.WWWZ));
+                return Multiply(result, Shuffle(one, ShuffleValues.WWWZ));
             }
 
             return CrossProduct4D_Software(one, two, three);

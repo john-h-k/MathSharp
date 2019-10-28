@@ -54,8 +54,8 @@ namespace MathSharp
 
             if (Sse.IsSupported)
             {
-                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues._0_2_0_2);
-                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues._1_3_1_3);
+                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues.XZXZ);
+                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues.YWYW);
 
                 return Sse.Add(vector1, vector2);
             }

@@ -260,7 +260,7 @@ namespace MathSharp
         {
             if (Sse.IsSupported)
             {
-                Vector128<float> hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues._2_2_2_2);
+                Vector128<float> hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues.ZZZZ);
 
                 Sse.StoreLow(destination, vector);
                 Sse.StoreScalar(&destination[3], hiBroadcast);

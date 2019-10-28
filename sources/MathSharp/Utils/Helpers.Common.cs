@@ -5,18 +5,6 @@ namespace MathSharp.Utils
 {
     internal static partial class Helpers
     {
-        // Has christ awful performance because JIT doesn't properly recognise it as producing a constant
-        // when all 4 args are constant so generates a jump table. Do NOT use
-        //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        //public static byte Shuffle(byte a, byte b, byte c, byte d)
-        //{
-        //    return (byte)(
-        //        (a << 6)
-        //        | (b << 4)
-        //        | (c << 2)
-        //        | d);
-        //}
-
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static float BoolToSimdBoolSingle(bool val) => val ? AllBitsSetSingle : NoBitsSetSingle;
 

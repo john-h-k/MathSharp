@@ -81,7 +81,7 @@ namespace MathSharp.Quaternion
 
             Vector128<float> omega = Vector.ATan2(sinOmega, cosOmega);
 
-            var v01 = Vector.Permute(amount, ShuffleValues._1_0_3_2);
+            var v01 = Vector.Shuffle(amount, ShuffleValues.YXWZ); 
             v01 = Vector.And(v01, Vector.SingleConstants.MaskZW);
             v01 = Vector.Xor(v01, SingleConstants.SignMaskX);
             v01 = Vector.Add(v01, SingleConstants.MatrixIdentityRow0);
@@ -92,8 +92,8 @@ namespace MathSharp.Quaternion
 
             s0 = Vector.Select(v01, s0, control);
 
-            var s1 = Vector.PermuteWithY(s0);
-            s0 = Vector.PermuteWithX(s0);
+            var s1 = Vector.FillWithY(s0);
+            s0 = Vector.FillWithX(s0);
             s1 = Vector.Multiply(s1, sign);
 
             var result = Vector.Multiply(left, s0);
@@ -113,23 +113,23 @@ namespace MathSharp.Quaternion
 
             var result = right;
 
-            result = Vector.PermuteWithW(result);
-            q2X = Vector.PermuteWithX(q2X);
-            q2Y = Vector.PermuteWithY(q2Y);
-            q2Z = Vector.PermuteWithZ(q2Z);
+            result = Vector.FillWithW(result);
+            q2X = Vector.FillWithX(q2X);
+            q2Y = Vector.FillWithY(q2Y);
+            q2Z = Vector.FillWithZ(q2Z);
 
             result = Vector.Multiply(result, left);
             var q1Shuffle = left;
 
-            q1Shuffle = Vector.Permute(q1Shuffle, ShuffleValues._3_2_1_0);
+            q1Shuffle = Vector.Shuffle(q1Shuffle, ShuffleValues.WZYX);
 
             q2X = Vector.Multiply(q2X, q1Shuffle);
-            q1Shuffle = Vector.Permute(q1Shuffle, ShuffleValues._1_0_3_2);
+            q1Shuffle = Vector.Shuffle(q1Shuffle, ShuffleValues.YXWZ);
 
             q2X = Vector.Multiply(q2X, ControlWZYX);
 
             q2Y = Vector.Multiply(q2Y, q1Shuffle);
-            q1Shuffle = Vector.Permute(q1Shuffle, ShuffleValues._3_2_1_0);
+            q1Shuffle = Vector.Shuffle(q1Shuffle, ShuffleValues.WZYX);
 
             q2Y = Vector.Multiply(q2Y, ControlZWXY);
             q2Z = Vector.Multiply(q2Z, q1Shuffle);

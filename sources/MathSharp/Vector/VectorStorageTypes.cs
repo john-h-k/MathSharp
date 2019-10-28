@@ -27,7 +27,7 @@ namespace MathSharp.StorageTypes
 
         public override int GetHashCode() => (X.GetHashCode() * 397) ^ Y.GetHashCode();
 
-        public override string ToString()
+        public override string? ToString()
         {
             return Vector.ToString(this.Load(), elemCount: 2);
         }
@@ -119,7 +119,6 @@ namespace MathSharp.StorageTypes
 
         public Vector2FAligned(Vector2FAligned xy) => this = xy;
         public Vector2FAligned(Vector2F xy) : this(xy.X, xy.Y) { }
-
 
         public Vector2FAligned(float xy) : this(xy, xy) { }
 

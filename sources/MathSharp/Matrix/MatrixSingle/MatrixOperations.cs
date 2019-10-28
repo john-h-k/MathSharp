@@ -157,8 +157,8 @@ namespace MathSharp
 
         public static Vector128<float> Transform2D(Vector128<float> position, MatrixSingle matrix)
         {
-            var x = PermuteWithX(position);
-            var y = PermuteWithY(position);
+            var x = FillWithX(position);
+            var y = FillWithY(position);
 
             x = Multiply(x, matrix._v0);
             y = Multiply(y, matrix._v1);
@@ -171,9 +171,9 @@ namespace MathSharp
 
         public static Vector128<float> Transform3D(Vector128<float> position, MatrixSingle matrix)
         {
-            var x = PermuteWithX(position);
-            var y = PermuteWithY(position);
-            var z = PermuteWithZ(position);
+            var x = FillWithX(position);
+            var y = FillWithY(position);
+            var z = FillWithZ(position);
 
             x = Multiply(x, matrix._v0);
             y = Multiply(y, matrix._v1);
@@ -188,10 +188,10 @@ namespace MathSharp
 
         public static Vector128<float> Transform4D(Vector128<float> position, MatrixSingle matrix)
         {
-            var x = PermuteWithX(position);
-            var y = PermuteWithY(position);
-            var z = PermuteWithZ(position);
-            var w = PermuteWithW(position);
+            var x = FillWithX(position);
+            var y = FillWithY(position);
+            var z = FillWithZ(position);
+            var w = FillWithW(position);
 
             x = Multiply(x, matrix._v0);
             y = Multiply(y, matrix._v1);
@@ -319,31 +319,31 @@ namespace MathSharp
         private static readonly Vector128<float> Sign = Vector128.Create(1.0f, -1.0f, 1.0f, -1.0f);
         public static Vector128<float> Determinant(MatrixSingle matrix)
         { 
-            var v0 = Permute(matrix._v2, ShuffleValues.YXXX);
-            var v1 = Permute(matrix._v3, ShuffleValues.ZZYY);
-            var v2 = Permute(matrix._v2, ShuffleValues.YXXX);
-            var v3 = Permute(matrix._v3, ShuffleValues.WWWZ);
-            var v4 = Permute(matrix._v2, ShuffleValues.ZZYY);
-            var v5 = Permute(matrix._v3, ShuffleValues.WWWZ);
+            var v0 = Shuffle(matrix._v2, ShuffleValues.YXXX);
+            var v1 = Shuffle(matrix._v3, ShuffleValues.ZZYY);
+            var v2 = Shuffle(matrix._v2, ShuffleValues.YXXX);
+            var v3 = Shuffle(matrix._v3, ShuffleValues.WWWZ);
+            var v4 = Shuffle(matrix._v2, ShuffleValues.ZZYY);
+            var v5 = Shuffle(matrix._v3, ShuffleValues.WWWZ);
 
             var p0 = Multiply(v0, v1);
             var p1 = Multiply(v2, v3);
             var p2 = Multiply(v4, v5);
 
-            v0 = Permute(matrix._v2, ShuffleValues.ZZYY);
-            v1 = Permute(matrix._v3, ShuffleValues.YXXX);
-            v2 = Permute(matrix._v2, ShuffleValues.WWWZ);
-            v3 = Permute(matrix._v3, ShuffleValues.YXXX);
-            v4 = Permute(matrix._v2, ShuffleValues.WWWZ);
-            v5 = Permute(matrix._v3, ShuffleValues.ZZYY);
+            v0 = Shuffle(matrix._v2, ShuffleValues.ZZYY);
+            v1 = Shuffle(matrix._v3, ShuffleValues.YXXX);
+            v2 = Shuffle(matrix._v2, ShuffleValues.WWWZ);
+            v3 = Shuffle(matrix._v3, ShuffleValues.YXXX);
+            v4 = Shuffle(matrix._v2, ShuffleValues.WWWZ);
+            v5 = Shuffle(matrix._v3, ShuffleValues.ZZYY);
 
             p0 = FastNegateMultiplyAdd(v0, v1, p0);
             p1 = FastNegateMultiplyAdd(v2, v3, p1);
             p2 = FastNegateMultiplyAdd(v4, v5, p2);
 
-            v0 = Permute(matrix._v1, ShuffleValues.WWWZ);
-            v1 = Permute(matrix._v1, ShuffleValues.ZZYY);
-            v2 = Permute(matrix._v1, ShuffleValues.YXXX);
+            v0 = Shuffle(matrix._v1, ShuffleValues.WWWZ);
+            v1 = Shuffle(matrix._v1, ShuffleValues.ZZYY);
+            v2 = Shuffle(matrix._v1, ShuffleValues.YXXX);
 
             var s = Multiply(matrix._v0, Sign);
             var r = Multiply(v0, p0);

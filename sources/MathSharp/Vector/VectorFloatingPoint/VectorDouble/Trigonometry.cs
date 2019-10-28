@@ -40,15 +40,15 @@ namespace MathSharp
                 Vector256<double> sc0 = SinCoefficient0D;
 
                 Vector256<double> constants = Vector256.Create(SinCoefficient1DScalar);
-                Vector256<double> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
+                Vector256<double> result = FastMultiplyAdd(constants, vectorSquared, FillWithW(sc0));
 
-                constants = PermuteWithZ(sc0);
+                constants = FillWithZ(sc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithY(sc0);
+                constants = FillWithY(sc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithX(sc0);
+                constants = FillWithX(sc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);
@@ -93,10 +93,10 @@ namespace MathSharp
                 // Fast polynomial approx
                 var sc1 = SinCoefficient1D;
 
-                var constants = PermuteWithW(sc1);
-                var result = FastMultiplyAdd(constants, vectorSquared, PermuteWithZ(sc1));
+                var constants = FillWithW(sc1);
+                var result = FastMultiplyAdd(constants, vectorSquared, FillWithZ(sc1));
 
-                constants = PermuteWithY(sc1);
+                constants = FillWithY(sc1);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);
@@ -139,15 +139,15 @@ namespace MathSharp
                 Vector256<double> cc0 = CosCoefficient0D;
 
                 Vector256<double> constants = Vector256.Create(CosCoefficient1DScalar);
-                Vector256<double> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(cc0));
+                Vector256<double> result = FastMultiplyAdd(constants, vectorSquared, FillWithW(cc0));
 
-                constants = PermuteWithZ(cc0);
+                constants = FillWithZ(cc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithY(cc0);
+                constants = FillWithY(cc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithX(cc0);
+                constants = FillWithX(cc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);
@@ -195,10 +195,10 @@ namespace MathSharp
                 // Fast polynomial approx
                 var cc1 = CosCoefficient1D;
 
-                var constants = PermuteWithW(cc1);
-                var result = FastMultiplyAdd(constants, vectorSquared, PermuteWithZ(cc1));
+                var constants = FillWithW(cc1);
+                var result = FastMultiplyAdd(constants, vectorSquared, FillWithZ(cc1));
 
-                constants = PermuteWithY(cc1);
+                constants = FillWithY(cc1);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);
@@ -220,11 +220,11 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                var twoDivPi = PermuteWithW(TanConstantsD);
+                var twoDivPi = FillWithW(TanConstantsD);
 
-                var tc0 = PermuteWithX(TanConstantsD);
-                var tc1 = PermuteWithY(TanConstantsD);
-                var epsilon = PermuteWithZ(TanConstantsD);
+                var tc0 = FillWithX(TanConstantsD);
+                var tc1 = FillWithY(TanConstantsD);
+                var epsilon = FillWithZ(TanConstantsD);
 
                 var va = Multiply(vector, twoDivPi);
                 va = Round(va);
@@ -239,14 +239,14 @@ namespace MathSharp
 
                 var vc2 = Square(vc);
 
-                var t7 = PermuteWithW(TanCoefficients1D);
-                var t6 = PermuteWithZ(TanCoefficients1D);
-                var t4 = PermuteWithX(TanCoefficients1D);
-                var t3 = PermuteWithW(TanCoefficients0D);
-                var t5 = PermuteWithY(TanCoefficients1D);
-                var t2 = PermuteWithZ(TanCoefficients0D);
-                var t1 = PermuteWithY(TanCoefficients0D);
-                var t0 = PermuteWithX(TanCoefficients0D);
+                var t7 = FillWithW(TanCoefficients1D);
+                var t6 = FillWithZ(TanCoefficients1D);
+                var t4 = FillWithX(TanCoefficients1D);
+                var t3 = FillWithW(TanCoefficients0D);
+                var t5 = FillWithY(TanCoefficients1D);
+                var t2 = FillWithZ(TanCoefficients0D);
+                var t1 = FillWithY(TanCoefficients0D);
+                var t0 = FillWithX(TanCoefficients0D);
 
                 var vbIsEven = And(vb, DoubleConstants.Epsilon).AsInt64();
                 vbIsEven = CompareBitwiseEqualInt64(vbIsEven, Vector256<long>.Zero);
@@ -320,16 +320,16 @@ namespace MathSharp
         {
             if (Avx.IsSupported)
             {
-                var oneDivPi = PermuteWithW(TanEstCoefficientsD);
+                var oneDivPi = FillWithW(TanEstCoefficientsD);
 
                 var v1 = Multiply(vector, oneDivPi);
                 v1 = Round(v1);
 
                 v1 = FastNegateMultiplyAdd(DoubleConstants.Pi, v1, vector);
 
-                var t0 = PermuteWithX(TanEstCoefficientsD);
-                var t1 = PermuteWithY(TanEstCoefficientsD);
-                var t2 = PermuteWithZ(TanEstCoefficientsD);
+                var t0 = FillWithX(TanEstCoefficientsD);
+                var t1 = FillWithY(TanEstCoefficientsD);
+                var t2 = FillWithZ(TanEstCoefficientsD);
 
                 var v2T2 = FastNegateMultiplyAdd(v1, v1, t2);
                 var v2 = Square(v1);
@@ -372,15 +372,15 @@ namespace MathSharp
                 Vector256<double> sc0 = SinCoefficient0D;
 
                 Vector256<double> constants = Vector256.Create(SinCoefficient1DScalar);
-                Vector256<double> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
+                Vector256<double> result = FastMultiplyAdd(constants, vectorSquared, FillWithW(sc0));
 
-                constants = PermuteWithZ(sc0);
+                constants = FillWithZ(sc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithY(sc0);
+                constants = FillWithY(sc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithX(sc0);
+                constants = FillWithX(sc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);
@@ -393,15 +393,15 @@ namespace MathSharp
                 Vector256<double> cc0 = CosCoefficient0D;
 
                 constants = Vector256.Create(CosCoefficient1DScalar);
-                result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(cc0));
+                result = FastMultiplyAdd(constants, vectorSquared, FillWithW(cc0));
 
-                constants = PermuteWithZ(cc0);
+                constants = FillWithZ(cc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithY(cc0);
+                constants = FillWithY(cc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
-                constants = PermuteWithX(cc0);
+                constants = FillWithX(cc0);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);
@@ -447,10 +447,10 @@ namespace MathSharp
                 // Fast polynomial approx
                 var sc1 = SinCoefficient1D;
 
-                var constants = PermuteWithW(sc1);
-                var result = FastMultiplyAdd(constants, vectorSquared, PermuteWithZ(sc1));
+                var constants = FillWithW(sc1);
+                var result = FastMultiplyAdd(constants, vectorSquared, FillWithZ(sc1));
 
-                constants = PermuteWithY(sc1);
+                constants = FillWithY(sc1);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);
@@ -462,10 +462,10 @@ namespace MathSharp
                 // Fast polynomial approx
                 var cc1 = CosCoefficient1D;
 
-                constants = PermuteWithW(cc1);
-                result = FastMultiplyAdd(constants, vectorSquared, PermuteWithZ(cc1));
+                constants = FillWithW(cc1);
+                result = FastMultiplyAdd(constants, vectorSquared, FillWithZ(cc1));
 
-                constants = PermuteWithY(cc1);
+                constants = FillWithY(cc1);
                 result = FastMultiplyAdd(result, vectorSquared, constants);
 
                 result = FastMultiplyAdd(result, vectorSquared, DoubleConstants.One);

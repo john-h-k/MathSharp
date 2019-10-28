@@ -13,7 +13,7 @@ namespace MathSharp
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Permute(Vector256<double> vector, byte control)
+        public static Vector256<double> Shuffle(Vector256<double> vector, byte control)
         {
             if (Avx2.IsSupported)
             {
@@ -24,20 +24,20 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithX(Vector256<double> vector)
-            => Permute(vector, ShuffleValues._0_0_0_0);
+        public static Vector256<double> FillWithX(Vector256<double> vector)
+            => Shuffle(vector, ShuffleValues.X);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithY(Vector256<double> vector)
-            => Permute(vector, ShuffleValues._1_1_1_1);
+        public static Vector256<double> FillWithY(Vector256<double> vector)
+            => Shuffle(vector, ShuffleValues.Y);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithZ(Vector256<double> vector)
-            => Permute(vector, ShuffleValues._2_2_2_2);
+        public static Vector256<double> FillWithZ(Vector256<double> vector)
+            => Shuffle(vector, ShuffleValues.Z);
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> PermuteWithW(Vector256<double> vector)
-            => Permute(vector, ShuffleValues._3_3_3_3);
+        public static Vector256<double> FillWithW(Vector256<double> vector)
+            => Shuffle(vector, ShuffleValues.W);
 
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Shuffle(Vector256<double> left, Vector256<double> right, byte control)
