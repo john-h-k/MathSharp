@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Intrinsics;
-using OpenTK.Graphics.OpenGL;
 using Xunit;
 using static MathSharp.UnitTests.TestHelpers;
 

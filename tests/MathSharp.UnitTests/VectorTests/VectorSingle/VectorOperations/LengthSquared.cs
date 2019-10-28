@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OpenTK;
 using System.Runtime.Intrinsics;
 using Xunit;
 

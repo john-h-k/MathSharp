@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics;
 
 namespace MathSharp.Utils
 {

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Intrinsics;
-using OpenTK;
 using Xunit;
 using static MathSharp.UnitTests.TestHelpers;
 

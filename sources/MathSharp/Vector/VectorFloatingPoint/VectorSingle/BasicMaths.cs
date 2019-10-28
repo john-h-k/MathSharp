@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using MathSharp.Constants;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
 using static MathSharp.Utils.Helpers;

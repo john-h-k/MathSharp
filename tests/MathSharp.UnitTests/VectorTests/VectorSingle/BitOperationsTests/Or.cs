@@ -2,7 +2,6 @@
 using OpenTK;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.BitOperationsTests

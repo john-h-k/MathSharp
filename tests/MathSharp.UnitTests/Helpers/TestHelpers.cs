@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using static MathSharp.Utils.Helpers;
-using MathSharp.Utils;
 using OpenTK;
 
 namespace MathSharp.UnitTests

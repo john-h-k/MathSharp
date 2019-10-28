@@ -2,7 +2,6 @@
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Utils;
-using Microsoft.VisualBasic.CompilerServices;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
