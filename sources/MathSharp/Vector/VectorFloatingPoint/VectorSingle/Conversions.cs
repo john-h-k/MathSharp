@@ -2,7 +2,6 @@
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using MathSharp.Utils;
-using Microsoft.VisualBasic.CompilerServices;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
@@ -260,7 +259,7 @@ namespace MathSharp
         {
             if (Sse.IsSupported)
             {
-                Vector128<float> hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues._2_2_2_2);
+                Vector128<float> hiBroadcast = Sse.Shuffle(vector, vector, ShuffleValues.ZZZZ);
 
                 Sse.StoreLow(destination, vector);
                 Sse.StoreScalar(&destination[3], hiBroadcast);

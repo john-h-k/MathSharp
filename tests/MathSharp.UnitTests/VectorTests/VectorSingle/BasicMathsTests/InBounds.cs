@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Intrinsics;
-using System.Text.Json;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.BasicMathsTests

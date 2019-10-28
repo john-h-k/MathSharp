@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using OpenTK;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
 using Xunit;
 
 namespace MathSharp.UnitTests.VectorTests.VectorDouble.BitOperationsTests
@@ -23,13 +21,13 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.BitOperationsTests
 
                 return new[]
                 {
-                    new object[] { Vector256.Create(0d), Vector256.Create(0d), new Vector4d(0d) },
-                    new object[] { Vector256.Create(AllBitsSet), Vector256.Create(AllBitsSet), new Vector4d(AllBitsSet) },
-                    new object[] { Vector256.Create(235434d, -123d, 0, double.MaxValue),  Vector256.Create(235434d, -123d, 0, double.MaxValue), new Vector4d(235434d, -123d, 0, double.MaxValue) },
+                    new object[] { Vector256.Create(0d), Vector256.Create(0d), Vector256.Create(0d) },
+                    new object[] { Vector256.Create(AllBitsSet), Vector256.Create(AllBitsSet), Vector256.Create(AllBitsSet) },
+                    new object[] { Vector256.Create(235434d, -123d, 0, double.MaxValue),  Vector256.Create(235434d, -123d, 0, double.MaxValue), Vector256.Create(235434d, -123d, 0, double.MaxValue) },
                     new object[]
                     {
                         Vector256.Create(0d,  double.MinValue,   double.PositiveInfinity,  1414123d), Vector256.Create(double.NaN, -0.00000000023434d, double.NegativeInfinity, 0),
-                        new Vector4d(AndF(0d, double.NaN), AndF(double.MinValue, -0.00000000023434d), AndF(double.PositiveInfinity, double.NegativeInfinity), AndF(1414123d, 0d))
+                        Vector256.Create(AndF(0d, double.NaN), AndF(double.MinValue, -0.00000000023434d), AndF(double.PositiveInfinity, double.NegativeInfinity), AndF(1414123d, 0d))
                     }
                 };
             }
@@ -40,7 +38,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.BitOperationsTests
 #pragma warning disable xUnit1019
         [MemberData(nameof(Data))]
 #pragma warning enable xUnit1019
-        public void And_Theory(Vector256<double> left, Vector256<double> right, Vector4d expected)
+        public void And_Theory(Vector256<double> left, Vector256<double> right, Vector256<double> expected)
         {
             Vector256<double> vector = Vector.And(left, right);
 

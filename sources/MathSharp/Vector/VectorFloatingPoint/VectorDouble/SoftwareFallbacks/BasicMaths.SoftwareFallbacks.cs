@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    
-    
-
     internal static unsafe partial class SoftwareFallbacks
     {
         #region Vector
@@ -194,39 +190,6 @@ namespace MathSharp
                 Math.Min(lY, rY),
                 Math.Min(lZ, rZ),
                 Math.Min(lW, rW)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector256<double> Negate2D_Software(Vector256<double> vector)
-        {
-            return Vector256.Create(
-                -X(vector),
-                -Y(vector),
-                +Z(vector),
-                +W(vector)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector256<double> Negate3D_Software(Vector256<double> vector)
-        {
-            return Vector256.Create(
-                -X(vector),
-                -Y(vector),
-                -Z(vector),
-                +W(vector)
-            );
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector256<double> Negate4D_Software(Vector256<double> vector)
-        {
-            return Vector256.Create(
-                -X(vector),
-                -Y(vector),
-                -Z(vector),
-                -W(vector)
             );
         }
 

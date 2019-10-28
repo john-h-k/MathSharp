@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using MathSharp.Constants;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
 using static MathSharp.Utils.Helpers;
@@ -54,8 +53,8 @@ namespace MathSharp
 
             if (Sse.IsSupported)
             {
-                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues._0_2_0_2);
-                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues._1_3_1_3);
+                Vector128<float> vector1 = Sse.Shuffle(left, right, ShuffleValues.XZXZ);
+                Vector128<float> vector2 = Sse.Shuffle(left, right, ShuffleValues.YWYW);
 
                 return Sse.Add(vector1, vector2);
             }
@@ -210,7 +209,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Clamp(Vector128<float> vector, Vector128<float> low, Vector128<float> high)
         {
-            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), $"Low argument at index {} for clamp ({low}) is more than high ({high})", nameof(low));
+            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), $"Low argument for clamp ({low}) is more than high ({high})", nameof(low));
 
             return Max(Min(vector, high), low);
         }

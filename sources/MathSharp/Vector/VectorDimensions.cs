@@ -1,5 +1,8 @@
-﻿namespace MathSharp
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace MathSharp
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum VectorDimensions
     {
         V1D = 1,

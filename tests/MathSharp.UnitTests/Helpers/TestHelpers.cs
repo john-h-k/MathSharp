@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using static MathSharp.Utils.Helpers;
-using MathSharp.Utils;
 using OpenTK;
 
 namespace MathSharp.UnitTests
@@ -79,6 +76,19 @@ namespace MathSharp.UnitTests
             {
                 int l = left.AsInt32().GetElement(i);
                 int r = right.AsInt32().GetElement(i);
+
+                if (l != r) return false;
+            }
+
+            return true;
+        }
+
+        public static bool AreEqual(Vector256<double> left, Vector256<double> right)
+        {
+            for (int i = 0; i < Vector256<double>.Count; i++)
+            {
+                long l = left.AsInt64().GetElement(i);
+                long r = right.AsInt64().GetElement(i);
 
                 if (l != r) return false;
             }

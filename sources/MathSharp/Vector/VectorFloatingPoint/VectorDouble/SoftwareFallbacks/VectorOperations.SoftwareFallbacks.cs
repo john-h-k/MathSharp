@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
@@ -76,8 +74,8 @@ namespace MathSharp
         public static Vector256<double> DotProduct2D_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
-                X(left) * X(right) +
-                +Y(left) * Y(right)
+                X(left) * X(right) 
+                + Y(left) * Y(right)
             );
         }
 

@@ -22,7 +22,7 @@ namespace MathSharp
         public static float GetW(Vector128<float> vector) => vector.GetElement(3);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Permute(Vector128<float> vector, byte control)
+        public static Vector128<float> Shuffle(Vector128<float> vector, byte control)
         {
             if (Avx.IsSupported)
             {
@@ -33,20 +33,20 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithX(Vector128<float> vector)
-            => Permute(vector, ShuffleValues._0_0_0_0);
+        public static Vector128<float> FillWithX(Vector128<float> vector)
+            => Shuffle(vector, ShuffleValues.XXXX);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithY(Vector128<float> vector)
-            => Permute(vector, ShuffleValues._1_1_1_1);
+        public static Vector128<float> FillWithY(Vector128<float> vector)
+            => Shuffle(vector, ShuffleValues.YYYY);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithZ(Vector128<float> vector)
-            => Permute(vector, ShuffleValues._2_2_2_2);
+        public static Vector128<float> FillWithZ(Vector128<float> vector)
+            => Shuffle(vector, ShuffleValues.ZZZZ);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithW(Vector128<float> vector)
-            => Permute(vector, ShuffleValues._3_3_3_3);
+        public static Vector128<float> FillWithW(Vector128<float> vector)
+            => Shuffle(vector, ShuffleValues.WWWW);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Shuffle(Vector128<float> left, Vector128<float> right, byte control)

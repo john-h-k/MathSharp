@@ -16,7 +16,7 @@ namespace MathSharp
         private static bool CanFuseOperations
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Fma.IsSupported && Options.AllowImpreciseMath;
+            get => Fma.IsSupported && !Options.StrictMath;
         }
 
         private static void ThrowPlatformNotSupported() =>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Intrinsics;
 
 namespace MathSharp.UnitTests.VectorTests.VectorSingle
@@ -74,8 +73,6 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle
                     }
                 }
 
-
-
                 object[] CreateBinarySingleDataSet(float f1, float f2) => new object[] { Vector128.Create(f1), Vector128.Create(f2), Vector128.Create(correctTransformation(f1, f2)) };
             }
         }
@@ -146,8 +143,6 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle
                         yield return CreateBinarySingleDataSet(value2, value2);
                     }
                 }
-
-
 
                 object[] CreateBinarySingleDataSet(double f1, double f2) => new object[] { Vector256.Create(f1), Vector256.Create(f2), Vector256.Create(correctTransformation(f1, f2)) };
             }

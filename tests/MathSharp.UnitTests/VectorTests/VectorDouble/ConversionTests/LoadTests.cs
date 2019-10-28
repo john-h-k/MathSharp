@@ -1,7 +1,4 @@
-﻿using OpenTK;
-using System.Runtime.Intrinsics;
-using MathSharp.Utils;
-using Xunit;
+﻿
 
 // ReSharper disable ConvertToConstant.Local
 

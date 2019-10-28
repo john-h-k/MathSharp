@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using MathSharp.Utils;
 using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
@@ -38,7 +37,7 @@ namespace MathSharp
 
             for (var i = 0; i < Vector128<float>.Count; i++)
             {
-                result = left.WithElement(i, left.GetElement(i) + right.GetElement(i));
+                result = result.WithElement(i, left.GetElement(i) + right.GetElement(i));
             }
 
             return result;
