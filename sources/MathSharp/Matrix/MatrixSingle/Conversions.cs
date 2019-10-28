@@ -16,23 +16,12 @@ namespace MathSharp
             return new MatrixSingle(v0, v1, v2, v3);
         }
 
-        public static void ToMatrix4x4(MatrixSingle matrix, Matrix4x4* destination)
+        public static void ToMatrix4x4(MatrixSingle matrix, float* destination)
         {
-            float* p = (float*)destination;
-
-            Vector.ToVector4D(matrix._v0, &p[0]);
-            Vector.ToVector4D(matrix._v1, &p[4]);
-            Vector.ToVector4D(matrix._v2, &p[8]);
-            Vector.ToVector4D(matrix._v3, &p[12]);
+            Vector.ToVector4D(matrix._v0, &destination[0]);
+            Vector.ToVector4D(matrix._v1, &destination[4]);
+            Vector.ToVector4D(matrix._v2, &destination[8]);
+            Vector.ToVector4D(matrix._v3, &destination[12]);
         }
-
-        public static void ToMatrix4x4(MatrixSingle matrix, out Matrix4x4 destination)
-        {
-            fixed (Matrix4x4* p = &destination)
-            {
-                ToMatrix4x4(matrix, p);
-            }
-        }
-
     }
 }

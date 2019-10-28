@@ -2,10 +2,11 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
 using MathSharp.StorageTypes;
+// ReSharper disable InvokeAsExtensionMethod
 
 namespace MathSharp
 {
-    // ReSharper disable once InconsistentNaming
+    // ReSharper disable InconsistentNaming
     public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     {
         public readonly float E11;
@@ -101,6 +102,27 @@ namespace MathSharp
                 hashCode = (hashCode * 397) ^ E43.GetHashCode();
                 hashCode = (hashCode * 397) ^ E44.GetHashCode();
                 return hashCode;
+            }
+        }
+    }
+
+    public static unsafe partial class MatrixExtensions
+    {
+        public static void ToMatrix4x4(MatrixSingle matrix, Matrix4x4* destination)
+        {
+            float* p = (float*)destination;
+
+            Vector.ToVector4D(matrix._v0, &p[0]);
+            Vector.ToVector4D(matrix._v1, &p[4]);
+            Vector.ToVector4D(matrix._v2, &p[8]);
+            Vector.ToVector4D(matrix._v3, &p[12]);
+        }
+
+        public static void ToMatrix4x4(MatrixSingle matrix, out Matrix4x4 destination)
+        {
+            fixed (Matrix4x4* p = &destination)
+            {
+                ToMatrix4x4(matrix, p);
             }
         }
     }
