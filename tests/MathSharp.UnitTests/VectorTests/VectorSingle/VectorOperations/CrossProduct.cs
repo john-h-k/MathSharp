@@ -13,15 +13,15 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
         {
             var objs = new[]
             {
-                new object[4] {Vector128.Create(0f), Vector128.Create(0f), Vector128.Create(0f), default(Vector4)},
-                new object[4] {Vector128.Create(1f), Vector128.Create(1f), Vector128.Create(1f), default(Vector4)},
-                new object[4] {Vector128.Create(-1f), Vector128.Create(-1f), Vector128.Create(-1f), default(Vector4)},
-                new object[4] {Vector128.Create(-1f), Vector128.Create(1f, 4f, 9f, 16f), Vector128.Create(100f, 200f, 300f, 400f), default(Vector4)},
-                new object[4] {Vector128.Create(1f, 2f, 3f, 4f), Vector128.Create(4f, -5f, 6f, 9f), Vector128.Create(0f), default(Vector4)},
-                new object[4] {Vector128.Create(float.PositiveInfinity), Vector128.Create(float.PositiveInfinity), Vector128.Create(0f), default(Vector4)},
-                new object[4] {Vector128.Create(float.PositiveInfinity), Vector128.Create(float.NegativeInfinity), Vector128.Create(0f), default(Vector4)},
-                new object[4] {Vector128.Create(float.NaN), Vector128.Create(float.NegativeInfinity), Vector128.Create(float.PositiveInfinity), default(Vector4)},
-                new object[4] {Vector128.Create(float.MaxValue, float.MinValue, float.NaN, 0), Vector128.Create(float.MaxValue, float.MinValue, float.NaN, 0), Vector128.Create(10f), default(Vector4)},
+                new object[] {Vector128.Create(0f), Vector128.Create(0f), Vector128.Create(0f), default(Vector4)},
+                new object[] {Vector128.Create(1f), Vector128.Create(1f), Vector128.Create(1f), default(Vector4)},
+                new object[] {Vector128.Create(-1f), Vector128.Create(-1f), Vector128.Create(-1f), default(Vector4)},
+                new object[] {Vector128.Create(-1f), Vector128.Create(1f, 4f, 9f, 16f), Vector128.Create(100f, 200f, 300f, 400f), default(Vector4)},
+                new object[] {Vector128.Create(1f, 2f, 3f, 4f), Vector128.Create(4f, -5f, 6f, 9f), Vector128.Create(0f), default(Vector4)},
+                new object[] {Vector128.Create(float.PositiveInfinity), Vector128.Create(float.PositiveInfinity), Vector128.Create(0f), default(Vector4)},
+                new object[] {Vector128.Create(float.PositiveInfinity), Vector128.Create(float.NegativeInfinity), Vector128.Create(0f), default(Vector4)},
+                new object[] {Vector128.Create(float.NaN), Vector128.Create(float.NegativeInfinity), Vector128.Create(float.PositiveInfinity), default(Vector4)},
+                new object[] {Vector128.Create(float.MaxValue, float.MinValue, float.NaN, 0), Vector128.Create(float.MaxValue, float.MinValue, float.NaN, 0), Vector128.Create(10f), default(Vector4)},
             };
 
             foreach (object[] set in objs)
@@ -84,7 +84,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
             Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
-#pragma warning enable xUnit1026
+#pragma warning restore xUnit1026
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V4D)]

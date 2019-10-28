@@ -4,8 +4,13 @@ using OpenTK;
 using System.Runtime.Intrinsics;
 using Xunit;
 
+
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 {
+    using Vector2 = OpenTK.Vector2;
+    using Vector3 = OpenTK.Vector3;
+    using Vector4 = OpenTK.Vector4;
+
     public class LengthSquared
     {
         public static IEnumerable<object[]> Data(VectorDimensions dimension)

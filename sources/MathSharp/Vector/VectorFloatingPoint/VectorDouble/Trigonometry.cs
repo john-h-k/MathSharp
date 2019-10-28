@@ -7,7 +7,7 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4DParam1_3 = Vector256<double>;
+    
 
     // The bane of every yr11's existence
     // TRIG
@@ -17,11 +17,8 @@ namespace MathSharp
         private static readonly Vector256<double> SinCoefficient1D = Vector256.Create(-2.3889859e-08d, -0.16665852d, +0.0083139502d, -0.00018524670d);
         private const double SinCoefficient1DScalar = -2.3889859e-08d;
 
-        private const string DoNotUse = "DO NOT USE!! Double precision trig is currently non-working";
-
-        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Sin(Vector4DParam1_3 vector)
+        public static Vector256<double> Sin(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -63,7 +60,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 vector)
+            static Vector256<double> SoftwareFallback(Vector256<double> vector)
             {
                 return Vector256.Create(
                     Math.Sin(X(vector)),
@@ -74,9 +71,8 @@ namespace MathSharp
             }
         }
 
-        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> SinApprox(Vector4DParam1_3 vector)
+        public static Vector256<double> SinApprox(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -117,9 +113,8 @@ namespace MathSharp
         private static readonly Vector256<double> CosCoefficient1D = Vector256.Create(-2.6051615e-07d, -0.49992746d, +0.041493919d, -0.0012712436d);
         private const double CosCoefficient1DScalar = -2.6051615e-07d;
 
-        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Cos(Vector4DParam1_3 vector)
+        public static Vector256<double> Cos(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -164,7 +159,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 vector)
+            static Vector256<double> SoftwareFallback(Vector256<double> vector)
             {
                 return Vector256.Create(
                     Math.Cos(X(vector)),
@@ -175,9 +170,8 @@ namespace MathSharp
             }
         }
 
-        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> CosApprox(Vector4DParam1_3 vector)
+        public static Vector256<double> CosApprox(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -220,10 +214,9 @@ namespace MathSharp
         private static readonly Vector256<double> TanCoefficients0D = Vector256.Create(1.0d, -4.667168334e-1d, 2.566383229e-2d, -3.118153191e-4d);
         private static readonly Vector256<double> TanCoefficients1D = Vector256.Create(4.981943399e-7d, -1.333835001e-1d, 3.424887824e-3d, -1.786170734e-5d);
         private static readonly Vector256<double> TanConstantsD = Vector256.Create(1.570796371d, 6.077100628e-11d, 0.000244140625d, 0.63661977228d);
-        
-        [Obsolete(DoNotUse, true)]
+
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Tan(Vector4DParam1_3 vector)
+        public static Vector256<double> Tan(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -288,7 +281,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector256<double> SoftwareFallback(Vector4DParam1_3 vector)
+            static Vector256<double> SoftwareFallback(Vector256<double> vector)
             {
                 return Vector256.Create(
                     Math.Tan(X(vector)),
@@ -299,7 +292,6 @@ namespace MathSharp
             }
         }
 
-        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
         private static Vector256<long> CompareBitwiseEqualInt64(Vector256<long> left, Vector256<long> right)
         {
@@ -321,11 +313,10 @@ namespace MathSharp
             }
         }
 
-        private static readonly Vector256<double> TanEstCoefficientsD = Vector256.Create(2.484d, -1.954923183e-1d, 2.467401101d, ScalarDoubleConstants.OneDivPi);
-        
-        [Obsolete(DoNotUse, true)]
+        private static readonly Vector256<double> TanEstCoefficientsD = Vector256.Create(2.484d, -1.954923183e-1d, 2.467401101d, ScalarDoubleConstants.OneDivPi);        
+
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> TanApprox(Vector4DParam1_3 vector)
+        public static Vector256<double> TanApprox(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -354,9 +345,8 @@ namespace MathSharp
             return Tan(vector);
         }
 
-        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
-        public static void SinCos(Vector4DParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
+        public static void SinCos(Vector256<double> vector, out Vector256<double> sin, out Vector256<double> cos)
         {
             if (Avx.IsSupported)
             {
@@ -425,16 +415,15 @@ namespace MathSharp
 
             SoftwareFallback(vector, out sin, out cos);
 
-            static void SoftwareFallback(Vector4DParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
+            static void SoftwareFallback(Vector256<double> vector, out Vector256<double> sin, out Vector256<double> cos)
             {
                 sin = Sin(vector);
                 cos = Cos(vector);
             }
         }
 
-        [Obsolete(DoNotUse, true)]
         [MethodImpl(MaxOpt)]
-        public static void SinCosApprox(Vector4DParam1_3 vector, out Vector256<double> sin, out Vector256<double> cos)
+        public static void SinCosApprox(Vector256<double> vector, out Vector256<double> sin, out Vector256<double> cos)
         {
             if (Avx.IsSupported)
             {

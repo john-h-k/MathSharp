@@ -8,7 +8,7 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4FParam1_3 = Vector128<float>;
+    
 
     // The bane of every yr11's existence
     // TRIG
@@ -17,9 +17,11 @@ namespace MathSharp
         private static readonly Vector128<float> SinCoefficient0 = Vector128.Create(-0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f);
         private static readonly Vector128<float> SinCoefficient1 = Vector128.Create(-2.3889859e-08f, -0.16665852f, +0.0083139502f, -0.00018524670f);
         private const float SinCoefficient1Scalar = -2.3889859e-08f;
+        private static readonly Vector128<float> SinCoefficient1Broadcast = Vector128.Create(SinCoefficient1Scalar);
+
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Sin(Vector4FParam1_3 vector)
+        public static Vector128<float> Sin(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -40,7 +42,7 @@ namespace MathSharp
                 // Polynomial approx
                 Vector128<float> sc0 = SinCoefficient0;
 
-                Vector128<float> constants = Vector128.Create(SinCoefficient1Scalar);
+                Vector128<float> constants = SinCoefficient1Broadcast;
                 Vector128<float> result = FastMultiplyAdd(constants, vectorSquared, PermuteWithW(sc0));
 
                 constants = PermuteWithZ(sc0);
@@ -61,7 +63,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector128<float> vector)
             {
                 return Vector128.Create(
                     MathF.Sin(X(vector)),
@@ -71,9 +73,8 @@ namespace MathSharp
                 );
             }
         }
-
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> SinApprox(Vector4FParam1_3 vector)
+        public static Vector128<float> SinApprox(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -110,12 +111,13 @@ namespace MathSharp
             return Sin(vector);
         }
 
+
         private static readonly Vector128<float> CosCoefficient0 = Vector128.Create(-0.5f, +0.041666638f, -0.0013888378f, +2.4760495e-05f);
         private static readonly Vector128<float> CosCoefficient1 = Vector128.Create(-2.6051615e-07f, -0.49992746f, +0.041493919f, -0.0012712436f);
         private const float CosCoefficient1Scalar = -2.6051615e-07f;
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Cos(Vector4FParam1_3 vector)
+        public static Vector128<float> Cos(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -160,7 +162,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector128<float> vector)
             {
                 return Vector128.Create(
                     MathF.Cos(X(vector)),
@@ -172,7 +174,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CosApprox(Vector4FParam1_3 vector)
+        public static Vector128<float> CosApprox(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -216,7 +218,7 @@ namespace MathSharp
         private static readonly Vector128<float> TanCoefficients1 = Vector128.Create(4.981943399e-7f, -1.333835001e-1f, 3.424887824e-3f, -1.786170734e-5f);
         private static readonly Vector128<float> TanConstants = Vector128.Create(1.570796371f, 6.077100628e-11f, 0.000244140625f, 0.63661977228f);
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Tan(Vector4FParam1_3 vector)
+        public static Vector128<float> Tan(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -281,7 +283,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector128<float> vector)
             {
                 return Vector128.Create(
                     MathF.Tan(X(vector)),
@@ -315,7 +317,7 @@ namespace MathSharp
 
         private static readonly Vector128<float> TanEstCoefficients = Vector128.Create(2.484f, -1.954923183e-1f, 2.467401101f, ScalarSingleConstants.OneDivPi);
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> TanApprox(Vector4FParam1_3 vector)
+        public static Vector128<float> TanApprox(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -345,7 +347,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void SinCos(Vector4FParam1_3 vector, out Vector128<float> sin, out Vector128<float> cos)
+        public static void SinCos(Vector128<float> vector, out Vector128<float> sin, out Vector128<float> cos)
         {
             if (Sse.IsSupported)
             {
@@ -414,7 +416,7 @@ namespace MathSharp
 
             SoftwareFallback(vector, out sin, out cos);
 
-            static void SoftwareFallback(Vector4FParam1_3 vector, out Vector128<float> sin, out Vector128<float> cos)
+            static void SoftwareFallback(Vector128<float> vector, out Vector128<float> sin, out Vector128<float> cos)
             {
                 sin = Sin(vector);
                 cos = Cos(vector);
@@ -422,7 +424,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static void SinCosApprox(Vector4FParam1_3 vector, out Vector128<float> sin, out Vector128<float> cos)
+        public static void SinCosApprox(Vector128<float> vector, out Vector128<float> sin, out Vector128<float> cos)
         {
             if (Sse.IsSupported)
             {
@@ -584,7 +586,7 @@ namespace MathSharp
             constants1 = PermuteWithY(tC0);
 
             result = FastMultiplyAdd(result, vecSquared, constants1);
-            
+
             constants1 = PermuteWithX(tC0);
 
             result = FastMultiplyAdd(result, vecSquared, constants1);

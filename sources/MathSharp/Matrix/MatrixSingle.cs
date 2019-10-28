@@ -12,10 +12,10 @@ namespace MathSharp
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public struct MatrixSingle
     {
-        public Vector128<float> _v0;
-        public Vector128<float> _v1;
-        public Vector128<float> _v2;
-        public Vector128<float> _v3;
+        internal Vector128<float> _v0;
+        internal Vector128<float> _v1;
+        internal Vector128<float> _v2;
+        internal Vector128<float> _v3;
 
         internal VectorF this[uint index]
         {

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics;
+﻿using System;
+using System.Runtime.Intrinsics;
 using MathSharp.Utils;
 
 namespace MathSharp.Quaternion
@@ -13,6 +14,9 @@ namespace MathSharp.Quaternion
 
         public static Vector128<float> Normalize(Vector128<float> quaternion)
             => Vector.Normalize4D(quaternion);
+
+        public static Vector128<float> NormalizeApprox(Vector128<float> quaternion)
+            => Vector.NormalizeApprox4D(quaternion);
 
         public static Vector128<float> Conjugate(Vector128<float> quaternion)
             => Vector.Xor(quaternion, SingleConstants.SignMaskXYZ);
@@ -53,7 +57,7 @@ namespace MathSharp.Quaternion
             var lhs = Vector.Multiply(mAmount, left);
             var rhs = Vector.Multiply(vAmount, right);
 
-            rhs = Vector.CopySign(dot, rhs);
+            rhs = Vector.CopySign(rhs, dot);
 
             var result = Add(lhs, rhs);
 
@@ -101,7 +105,7 @@ namespace MathSharp.Quaternion
         public static Vector128<float> Concatenate(Vector128<float> left, Vector128<float> right)
             => Multiply(right, left); // order reversed
         
-        public static Vector128<float> Multiply(in Vector128<float> right, in Vector128<float> left)
+        public static Vector128<float> Multiply(Vector128<float> right, Vector128<float> left)
         {
             var q2X = right;
             var q2Y = right;
@@ -136,6 +140,17 @@ namespace MathSharp.Quaternion
 
             result = Vector.Add(result, q2Y);
             return result;
+        }
+        
+        // TODO 2D and 4D transform quaternion methods
+
+        public static Vector128<float> Transform3D(Vector128<float> value, Vector128<float> quaternion)
+        {
+            value = Vector.And(value, Vector.SingleConstants.MaskW);
+            var result = Multiply(quaternion, value);
+            var conjugate = Conjugate(quaternion);
+
+            return Multiply(result, conjugate);
         }
 
         // ReSharper disable InconsistentNaming, IdentifierTypo

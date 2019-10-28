@@ -6,13 +6,13 @@ using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
-    using Vector4DParam1_3 = Vector256<double>;
+    
+    
 
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static Vector4D CompareEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CompareEqual(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -24,7 +24,7 @@ namespace MathSharp
         
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D CompareNotEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CompareNotEqual(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -36,7 +36,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D CompareGreaterThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CompareGreaterThan(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -48,7 +48,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D CompareLessThan(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CompareLessThan(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -60,7 +60,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D CompareGreaterThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CompareGreaterThanOrEqual(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -72,7 +72,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector4D CompareLessThanOrEqual(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> CompareLessThanOrEqual(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {

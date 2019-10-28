@@ -6,8 +6,8 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4F = Vector128<float>;
-    using Vector4FParam1_3 = Vector128<float>;
+    
+    
 
     internal static partial class SoftwareFallbacks
     {
@@ -16,7 +16,7 @@ namespace MathSharp
         #region DotProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct2D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct2D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) * X(right) +
@@ -25,7 +25,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct3D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct3D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) * X(right)
@@ -35,7 +35,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct4D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> DotProduct4D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create(
                 X(left) * X(right)
@@ -50,13 +50,13 @@ namespace MathSharp
         #region CrossProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct2D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CrossProduct2D_Software(Vector128<float> left, Vector128<float> right)
         {
             return Vector128.Create((X(left) * Y(right) - Y(left) * X(right)));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct3D_Software(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> CrossProduct3D_Software(Vector128<float> left, Vector128<float> right)
         {
             /* Cross product of A(x, y, z, _) and B(x, y, z, _) is
              *
@@ -72,35 +72,44 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct4D_Software(Vector4FParam1_3 one, Vector4FParam1_3 two, Vector4FParam1_3 three)
+        public static Vector128<float> CrossProduct4D_Software(Vector128<float> one, Vector128<float> two, Vector128<float> three)
         {
-            float x = (Z(two) * W(three) - W(two) * Z(three)) *
-                    Y(one) -
-                    (Y(two) * W(three) - W(two) * Y(three)) *
-                    Z(one) +
-                    (Y(two) * Z(three) - Z(two) * Y(three)) *
-                    W(one);
+            var x1 = X(one);
+            var x2 = X(two);
+            var x3 = X(three);
+            var y1 = Y(one);
+            var y2 = Y(two);
+            var y3 = Y(three);
+            var z1 = Z(one);
+            var z2 = Z(two);
+            var z3 = Z(three);
+            var w1 = W(one);
+            var w2 = W(two);
+            var w3 = W(three);
 
-            float y = (W(two) * Z(three) - Z(two) * W(three)) *
-                    X(one) -
-                    (W(two) * X(three) - X(two) * W(three)) *
-                    Z(one) +
-                    (Z(two) * X(three) - X(two) * Z(three)) *
-                    W(one);
+            float xTmp1 = z2 * w3 - w2 * z3;
+            float yTmp1 = w2 * z3 - z2 * w3;
+            float zTmp1 = y2 * w3 - w2 * y3;
+            float wTmp1 = z2 * y3 - y2 * z3;
 
-            float z = (Y(two) * W(three) - W(two) * Y(three)) *
-                    X(one) -
-                    (X(two) * W(three) - W(two) * X(three)) *
-                    Y(one) +
-                    (X(two) * Y(three) - Y(two) * X(three)) *
-                    W(one);
 
-            float w = (Z(two) * Y(three) - Y(two) * Z(three)) *
-                    X(one) -
-                    (Z(two) * X(three) - X(two) * Z(three)) *
-                    Y(one) +
-                    (Y(two) * X(three) - X(two) * Y(three)) *
-                    Z(one);
+            float xTmp2 = y1 - (y2 * w3 - w2 * y3);
+            float yTmp2 = x1 - (w2 * x3 - x2 * w3);
+            float zTmp2 = x1 - (x2 * w3 - w2 * x3);
+            float wTmp2 = x1 - (z2 * x3 - x2 * z3);
+
+
+            float xTmp3 = z1 + (y2 * z3 - z2 * y3);
+            float yTmp3 = z1 + (z2 * x3 - x2 * z3);
+            float zTmp3 = y1 + (x2 * y3 - y2 * x3);
+            float wTmp3 = y1 + (y2 * x3 - x2 * y3);
+
+            
+            float x = xTmp1 * xTmp2 * xTmp3 * w1;
+            float y = yTmp1 * yTmp2 * yTmp3 * w1;
+            float z = zTmp1 * zTmp2 * zTmp3 * w1;
+            float w = wTmp1 * wTmp2 * wTmp3 * z1;
+
 
             return Vector128.Create(x, y, z, w);
         }

@@ -10,13 +10,13 @@ namespace MathSharp.Utils
         public static readonly double NoBitsSetDouble = 0d;
         public static readonly double AllBitsSetDouble = BitConverter.Int64BitsToDouble(-1);
 
-        public static void GetLowHigh(Vector256<double> vector, out Vector128<double> low, out Vector128<double> high)
+        public static void GetLowHigh<T>(Vector256<T> vector, out Vector128<T> low, out Vector128<T> high) where T : struct
         {
             low = vector.GetLower();
             high = vector.GetUpper();
         }
 
-        public static Vector256<double> FromLowHigh(Vector128<double> low, Vector128<double> high)
-            => Vector256.Create(low, high);
+        public static Vector256<T> FromLowHigh<T>(Vector128<T> low, Vector128<T> high) where T : struct 
+            => low.ToVector256Unsafe().WithUpper(high);
     }
 }

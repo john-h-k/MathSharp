@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using MathSharp.Constants;
 using MathSharp.Utils;
 using static MathSharp.SoftwareFallbacks;
 using static MathSharp.Utils.Helpers;
@@ -11,8 +12,6 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4F = Vector128<float>;
-    using Vector4FParam1_3 = Vector128<float>;
 
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
     public static partial class Vector
@@ -20,12 +19,16 @@ namespace MathSharp
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Abs(Vector4FParam1_3 vector)
+        public static Vector128<float> Abs(Vector128<float> vector)
             => And(vector, SingleConstants.MaskSign);
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Abs(Vector256<float> vector)
+            => And(vector, SingleConstants256.MaskSign);
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> HorizontalAdd(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> HorizontalAdd(Vector128<float> left, Vector128<float> right)
         {
             /*
              * return Vector128.Create(
@@ -62,7 +65,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Add(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Add(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
             {
@@ -74,12 +77,23 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Add(Vector4FParam1_3 vector, float scalar)
+        public static Vector128<float> Add(Vector128<float> vector, float scalar)
             => Add(vector, Vector128.Create(scalar));
+
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Add(Vector256<float> left, Vector256<float> right)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Add(left, right);
+            }
+
+            return FromLowHigh(Add(left.GetLower(), right.GetLower()), Add(left.GetUpper(), right.GetLower()));
+        }
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Subtract(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Subtract(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
             {
@@ -89,14 +103,24 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Subtract(Vector256<float> left, Vector256<float> right)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Subtract(left, right);
+            }
+
+            return FromLowHigh(Subtract(left.GetLower(), right.GetLower()), Subtract(left.GetUpper(), right.GetLower()));
+        }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Subtract(Vector4FParam1_3 vector, float scalar)
+        public static Vector128<float> Subtract(Vector128<float> vector, float scalar)
             => Subtract(vector, Vector128.Create(scalar));
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Multiply(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Multiply(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
             {
@@ -107,7 +131,18 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Square(Vector4FParam1_3 vector)
+        public static Vector256<float> Multiply(Vector256<float> left, Vector256<float> right)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Multiply(left, right);
+            }
+
+            return FromLowHigh(Subtract(left.GetLower(), right.GetLower()), Subtract(left.GetUpper(), right.GetLower()));
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Square(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -118,12 +153,23 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Multiply(Vector4FParam1_3 vector, float scalar)
+        public static Vector256<float> Square(Vector256<float> vector)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Multiply(vector, vector);
+            }
+
+            return Multiply(vector, vector);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Multiply(Vector128<float> vector, float scalar)
             => Multiply(vector, Vector128.Create(scalar));
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Divide(Vector4FParam1_3 dividend, Vector4FParam1_3 divisor)
+        public static Vector128<float> Divide(Vector128<float> dividend, Vector128<float> divisor)
         {
             if (Sse.IsSupported)
             {
@@ -133,23 +179,45 @@ namespace MathSharp
             return Divide_Software(dividend, divisor);
         }
 
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> DivideApprox(Vector128<float> dividend, Vector128<float> divisor)
+        {
+            if (Sse.IsSupported)
+            {
+                return Sse.Multiply(dividend, Sse.Reciprocal(divisor));
+            }
+
+            return Divide(dividend, divisor);
+        }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Divide(Vector4FParam1_3 dividend, float scalarDivisor)
+        public static Vector256<float> Divide(Vector256<float> dividend, Vector256<float> divisor)
+        {
+            if (Avx.IsSupported)
+            {
+                return Avx.Divide(dividend, divisor);
+            }
+
+            return FromLowHigh(Subtract(dividend.GetLower(), divisor.GetLower()), Subtract(dividend.GetUpper(), divisor.GetLower()));
+        }
+
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Divide(Vector128<float> dividend, float scalarDivisor)
             => Multiply(dividend, Vector128.Create(scalarDivisor));
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Clamp(Vector4FParam1_3 vector, Vector4FParam1_3 low, Vector4FParam1_3 high)
+        public static Vector128<float> Clamp(Vector128<float> vector, Vector128<float> low, Vector128<float> high)
         {
-            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), $"Low argument for clamp ({low}) is more than high ({high})", nameof(low));
+            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), $"Low argument at index {} for clamp ({low}) is more than high ({high})", nameof(low));
 
             return Max(Min(vector, high), low);
         }
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Sqrt(Vector4FParam1_3 vector)
+        public static Vector128<float> Sqrt(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -164,7 +232,7 @@ namespace MathSharp
         // TODO We should provide a symmetric alternative to this
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Max(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Max(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
             {
@@ -177,7 +245,7 @@ namespace MathSharp
         // TODO Neither this or Min have symmetry with MathF/Math, where NaN is propagated - here, it is discarded. We should provide a symmetric alternative to this
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Min(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Min(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
             {
@@ -188,23 +256,23 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Negate(Vector4FParam1_3 vector)
+        public static Vector128<float> Negate(Vector128<float> vector)
             => Xor(vector, SingleConstants.MaskNotSign);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CopySign(Vector128<float> sign, Vector128<float> vector)
-            => Or(ExtractSign(sign), ClearSign(vector));
+        public static Vector256<float> Negate(Vector256<float> vector)
+            => Xor(vector, SingleConstants256.MaskNotSign);
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> CopySign(Vector128<float> vector, Vector128<float> sign)
+            => Or(ExtractSign(sign), Abs(vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> ExtractSign(Vector128<float> vector)
             => And(vector, SingleConstants.MaskNotSign);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> ClearSign(Vector128<float> vector)
-            => And(vector, SingleConstants.MaskSign);
-
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> Mod2Pi(Vector4FParam1_3 vector)
+        public static Vector128<float> Mod2Pi(Vector128<float> vector)
         {
             Vector128<float> result = Multiply(vector, SingleConstants.OneDiv2Pi);
 
@@ -215,7 +283,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Round(Vector4FParam1_3 vector)
+        public static Vector128<float> Round(Vector128<float> vector)
         {
             if (Sse41.IsSupported)
             {
@@ -225,7 +293,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector128<float> vector)
             {
                 // TODO is this semantically equivalent to 'roundps'?
                 return Vector128.Create(
@@ -238,7 +306,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Remainder(Vector4FParam1_3 left, Vector4FParam1_3 right)
+        public static Vector128<float> Remainder(Vector128<float> left, Vector128<float> right)
         {
             Vector128<float> n = Divide(left, right);
             n = Truncate(n);
@@ -248,36 +316,33 @@ namespace MathSharp
             return Subtract(left, y);
         }
 
-        public static Vector128<float> Remainder(Vector4FParam1_3 left, float right)
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Remainder(Vector256<float> left, Vector256<float> right)
+        {
+            Vector256<float> n = Divide(left, right);
+            n = Truncate(n);
+
+            Vector256<float> y = Multiply(n, right);
+
+            return Subtract(left, y);
+        }
+
+        public static Vector128<float> Remainder(Vector128<float> left, float right)
             => Remainder(left, Vector128.Create(right));
 
         private static readonly Vector128<float> NoFraction = Vector128.Create(8388608f);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Truncate(Vector4FParam1_3 vector)
+        public static Vector128<float> Truncate(Vector128<float> vector)
         {
             if (Sse41.IsSupported)
             {
                 return Sse41.RoundToZero(vector);
             }
 
-            if (Sse2.IsSupported)
-            {
-                Vector128<int> fractionalValues = Abs(vector).AsInt32();
-
-                fractionalValues = CompareLessThan(fractionalValues, NoFraction.AsInt32());
-                var result = Sse2.ConvertToVector128Single(Sse2.ConvertToVector128Int32WithTruncation(vector)); // Roundtrip float->int32->float to truncate
-
-                // Select results for non fractional values, else select the original value
-                result = SelectWhereTrue(result, fractionalValues);
-                fractionalValues = SelectWhereFalse(vector, fractionalValues).AsInt32();
-
-                return Or(result, fractionalValues.AsSingle());
-            }
-
             return SoftwareFallback(vector);
 
-            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector128<float> vector)
             {
                 return Vector128.Create(
                     MathF.Truncate(X(vector)),
@@ -288,29 +353,19 @@ namespace MathSharp
             }
         }
 
-        // TODO move to proper Int32 file
-        private static Vector128<int> CompareLessThan(Vector128<int> left, Vector128<int> right)
+        [MethodImpl(MaxOpt)]
+        public static Vector256<float> Truncate(Vector256<float> vector)
         {
-            if (Sse.IsSupported)
+            if (Avx.IsSupported)
             {
-                return Sse2.CompareLessThan(left, right);
+                return Avx.RoundToZero(vector);
             }
 
-            return SoftwareFallback(left, right);
-
-            static Vector128<int> SoftwareFallback(Vector128<int> left, Vector128<int> right)
-            {
-                return Vector128.Create(
-                    BoolToSimdBoolInt32(X(left) < X(right)),
-                    BoolToSimdBoolInt32(X(left) < X(right)),
-                    BoolToSimdBoolInt32(X(left) < X(right)),
-                    BoolToSimdBoolInt32(X(left) < X(right))
-                );
-            }
+            return FromLowHigh(Truncate(vector.GetLower()), Truncate(vector.GetUpper()));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Floor(Vector4FParam1_3 vector)
+        public static Vector128<float> Floor(Vector128<float> vector)
         {
             if (Sse41.IsSupported)
             {
@@ -319,7 +374,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector128<float> SoftwareFallback(Vector4FParam1_3 vector)
+            static Vector128<float> SoftwareFallback(Vector128<float> vector)
             {
                 return Vector128.Create(
                     MathF.Floor(X(vector)),
@@ -361,11 +416,11 @@ namespace MathSharp
                 return Sse.ReciprocalSqrt(vector);
             }
 
-            return ReciprocalSqrtApprox(vector);
+            return ReciprocalSqrt(vector);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> InBounds(Vector4F vector, Vector4F bound)
+        public static Vector128<float> InBounds(Vector128<float> vector, Vector128<float> bound)
         {
             var lessThan = CompareLessThanOrEqual(vector, bound);
             var greaterThan = CompareGreaterThanOrEqual(vector, Negate(bound));

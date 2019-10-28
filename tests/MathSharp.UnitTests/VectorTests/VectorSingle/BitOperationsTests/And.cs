@@ -39,7 +39,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.BitOperationsTests
         // TODO wtf
 #pragma warning disable xUnit1019
         [MemberData(nameof(Data))]
-#pragma warning enable xUnit1019
+#pragma warning restore xUnit1019
         public void And_Theory(Vector128<float> left, Vector128<float> right, Vector4 expected)
         {
             Vector128<float> vector = Vector.And(left, right);

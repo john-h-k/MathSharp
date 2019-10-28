@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using static MathSharp.Utils.Helpers;
 using MathSharp.Utils;
@@ -9,6 +11,50 @@ namespace MathSharp.UnitTests
 {
     public static class TestHelpers
     {
+        public static bool IsNegative(float f) => (BitConverter.SingleToInt32Bits(f) & (1u << 31)) != 0;
+
+        public static unsafe Vector128<T> ForEach<T>(Vector128<T> vector, Func<T, T> transform) where T : unmanaged
+        {
+            T* pool = stackalloc T[Vector128<T>.Count];
+
+            for (var i = 0; i < Vector128<T>.Count; i++)
+            {
+                pool[i] = transform(vector.GetElement(i));
+            }
+
+            return Unsafe.Read<Vector128<T>>(pool);
+        }
+
+        public static bool PerElemCheck(Vector128<float> a, Func<float, bool> check)
+        {
+            for (var i = 0; i < Vector128<float>.Count; i++)
+            {
+                if (!check(a.GetElement(i))) return false;
+            }
+
+            return true;
+        }
+
+        public static bool PerElemCheck(Vector128<float> a, Vector128<float> b, Func<float, float, bool> check)
+        {
+            for (var i = 0; i < Vector128<float>.Count; i++)
+            {
+                if (!check(a.GetElement(i), b.GetElement(i))) return false;
+            }
+
+            return true;
+        }
+
+        public static bool PerElemCheck(Vector128<float> a, Vector128<float> b, Vector128<float> c, Func<float, float, float, bool> check)
+        {
+            for (var i = 0; i < Vector128<float>.Count; i++)
+            {
+                if (!check(a.GetElement(i), b.GetElement(i), c.GetElement(i))) return false;
+            }
+
+            return true;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static Vector2 ByValToSlowVector2(Vector128<float> vec)
         {
@@ -27,22 +73,36 @@ namespace MathSharp.UnitTests
             return new Vector4(X(vec), Y(vec), Z(vec), W(vec));
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector2d ByValToSlowVector2(Vector256<double> vec)
+        public static bool AreEqual(Vector128<float> left, Vector128<float> right)
         {
-            return new Vector2d(X(vec), Y(vec));
+            for (int i = 0; i < Vector128<float>.Count; i++)
+            {
+                int l = left.AsInt32().GetElement(i);
+                int r = right.AsInt32().GetElement(i);
+
+                if (l != r) return false;
+            }
+
+            return true;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector3d ByValToSlowVector3(Vector256<double> vec)
+        public static bool AreApproxEqual(Vector128<float> left, Vector128<float> right, float tolerance)
         {
-            return new Vector3d(X(vec), Y(vec), Z(vec));
-        }
+            for (int i = 0; i < Vector128<float>.Count; i++)
+            {
+                var l = left.GetElement(i);
+                var r = right.GetElement(i);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector4d ByValToSlowVector4(Vector256<double> vec)
-        {
-            return new Vector4d(X(vec), Y(vec), Z(vec), W(vec));
+                var diff = MathF.Abs(l - r);
+
+                if (diff < tolerance || l.Equals(r))
+                {
+                    continue;
+                }
+            }
+
+            return true;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -100,12 +160,14 @@ namespace MathSharp.UnitTests
             return AreApproxEqual(left, X(right));
         }
 
+        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static bool AreAllEqual(bool[] bools, Vector128<int> boolVecZeroIsFalseNotZeroIsTrue)
         {
             for (var i = 0; i < 4; i++)
             {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0
+                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1
                     || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0)
                     return false;
             }
@@ -119,7 +181,7 @@ namespace MathSharp.UnitTests
             for (var i = 0; i < 4; i++)
             {
                 if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0)
+                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1)
                     return false;
             }
 
@@ -131,7 +193,7 @@ namespace MathSharp.UnitTests
         {
             for (var i = 0; i < 4; i++)
             {
-                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0
+                if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1
                     || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0)
                     return false;
             }
@@ -145,7 +207,7 @@ namespace MathSharp.UnitTests
             for (var i = 0; i < 4; i++)
             {
                 if (bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != 0
-                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) == 0)
+                    || !bools[i] && boolVecZeroIsFalseNotZeroIsTrue.GetElement(i) != -1)
                     return false;
             }
 

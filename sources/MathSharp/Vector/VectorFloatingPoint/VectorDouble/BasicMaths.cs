@@ -7,20 +7,20 @@ using static MathSharp.SoftwareFallbacks;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
-    using Vector4DParam1_3 = Vector256<double>;
+    
+    
 
     public static partial class Vector
     {
         #region Vector
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Abs(in Vector4DParam1_3 vector)
-            => Max(Subtract(Vector4D.Zero, vector), vector);
+        public static Vector256<double> Abs(Vector256<double> vector)
+            => Max(Subtract(Vector256<double>.Zero, vector), vector);
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D HorizontalAdd(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> HorizontalAdd(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -32,7 +32,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Add(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Add(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -44,12 +44,12 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Add(in Vector4DParam1_3 vector, double scalar)
+        public static Vector256<double> Add(Vector256<double> vector, double scalar)
             => Add(vector, Vector256.Create(scalar));
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Subtract(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Subtract(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -61,12 +61,12 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Subtract(in Vector4DParam1_3 vector, double scalar)
+        public static Vector256<double> Subtract(Vector256<double> vector, double scalar)
             => Subtract(vector, Vector256.Create(scalar));
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Multiply(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Multiply(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -77,7 +77,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Square(Vector4DParam1_3 vector)
+        public static Vector256<double> Square(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -88,11 +88,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Multiply(in Vector4DParam1_3 vector, double scalar)
+        public static Vector256<double> Multiply(Vector256<double> vector, double scalar)
             => Multiply(vector, Vector256.Create(scalar));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Divide(in Vector4DParam1_3 dividend, in Vector4DParam1_3 divisor)
+        public static Vector256<double> Divide(Vector256<double> dividend, Vector256<double> divisor)
         {
             if (Avx.IsSupported)
             {
@@ -102,18 +102,15 @@ namespace MathSharp
             return Divide_Software(dividend, divisor);
         }
 
-
         [MethodImpl(MaxOpt)]
-        public static Vector4D Divide(in Vector4DParam1_3 dividend, double scalarDivisor)
+        public static Vector256<double> Divide(Vector256<double> dividend, double scalarDivisor)
             => Subtract(dividend, Vector256.Create(scalarDivisor));
 
-
-        public static Vector4D Clamp(in Vector4DParam1_3 vector, in Vector4DParam1_3 low, in Vector4DParam1_3 high)
+        public static Vector256<double> Clamp(Vector256<double> vector, Vector256<double> low, Vector256<double> high)
             => Max(Min(vector, high), low);
 
-
         [MethodImpl(MaxOpt)]
-        public static Vector4D Sqrt(in Vector4DParam1_3 vector)
+        public static Vector256<double> Sqrt(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -125,7 +122,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Max(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Max(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -137,7 +134,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Min(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Min(Vector256<double> left, Vector256<double> right)
         {
             if (Avx.IsSupported)
             {
@@ -147,23 +144,19 @@ namespace MathSharp
             return Min_Software(left, right);
         }
 
-        public static Vector4D Negate(in Vector4DParam1_3 vector)
+        public static Vector256<double> Negate(Vector256<double> vector)
             => Xor(DoubleConstants.MaskNotSign, vector);
 
         [MethodImpl(MaxOpt)]
-        public static Vector4DParam1_3 CopySign(Vector4DParam1_3 sign, Vector4DParam1_3 vector)
-            => Or(ExtractSign(sign), ClearSign(vector));
+        public static Vector256<double> CopySign(Vector256<double> sign, Vector256<double> vector)
+            => Or(ExtractSign(sign), Abs(vector));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4DParam1_3 ExtractSign(Vector4DParam1_3 vector)
+        public static Vector256<double> ExtractSign(Vector256<double> vector)
             => And(vector, DoubleConstants.MaskNotSign);
 
         [MethodImpl(MaxOpt)]
-        public static Vector4DParam1_3 ClearSign(Vector4DParam1_3 vector)
-            => And(vector, DoubleConstants.MaskSign);
-
-        [MethodImpl(MaxOpt)]
-        public static Vector256<double> Mod2Pi(in Vector4DParam1_3 vector)
+        public static Vector256<double> Mod2Pi(Vector256<double> vector)
         {
             Vector256<double> result = Multiply(vector, DoubleConstants.OneDiv2Pi);
 
@@ -174,7 +167,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> Round(in Vector4DParam1_3 vector)
+        public static Vector256<double> Round(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -189,7 +182,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector256<double> SoftwareFallback(in Vector4DParam1_3 vector)
+            static Vector256<double> SoftwareFallback(Vector256<double> vector)
             {
                 // TODO is this semantically equivalent to 'roundps'?
                 return Vector256.Create(
@@ -202,21 +195,21 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Remainder(in Vector4DParam1_3 left, in Vector4DParam1_3 right)
+        public static Vector256<double> Remainder(Vector256<double> left, Vector256<double> right)
         {
-            Vector4D n = Divide(left, right);
+            Vector256<double> n = Divide(left, right);
             n = Truncate(n);
 
-            Vector4D y = Multiply(n, right);
+            Vector256<double> y = Multiply(n, right);
 
             return Subtract(left, y);
         }
 
-        public static Vector4D Remainder(in Vector4DParam1_3 left, double right)
+        public static Vector256<double> Remainder(Vector256<double> left, double right)
             => Remainder(left, Vector256.Create(right));
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Truncate(in Vector4DParam1_3 vector)
+        public static Vector256<double> Truncate(Vector256<double> vector)
         {
             if (Avx.IsSupported)
             {
@@ -231,7 +224,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static Vector4D SoftwareFallback(in Vector4DParam1_3 vector)
+            static Vector256<double> SoftwareFallback(Vector256<double> vector)
             {
                 return Vector256.Create(
                     Math.Truncate(X(vector)),
@@ -243,31 +236,31 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D Reciprocal(Vector4D vector)
+        public static Vector256<double> Reciprocal(Vector256<double> vector)
         {
             return Divide(DoubleConstants.One, vector);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D ReciprocalSqrt(Vector4D vector)
+        public static Vector256<double> ReciprocalSqrt(Vector256<double> vector)
         {
             return Divide(DoubleConstants.One, Sqrt(vector));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D ReciprocalApprox(Vector4D vector)
+        public static Vector256<double> ReciprocalApprox(Vector256<double> vector)
         {
             return Reciprocal(vector);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D ReciprocalSqrtApprox(Vector4D vector)
+        public static Vector256<double> ReciprocalSqrtApprox(Vector256<double> vector)
         {
             return ReciprocalSqrt(vector);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector4D InBounds(Vector4D vector, Vector4D bound)
+        public static Vector256<double> InBounds(Vector256<double> vector, Vector256<double> bound)
         {
             var lessThan = CompareLessThanOrEqual(vector, bound);
             var greaterThan = CompareGreaterThanOrEqual(vector, Negate(bound));

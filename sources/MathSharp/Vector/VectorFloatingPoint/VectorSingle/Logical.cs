@@ -7,13 +7,22 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4F = Vector128<float>;
-    using Vector4FParam1_3 = Vector128<float>;
-
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Permute(Vector4FParam1_3 vector, byte control)
+        public static float GetX(Vector128<float> vector) => vector.GetElement(0);
+
+        [MethodImpl(MaxOpt)]
+        public static float GetY(Vector128<float> vector) => vector.GetElement(1);
+
+        [MethodImpl(MaxOpt)]
+        public static float GetZ(Vector128<float> vector) => vector.GetElement(2);
+
+        [MethodImpl(MaxOpt)]
+        public static float GetW(Vector128<float> vector) => vector.GetElement(3);
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Permute(Vector128<float> vector, byte control)
         {
             if (Avx.IsSupported)
             {
@@ -24,23 +33,23 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithX(Vector4FParam1_3 vector)
+        public static Vector128<float> PermuteWithX(Vector128<float> vector)
             => Permute(vector, ShuffleValues._0_0_0_0);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithY(Vector4FParam1_3 vector)
+        public static Vector128<float> PermuteWithY(Vector128<float> vector)
             => Permute(vector, ShuffleValues._1_1_1_1);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithZ(Vector4FParam1_3 vector)
+        public static Vector128<float> PermuteWithZ(Vector128<float> vector)
             => Permute(vector, ShuffleValues._2_2_2_2);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> PermuteWithW(Vector4FParam1_3 vector)
+        public static Vector128<float> PermuteWithW(Vector128<float> vector)
             => Permute(vector, ShuffleValues._3_3_3_3);
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Shuffle(Vector4FParam1_3 left, Vector4FParam1_3 right, byte control)
+        public static Vector128<float> Shuffle(Vector128<float> left, Vector128<float> right, byte control)
         {
             if (Sse.IsSupported)
             {
@@ -51,7 +60,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static byte MoveMask(Vector4F vector)
+        public static byte MoveMask(Vector128<float> vector)
         {
             if (Sse.IsSupported)
             {
@@ -60,7 +69,7 @@ namespace MathSharp
 
             return SoftwareFallback(vector);
 
-            static byte SoftwareFallback(Vector4F vector)
+            static byte SoftwareFallback(Vector128<float> vector)
             {
                 float s0 = X(vector);
                 float s1 = Y(vector);

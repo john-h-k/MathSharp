@@ -6,7 +6,7 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    using Vector4D = Vector256<double>;
+    
     using Vector2D = Vector128<double>;
 
     public static unsafe partial class Vector
@@ -230,7 +230,7 @@ namespace MathSharp
 
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> ScalarToVector(Vector4D scalar)
+        public static Vector256<double> ScalarToVector(Vector256<double> scalar)
         {
             if (Avx2.IsSupported)
             {
@@ -244,7 +244,7 @@ namespace MathSharp
 
             return SoftwareFallback(scalar);
 
-            static Vector256<double> SoftwareFallback(Vector4D scalar)
+            static Vector256<double> SoftwareFallback(Vector256<double> scalar)
             {
                 return Vector256.Create(X(scalar));
             }
