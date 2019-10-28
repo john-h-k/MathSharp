@@ -9,14 +9,6 @@ namespace MathSharp.Utils
 {
     internal static partial class Helpers
     {
-        
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector256<double> ToScalarVector256(Vector256<double> vector)
-        {
-            return Vector256.CreateScalar(vector.ToScalar());
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static Vector256<double> DuplicateToVector256(Vector128<double> vector)
         {

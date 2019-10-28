@@ -16,7 +16,11 @@ namespace MathSharp.Utils
     /// <code>
     /// Vector.Permute(vector, <see cref="_3_2_1_0"/>)
     /// </code>
-    /// which selects the 4th, then 3rd, then 2nd, then 1st element
+    /// which selects the 4th, then 3rd, then 2nd, then 1st element,
+    /// or
+    /// <code>
+    /// Vector.Permute(vector, <see cref="WZYX"/>)
+    /// </code>
     /// </example>
     public static class ShuffleValues
     {

@@ -1,27 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Cryptography;
-using System.Text;
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using BenchmarkDotNet.Validators;
-using MathSharp.Interactive.Benchmarks.Vector.Single;
 using MathSharp.StorageTypes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MathSharp.Interactive
 {
     internal class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            Console.WriteLine(new Vector2F(1f, 2f));
+            Console.WriteLine(Vector.ToString(Vector128.Create(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16), elemCount: 15));
         }
 
         public static bool Equal(Vector2F left, Vector2F right) => left.Equals(right);

@@ -28,11 +28,5 @@ namespace MathSharp.Utils
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static long BoolToSimdBoolInt64(bool val) => val ? -1 : 0;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static uint BoolToSimdBoolUInt32(bool val) => val ? (uint)int.MaxValue + 1 : 0;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static ulong BoolToSimdBoolUInt64(bool val) => val ? (ulong)long.MaxValue + 1 : 0;
     }
 }
