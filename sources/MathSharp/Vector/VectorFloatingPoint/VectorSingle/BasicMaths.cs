@@ -210,7 +210,7 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Clamp(Vector128<float> vector, Vector128<float> low, Vector128<float> high)
         {
-            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), $"Low argument for clamp ({low}) is more than high ({high})", nameof(low));
+            Debug.Assert(CompareLessThanOrEqual(low, high).AllTrue(), $"Low argument at index {} for clamp ({low}) is more than high ({high})", nameof(low));
 
             return Max(Min(vector, high), low);
         }
@@ -280,17 +280,6 @@ namespace MathSharp
             result = Multiply(result, SingleConstants.Pi2);
 
             return Subtract(vector, result);
-        }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> Mod2PiScalar(Vector128<float> vector)
-        {
-            Vector128<float> result = Sse.MultiplyScalar(vector,  Vector128.CreateScalarUnsafe(ScalarSingleConstants.OneDiv2Pi));
-
-            result = Sse41.RoundToNearestIntegerScalar(result);
-            result = Sse.MultiplyScalar(result, Vector128.CreateScalarUnsafe(ScalarSingleConstants.Pi2));
-
-            return Sse.SubtractScalar(vector, result);
         }
 
         [MethodImpl(MaxOpt)]
