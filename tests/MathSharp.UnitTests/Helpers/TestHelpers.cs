@@ -73,24 +73,6 @@ namespace MathSharp.UnitTests
             return new Vector4(X(vec), Y(vec), Z(vec), W(vec));
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector2d ByValToSlowVector2(Vector256<double> vec)
-        {
-            return new Vector2d(X(vec), Y(vec));
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector3d ByValToSlowVector3(Vector256<double> vec)
-        {
-            return new Vector3d(X(vec), Y(vec), Z(vec));
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static Vector4d ByValToSlowVector4(Vector256<double> vec)
-        {
-            return new Vector4d(X(vec), Y(vec), Z(vec), W(vec));
-        }
-
         public static bool AreEqual(Vector128<float> left, Vector128<float> right)
         {
             for (int i = 0; i < Vector128<float>.Count; i++)
