@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.Intrinsics;
 using static System.Runtime.InteropServices.RuntimeInformation;
+// ReSharper disable once PossibleNullReferenceException
 
 namespace MathSharp
 {
@@ -12,11 +13,12 @@ namespace MathSharp
 
         public static string SupportSummary { get; } =
             "System:\n" +
-            $"64 bit: {Environment.Is64BitProcess}\n" +
-            $"Architecture: {ProcessArchitecture}{(ProcessArchitecture == OSArchitecture ? string.Empty : $"-- NOTE: Process arch {{{ProcessArchitecture}}} differs from OS arch {{{OSArchitecture}}}")}\n" +
-            $"OS: {OSDescription}" +
+            $"    64 bit: {Environment.Is64BitProcess}\n" +
+            $"    Architecture: {ProcessArchitecture}{(ProcessArchitecture == OSArchitecture ? string.Empty : $"-- NOTE: Process arch {{{ProcessArchitecture}}} differs from OS arch {{{OSArchitecture}}}")}\n" +
+            $"    OS: {OSDescription}" +
             "\n\n\n" +
-            string.Join('\n', typeof(Vector128<>).Assembly.GetTypes().Where(IsIsaClass).Select(FormatIsa));
+            "Instruction Sets:\n    " +
+            string.Join("\n    ", typeof(Vector128<>).Assembly.GetTypes().Where(IsIsaClass).Select(FormatIsa));
 
         private static bool IsIsaClass(Type isa) => (isa.Namespace?.StartsWith(IntrinsicNamespace)).GetValueOrDefault() && isa.GetProperty(IsSupported) is object;
 
