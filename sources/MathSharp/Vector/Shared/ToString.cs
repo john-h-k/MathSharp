@@ -74,10 +74,9 @@ namespace MathSharp
         }
 
         private static Vector256<T> AsVector256<T>(Vector64<T> vector) where T : struct 
-            => vector.ToVector128Unsafe().ToVector256Unsafe();
+            => AsVector256(vector.ToVector128Unsafe());
         private static Vector256<T> AsVector256<T>(Vector128<T> vector) where T : struct
             => vector.ToVector256Unsafe();
-
         public static string? ToString<T>(Vector64<T> vector, string? format = null, IFormatProvider? provider = null, int elemCount = -1, string delimiter = ", ", string start = "<", string end = ">") where T : struct
             => InternalToString<T, Vector64<T>>(AsVector256(vector), format, provider, elemCount, delimiter, start, end);
         public static string? ToString<T>(Vector128<T> vector, string? format = null, IFormatProvider? provider = null, int elemCount = -1, string delimiter = ", ", string start = "<", string end = ">") where T : struct
