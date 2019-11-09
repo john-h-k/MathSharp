@@ -25,15 +25,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector2F other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y);
 
         public bool Equals(Vector2F other) => X.Equals(other.X) && Y.Equals(other.Y);
         public bool Equals(Vector2FAligned other) => Equals(new Vector2F(other));
@@ -68,16 +60,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector2F other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
         public bool Equals(Vector3F other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector3FAligned other) => Equals(new Vector3F(other));
@@ -119,17 +102,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector4F other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                hashCode = (hashCode * 397) ^ W.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
 
         public bool Equals(Vector4F other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector4FAligned other) => Equals(new Vector4F(other));
@@ -161,15 +134,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector2FAligned other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y);
 
         public bool Equals(Vector2FAligned other) => X.Equals(other.X) && Y.Equals(other.Y);
         public bool Equals(Vector2F other) => Equals(new Vector2FAligned(other));
@@ -205,16 +170,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector3FAligned other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
         public bool Equals(Vector3FAligned other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector3F other) => Equals(new Vector3FAligned(other));
@@ -257,17 +213,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector4FAligned other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                hashCode = (hashCode * 397) ^ W.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
 
         public bool Equals(Vector4FAligned other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector4F other) => Equals(new Vector4FAligned(other));

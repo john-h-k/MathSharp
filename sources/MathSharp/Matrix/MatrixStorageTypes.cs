@@ -59,57 +59,37 @@ namespace MathSharp
         }
 
         public bool Equals(Matrix4x4F other)
-        {
-            return E11.Equals(other.E11) 
-                   && E12.Equals(other.E12) 
-                   && E13.Equals(other.E13) 
-                   && E14.Equals(other.E14) 
-                   && E21.Equals(other.E21) 
-                   && E22.Equals(other.E22) 
-                   && E23.Equals(other.E23) 
-                   && E24.Equals(other.E24) 
-                   && E31.Equals(other.E31) 
-                   && E32.Equals(other.E32) 
-                   && E33.Equals(other.E33) 
-                   && E34.Equals(other.E34) 
-                   && E41.Equals(other.E41) 
-                   && E42.Equals(other.E42) 
-                   && E43.Equals(other.E43) 
-                   && E44.Equals(other.E44);
-        }
+            => E11.Equals(other.E11) &&
+               E12.Equals(other.E12) &&
+               E13.Equals(other.E13) &&
+               E14.Equals(other.E14) &&
+               E21.Equals(other.E21) &&
+               E22.Equals(other.E22) &&
+               E23.Equals(other.E23) &&
+               E24.Equals(other.E24) &&
+               E31.Equals(other.E31) &&
+               E32.Equals(other.E32) &&
+               E33.Equals(other.E33) &&
+               E34.Equals(other.E34) &&
+               E41.Equals(other.E41) &&
+               E42.Equals(other.E42) &&
+               E43.Equals(other.E43) &&
+               E44.Equals(other.E44);
 
         public override bool Equals(object? obj) => obj is Matrix4x4F other && Equals(other);
 
         public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = E11.GetHashCode();
-                hashCode = (hashCode * 397) ^ E12.GetHashCode();
-                hashCode = (hashCode * 397) ^ E13.GetHashCode();
-                hashCode = (hashCode * 397) ^ E14.GetHashCode();
-                hashCode = (hashCode * 397) ^ E21.GetHashCode();
-                hashCode = (hashCode * 397) ^ E22.GetHashCode();
-                hashCode = (hashCode * 397) ^ E23.GetHashCode();
-                hashCode = (hashCode * 397) ^ E24.GetHashCode();
-                hashCode = (hashCode * 397) ^ E31.GetHashCode();
-                hashCode = (hashCode * 397) ^ E32.GetHashCode();
-                hashCode = (hashCode * 397) ^ E33.GetHashCode();
-                hashCode = (hashCode * 397) ^ E34.GetHashCode();
-                hashCode = (hashCode * 397) ^ E41.GetHashCode();
-                hashCode = (hashCode * 397) ^ E42.GetHashCode();
-                hashCode = (hashCode * 397) ^ E43.GetHashCode();
-                hashCode = (hashCode * 397) ^ E44.GetHashCode();
-                return hashCode;
-            }
-        }
+            => HashCode.Combine(
+                HashCode.Combine(E11, E12, E13, E14, E21, E22, E23, E24),
+                HashCode.Combine(E31, E32, E33, E34, E41, E42, E43, E44)
+            );
     }
 
     public static unsafe partial class MatrixExtensions
     {
         public static void ToMatrix4x4(MatrixSingle matrix, Matrix4x4F* destination)
         {
-            float* p = (float*)destination;
+            float* p = &destination->E11;
 
             Vector.ToVector4D(matrix._v0, &p[0]);
             Vector.ToVector4D(matrix._v1, &p[4]);

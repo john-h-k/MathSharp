@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -7,11 +8,10 @@ using MathSharp.StorageTypes;
 
 namespace MathSharp.Interactive
 {
-    internal class Program
+    internal unsafe class Program
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(Vector.SupportSummary);
         }
     }
 }

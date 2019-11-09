@@ -29,17 +29,7 @@ namespace MathSharp.Quaternion
         public override bool Equals(object? obj)
             => obj is QuaternionF other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                hashCode = (hashCode * 397) ^ W.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
 
         public bool Equals(QuaternionF other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
 
@@ -56,7 +46,7 @@ namespace MathSharp.Quaternion
     {
         public static Vector128<float> ToVector128(QuaternionF* p) => Vector.FromVector4D((float*)p);
 
-        public static void StoreToQuaternion(Vector128<float> quaternion, QuaternionF* destination) => Vector.ToVector4D(quaternion, (float*)destination);
+        public static void StoreToQuaternion(Vector128<float> quaternion, QuaternionF* destination) => Vector.ToVector4D(quaternion, &destination->X);
 
         public static void StoreToQuaternion(Vector128<float> quaternion, out QuaternionF destination)
         {
