@@ -20,7 +20,7 @@ namespace MathSharp
             public readonly IFormatProvider? FormatProvider;
             public readonly Vector256<T> Vector;
 
-            public VectorFormatter(
+            internal VectorFormatter(
                 ReadOnlySpan<char> delimiter,
                 ReadOnlySpan<char> start,
                 ReadOnlySpan<char> end,
@@ -53,7 +53,7 @@ namespace MathSharp
 
             public override string? ToString()
             {
-                StringBuilder b = new StringBuilder();
+                var b = new StringBuilder();
 
                 b.Append(Start);
 
@@ -84,8 +84,7 @@ namespace MathSharp
         public static string? ToString<T>(Vector256<T> vector, string? format = null, IFormatProvider? provider = null, int elemCount = -1, string delimiter = ", ", string start = "<", string end = ">") where T : struct 
             => InternalToString<T, Vector256<T>>(vector, format, provider, elemCount, delimiter, start, end);
 
-        private static string? InternalToString<T, TVec>(Vector256<T> vector, string? format, IFormatProvider? formatProvider, int elemCount,
-            string delimiter, string start, string end) where T : struct
+        private static string? InternalToString<T, TVec>(Vector256<T> vector, string? format, IFormatProvider? formatProvider, int elemCount, string delimiter, string start, string end) where T : struct
         {
             if ((format != null || formatProvider != null) && !(default(T) is IFormattable))
             {

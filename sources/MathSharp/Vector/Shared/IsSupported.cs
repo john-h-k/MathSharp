@@ -25,7 +25,7 @@ namespace MathSharp
 
         private static string FormatIsa(Type isa)
         {
-            var arch = $"{isa.Namespace!.Split('.').Last().ToUpper()}"; // Get ARM or x86 (e.g 'System.Runtime.Intrinsics.X86' -> 'X86')
+            var arch = $"{isa.Namespace!.Split('.')[^1].ToUpper()}"; // Get ARM or x86 (e.g 'System.Runtime.Intrinsics.X86' -> 'X86')
             var name = $"{(isa.IsNested ? $"{isa.DeclaringType!.Name.ToUpper()}-" : string.Empty) + isa.Name.ToUpper()}"; // E.g 'Sse' -> SSE or 'Sse.X64' -> SSE-X64
 
             var envVar = EnvVarPrefix + isa.Name.ToUpper();

@@ -9,26 +9,9 @@ namespace MathSharp.Interactive
 {
     internal class Program
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
-            Rand();
-            Rand();
-            Rand();
-            Rand();
-            Rand();
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        private static void Rand()
-        {
-            Console.WriteLine(string.Join(", ", Rng().ToArray().Select(x => x.ToString())));
-        }
-
-        public static unsafe Span<int> Rng()
-        {
-            var scalar = Vector256.CreateScalarUnsafe(0);
-
-            return new Span<int>(&scalar + 1, Vector256<int>.Count - 1);
+            Console.WriteLine(Vector.SupportSummary);
         }
     }
 }
