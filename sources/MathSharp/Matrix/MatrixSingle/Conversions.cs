@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 // ReSharper disable InvokeAsExtensionMethod
 
 namespace MathSharp

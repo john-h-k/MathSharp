@@ -7,9 +7,6 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    
-    
-
     public static partial class Vector
     {
         // Whether 'Fastxxx' operations use 'Fusedxxx' operations or not
@@ -20,10 +17,9 @@ namespace MathSharp
         }
 
         private static void ThrowPlatformNotSupported() =>
-            ThrowHelper.ThrowPlatformNotSupportedException(FmaRequiredPlatformNotSupportedMessage());
+            ThrowHelper.ThrowPlatformNotSupportedException(FmaRequiredPlatformNotSupportedMessage);
 
-        private static string FmaRequiredPlatformNotSupportedMessage()
-            => "Platform not supported for operation as it does not support FMA instructions";
+        private static string FmaRequiredPlatformNotSupportedMessage => "Platform not supported for operation as it does not support FMA instructions";
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FusedMultiplyAdd(Vector128<float> x, Vector128<float> y, Vector128<float> z)

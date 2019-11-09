@@ -18,23 +18,22 @@ namespace MathSharp
             public readonly int ElemCount;
             public readonly ReadOnlySpan<char> Format;
             public readonly IFormatProvider? FormatProvider;
-            public readonly object Vector;
+            public readonly Vector256<T> Vector;
 
-            public VectorFormatter(
-                ReadOnlySpan<char> delimiter, 
+            internal VectorFormatter(
+                ReadOnlySpan<char> delimiter,
                 ReadOnlySpan<char> start,
-                ReadOnlySpan<char> end, 
-                int elemCount, 
-                object vector,
-                ReadOnlySpan<char> format = default, 
+                ReadOnlySpan<char> end,
+                int elemCount,
+                Vector256<T> vector,
+                ReadOnlySpan<char> format = default,
                 IFormatProvider? formatProvider = null
-                )
+            )
             {
                 Delimiter = delimiter;
                 Start = start;
                 End = end;
                 ElemCount = elemCount;
-                Debug.Assert(vector is Vector64<T> || vector is Vector128<T> || vector is Vector256<T>);
                 Vector = vector;
                 Format = format;
                 FormatProvider = formatProvider;
@@ -54,13 +53,13 @@ namespace MathSharp
 
             public override string? ToString()
             {
-                StringBuilder b = new StringBuilder();
+                var b = new StringBuilder();
 
                 b.Append(Start);
 
-                for (int i = 0; i < ElemCount; i++)
+                for (var i = 0; i < ElemCount; i++)
                 {
-                    var elem = GetElement(i);
+                    var elem = Vector.GetElement(i);
                     var str = FormatElem(elem);
 
                     b.Append(str);
@@ -72,44 +71,38 @@ namespace MathSharp
 
                 return b.ToString();
             }
-
-            private T GetElement(int i)
-            {
-                if (Vector is Vector64<T> vector64) return vector64.GetElement(i);
-                if (Vector is Vector128<T> vector128) return vector128.GetElement(i);
-                if (Vector is Vector256<T> vector256) return vector256.GetElement(i);
-
-                return default;
-            }
         }
 
-        private static int RationaliseElemCount<T, TVec>(int elemCount) where T : struct
-        {
-            var count = Unsafe.SizeOf<TVec>() / Unsafe.SizeOf<T>();
-            if (elemCount == -1) return count;
-            if (elemCount < 0 || elemCount > count) throw new ArgumentOutOfRangeException(nameof(elemCount), $"Out of range [0, {count}]");
-            return elemCount;
-        }
+        private static Vector256<T> AsVector256<T>(Vector64<T> vector) where T : struct 
+            => AsVector256(vector.ToVector128Unsafe());
+        private static Vector256<T> AsVector256<T>(Vector128<T> vector) where T : struct
+            => vector.ToVector256Unsafe();
         public static string? ToString<T>(Vector64<T> vector, string? format = null, IFormatProvider? provider = null, int elemCount = -1, string delimiter = ", ", string start = "<", string end = ">") where T : struct
-            => InternalToString<T, Vector64<T>>(vector, format, provider, elemCount, delimiter, start, end);
+            => InternalToString<T, Vector64<T>>(AsVector256(vector), format, provider, elemCount, delimiter, start, end);
         public static string? ToString<T>(Vector128<T> vector, string? format = null, IFormatProvider? provider = null, int elemCount = -1, string delimiter = ", ", string start = "<", string end = ">") where T : struct
-            => InternalToString<T, Vector128<T>>(vector, format, provider, elemCount, delimiter, start, end);
+            => InternalToString<T, Vector128<T>>(AsVector256(vector), format, provider, elemCount, delimiter, start, end);
         public static string? ToString<T>(Vector256<T> vector, string? format = null, IFormatProvider? provider = null, int elemCount = -1, string delimiter = ", ", string start = "<", string end = ">") where T : struct 
             => InternalToString<T, Vector256<T>>(vector, format, provider, elemCount, delimiter, start, end);
 
-        private static string? InternalToString<T, TVec>(object vector, string? format, IFormatProvider? provider, int elemCount,
-            string delimiter, string start, string end) where T : struct
+        private static string? InternalToString<T, TVec>(Vector256<T> vector, string? format, IFormatProvider? formatProvider, int elemCount, string delimiter, string start, string end) where T : struct
         {
-            if ((format != null || provider != null) && !(default(T) is IFormattable))
+            if ((format != null || formatProvider != null) && !(default(T) is IFormattable))
             {
                 throw new ArgumentException($"Format or format provider was provided, yet type {typeof(T).Name} is not {nameof(IFormattable)}");
             }
 
             elemCount = RationaliseElemCount<T, TVec>(elemCount);
 
-            var formatter = new VectorFormatter<T>(delimiter, start, end, elemCount, vector, format, provider);
+            var formatter = new VectorFormatter<T>(delimiter, start, end, elemCount, vector, format, formatProvider);
 
             return formatter.ToString();
+        }
+        private static int RationaliseElemCount<T, TVec>(int elemCount) where T : struct
+        {
+            var count = Unsafe.SizeOf<TVec>() / Unsafe.SizeOf<T>();
+            if (elemCount == -1) return count;
+            if (elemCount < 0 || elemCount > count) throw new ArgumentOutOfRangeException(nameof(elemCount), $"Out of range [0, {count}]");
+            return elemCount;
         }
     }
 }

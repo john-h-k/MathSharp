@@ -46,6 +46,7 @@ namespace MathSharp.StorageTypes
             }
         }
     }
+
     public readonly struct Vector3D : IEquatable<Vector3D>, IEquatable<Vector3DAligned>
     {
         public readonly double X, Y, Z;
