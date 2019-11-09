@@ -10,9 +10,6 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
     using Vector = MathSharp.Vector;
     using SysVector2 = System.Numerics.Vector2;
 
-    using MathSharpVector2 = Vector2F;
-    using MathSharpVector2Aligned = Vector2FAligned;
-
     [CoreJob]
     [RPlotExporter]
     [RankColumn]
@@ -34,19 +31,14 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         private Vector128<float> _mathSharpScale;
         private Vector128<float> _mathSharpAmount;
 
-        private MathSharpVector2 _storageMathSharpTranslation;
-        private MathSharpVector2 _storageMathSharpAnchor;
-        private MathSharpVector2 _storageMathSharpScale;
-        private MathSharpVector2 _storageMathSharpAmount;
+        private Vector2F _storageMathSharpTranslation;
+        private Vector2F _storageMathSharpAnchor;
+        private Vector2F _storageMathSharpScale;
+        private Vector2F _storageMathSharpAmount;
 
-        private MathSharpVector2Aligned _alignedMathSharpTranslation;
-        private MathSharpVector2Aligned _alignedMathSharpAnchor;
-        private MathSharpVector2Aligned _alignedMathSharpScale;
-        private MathSharpVector2Aligned _alignedMathSharpAmount;
+        private Vector2F _mathSharpResult;
 
         private Vector2 _result;
-        private MathSharpVector2 _mathSharpResult;
-        private MathSharpVector2Aligned _alignedMathSharpResult;
         private SysVector2 _sysResult;
 
         [GlobalSetup]
@@ -67,15 +59,10 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             _mathSharpScale = Vector128.Create(7.0f, 3.6f, 0f, 0f);
             _mathSharpAmount = Vector128.Create(0.5f, 0.25f, 0f, 0f);
 
-            _storageMathSharpTranslation = new MathSharpVector2(1.7f, 2.3f);
-            _storageMathSharpAnchor = new MathSharpVector2(1.0f, 0.0f);
-            _storageMathSharpScale = new MathSharpVector2(7.0f, 3.6f);
-            _storageMathSharpAmount = new MathSharpVector2(0.5f, 0.25f);
-
-            _alignedMathSharpTranslation = new MathSharpVector2Aligned(1.7f, 2.3f);
-            _alignedMathSharpAnchor = new MathSharpVector2Aligned(1.0f, 0.0f);
-            _alignedMathSharpScale = new MathSharpVector2Aligned(7.0f, 3.6f);
-            _alignedMathSharpAmount = new MathSharpVector2Aligned(0.5f, 0.25f);
+            _storageMathSharpTranslation = new Vector2F(1.7f, 2.3f);
+            _storageMathSharpAnchor = new Vector2F(1.0f, 0.0f);
+            _storageMathSharpScale = new Vector2F(7.0f, 3.6f);
+            _storageMathSharpAmount = new Vector2F(0.5f, 0.25f);
         }
 
         [Benchmark]
@@ -86,39 +73,29 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
             deltaT = Vector.Multiply(deltaT, _mathSharpAnchor);
             Vector128<float> result = Vector.Multiply((Vector.Add(_mathSharpTranslation, deltaT)), newScale);
 
-            result.Store(out _mathSharpResult);
+            result.StoreToVector(out _mathSharpResult);
         }
 
         [Benchmark]
-        public void MathSharpWithStorageTypes()
+        public unsafe void MathSharpWithStorageTypes()
         {
-            var scale = _storageMathSharpScale.Load();
-            var amount = _storageMathSharpAmount.Load();
-            var anchor = _storageMathSharpAnchor.Load();
-            var translation = _storageMathSharpTranslation.Load();
+            fixed (Vector2F* pScale = &_storageMathSharpScale)
+            fixed (Vector2F* pAmount = &_storageMathSharpAmount)
+            fixed (Vector2F* pAnchor = &_storageMathSharpAnchor)
+            fixed (Vector2F* pTranslation = &_storageMathSharpTranslation)
+            {
+                var scale = VectorExtensions.ToVector128(pScale);
+                var amount = VectorExtensions.ToVector128(pAmount);
+                var anchor = VectorExtensions.ToVector128(pAnchor);
+                var translation = VectorExtensions.ToVector128(pTranslation);
 
-            Vector128<float> newScale = Vector.Multiply(scale, amount);
-            Vector128<float> deltaT = Vector.Multiply(scale, Vector.Subtract(Vector.SingleConstants.One, amount));
-            deltaT = Vector.Multiply(deltaT, anchor);
-            Vector128<float> result = Vector.Multiply((Vector.Add(translation, deltaT)), newScale);
+                Vector128<float> newScale = Vector.Multiply(scale, amount);
+                Vector128<float> deltaT = Vector.Multiply(scale, Vector.Subtract(Vector.SingleConstants.One, amount));
+                deltaT = Vector.Multiply(deltaT, anchor);
+                Vector128<float> result = Vector.Multiply((Vector.Add(translation, deltaT)), newScale);
 
-            result.Store(out _mathSharpResult);
-        }
-
-        [Benchmark]
-        public void MathSharpWithAlignedStorageTypes()
-        {
-            var scale = _alignedMathSharpScale.Load();
-            var amount = _alignedMathSharpAmount.Load();
-            var anchor = _alignedMathSharpAnchor.Load();
-            var translation = _alignedMathSharpTranslation.Load();
-
-            Vector128<float> newScale = Vector.Multiply(scale, amount);
-            Vector128<float> deltaT = Vector.Multiply(scale, Vector.Subtract(Vector.SingleConstants.One, amount));
-            deltaT = Vector.Multiply(deltaT, anchor);
-            Vector128<float> result = Vector.Multiply((Vector.Add(translation, deltaT)), newScale);
-
-            result.Store(out _alignedMathSharpResult);
+                result.StoreToVector(out _mathSharpResult);
+            }
         }
 
         [Benchmark]
