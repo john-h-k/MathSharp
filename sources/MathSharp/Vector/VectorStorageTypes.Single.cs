@@ -237,7 +237,7 @@ namespace MathSharp.StorageTypes
         public static Vector128<float> ToVector128(Vector3FAligned* vector) => Vector.FromVector3DAligned((float*)vector);
         public static Vector128<float> ToVector128(Vector4FAligned* vector) => Vector.FromVector4DAligned((float*)vector);
 
-        public static void StoreToVector(this Vector128<float> vector, Vector2F* destination) => vector.ToVector2D((float*)destination);
+        public static void StoreToVector(this Vector128<float> vector, Vector2F* destination) => vector.ToVector2D(&destination->X);
         public static void StoreToVector(this Vector128<float> vector, out Vector2F destination)
         {
             fixed (Vector2F* p = &destination)
@@ -246,7 +246,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector128<float> vector, Vector3F* destination) => vector.ToVector3D((float*)destination);
+        public static void StoreToVector(this Vector128<float> vector, Vector3F* destination) => vector.ToVector3D(&destination->X);
         public static void StoreToVector(this Vector128<float> vector, out Vector3F destination)
         {
             fixed (Vector3F* p = &destination)
@@ -255,7 +255,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector128<float> vector, Vector4F* destination) => vector.ToVector4D((float*)destination);
+        public static void StoreToVector(this Vector128<float> vector, Vector4F* destination) => vector.ToVector4D(&destination->X);
         public static void StoreToVector(this Vector128<float> vector, out Vector4F destination)
         {
             fixed (Vector4F* p = &destination)
@@ -264,7 +264,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector128<float> vector, Vector2FAligned* destination) => Vector.ToVector2DAligned(vector, (float*)destination);
+        public static void StoreToVector(this Vector128<float> vector, Vector2FAligned* destination) => Vector.ToVector2DAligned(vector, &destination->X);
         public static void StoreToVector(this Vector128<float> vector, out Vector2FAligned destination)
         {
             fixed (Vector2FAligned* p = &destination)
@@ -273,7 +273,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector128<float> vector, Vector3FAligned* destination) => Vector.ToVector3DAligned(vector, (float*)destination);
+        public static void StoreToVector(this Vector128<float> vector, Vector3FAligned* destination) => Vector.ToVector3DAligned(vector, &destination->X);
         public static void StoreToVector(this Vector128<float> vector, out Vector3FAligned destination)
         {
             fixed (Vector3FAligned* p = &destination)
@@ -282,7 +282,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector128<float> vector, Vector4FAligned* destination) => Vector.ToVector4DAligned(vector, (float*)destination);
+        public static void StoreToVector(this Vector128<float> vector, Vector4FAligned* destination) => Vector.ToVector4DAligned(vector, &destination->X);
         public static void StoreToVector(this Vector128<float> vector, out Vector4FAligned destination)
         {
             fixed (Vector4FAligned* p = &destination)

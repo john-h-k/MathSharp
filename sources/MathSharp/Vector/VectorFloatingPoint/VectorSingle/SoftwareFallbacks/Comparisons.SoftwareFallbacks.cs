@@ -20,10 +20,10 @@ namespace MathSharp
             float lW = W(left), rW = W(right);
 
             return Vector128.Create(
-               BoolToSimdBoolSingle(lX == rX),
-               BoolToSimdBoolSingle(lY == rY),
-               BoolToSimdBoolSingle(lZ == rZ),
-               BoolToSimdBoolSingle(lW == rW)
+               AsMaskSingle(lX == rX),
+               AsMaskSingle(lY == rY),
+               AsMaskSingle(lZ == rZ),
+               AsMaskSingle(lW == rW)
             );
         }
 
@@ -38,10 +38,10 @@ namespace MathSharp
             float lW = W(left), rW = W(right);
 
             return Vector128.Create(
-                BoolToSimdBoolSingle(lX != rX || IsNan(lX, rX)),
-                BoolToSimdBoolSingle(lY != rY || IsNan(lY, rY)),
-                BoolToSimdBoolSingle(lZ != rZ || IsNan(lZ, rZ)),
-                BoolToSimdBoolSingle(lW != rW || IsNan(lW, rW))
+                AsMaskSingle(lX != rX || IsNan(lX, rX)),
+                AsMaskSingle(lY != rY || IsNan(lY, rY)),
+                AsMaskSingle(lZ != rZ || IsNan(lZ, rZ)),
+                AsMaskSingle(lW != rW || IsNan(lW, rW))
             );
         }
 
@@ -54,10 +54,10 @@ namespace MathSharp
             float lW = W(left), rW = W(right);
 
             return Vector128.Create(
-                BoolToSimdBoolSingle(lX > rX || IsNan(lX, rX)),
-                BoolToSimdBoolSingle(lY > rY || IsNan(lY, rY)),
-                BoolToSimdBoolSingle(lZ > rZ || IsNan(lZ, rZ)),
-                BoolToSimdBoolSingle(lW > rW || IsNan(lW, rW))
+                AsMaskSingle(lX > rX || IsNan(lX, rX)),
+                AsMaskSingle(lY > rY || IsNan(lY, rY)),
+                AsMaskSingle(lZ > rZ || IsNan(lZ, rZ)),
+                AsMaskSingle(lW > rW || IsNan(lW, rW))
             );
         }
 
@@ -70,10 +70,10 @@ namespace MathSharp
             float lW = W(left), rW = W(right);
 
             return Vector128.Create(
-                BoolToSimdBoolSingle(lX < rX/* || IsNan(lX, rX)*/),
-                BoolToSimdBoolSingle(lY < rY/* || IsNan(lY, rY)*/),
-                BoolToSimdBoolSingle(lZ < rZ/* || IsNan(lZ, rZ)*/),
-                BoolToSimdBoolSingle(lW < rW/* || IsNan(lW, rW)*/)
+                AsMaskSingle(lX < rX/* || IsNan(lX, rX)*/),
+                AsMaskSingle(lY < rY/* || IsNan(lY, rY)*/),
+                AsMaskSingle(lZ < rZ/* || IsNan(lZ, rZ)*/),
+                AsMaskSingle(lW < rW/* || IsNan(lW, rW)*/)
             );
         }
 
@@ -86,10 +86,10 @@ namespace MathSharp
             float lW = W(left), rW = W(right);
 
             return Vector128.Create(
-                BoolToSimdBoolSingle(lX >= rX || IsNan(lX, rX)),
-                BoolToSimdBoolSingle(lY >= rY || IsNan(lY, rY)),
-                BoolToSimdBoolSingle(lZ >= rZ || IsNan(lZ, rZ)),
-                BoolToSimdBoolSingle(lW >= rW || IsNan(lW, rW))
+                AsMaskSingle(lX >= rX || IsNan(lX, rX)),
+                AsMaskSingle(lY >= rY || IsNan(lY, rY)),
+                AsMaskSingle(lZ >= rZ || IsNan(lZ, rZ)),
+                AsMaskSingle(lW >= rW || IsNan(lW, rW))
             );
         }
 
@@ -102,10 +102,10 @@ namespace MathSharp
             float lW = W(left), rW = W(right);
 
             return Vector128.Create(
-                BoolToSimdBoolSingle(lX <= rX/* || IsNan(lX, rX)*/),
-                BoolToSimdBoolSingle(lY <= rY/* || IsNan(lY, rY)*/),
-                BoolToSimdBoolSingle(lZ <= rZ/* || IsNan(lZ, rZ)*/),
-                BoolToSimdBoolSingle(lW <= rW/* || IsNan(lW, rW)*/)
+                AsMaskSingle(lX <= rX/* || IsNan(lX, rX)*/),
+                AsMaskSingle(lY <= rY/* || IsNan(lY, rY)*/),
+                AsMaskSingle(lZ <= rZ/* || IsNan(lZ, rZ)*/),
+                AsMaskSingle(lW <= rW/* || IsNan(lW, rW)*/)
             );
         }
     }

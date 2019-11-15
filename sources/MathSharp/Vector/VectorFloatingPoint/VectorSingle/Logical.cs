@@ -58,33 +58,5 @@ namespace MathSharp
 
             return Shuffle_Software(left, right, control);
         }
-
-        [MethodImpl(MaxOpt)]
-        public static byte MoveMask(Vector128<float> vector)
-        {
-            if (Sse.IsSupported)
-            {
-                return (byte)Sse.MoveMask(vector);
-            }
-
-            return SoftwareFallback(vector);
-
-            static byte SoftwareFallback(Vector128<float> vector)
-            {
-                float s0 = X(vector);
-                float s1 = Y(vector);
-                float s2 = Z(vector);
-                float s3 = W(vector);
-
-                int e0 = Unsafe.As<float, int>(ref s0);
-                int e1 = Unsafe.As<float, int>(ref s1);
-                int e2 = Unsafe.As<float, int>(ref s2);
-                int e3 = Unsafe.As<float, int>(ref s3);
-
-                return (byte)(SignAsByteBool(e0) | (SignAsByteBool(e1) << 1) | (SignAsByteBool(e2) << 2) | (SignAsByteBool(e3) << 3));
-            }
-
-            static byte SignAsByteBool(int i) => i < 0 ? (byte)1 : (byte)0;
-        }
     }
 }

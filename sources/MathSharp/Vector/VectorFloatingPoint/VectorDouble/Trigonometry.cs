@@ -249,7 +249,7 @@ namespace MathSharp
                 var t0 = FillWithX(TanCoefficients0D);
 
                 var vbIsEven = And(vb, DoubleConstants.Epsilon).AsInt64();
-                vbIsEven = CompareBitwiseEqualInt64(vbIsEven, Vector256<long>.Zero);
+                vbIsEven = CompareBit64Equal(vbIsEven, Vector256<long>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
@@ -288,27 +288,6 @@ namespace MathSharp
                     Math.Tan(Y(vector)),
                     Math.Tan(Z(vector)),
                     Math.Tan(W(vector))
-                );
-            }
-        }
-
-        [MethodImpl(MaxOpt)]
-        private static Vector256<long> CompareBitwiseEqualInt64(Vector256<long> left, Vector256<long> right)
-        {
-            if (Avx2.IsSupported)
-            {
-                return Avx2.CompareEqual(left, right);
-            }
-
-            return SoftwareFallback(left, right);
-
-            static Vector256<long> SoftwareFallback(Vector256<long> left, Vector256<long> right)
-            {
-                return Vector256.Create(
-                    BoolToSimdBoolInt64(X(left) == X(right)),
-                    BoolToSimdBoolInt64(Y(left) == Y(right)),
-                    BoolToSimdBoolInt64(Z(left) == Z(right)),
-                    BoolToSimdBoolInt64(W(left) == W(right))
                 );
             }
         }
