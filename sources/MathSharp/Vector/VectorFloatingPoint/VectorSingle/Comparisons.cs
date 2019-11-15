@@ -8,9 +8,6 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    
-    
-
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]

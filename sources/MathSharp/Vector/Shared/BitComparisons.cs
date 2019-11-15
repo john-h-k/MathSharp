@@ -25,7 +25,7 @@ namespace MathSharp
             {
                 Vector128<sbyte> result = default;
 
-                for (int i = 0; i < Vector128<sbyte>.Count; i++)
+                for (var i = 0; i < Vector128<sbyte>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? (sbyte)-1 : (sbyte)0);
                 }
@@ -52,7 +52,7 @@ namespace MathSharp
             {
                 Vector256<sbyte> result = default;
 
-                for (int i = 0; i < Vector256<sbyte>.Count; i++)
+                for (var i = 0; i < Vector256<sbyte>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? (sbyte)-1 : (sbyte)0);
                 }
@@ -79,7 +79,7 @@ namespace MathSharp
             {
                 Vector128<short> result = default;
 
-                for (int i = 0; i < Vector128<short>.Count; i++)
+                for (var i = 0; i < Vector128<short>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? (short)-1 : (short)0);
                 }
@@ -106,7 +106,7 @@ namespace MathSharp
             {
                 Vector256<short> result = default;
 
-                for (int i = 0; i < Vector256<short>.Count; i++)
+                for (var i = 0; i < Vector256<short>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? (short)-1 : (short)0);
                 }
@@ -133,7 +133,7 @@ namespace MathSharp
             {
                 Vector128<int> result = default;
 
-                for (int i = 0; i < Vector128<int>.Count; i++)
+                for (var i = 0; i < Vector128<int>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? -1 : 0);
                 }
@@ -160,7 +160,7 @@ namespace MathSharp
             {
                 Vector256<int> result = default;
 
-                for (int i = 0; i < Vector256<int>.Count; i++)
+                for (var i = 0; i < Vector256<int>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? -1 : 0);
                 }
@@ -187,7 +187,7 @@ namespace MathSharp
             {
                 Vector128<long> result = default;
 
-                for (int i = 0; i < Vector256<long>.Count; i++)
+                for (var i = 0; i < Vector256<long>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? -1 : 0);
                 }
@@ -214,7 +214,7 @@ namespace MathSharp
             {
                 Vector256<long> result = default;
 
-                for (int i = 0; i < Vector256<int>.Count; i++)
+                for (var i = 0; i < Vector256<int>.Count; i++)
                 {
                     result = result.WithElement(i, left.GetElement(i) == right.GetElement(i) ? -1 : 0);
                 }

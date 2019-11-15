@@ -63,8 +63,6 @@ namespace MathSharp
             E31 = 1 << 31
         }
 
-        public static bool IsDefined(this ComparisonMask mask) => true;
-
         [MethodImpl(MaxOpt)]
         private static ComparisonMask GetCmpMaskForT<T>() where T : struct
         {
@@ -156,7 +154,6 @@ namespace MathSharp
             return vector.AsInt32().GetElement(elem) != 0;
             //return (MoveMask(vector) & (1 << elem)) != 0;
         }
-
 
         [MethodImpl(MaxOpt)]
         public static bool ElementFalse(this Vector128<float> vector, int elem)
