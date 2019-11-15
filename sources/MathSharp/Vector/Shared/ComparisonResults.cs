@@ -89,7 +89,7 @@ namespace MathSharp
                 return E00 | E01 | E02 | E03 | E04 | E05 | E06 | E07 | E08 | E09 | E10 | E11 | E12 | E13 | E14 | E15;
             }
 
-            Debug.Fail(Fuck);
+            Debug.Fail("oh no. oh nooo. oh noooooooooooooo");
             return default;
         }
 
@@ -113,12 +113,9 @@ namespace MathSharp
                 return E00 | E01 | E02 | E03 | E04 | E05 | E06 | E07;
             }
 
-            Debug.Fail(Fuck);
+            Debug.Fail("oh no. oh nooo. oh noooooooooooooo");
             return default;
         }
-
-
-        private const string Fuck = "FUCK!";
 
         [MethodImpl(MaxOpt)]
         public static bool AllTrue(this Vector128<float> vector, ComparisonMask mask)
@@ -145,7 +142,7 @@ namespace MathSharp
             => MoveMask(vector) != 0b_1111;
 
         [MethodImpl(MaxOpt)]
-        public static bool Mixed(this Vector128<float> vector)
+        public static bool AreMixed(this Vector128<float> vector)
         {
             var mask = MoveMask(vector);
             return mask != 0 && mask != 0b_1111;
@@ -198,7 +195,7 @@ namespace MathSharp
         //    => GetMaskAsCmpMask(vector) != GetCmpMaskForT<T>();
 
         //[MethodImpl(MaxOpt)]
-        //public static bool Mixed<T>(this Vector128<T> vector) where T : struct
+        //public static bool AreMixed<T>(this Vector128<T> vector) where T : struct
         //{
         //    var mask = GetMaskAsCmpMask(vector);
         //    return mask != 0 && mask != GetCmpMaskForT<T>();
