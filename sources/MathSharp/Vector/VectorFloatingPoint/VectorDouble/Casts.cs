@@ -6,7 +6,8 @@ namespace MathSharp
 {
     public static partial class Vector
     {
-        public static Vector256<long> ConvertToInt64(Vector256<double> vector)
+        // Used by trig. Low quality because it narrows to Int32.
+        internal static Vector256<long> ConvertToInt64(Vector256<double> vector)
         {
             if (Avx2.IsSupported)
             {
