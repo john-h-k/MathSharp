@@ -12,10 +12,20 @@ namespace MathSharp.Interactive
 {
     internal unsafe class Program
     {
+        private static readonly string StaticReadonly = "A";
+        private const string Const = "C";
+
         public static void Main(string[] args)
         {
+            Console.WriteLine(StaticReadonly);
+            Unsafe.AsRef(StaticReadonly.GetPinnableReference()) = 'B';
+            Console.WriteLine(StaticReadonly);
+
+            Console.WriteLine(Const);
+            Unsafe.AsRef(Const.GetPinnableReference()) = 'B';
+            Console.WriteLine(Const);
         }
 
-        public static MatrixSingle Add(MatrixSingle* left, MatrixSingle* right) => Matrix.Add(left, right);
+        public static ref byte Ref(Span<byte> span) => ref span.GetPinnableReference();
     }
 }

@@ -143,7 +143,8 @@ namespace MathSharp
         public static bool AreMixed(this Vector128<float> vector)
         {
             var mask = MoveMask(vector);
-            return mask != 0 && mask != 0b_1111;
+            // TODO I am too lazy/have not had time to benchmark '&' (branchless) vs '&&' here
+            return mask != 0 & mask != 0b_1111;
         }
 
         [MethodImpl(MaxOpt)]

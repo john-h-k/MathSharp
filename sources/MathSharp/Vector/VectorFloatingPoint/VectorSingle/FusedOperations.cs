@@ -10,7 +10,7 @@ namespace MathSharp
     public static partial class Vector
     {
         // Whether 'Fastxxx' operations use 'Fusedxxx' operations or not
-        private static bool CanFuseOperations
+        public static bool CanFuseOperations
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => Fma.IsSupported && !Options.StrictMath;
@@ -21,6 +21,13 @@ namespace MathSharp
 
         private static string FmaRequiredPlatformNotSupportedMessage => "Platform not supported for operation as it does not support FMA instructions";
 
+        /// <summary>
+        /// Returns (x * y) + z on each element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to to the infinite precision multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) + z on each element, rounded as one ternary operation</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FusedMultiplyAdd(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -42,6 +49,14 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Returns (x * y) + z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation
+        /// It is implemented as a single, ternary operation if <see cref="CanFuseOperations"/> is <langword>true</langword>
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to the multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) + z on each element</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FastMultiplyAdd(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -54,6 +69,13 @@ namespace MathSharp
             return Add(Multiply(x, y), z);
         }
 
+        /// <summary>
+        /// Returns -(x * y) + z on each element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to to the infinite precision negated multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>-(x * y) + z on each element, rounded as one ternary operation</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FusedNegateMultiplyAdd(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -71,6 +93,14 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Returns -(x * y) + z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation
+        /// It is implemented as a single, ternary operation if <see cref="CanFuseOperations"/> is <langword>true</langword>
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to the negated multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>-(x * y) + z on each element</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FastNegateMultiplyAdd(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -83,6 +113,13 @@ namespace MathSharp
             return Add(Negate(Multiply(x, y)), z);
         }
 
+        /// <summary>
+        /// Returns (x * y) - z on each element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be subtracted from to the infinite precision multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) - z on each element, rounded as one ternary operation</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FusedMultiplySubtract(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -99,6 +136,14 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Returns (x * y) - z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation
+        /// It is implemented as a single, ternary operation if <see cref="CanFuseOperations"/> is <langword>true</langword>
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be subtracted from to multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) - z on each element</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FastMultiplySubtract(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -110,6 +155,13 @@ namespace MathSharp
             return Subtract(Multiply(x, y), z);
         }
 
+        /// <summary>
+        /// Returns -(x * y) - z on each element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be subtracted from the infinite precision multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>-(x * y) - z on each element, rounded as one ternary operation</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FusedNegateMultiplySubtract(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -127,6 +179,14 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Returns -(x * y) - z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation
+        /// It is implemented as a single, ternary operation if <see cref="CanFuseOperations"/> is <langword>true</langword>
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be subtracted from the multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>-(x * y) - z on each element</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FastNegateMultiplySubtract(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -138,6 +198,15 @@ namespace MathSharp
             return Subtract(Negate(Multiply(x, y)), z);
         }
 
+        /// <summary>
+        /// Returns (x * y) + z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation,
+        /// and (x * y) - z on each odd-indexed element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation
+        /// This presumes indexing beginning at 0
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to or subtracted from to the infinite precision multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) +/- z on each element, rounded as one ternary operation</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FusedMultiplyAddSubtractAlternating(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -154,7 +223,16 @@ namespace MathSharp
             }
         }
 
-        
+        /// <summary>
+        /// Returns (x * y) + z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation,
+        /// and (x * y) - z on each odd-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation
+        /// It is implemented as a single, ternary operation if <see cref="CanFuseOperations"/> is <langword>true</langword>
+        /// This presumes indexing beginning at 0
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to or subtracted from to the multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) +/- z on each element</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FastMultiplyAddSubtractAlternating(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -168,6 +246,15 @@ namespace MathSharp
             return Add(mul, negate);
         }
 
+        /// <summary>
+        /// Returns (x * y) - z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation,
+        /// and (x * y) + z on each odd-indexed element of a <see cref="Vector128{Single}"/>, rounded as one ternary operation
+        /// This presumes indexing beginning at 0
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to or subtracted from to the infinite precision multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) +/- z on each element, rounded as one ternary operation</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FusedMultiplySubtractAddAlternating(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
@@ -184,6 +271,16 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Returns (x * y) - z on each even-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation,
+        /// and (x * y) + z on each odd-indexed element of a <see cref="Vector128{Single}"/>, rounded either as 2 binary operations, or as one ternary operation
+        /// It is implemented as a single, ternary operation if <see cref="CanFuseOperations"/> is <langword>true</langword>
+        /// This presumes indexing beginning at 0
+        /// </summary>
+        /// <param name="x">The vector to be multiplied with <paramref name="y"/></param>
+        /// <param name="y">The vector to be multiplied with <paramref name="x"/></param>
+        /// <param name="z">The vector to be added to or subtracted from to the multiplication of <paramref name="x"/> and <paramref name="y"/></param>
+        /// <returns>(x * y) +/- z on each element</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FastMultiplySubtractAddAlternating(Vector128<float> x, Vector128<float> y, Vector128<float> z)
         {
