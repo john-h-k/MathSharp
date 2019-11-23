@@ -14,6 +14,11 @@ namespace MathSharp
     {
         #region Vector
 
+        /// <summary>
+        /// Returns the absolute value of each element in <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to take the absolute values</param>
+        /// <returns>The absolute value of each element in <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Abs(Vector256<double> vector)
             => Max(Subtract(Vector256<double>.Zero, vector), vector);
@@ -30,7 +35,12 @@ namespace MathSharp
             return HorizontalAdd_Software(left, right);
         }
 
-
+        /// <summary>
+        /// Adds each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be added</param>
+        /// <param name="right">The right vector to be added</param>
+        /// <returns>The per-element addition of <paramref name="left"/> and <paramref name="right"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Add(Vector256<double> left, Vector256<double> right)
         {
@@ -42,12 +52,22 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-
+        /// <summary>
+        /// Adds a scalar to each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to be added</param>
+        /// <param name="scalar">The scalar to be added to each element of <paramref name="vector"/></param>
+        /// <returns>The per-element addition of <paramref name="vector"/> with <paramref name="scalar"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Add(Vector256<double> vector, double scalar)
             => Add(vector, Vector256.Create(scalar));
 
-
+        /// <summary>
+        /// Subtracts each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to have <paramref name="right"/>subtracted from</param>
+        /// <param name="right">The right vector to be subtracted from <paramref name="left"/></param>
+        /// <returns>The per-element subtraction of <paramref name="right"/> from <paramref name="left"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Subtract(Vector256<double> left, Vector256<double> right)
         {
@@ -59,12 +79,22 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
-
+        /// <summary>
+        /// Subtracts a scalar from each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to be added</param>
+        /// <param name="scalar">The scalar to be subtracted from each element of <paramref name="vector"/></param>
+        /// <returns>The per-element subtraction of <paramref name="scalar"/> from <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Subtract(Vector256<double> vector, double scalar)
             => Subtract(vector, Vector256.Create(scalar));
 
-
+        /// <summary>
+        /// Multiplies each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be multiplied</param>
+        /// <param name="right">The right vector to be multiplied</param>
+        /// <returns>The per-element multiplication of <paramref name="left"/> and <paramref name="right"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Multiply(Vector256<double> left, Vector256<double> right)
         {
