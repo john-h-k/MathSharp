@@ -1,10 +1,12 @@
 ﻿using System.Runtime.Intrinsics;
 using MathSharp.Utils;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace MathSharp.Quaternion
 {
     public static partial class Quaternion
     {
+        public static Vector128<float> Create(float x, float y, float z, float w) => Vector128.Create(x, y, z, w);
         public static Vector128<float> LengthSquared(Vector128<float> quaternion)
             => Vector.LengthSquared4D(quaternion);
 
@@ -153,9 +155,9 @@ namespace MathSharp.Quaternion
         }
 
         // ReSharper disable InconsistentNaming, IdentifierTypo
-        private static readonly Vector128<float> ControlWZYX = Vector128.Create(1.0f, -1.0f, 1.0f, -1.0f);
-        private static readonly Vector128<float> ControlZWXY = Vector128.Create(1.0f, 1.0f, -1.0f, -1.0f);
-        private static readonly Vector128<float> ControlYXWZ = Vector128.Create(-1.0f, 1.0f, 1.0f, -1.0f);
+        private static readonly Vector128<float> ControlWZYX = Vector128.Create(+1.0f, -1.0f, +1.0f, -1.0f);
+        private static readonly Vector128<float> ControlZWXY = Vector128.Create(+1.0f, +1.0f, -1.0f, -1.0f);
+        private static readonly Vector128<float> ControlYXWZ = Vector128.Create(-1.0f, +1.0f, +1.0f, -1.0f);
         // ReSharper restore InconsistentNaming, IdentifierTypo
     }
 }

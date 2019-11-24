@@ -191,7 +191,7 @@ namespace MathSharp
                 return Avx.Multiply(left, right);
             }
 
-            return FromLowHigh(Subtract(left.GetLower(), right.GetLower()), Subtract(left.GetUpper(), right.GetLower()));
+            return FromLowHigh(Multiply(left.GetLower(), right.GetLower()), Multiply(left.GetUpper(), right.GetLower()));
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace MathSharp
                 return Avx.Divide(dividend, divisor);
             }
 
-            return FromLowHigh(Subtract(dividend.GetLower(), divisor.GetLower()), Subtract(dividend.GetUpper(), divisor.GetLower()));
+            return FromLowHigh(Divide(dividend.GetLower(), divisor.GetLower()), Divide(dividend.GetUpper(), divisor.GetLower()));
         }
 
 
@@ -506,7 +506,5 @@ namespace MathSharp
         public static Vector128<float> IsNotNaN(Vector128<float> vector) => CompareLessThanOrEqual(And(vector, FiniteComparison0), FiniteComparison1);
         public static Vector128<float> IsZero(Vector128<float> vector) => CompareEqual(vector, SingleConstants.Zero);
         public static Vector128<float> IsNotZero(Vector128<float> vector) => CompareNotEqual(vector, SingleConstants.Zero);
-
-
     }
 }
