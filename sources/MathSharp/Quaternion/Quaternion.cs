@@ -1,6 +1,5 @@
 ﻿using System.Runtime.Intrinsics;
 using MathSharp.Utils;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace MathSharp.Quaternion
 {

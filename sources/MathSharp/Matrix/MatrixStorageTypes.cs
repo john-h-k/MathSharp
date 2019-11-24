@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using MathSharp.StorageTypes;
 // ReSharper disable InvokeAsExtensionMethod
 
@@ -48,10 +49,9 @@ namespace MathSharp
             E44 = e44;
         }
 
-        public Matrix4x4F(Vector4F e1, Vector4F e2, Vector4F e3, Vector4F e4)
+        public unsafe Matrix4x4F(Vector4F e1, Vector4F e2, Vector4F e3, Vector4F e4)
         {
-            // TODO use Unsafe.SkipInit<T>(out T)
-            this = default;
+            fixed (void* p = &this) { } // TODO Use Unsafe.SkipInit<T>(out T)
             Unsafe.As<float, Vector4F>(ref Unsafe.AsRef(in E11)) = e1;
             Unsafe.As<float, Vector4F>(ref Unsafe.AsRef(in E21)) = e2;
             Unsafe.As<float, Vector4F>(ref Unsafe.AsRef(in E31)) = e3;
@@ -87,14 +87,23 @@ namespace MathSharp
 
     public static unsafe partial class MatrixExtensions
     {
+        public static MatrixSingle FromMatrix4x4(in Matrix4x4F matrix)
+        {
+            fixed (Matrix4x4F* p = &matrix)
+            {
+                return FromMatrix4x4(p);
+            }
+        }
+
+
+        public static MatrixSingle FromMatrix4x4(Matrix4x4F* matrix) 
+            => Matrix.FromMatrix4x4(&matrix->E11);
+
         public static void ToMatrix4x4(MatrixSingle matrix, Matrix4x4F* destination)
         {
             float* p = &destination->E11;
 
-            Vector.ToVector4D(matrix._v0, &p[0]);
-            Vector.ToVector4D(matrix._v1, &p[4]);
-            Vector.ToVector4D(matrix._v2, &p[8]);
-            Vector.ToVector4D(matrix._v3, &p[12]);
+            Matrix.ToMatrix4x4(matrix, p);
         }
 
         public static void ToMatrix4x4(MatrixSingle matrix, out Matrix4x4F destination)
