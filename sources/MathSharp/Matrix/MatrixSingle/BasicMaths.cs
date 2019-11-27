@@ -18,6 +18,15 @@ namespace MathSharp
                 Vector.Add(left._v3, right._v3)
             );
 
+        [MethodImpl(MaxOpt)]
+        public static unsafe MatrixSingle Add(MatrixSingle* left, MatrixSingle* right) =>
+            new MatrixSingle(
+                Vector.Add(left->_v0, right->_v0),
+                Vector.Add(left->_v1, right->_v1),
+                Vector.Add(left->_v2, right->_v2),
+                Vector.Add(left->_v3, right->_v3)
+            );
+
 
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right) =>
