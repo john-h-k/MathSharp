@@ -250,7 +250,7 @@ namespace MathSharp
                 var t0 = FillWithX(TanCoefficients0);
 
                 var vbIsEven = And(vb, SingleConstants.Epsilon).AsInt32();
-                vbIsEven = CompareBitwiseEqualInt32(vbIsEven, Vector128<int>.Zero);
+                vbIsEven = CompareBit32Equal(vbIsEven, Vector128<int>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
@@ -293,26 +293,7 @@ namespace MathSharp
             }
         }
 
-        [MethodImpl(MaxOpt)]
-        private static Vector128<int> CompareBitwiseEqualInt32(Vector128<int> left, Vector128<int> right)
-        {
-            if (Sse2.IsSupported)
-            {
-                return Sse2.CompareEqual(left, right);
-            }
-
-            return SoftwareFallback(left, right);
-
-            static Vector128<int> SoftwareFallback(Vector128<int> left, Vector128<int> right)
-            {
-                return Vector128.Create(
-                    BoolToSimdBoolInt32(X(left) == X(right)),
-                    BoolToSimdBoolInt32(Y(left) == Y(right)),
-                    BoolToSimdBoolInt32(Z(left) == Z(right)),
-                    BoolToSimdBoolInt32(W(left) == W(right))
-                );
-            }
-        }
+        
 
         private static readonly Vector128<float> TanEstCoefficients = Vector128.Create(2.484f, -1.954923183e-1f, 2.467401101f, ScalarSingleConstants.OneDivPi);
         [MethodImpl(MaxOpt)]
@@ -501,7 +482,7 @@ namespace MathSharp
                 var yEqualsZero = CompareEqual(left, SingleConstants.Zero);
                 var xEqualsZero = CompareEqual(right, SingleConstants.Zero);
                 var rightIsPositive = ExtractSign(right);
-                rightIsPositive = CompareBitwiseEqualInt32(rightIsPositive.AsInt32(), Vector128<int>.Zero).AsSingle();
+                rightIsPositive = CompareBit32Equal(rightIsPositive.AsInt32(), Vector128<int>.Zero).AsSingle();
                 var yEqualsInfinity = IsInfinite(left);
                 var xEqualsInfinity = IsInfinite(right);
 
@@ -517,7 +498,7 @@ namespace MathSharp
                 var r4 = Select(threePiDiv4, piDiv4, rightIsPositive);
                 var r5 = Select(piDiv2, r4, xEqualsInfinity);
                 var result = Select(r3, r5, yEqualsInfinity);
-                aTanResultValid = CompareBitwiseEqualInt32(result.AsInt32(), aTanResultValid.AsInt32()).AsSingle();
+                aTanResultValid = CompareBit32Equal(result.AsInt32(), aTanResultValid.AsInt32()).AsSingle();
 
                 var v = Divide(left, right);
 

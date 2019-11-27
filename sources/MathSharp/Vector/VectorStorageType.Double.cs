@@ -25,15 +25,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector2D other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y);
 
         public bool Equals(Vector2D other) => X.Equals(other.X) && Y.Equals(other.Y);
         public bool Equals(Vector2DAligned other) => Equals(new Vector2D(other));
@@ -69,16 +61,8 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector2D other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z);
+
 
         public bool Equals(Vector3D other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector3DAligned other) => Equals(new Vector3D(other));
@@ -120,17 +104,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector4D other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                hashCode = (hashCode * 397) ^ W.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
 
         public bool Equals(Vector4D other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector4DAligned other) => Equals(new Vector4D(other));
@@ -162,15 +136,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector2DAligned other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y);
 
         public bool Equals(Vector2DAligned other) => X.Equals(other.X) && Y.Equals(other.Y);
         public bool Equals(Vector2D other) => Equals(new Vector2DAligned(other));
@@ -206,16 +172,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector3DAligned other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
         public bool Equals(Vector3DAligned other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector3D other) => Equals(new Vector3DAligned(other));
@@ -258,17 +215,7 @@ namespace MathSharp.StorageTypes
         public override bool Equals(object? obj)
             => obj is Vector4DAligned other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                hashCode = (hashCode * 397) ^ W.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
 
         public bool Equals(Vector4DAligned other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         public bool Equals(Vector4D other) => Equals(new Vector4DAligned(other));
@@ -292,7 +239,7 @@ namespace MathSharp.StorageTypes
         public static Vector256<double> ToVector256(Vector3DAligned* vector) => Vector.FromVector3DAligned((double*)vector);
         public static Vector256<double> ToVector256(Vector4DAligned* vector) => Vector.FromVector4DAligned((double*)vector);
 
-        public static void StoreToVector(this Vector256<double> vector, Vector2D* destination) => vector.ToVector2D((double*)destination);
+        public static void StoreToVector(this Vector256<double> vector, Vector2D* destination) => vector.ToVector2D(&destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector2D destination)
         {
             fixed (Vector2D* p = &destination)
@@ -301,7 +248,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector3D* destination) => vector.ToVector3D((double*)destination);
+        public static void StoreToVector(this Vector256<double> vector, Vector3D* destination) => vector.ToVector3D(&destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector3D destination)
         {
             fixed (Vector3D* p = &destination)
@@ -310,7 +257,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector4D* destination) => vector.ToVector4D((double*)destination);
+        public static void StoreToVector(this Vector256<double> vector, Vector4D* destination) => vector.ToVector4D(&destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector4D destination)
         {
             fixed (Vector4D* p = &destination)
@@ -319,7 +266,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector2DAligned* destination) => Vector.ToVector2DAligned(vector, (double*)destination);
+        public static void StoreToVector(this Vector256<double> vector, Vector2DAligned* destination) => Vector.ToVector2DAligned(vector, &destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector2DAligned destination)
         {
             fixed (Vector2DAligned* p = &destination)
@@ -328,7 +275,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector3DAligned* destination) => Vector.ToVector3DAligned(vector, (double*)destination);
+        public static void StoreToVector(this Vector256<double> vector, Vector3DAligned* destination) => Vector.ToVector3DAligned(vector, &destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector3DAligned destination)
         {
             fixed (Vector3DAligned* p = &destination)
@@ -337,7 +284,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector4DAligned* destination) => Vector.ToVector4DAligned(vector, (double*)destination);
+        public static void StoreToVector(this Vector256<double> vector, Vector4DAligned* destination) => Vector.ToVector4DAligned(vector, &destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector4DAligned destination)
         {
             fixed (Vector4DAligned* p = &destination)

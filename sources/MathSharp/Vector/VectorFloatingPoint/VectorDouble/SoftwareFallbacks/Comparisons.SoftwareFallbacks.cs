@@ -19,10 +19,10 @@ namespace MathSharp
             double lW = W(left), rW = W(right);
 
             return Vector256.Create(
-               BoolToSimdBoolDouble(lX == rX),
-               BoolToSimdBoolDouble(lY == rY),
-               BoolToSimdBoolDouble(lZ == rZ),
-               BoolToSimdBoolDouble(lW == rW)
+               AsMaskDouble(lX == rX),
+               AsMaskDouble(lY == rY),
+               AsMaskDouble(lZ == rZ),
+               AsMaskDouble(lW == rW)
             );
         }
 
@@ -37,10 +37,10 @@ namespace MathSharp
             double lW = W(left), rW = W(right);
 
             return Vector256.Create(
-                BoolToSimdBoolDouble(lX != rX || IsNan(lX, rX)),
-                BoolToSimdBoolDouble(lY != rY || IsNan(lY, rY)),
-                BoolToSimdBoolDouble(lZ != rZ || IsNan(lZ, rZ)),
-                BoolToSimdBoolDouble(lW != rW || IsNan(lW, rW))
+                AsMaskDouble(lX != rX || IsNan(lX, rX)),
+                AsMaskDouble(lY != rY || IsNan(lY, rY)),
+                AsMaskDouble(lZ != rZ || IsNan(lZ, rZ)),
+                AsMaskDouble(lW != rW || IsNan(lW, rW))
             );
         }
 
@@ -53,10 +53,10 @@ namespace MathSharp
             double lW = W(left), rW = W(right);
 
             return Vector256.Create(
-                BoolToSimdBoolDouble(lX > rX || IsNan(lX, rX)),
-                BoolToSimdBoolDouble(lY > rY || IsNan(lY, rY)),
-                BoolToSimdBoolDouble(lZ > rZ || IsNan(lZ, rZ)),
-                BoolToSimdBoolDouble(lW > rW || IsNan(lW, rW))
+                AsMaskDouble(lX > rX || IsNan(lX, rX)),
+                AsMaskDouble(lY > rY || IsNan(lY, rY)),
+                AsMaskDouble(lZ > rZ || IsNan(lZ, rZ)),
+                AsMaskDouble(lW > rW || IsNan(lW, rW))
             );
         }
 
@@ -69,10 +69,10 @@ namespace MathSharp
             double lW = W(left), rW = W(right);
 
             return Vector256.Create(
-                BoolToSimdBoolDouble(lX < rX/* || IsNan(lX, rX)*/),
-                BoolToSimdBoolDouble(lY < rY/* || IsNan(lY, rY)*/),
-                BoolToSimdBoolDouble(lZ < rZ/* || IsNan(lZ, rZ)*/),
-                BoolToSimdBoolDouble(lW < rW/* || IsNan(lW, rW)*/)
+                AsMaskDouble(lX < rX/* || IsNan(lX, rX)*/),
+                AsMaskDouble(lY < rY/* || IsNan(lY, rY)*/),
+                AsMaskDouble(lZ < rZ/* || IsNan(lZ, rZ)*/),
+                AsMaskDouble(lW < rW/* || IsNan(lW, rW)*/)
             );
         }
 
@@ -85,10 +85,10 @@ namespace MathSharp
             double lW = W(left), rW = W(right);
 
             return Vector256.Create(
-                BoolToSimdBoolDouble(lX >= rX || IsNan(lX, rX)),
-                BoolToSimdBoolDouble(lY >= rY || IsNan(lY, rY)),
-                BoolToSimdBoolDouble(lZ >= rZ || IsNan(lZ, rZ)),
-                BoolToSimdBoolDouble(lW >= rW || IsNan(lW, rW))
+                AsMaskDouble(lX >= rX || IsNan(lX, rX)),
+                AsMaskDouble(lY >= rY || IsNan(lY, rY)),
+                AsMaskDouble(lZ >= rZ || IsNan(lZ, rZ)),
+                AsMaskDouble(lW >= rW || IsNan(lW, rW))
             );
         }
 
@@ -101,10 +101,10 @@ namespace MathSharp
             double lW = W(left), rW = W(right);
 
             return Vector256.Create(
-                BoolToSimdBoolDouble(lX <= rX/* || IsNan(lX, rX)*/),
-                BoolToSimdBoolDouble(lY <= rY/* || IsNan(lY, rY)*/),
-                BoolToSimdBoolDouble(lZ <= rZ/* || IsNan(lZ, rZ)*/),
-                BoolToSimdBoolDouble(lW <= rW/* || IsNan(lW, rW)*/)
+                AsMaskDouble(lX <= rX/* || IsNan(lX, rX)*/),
+                AsMaskDouble(lY <= rY/* || IsNan(lY, rY)*/),
+                AsMaskDouble(lZ <= rZ/* || IsNan(lZ, rZ)*/),
+                AsMaskDouble(lW <= rW/* || IsNan(lW, rW)*/)
             );
         }
     }

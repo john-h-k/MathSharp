@@ -20,7 +20,23 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<T> Select<T, U>(Vector128<T> left, Vector128<T> right, Vector128<U> selector)
             where T : struct where U : struct
-            => Or(And(selector.As<U, T>(), right), AndNot(selector.As<U, T>(), left));
+        {
+            if (Sse41.IsSupported)
+            {
+                if (typeof(T) == typeof(float))
+                {
+                    return Sse41.BlendVariable(left.AsSingle(), right.AsSingle(), selector.AsSingle()).As<float, T>();
+                }
+                else if (typeof(T) == typeof(double))
+                {
+                    return Sse41.BlendVariable(left.AsDouble(), right.AsDouble(), selector.AsDouble()).As<double, T>();
+                }
+
+                return Sse41.BlendVariable(left.AsByte(), right.AsByte(), selector.AsByte()).As<byte, T>();
+            }
+
+            return Or(And(selector.As<U, T>(), right), AndNot(selector.As<U, T>(), left));
+        }
 
         /// <summary>
         /// Select the elements from <paramref name="vector"/> where the equivalent element in

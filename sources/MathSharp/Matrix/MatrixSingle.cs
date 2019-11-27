@@ -91,10 +91,12 @@ namespace MathSharp
             return Create(Vector128.Create(value));
         }
 
+#if !NO_OPERATORS
+
         #region Operators
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MatrixSingle operator +(in MatrixSingle left, in MatrixSingle right)
+        public static MatrixSingle operator +(MatrixSingle left, MatrixSingle right)
             => Matrix.Add(left, right);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -123,5 +125,7 @@ namespace MathSharp
             => Matrix.Negate(matrix);
 
         #endregion
+
+#endif
     }
 }

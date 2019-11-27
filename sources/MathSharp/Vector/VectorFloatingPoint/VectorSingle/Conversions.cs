@@ -6,8 +6,6 @@ using static MathSharp.Utils.Helpers;
 
 namespace MathSharp
 {
-    
-
     public static unsafe partial class Vector
     {
         #region Loads
@@ -29,10 +27,11 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FromVector3DAligned(in float p)
         {
-            fixed (float* pp = &p)
-            {
-                return FromVector3DAligned(pp);
-            }
+            return FromVector4DAligned(in p);
+            //fixed (float* pp = &p)
+            //{
+            //    return FromVector3DAligned(pp);
+            //}
         }
 
         [MethodImpl(MaxOpt)]

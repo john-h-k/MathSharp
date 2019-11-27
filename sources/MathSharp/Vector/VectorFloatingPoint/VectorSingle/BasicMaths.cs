@@ -17,10 +17,20 @@ namespace MathSharp
     {
         #region Vector
 
+        /// <summary>
+        /// Returns the absolute value of each element in <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to take the absolute values</param>
+        /// <returns>The absolute value of each element in <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Abs(Vector128<float> vector)
             => And(vector, SingleConstants.MaskSign);
 
+        /// <summary>
+        /// Returns the absolute value of each element in <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to take the absolute values</param>
+        /// <returns>The absolute value of each element in <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<float> Abs(Vector256<float> vector)
             => And(vector, SingleConstants256.MaskSign);
@@ -62,7 +72,12 @@ namespace MathSharp
             return HorizontalAdd_Software(left, right);
         }
 
-
+        /// <summary>
+        /// Adds each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be added</param>
+        /// <param name="right">The right vector to be added</param>
+        /// <returns>The per-element addition of <paramref name="left"/> and <paramref name="right"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Add(Vector128<float> left, Vector128<float> right)
         {
@@ -74,11 +89,22 @@ namespace MathSharp
             return Add_Software(left, right);
         }
 
-
+        /// <summary>
+        /// Adds a scalar to each element of a vectors
+        /// </summary>
+        /// <param name="vector">The vector to be added</param>
+        /// <param name="scalar">The scalar to be added to each element of <paramref name="vector"/></param>
+        /// <returns>The per-element addition of <paramref name="vector"/> with <paramref name="scalar"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Add(Vector128<float> vector, float scalar)
             => Add(vector, Vector128.Create(scalar));
 
+        /// <summary>
+        /// Adds each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be added</param>
+        /// <param name="right">The right vector to be added</param>
+        /// <returns>The per-element addition of <paramref name="left"/> and <paramref name="right"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<float> Add(Vector256<float> left, Vector256<float> right)
         {
@@ -90,7 +116,12 @@ namespace MathSharp
             return FromLowHigh(Add(left.GetLower(), right.GetLower()), Add(left.GetUpper(), right.GetLower()));
         }
 
-
+        /// <summary>
+        /// Subtracts each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to have <paramref name="right"/>subtracted from</param>
+        /// <param name="right">The right vector to be subtracted from <paramref name="left"/></param>
+        /// <returns>The per-element subtraction of <paramref name="right"/> from <paramref name="left"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Subtract(Vector128<float> left, Vector128<float> right)
         {
@@ -102,6 +133,12 @@ namespace MathSharp
             return Subtract_Software(left, right);
         }
 
+        /// <summary>
+        /// Subtracts each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to have <paramref name="right"/>subtracted from</param>
+        /// <param name="right">The right vector to be subtracted from <paramref name="left"/></param>
+        /// <returns>The per-element subtraction of <paramref name="right"/> from <paramref name="left"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<float> Subtract(Vector256<float> left, Vector256<float> right)
         {
@@ -113,11 +150,22 @@ namespace MathSharp
             return FromLowHigh(Subtract(left.GetLower(), right.GetLower()), Subtract(left.GetUpper(), right.GetLower()));
         }
 
+        /// <summary>
+        /// Subtracts a scalar from each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to be added</param>
+        /// <param name="scalar">The scalar to be subtracted from each element of <paramref name="vector"/></param>
+        /// <returns>The per-element subtraction of <paramref name="scalar"/> from <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Subtract(Vector128<float> vector, float scalar)
             => Subtract(vector, Vector128.Create(scalar));
 
-
+        /// <summary>
+        /// Multiplies each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be multiplied</param>
+        /// <param name="right">The right vector to be multiplied</param>
+        /// <returns>The per-element multiplication of <paramref name="left"/> and <paramref name="right"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Multiply(Vector128<float> left, Vector128<float> right)
         {
@@ -129,6 +177,12 @@ namespace MathSharp
             return Multiply_Software(left, right);
         }
 
+        /// <summary>
+        /// Multiplies each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be multiplied</param>
+        /// <param name="right">The right vector to be multiplied</param>
+        /// <returns>The per-element multiplication of <paramref name="left"/> and <paramref name="right"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<float> Multiply(Vector256<float> left, Vector256<float> right)
         {
@@ -137,9 +191,24 @@ namespace MathSharp
                 return Avx.Multiply(left, right);
             }
 
-            return FromLowHigh(Subtract(left.GetLower(), right.GetLower()), Subtract(left.GetUpper(), right.GetLower()));
+            return FromLowHigh(Multiply(left.GetLower(), right.GetLower()), Multiply(left.GetUpper(), right.GetLower()));
         }
 
+        /// <summary>
+        /// Multiplies each element of 2 vectors
+        /// </summary>
+        /// <param name="vector">The vector to be added</param>
+        /// <param name="scalar">The scalar to be subtracted from each element of <paramref name="vector"/></param>
+        /// <returns>The per-element subtraction of <paramref name="scalar"/> from <paramref name="vector"/></returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector128<float> Multiply(Vector128<float> vector, float scalar)
+            => Multiply(vector, Vector128.Create(scalar));
+
+        /// <summary>
+        /// Squares each element of 2 vectors
+        /// </summary>
+        /// <param name="vector">The vector to have each element squared</param>
+        /// <returns>The per-element square of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Square(Vector128<float> vector)
         {
@@ -151,6 +220,11 @@ namespace MathSharp
             return Multiply_Software(vector, vector);
         }
 
+        /// <summary>
+        /// Squares each element of 2 vectors
+        /// </summary>
+        /// <param name="vector">The vector to have each element squared</param>
+        /// <returns>The per-element square of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<float> Square(Vector256<float> vector)
         {
@@ -161,11 +235,6 @@ namespace MathSharp
 
             return Multiply(vector, vector);
         }
-
-        [MethodImpl(MaxOpt)]
-        public static Vector128<float> Multiply(Vector128<float> vector, float scalar)
-            => Multiply(vector, Vector128.Create(scalar));
-
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Divide(Vector128<float> dividend, Vector128<float> divisor)
@@ -197,7 +266,7 @@ namespace MathSharp
                 return Avx.Divide(dividend, divisor);
             }
 
-            return FromLowHigh(Subtract(dividend.GetLower(), divisor.GetLower()), Subtract(dividend.GetUpper(), divisor.GetLower()));
+            return FromLowHigh(Divide(dividend.GetLower(), divisor.GetLower()), Divide(dividend.GetUpper(), divisor.GetLower()));
         }
 
 
@@ -437,7 +506,5 @@ namespace MathSharp
         public static Vector128<float> IsNotNaN(Vector128<float> vector) => CompareLessThanOrEqual(And(vector, FiniteComparison0), FiniteComparison1);
         public static Vector128<float> IsZero(Vector128<float> vector) => CompareEqual(vector, SingleConstants.Zero);
         public static Vector128<float> IsNotZero(Vector128<float> vector) => CompareNotEqual(vector, SingleConstants.Zero);
-
-
     }
 }

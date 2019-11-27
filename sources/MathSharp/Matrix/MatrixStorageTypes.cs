@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using MathSharp.StorageTypes;
 // ReSharper disable InvokeAsExtensionMethod
 
@@ -48,10 +49,9 @@ namespace MathSharp
             E44 = e44;
         }
 
-        public Matrix4x4F(Vector4F e1, Vector4F e2, Vector4F e3, Vector4F e4)
+        public unsafe Matrix4x4F(Vector4F e1, Vector4F e2, Vector4F e3, Vector4F e4)
         {
-            // TODO use Unsafe.SkipInit<T>(out T)
-            this = default;
+            fixed (void* p = &this) { } // TODO Use Unsafe.SkipInit<T>(out T)
             Unsafe.As<float, Vector4F>(ref Unsafe.AsRef(in E11)) = e1;
             Unsafe.As<float, Vector4F>(ref Unsafe.AsRef(in E21)) = e2;
             Unsafe.As<float, Vector4F>(ref Unsafe.AsRef(in E31)) = e3;
@@ -59,62 +59,51 @@ namespace MathSharp
         }
 
         public bool Equals(Matrix4x4F other)
-        {
-            return E11.Equals(other.E11) 
-                   && E12.Equals(other.E12) 
-                   && E13.Equals(other.E13) 
-                   && E14.Equals(other.E14) 
-                   && E21.Equals(other.E21) 
-                   && E22.Equals(other.E22) 
-                   && E23.Equals(other.E23) 
-                   && E24.Equals(other.E24) 
-                   && E31.Equals(other.E31) 
-                   && E32.Equals(other.E32) 
-                   && E33.Equals(other.E33) 
-                   && E34.Equals(other.E34) 
-                   && E41.Equals(other.E41) 
-                   && E42.Equals(other.E42) 
-                   && E43.Equals(other.E43) 
-                   && E44.Equals(other.E44);
-        }
+            => E11.Equals(other.E11) &&
+               E12.Equals(other.E12) &&
+               E13.Equals(other.E13) &&
+               E14.Equals(other.E14) &&
+               E21.Equals(other.E21) &&
+               E22.Equals(other.E22) &&
+               E23.Equals(other.E23) &&
+               E24.Equals(other.E24) &&
+               E31.Equals(other.E31) &&
+               E32.Equals(other.E32) &&
+               E33.Equals(other.E33) &&
+               E34.Equals(other.E34) &&
+               E41.Equals(other.E41) &&
+               E42.Equals(other.E42) &&
+               E43.Equals(other.E43) &&
+               E44.Equals(other.E44);
 
         public override bool Equals(object? obj) => obj is Matrix4x4F other && Equals(other);
 
         public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = E11.GetHashCode();
-                hashCode = (hashCode * 397) ^ E12.GetHashCode();
-                hashCode = (hashCode * 397) ^ E13.GetHashCode();
-                hashCode = (hashCode * 397) ^ E14.GetHashCode();
-                hashCode = (hashCode * 397) ^ E21.GetHashCode();
-                hashCode = (hashCode * 397) ^ E22.GetHashCode();
-                hashCode = (hashCode * 397) ^ E23.GetHashCode();
-                hashCode = (hashCode * 397) ^ E24.GetHashCode();
-                hashCode = (hashCode * 397) ^ E31.GetHashCode();
-                hashCode = (hashCode * 397) ^ E32.GetHashCode();
-                hashCode = (hashCode * 397) ^ E33.GetHashCode();
-                hashCode = (hashCode * 397) ^ E34.GetHashCode();
-                hashCode = (hashCode * 397) ^ E41.GetHashCode();
-                hashCode = (hashCode * 397) ^ E42.GetHashCode();
-                hashCode = (hashCode * 397) ^ E43.GetHashCode();
-                hashCode = (hashCode * 397) ^ E44.GetHashCode();
-                return hashCode;
-            }
-        }
+            => HashCode.Combine(
+                HashCode.Combine(E11, E12, E13, E14, E21, E22, E23, E24),
+                HashCode.Combine(E31, E32, E33, E34, E41, E42, E43, E44)
+            );
     }
 
     public static unsafe partial class MatrixExtensions
     {
+        public static MatrixSingle FromMatrix4x4(in Matrix4x4F matrix)
+        {
+            fixed (Matrix4x4F* p = &matrix)
+            {
+                return FromMatrix4x4(p);
+            }
+        }
+
+
+        public static MatrixSingle FromMatrix4x4(Matrix4x4F* matrix) 
+            => Matrix.FromMatrix4x4(&matrix->E11);
+
         public static void ToMatrix4x4(MatrixSingle matrix, Matrix4x4F* destination)
         {
-            float* p = (float*)destination;
+            float* p = &destination->E11;
 
-            Vector.ToVector4D(matrix._v0, &p[0]);
-            Vector.ToVector4D(matrix._v1, &p[4]);
-            Vector.ToVector4D(matrix._v2, &p[8]);
-            Vector.ToVector4D(matrix._v3, &p[12]);
+            Matrix.ToMatrix4x4(matrix, p);
         }
 
         public static void ToMatrix4x4(MatrixSingle matrix, out Matrix4x4F destination)
