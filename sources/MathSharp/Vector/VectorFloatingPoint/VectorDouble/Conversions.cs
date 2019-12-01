@@ -13,6 +13,11 @@ namespace MathSharp
     {
         #region Loads
 
+        /// <summary>
+        /// Creates a new Vector256&lt;double&gt; from a pointer to 4 doubles.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> FromVector4DAligned(double* p) 
             => FromVector4D(p);
