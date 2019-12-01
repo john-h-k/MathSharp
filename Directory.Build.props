@@ -38,23 +38,21 @@
   <PropertyGroup>
     <Authors>John Kelly and Contributors</Authors>
     <BaseOutputPath>$(BaseArtifactsPath)bin/$(BaseArtifactsPathSuffix)/</BaseOutputPath>
-    <Company>johnkellyoxford</Company>
+    <Company>John Kelly</Company>
     <PackageOutputPath>$(BaseArtifactsPath)pkg/$(BaseArtifactsPathSuffix)/$(Configuration)/</PackageOutputPath>
     <Product>MathSharp</Product>
-    <VersionPrefix>0.0.1</VersionPrefix>
-    <VersionSuffix>alpha</VersionSuffix>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>pre</VersionSuffix>
   </PropertyGroup>
 
   <!-- Default settings that are otherwise undefined -->
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)MathSharp.snk</AssemblyOriginatorKeyFile>
-    <Copyright>Copyright � John Kelly and Contributors</Copyright>
-    <Description>A high speed vector maths library</Description>
+    <Copyright>Copyright (C) John Kelly and Contributors</Copyright>
+    <Description>MathSharp is a vector and matrix library written in C# using hardware intrinsics. Thanks to hardware acceleration, MathSharp is significantly faster than most mathematics libraries out there.</Description>
     <Features>strict</Features>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <HighEntropyVA>true</HighEntropyVA>
     <LangVersion>preview</LangVersion>
-    <MathSharpPublicKey>00240000048000009400000006020000002400005253413100040000010001000586cd22205c2991de00dea27c3455744874d5b9c4532ccee2bf8fa9b55752af42fa6170f641c20d1501cd3b9e6d22a1327cdaf19eb8eba23e8ed350a60930e7286417916e3a3a39798e69d8d521ac3af4c720cbcca2f2fbf5cee2c0b1c6be08ebba9051399148c663c3408513be9a2ff96e7816bb1b3713d1f30e13fa2e66a9</MathSharpPublicKey>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <OverwriteReadOnlyFiles>true</OverwriteReadOnlyFiles>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
