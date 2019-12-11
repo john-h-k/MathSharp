@@ -41,7 +41,7 @@
     <Company>John Kelly</Company>
     <PackageOutputPath>$(BaseArtifactsPath)pkg/$(BaseArtifactsPathSuffix)/$(Configuration)/</PackageOutputPath>
     <Product>MathSharp</Product>
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
     <VersionSuffix>pre</VersionSuffix>
   </PropertyGroup>
 
