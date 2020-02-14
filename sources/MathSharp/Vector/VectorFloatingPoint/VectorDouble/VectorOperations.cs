@@ -22,6 +22,9 @@ namespace MathSharp
         // For anyone looking at codegen, it is actually
         // [v]cmpps xmm0, xmm0, xmm0, 0x0
         // which is functionally identical
+        /// <summary>
+        /// Gets a new Vector256&lt;double&gt; with all elements initialized to one.
+        /// </summary>
         public static Vector256<double> OneDouble
         {
             get
@@ -31,18 +34,36 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Gets a new Vector256&lt;double&gt; with all elements initialized to zero.
+        /// </summary>
         public static Vector256<double> ZeroDouble => Vector256<double>.Zero;
 
         #region Normalize
 
+        /// <summary>
+        /// Scales the Vector2D to unit length.
+        /// </summary>
+        /// <param name="vector">The Vector2D to normalize.</param>
+        /// <returns>A normalized vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Normalize2D(Vector256<double> vector)
             => Divide(vector, Length2D(vector));
 
+        /// <summary>
+        /// Scales the Vector3D to unit length.
+        /// </summary>
+        /// <param name="vector">The Vector3D to normalize.</param>
+        /// <returns>A normalized vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Normalize3D(Vector256<double> vector)
             => Divide(vector, Length3D(vector));
 
+        /// <summary>
+        /// Scales the Vector4D to unit length.
+        /// </summary>
+        /// <param name="vector">The Vector4D to normalize.</param>
+        /// <returns>A normalized vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Normalize4D(Vector256<double> vector)
             => Divide(vector, Length4D(vector));
@@ -50,15 +71,29 @@ namespace MathSharp
         #endregion
 
         #region Length
-
+        /// <summary>
+        /// Returns the length of the given Vector2D.
+        /// </summary>
+        /// <param name="vector">The input vector.</param>
+        /// <returns>The length vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Length2D(Vector256<double> vector)
             => Sqrt(DotProduct2D(vector, vector));
 
+        /// <summary>
+        /// Returns the length of the given Vector3D.
+        /// </summary>
+        /// <param name="vector">The input vector.</param>
+        /// <returns>The length vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Length3D(Vector256<double> vector)
             => Sqrt(DotProduct3D(vector, vector));
 
+        /// <summary>
+        /// Returns the length of the given Vector4D.
+        /// </summary>
+        /// <param name="vector">The input vector.</param>
+        /// <returns>The length vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Length4D(Vector256<double> vector)
             => Sqrt(DotProduct4D(vector, vector));
@@ -66,15 +101,29 @@ namespace MathSharp
         #endregion
 
         #region LengthSquared
-
+        /// <summary>
+        /// Returns the length of the given Vector2D squared.
+        /// </summary>
+        /// <param name="vector">The input vector.</param>
+        /// <returns>The length vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> LengthSquared2D(Vector256<double> vector)
             => DotProduct2D(vector, vector);
 
+        /// <summary>
+        /// Returns the length of the given Vector3D squared.
+        /// </summary>
+        /// <param name="vector">The input vector.</param>
+        /// <returns>The length vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> LengthSquared3D(Vector256<double> vector)
             => DotProduct3D(vector, vector);
 
+        /// <summary>
+        /// Returns the length of the given Vector4D squared.
+        /// </summary>
+        /// <param name="vector">The input vector.</param>
+        /// <returns>The length vector.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> LengthSquared4D(Vector256<double> vector)
             => DotProduct4D(vector, vector);
@@ -83,7 +132,12 @@ namespace MathSharp
 
         #region DotProduct
 
-        
+        /// <summary>
+        /// Returns the dot product of the two given vectors.
+        /// </summary>
+        /// <param name="left">The first input vector.</param>
+        /// <param name="right">The second input vector.</param>
+        /// <returns>The dot product of the two input vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> DotProduct2D(Vector256<double> left, Vector256<double> right)
         {
@@ -113,8 +167,13 @@ namespace MathSharp
 
             return DotProduct2D_Software(left, right);
         }
-
         
+        /// <summary>
+        /// Returns the dot product of the two given vectors.
+        /// </summary>
+        /// <param name="left">The first input vector.</param>
+        /// <param name="right">The second input vector.</param>
+        /// <returns>The dot product of the two input vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> DotProduct3D(Vector256<double> left, Vector256<double> right)
         {
@@ -138,8 +197,13 @@ namespace MathSharp
 
             return DotProduct3D_Software(left, right);
         }
-
         
+        /// <summary>
+        /// Returns the dot product of the two given vectors.
+        /// </summary>
+        /// <param name="left">The first input vector.</param>
+        /// <param name="right">The second input vector.</param>
+        /// <returns>The dot product of the two input vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> DotProduct4D(Vector256<double> left, Vector256<double> right)
         {
@@ -163,8 +227,13 @@ namespace MathSharp
         #endregion
 
         #region CrossProduct
-
         
+        /// <summary>
+        /// Returns the cross product of the two given vectors.
+        /// </summary>
+        /// <param name="left">The first input vector.</param>
+        /// <param name="right">The second input vector.</param>
+        /// <returns>The dot product of the two input vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> CrossProduct2D(Vector256<double> left, Vector256<double> right)
         {
@@ -194,8 +263,13 @@ namespace MathSharp
 
             return CrossProduct2D_Software(left, right);
         }
-
         
+        /// <summary>
+        /// Returns the cross product of the two given vectors.
+        /// </summary>
+        /// <param name="left">The first input vector.</param>
+        /// <param name="right">The second input vector.</param>
+        /// <returns>The dot product of the two input vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> CrossProduct3D(Vector256<double> left, Vector256<double> right)
         {
@@ -252,6 +326,13 @@ namespace MathSharp
             return CrossProduct3D_Software(left, right);
         }
 
+        /// <summary>
+        /// Returns the cross product of the three given vectors.
+        /// </summary>
+        /// <param name="one">The first input vector.</param>
+        /// <param name="two">The second input vector.</param>
+        /// <param name="three">The third input vector.</param>
+        /// <returns>The dot product of the two input vectors.</returns>
         // TODO 
         [MethodImpl(MaxOpt)]
         public static Vector256<double> CrossProduct4D(Vector256<double> one, Vector256<double> two, Vector256<double> three)
@@ -264,18 +345,32 @@ namespace MathSharp
         #endregion
 
         #region Distance
-
+        /// <summary>
+        /// Computes the euclidean distance between two vectors.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>The distance between the two vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Distance2D(Vector256<double> left, Vector256<double> right)
             => Length2D(Subtract(left, right));
-
         
+        /// <summary>
+        /// Computes the euclidean distance between two vectors.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>The distance between the two vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Distance3D(Vector256<double> left, Vector256<double> right)
             => Length3D(Subtract(left, right));
-
-
         
+        /// <summary>
+        /// Computes the euclidean distance between two vectors.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>The distance between the two vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Distance4D(Vector256<double> left, Vector256<double> right)
             => Length4D(Subtract(left, right));
@@ -284,16 +379,32 @@ namespace MathSharp
 
         #region DistanceSquared
 
+        /// <summary>
+        /// Compute the euclidean distance between two vectors squared.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>The distance between the two vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> DistanceSquared2D(Vector256<double> left, Vector256<double> right)
             => LengthSquared2D(Subtract(left, right));
 
+        /// <summary>
+        /// Compute the euclidean distance between two vectors squared.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>The distance between the two vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> DistanceSquared3D(Vector256<double> left, Vector256<double> right)
             => LengthSquared3D(Subtract(left, right));
 
-
-        
+        /// <summary>
+        /// Compute the euclidean distance between two vectors squared.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>The distance between the two vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> DistanceSquared4D(Vector256<double> left, Vector256<double> right)
             => LengthSquared4D(Subtract(left, right));
@@ -302,6 +413,13 @@ namespace MathSharp
 
         #region Lerp
 
+        /// <summary>
+        /// Returns a new vector that is a linear blend of the two given vectors.
+        /// </summary>
+        /// <param name="from">The first input vector.</param>
+        /// <param name="to">The second input vector.</param>
+        /// <param name="weight">The blend factor. a when blend=0, b when blend=1.</param>
+        /// <returns>The linear interpolated blend of the two vectors.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Lerp(Vector256<double> from, Vector256<double> to, double weight)
         {
@@ -318,6 +436,12 @@ namespace MathSharp
 
         #region Reflect
 
+        /// <summary>
+        /// Calculates the reflection of an incident ray.
+        /// </summary>
+        /// <param name="incident">The incident ray's vector.</param>
+        /// <param name="normal">The normal of the mirror upon which the ray is reflecting.</param>
+        /// <returns>The vector of the reflected ray.</returns>
         public static Vector256<double> Reflect2D(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
@@ -327,6 +451,12 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
+        /// <summary>
+        /// Calculates the reflection of an incident ray.
+        /// </summary>
+        /// <param name="incident">The incident ray's vector.</param>
+        /// <param name="normal">The normal of the mirror upon which the ray is reflecting.</param>
+        /// <returns>The vector of the reflected ray.</returns>
         public static Vector256<double> Reflect3D(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
@@ -336,6 +466,12 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
+        /// <summary>
+        /// Calculates the reflection of an incident ray.
+        /// </summary>
+        /// <param name="incident">The incident ray's vector.</param>
+        /// <param name="normal">The normal of the mirror upon which the ray is reflecting.</param>
+        /// <returns>The vector of the reflected ray.</returns>
         public static Vector256<double> Reflect4D(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
