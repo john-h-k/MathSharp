@@ -120,7 +120,8 @@ Vector4 + Vector4;
 
 ### Results (within margin of error between MathSharp and System.Numerics)
 
-![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)
+<!--![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/VectorAdditionBenchmark-barplot.png" width="500" height="500">
 
 |         Method |      Mean |     Error |    StdDev |
 |--------------- |----------:|----------:|----------:|
