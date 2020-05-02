@@ -8,4 +8,8 @@
   <ItemGroup>
     <Folder Include="obj\Debug\netcoreapp3.0\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.0-preview3.19551.4" />
+  </ItemGroup>
 </Project>

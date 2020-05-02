@@ -9,7 +9,6 @@ namespace MathSharp
 {
     public static partial class Vector
     {
-
         private readonly ref struct VectorFormatter<T> where T : struct
         {
             public readonly ReadOnlySpan<char> Delimiter;

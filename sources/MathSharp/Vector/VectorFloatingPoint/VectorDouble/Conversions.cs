@@ -101,7 +101,8 @@ namespace MathSharp
 
             static Vector256<double> SoftwareFallback(double* p)
             {
-                return Vector256.Create(p[0], p[1], 0f, 0f);
+                return Vector128.Create(p[0]).ToVector256();
+                //return Vector256.Create(p[0], p[1], 0f, 0f);
             }
         }
 

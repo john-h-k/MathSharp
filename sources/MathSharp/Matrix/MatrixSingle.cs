@@ -10,6 +10,8 @@ namespace MathSharp
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public struct MatrixSingle
     {
+        // This stuff is internal because
+
         internal Vector128<float> _v0;
         internal Vector128<float> _v1;
         internal Vector128<float> _v2;

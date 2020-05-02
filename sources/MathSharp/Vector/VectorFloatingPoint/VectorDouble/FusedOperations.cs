@@ -79,8 +79,7 @@ namespace MathSharp
 
             static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
-                ThrowPlatformNotSupported();
-                return default;
+                return FusedMultiplyAdd(Negate(x), y, z);
             }
         }
 
@@ -165,8 +164,7 @@ namespace MathSharp
 
             static Vector256<double> SoftwareFallback(Vector256<double> x, Vector256<double> y, Vector256<double> z)
             {
-                ThrowPlatformNotSupported();
-                return default;
+                return FusedMultiplySubtract(Negate(x), y, z);
             }
         }
 
