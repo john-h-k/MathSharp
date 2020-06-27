@@ -53,12 +53,7 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FromVector4D(in float p)
-        {
-            fixed (float* pp = &p)
-            {
-                return FromVector4D(pp);
-            }
-        }
+            => Unsafe.As<float, Vector128<float>>(ref Unsafe.AsRef(in p));
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> FromVector4D(float* p)

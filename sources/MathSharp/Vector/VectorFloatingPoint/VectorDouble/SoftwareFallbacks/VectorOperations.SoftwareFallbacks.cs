@@ -45,21 +45,21 @@ namespace MathSharp
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Length2D_Software(Vector256<double> vector)
         {
-            return Sqrt_Software(DotProduct2D_Software(vector, vector));
+            return Sqrt_Software(Dot2D_Software(vector, vector));
         }
 
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Length3D_Software(Vector256<double> vector)
         {
             // No software fallback needed, these methods cover it
-            return Sqrt_Software(DotProduct3D_Software(vector, vector));
+            return Sqrt_Software(Dot3D_Software(vector, vector));
         }
 
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Length4D_Software(Vector256<double> vector)
         {
             // No software fallback needed, these methods cover it
-            return Sqrt_Software(DotProduct4D_Software(vector, vector));
+            return Sqrt_Software(Dot4D_Software(vector, vector));
         }
 
         #endregion
@@ -71,7 +71,7 @@ namespace MathSharp
         #region DotProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> DotProduct2D_Software(Vector256<double> left, Vector256<double> right)
+        public static Vector256<double> Dot2D_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
                 X(left) * X(right) 
@@ -80,7 +80,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> DotProduct3D_Software(Vector256<double> left, Vector256<double> right)
+        public static Vector256<double> Dot3D_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
                 X(left) * X(right)
@@ -90,7 +90,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> DotProduct4D_Software(Vector256<double> left, Vector256<double> right)
+        public static Vector256<double> Dot4D_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
                 X(left) * X(right)
@@ -105,14 +105,14 @@ namespace MathSharp
         #region CrossProduct
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> CrossProduct2D_Software(Vector256<double> left, Vector256<double> right)
+        public static Vector256<double> Cross2D_Software(Vector256<double> left, Vector256<double> right)
         {
 
             return Vector256.Create((X(left) * Y(right) - Y(left) * X(right)));
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> CrossProduct3D_Software(Vector256<double> left, Vector256<double> right)
+        public static Vector256<double> Cross3D_Software(Vector256<double> left, Vector256<double> right)
         {
             /* Cross product of A(x, y, z, _) and B(x, y, z, _) is
              *
@@ -128,7 +128,7 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<double> CrossProduct4D_Software(Vector256<double> one, Vector256<double> two, Vector256<double> three)
+        public static Vector256<double> Cross4D_Software(Vector256<double> one, Vector256<double> two, Vector256<double> three)
         {
             double x = (Z(two) * W(three) - W(two) * Z(three)) *
                       Y(one) -
@@ -198,7 +198,7 @@ namespace MathSharp
         {
             Vector256<double> diff = Subtract_Software(left, right);
 
-            return DotProduct2D_Software(diff, diff);
+            return Dot2D_Software(diff, diff);
         }
 
         [MethodImpl(MaxOpt)]
@@ -206,7 +206,7 @@ namespace MathSharp
         {
             Vector256<double> diff = Subtract_Software(left, right);
 
-            return DotProduct3D_Software(diff, diff);
+            return Dot3D_Software(diff, diff);
         }
 
         [MethodImpl(MaxOpt)]
@@ -214,7 +214,7 @@ namespace MathSharp
         {
             Vector256<double> diff = Subtract_Software(left, right);
 
-            return DotProduct4D_Software(diff, diff);
+            return Dot4D_Software(diff, diff);
         }
 
         #endregion
@@ -243,7 +243,7 @@ namespace MathSharp
         public static Vector256<double> Reflect2D_Software(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector256<double> tmp = DotProduct2D_Software(incident, normal);
+            Vector256<double> tmp = Dot2D_Software(incident, normal);
             tmp = Add_Software(tmp, tmp);
             tmp = Multiply_Software(tmp, normal);
             return Subtract_Software(incident, tmp);
@@ -252,7 +252,7 @@ namespace MathSharp
         public static Vector256<double> Reflect3D_Software(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector256<double> tmp = DotProduct3D_Software(incident, normal);
+            Vector256<double> tmp = Dot3D_Software(incident, normal);
             tmp = Add_Software(tmp, tmp);
             tmp = Multiply_Software(tmp, normal);
             return Subtract_Software(incident, tmp);
@@ -261,7 +261,7 @@ namespace MathSharp
         public static Vector256<double> Reflect4D_Software(Vector256<double> incident, Vector256<double> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector256<double> tmp = DotProduct4D_Software(incident, normal);
+            Vector256<double> tmp = Dot4D_Software(incident, normal);
             tmp = Add_Software(tmp, tmp);
             tmp = Multiply_Software(tmp, normal);
             return Subtract_Software(incident, tmp);

@@ -137,9 +137,9 @@ namespace MathSharp
                 ? Vector.Negate(cameraForwardVector)
                 : Multiply(z, Divide(SingleConstants.AllBitsSet, Sqrt(norm)));
 
-            Vector128<float> x = Normalize3D(CrossProduct3D(cameraUpVector, z));
+            Vector128<float> x = Normalize3D(Cross3D(cameraUpVector, z));
 
-            Vector128<float> y = CrossProduct3D(z, x);
+            Vector128<float> y = Cross3D(z, x);
 
             // We need W to be zero for x, y, and z, and 1.0f for objectPosition. They are currently undefined
             x = And(x, SingleConstants.MaskW);
@@ -274,14 +274,14 @@ namespace MathSharp
 
                 Rank3Decompose(out _, out _, out int cc, absX, absY, absZ);
 
-                *pVectorBasis[b] = CrossProduct3D(*pVectorBasis[a], *pCanonicalBasis[cc]);
+                *pVectorBasis[b] = Cross3D(*pVectorBasis[a], *pCanonicalBasis[cc]);
             }
 
             *pVectorBasis[b] = Normalize3D(*pVectorBasis[b]);
 
             if (Unsafe.Add(ref pFloat0, c) < DecomposeEpsilon)
             {
-                *pVectorBasis[c] = CrossProduct3D(*pVectorBasis[a], *pVectorBasis[b]);
+                *pVectorBasis[c] = Cross3D(*pVectorBasis[a], *pVectorBasis[b]);
             }
 
             *pVectorBasis[c] = Normalize3D(*pVectorBasis[c]);
@@ -348,7 +348,7 @@ namespace MathSharp
             r = FastNegateMultiplyAdd(v1, p1, r);
             r = FastMultiplyAdd(v2, p2, r);
 
-            return DotProduct4D(s, r);
+            return Dot4D(s, r);
         }
 
         [MethodImpl(MaxOpt)]

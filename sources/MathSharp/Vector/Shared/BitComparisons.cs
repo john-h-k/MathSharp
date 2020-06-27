@@ -8,11 +8,11 @@ namespace MathSharp
     public static partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static Vector128<byte> CompareBit8Equal(Vector128<byte> left, Vector128<byte> right)
-            => CompareBit8Equal(left.AsSByte(), right.AsSByte()).AsByte();
+        public static Vector128<byte> CompareEqual(Vector128<byte> left, Vector128<byte> right)
+            => CompareEqual(left.AsSByte(), right.AsSByte()).AsByte();
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<sbyte> CompareBit8Equal(Vector128<sbyte> left, Vector128<sbyte> right)
+        public static Vector128<sbyte> CompareEqual(Vector128<sbyte> left, Vector128<sbyte> right)
         {
             if (Sse2.IsSupported)
             {
@@ -35,11 +35,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<byte> CompareBit8Equal(Vector256<byte> left, Vector256<byte> right)
-            => CompareBit8Equal(left.AsSByte(), right.AsSByte()).AsByte();
+        public static Vector256<byte> CompareEqual(Vector256<byte> left, Vector256<byte> right)
+            => CompareEqual(left.AsSByte(), right.AsSByte()).AsByte();
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<sbyte> CompareBit8Equal(Vector256<sbyte> left, Vector256<sbyte> right)
+        public static Vector256<sbyte> CompareEqual(Vector256<sbyte> left, Vector256<sbyte> right)
         {
             if (Avx2.IsSupported)
             {
@@ -62,11 +62,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<ushort> CompareBit16Equal(Vector128<ushort> left, Vector128<ushort> right)
-            => CompareBit16Equal(left.AsInt16(), right.AsInt16()).AsUInt16();
+        public static Vector128<ushort> CompareEqual(Vector128<ushort> left, Vector128<ushort> right)
+            => CompareEqual(left.AsInt16(), right.AsInt16()).AsUInt16();
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<short> CompareBit16Equal(Vector128<short> left, Vector128<short> right)
+        public static Vector128<short> CompareEqual(Vector128<short> left, Vector128<short> right)
         {
             if (Sse2.IsSupported)
             {
@@ -89,11 +89,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<ushort> CompareBit16Equal(Vector256<ushort> left, Vector256<ushort> right)
-            => CompareBit16Equal(left.AsInt16(), right.AsInt16()).AsUInt16();
+        public static Vector256<ushort> CompareEqual(Vector256<ushort> left, Vector256<ushort> right)
+            => CompareEqual(left.AsInt16(), right.AsInt16()).AsUInt16();
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<short> CompareBit16Equal(Vector256<short> left, Vector256<short> right)
+        public static Vector256<short> CompareEqual(Vector256<short> left, Vector256<short> right)
         {
             if (Avx2.IsSupported)
             {
@@ -116,11 +116,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<uint> CompareBit32Equal(Vector128<uint> left, Vector128<uint> right)
-            => CompareBit32Equal(left.AsInt32(), right.AsInt32()).AsUInt32();
+        public static Vector128<uint> CompareEqual(Vector128<uint> left, Vector128<uint> right)
+            => CompareEqual(left.AsInt32(), right.AsInt32()).AsUInt32();
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<int> CompareBit32Equal(Vector128<int> left, Vector128<int> right)
+        public static Vector128<int> CompareEqual(Vector128<int> left, Vector128<int> right)
         {
             if (Sse2.IsSupported)
             {
@@ -143,11 +143,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<uint> CompareBit32Equal(Vector256<uint> left, Vector256<uint> right)
-            => CompareBit32Equal(left.AsInt32(), right.AsInt32()).AsUInt32();
+        public static Vector256<uint> CompareEqual(Vector256<uint> left, Vector256<uint> right)
+            => CompareEqual(left.AsInt32(), right.AsInt32()).AsUInt32();
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<int> CompareBit32Equal(Vector256<int> left, Vector256<int> right)
+        public static Vector256<int> CompareEqual(Vector256<int> left, Vector256<int> right)
         {
             if (Avx2.IsSupported)
             {
@@ -170,11 +170,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<ulong> CompareBit64Equal(Vector128<ulong> left, Vector128<ulong> right)
-            => CompareBit64Equal(left.AsInt64(), right.AsInt64()).AsUInt64();
+        public static Vector128<ulong> CompareEqual(Vector128<ulong> left, Vector128<ulong> right)
+            => CompareEqual(left.AsInt64(), right.AsInt64()).AsUInt64();
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<long> CompareBit64Equal(Vector128<long> left, Vector128<long> right)
+        public static Vector128<long> CompareEqual(Vector128<long> left, Vector128<long> right)
         {
             if (Sse41.IsSupported)
             {
@@ -197,11 +197,11 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<ulong> CompareBit64Equal(Vector256<ulong> left, Vector256<ulong> right)
-            => CompareBit64Equal(left.AsInt64(), right.AsInt64()).AsUInt64();
+        public static Vector256<ulong> CompareEqual(Vector256<ulong> left, Vector256<ulong> right)
+            => CompareEqual(left.AsInt64(), right.AsInt64()).AsUInt64();
 
         [MethodImpl(MaxOpt)]
-        public static Vector256<long> CompareBit64Equal(Vector256<long> left, Vector256<long> right)
+        public static Vector256<long> CompareEqual(Vector256<long> left, Vector256<long> right)
         {
             if (Avx2.IsSupported)
             {

@@ -71,7 +71,7 @@ namespace MathSharp
                 return vectorSize switch
                 {
                     VectorSize.V64 => false,
-                    VectorSize.V128 => Sse.IsSupported,
+                    VectorSize.V128 => Sse.IsSupported /* || AdvSimd.IsSupported */,
                     VectorSize.V256 => Avx.IsSupported
                 };
             }

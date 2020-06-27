@@ -5,7 +5,7 @@ using BenchmarkDotNet.Attributes;
  namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     using Vector = MathSharp.Vector;
-    using Vector3 = OpenTK.Vector3;
+    using Vector3 = System.Numerics.Vector3;
 
     public class CameraClassBenchmark
     {
@@ -21,7 +21,7 @@ using BenchmarkDotNet.Attributes;
         [GlobalSetup]
         public void Setup()
         {
-            _pitch =  11f;
+            _pitch = 11f;
             _yaw = 0.008888f;
             _unitY = Vector128.Create(0f, 1f, 0f, 0f);
             _unitYWrapper = _unitY;
@@ -38,10 +38,25 @@ using BenchmarkDotNet.Attributes;
         {
             Vector128<float> front = _mathSharpFront;
             front = Vector.Normalize3D(front);
-            Vector128<float> right = Vector.Normalize3D(Vector.CrossProduct3D(_unitY, front));
+            Vector128<float> right = Vector.Normalize3D(Vector.Cross3D(_unitY, front));
 
-            Vector128<float> up = Vector.Normalize3D(Vector.CrossProduct3D(front, right));
+            Vector128<float> up = Vector.Normalize3D(Vector.Cross3D(front, right));
             return up;
+        }
+
+        public void DotAndCross(Vector3 left0, Vector3 left1, Vector3 right0, Vector3 right1, out Vector3 result)
+        {
+            var leftDot = new Vector3(Vector3.Dot(left0, left1));
+            var rightDot = new Vector3(Vector3.Dot(right0, right1));
+            result = Vector3.Cross(leftDot, rightDot);
+        }
+
+        public void DotAndCross(in Vector3 left0, in Vector3 left1, in Vector3 right0, in Vector3 right1, out Vector3 result)
+        {
+            var leftDot = Vector.Dot3D(left0.Load(), left1.Load());
+            var rightDot = Vector.Dot3D(right0.Load(), right1.Load());
+
+            Vector.Store(Vector.Cross3D(leftDot, rightDot), out result);
         }
 
         [Benchmark]

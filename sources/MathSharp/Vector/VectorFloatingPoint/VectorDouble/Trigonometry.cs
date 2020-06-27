@@ -274,7 +274,7 @@ namespace MathSharp
                 var t0 = FillWithX(TanCoefficients0D);
 
                 var vbIsEven = And(vb, DoubleConstants.Epsilon).AsInt64();
-                vbIsEven = CompareBit64Equal(vbIsEven, Vector256<long>.Zero);
+                vbIsEven = CompareEqual(vbIsEven, Vector256<long>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
