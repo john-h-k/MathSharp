@@ -61,39 +61,42 @@ namespace MathSharp
                 }
             }
 
-            public static readonly Vector128<float> MaskSign = Vector128.Create(int.MaxValue).AsSingle();
-            public static readonly Vector128<float> MaskNotSign = Vector128.Create(~int.MaxValue).AsSingle();
+            public static Vector128<float> MaskSign => Vector128.Create(int.MinValue).AsSingle();
+            //{
+            //    get { var i = int.MinValue; return Avx2.BroadcastScalarToVector128(&i).AsSingle(); }
+            //}
+            public static Vector128<float> MaskNotSign => Vector128.Create(~int.MaxValue).AsSingle();
 
             // ReSharper disable InconsistentNaming
-            public static readonly Vector128<float> MaskNotSignXZ = Vector128.Create(~int.MaxValue, 0, ~int.MaxValue, 0).AsSingle();
-            public static readonly Vector128<float> MaskNotSignYW = Vector128.Create(0, ~int.MaxValue, 0, ~int.MaxValue).AsSingle();
+            public static Vector128<float> MaskNotSignXZ => Vector128.Create(~int.MaxValue, 0, ~int.MaxValue, 0).AsSingle();
+            public static Vector128<float> MaskNotSignYW => Vector128.Create(0, ~int.MaxValue, 0, ~int.MaxValue).AsSingle();
 
-            public static readonly Vector128<float> MaskX = Vector128.Create(+0, -1, -1, -1).AsSingle();
-            public static readonly Vector128<float> MaskY = Vector128.Create(-1, +0, -1, -1).AsSingle();
-            public static readonly Vector128<float> MaskZ = Vector128.Create(-1, -1, +0, -1).AsSingle();
-            public static readonly Vector128<float> MaskW = Vector128.Create(-1, -1, -1, +0).AsSingle();
+            public static Vector128<float> MaskX => Vector128.Create(+0, -1, -1, -1).AsSingle();
+            public static Vector128<float> MaskY => Vector128.Create(-1, +0, -1, -1).AsSingle();
+            public static Vector128<float> MaskZ => Vector128.Create(-1, -1, +0, -1).AsSingle();
+            public static Vector128<float> MaskW => Vector128.Create(-1, -1, -1, +0).AsSingle();
 
-            public static readonly Vector128<float> MaskXY = Vector128.Create(+0, +0, -1, -1).AsSingle();
-            public static readonly Vector128<float> MaskZW = Vector128.Create(-1, -1, +0, +0).AsSingle();
+            public static Vector128<float> MaskXY => Vector128.Create(+0, +0, -1, -1).AsSingle();
+            public static Vector128<float> MaskZW => Vector128.Create(-1, -1, +0, +0).AsSingle();
 
-            public static readonly Vector128<float> MaskXYZ = Vector128.Create(+0, +0, +0, -1).AsSingle();
-            public static readonly Vector128<float> MaskYZW = Vector128.Create(-1, +0, +0, +0).AsSingle();
+            public static Vector128<float> MaskXYZ => Vector128.Create(+0, +0, +0, -1).AsSingle();
+            public static Vector128<float> MaskYZW => Vector128.Create(-1, +0, +0, +0).AsSingle();
 
-            public static readonly Vector128<float> MaskXYZW = Vector128.Create(0).AsSingle();
+            public static Vector128<float> MaskXYZW => Vector128.Create(0).AsSingle();
             // ReSharper restore InconsistentNaming
 
-            public static readonly Vector128<float> UnitX = Vector128.Create(1f, 0f, 0f, 0f);
-            public static readonly Vector128<float> UnitY = Vector128.Create(0f, 1f, 0f, 0f);
-            public static readonly Vector128<float> UnitZ = Vector128.Create(0f, 0f, 1f, 0f);
-            public static readonly Vector128<float> UnitW = Vector128.Create(0f, 0f, 0f, 1f);
+            public static Vector128<float> UnitX => Vector128.Create(1f, 0f, 0f, 0f);
+            public static Vector128<float> UnitY => Vector128.Create(0f, 1f, 0f, 0f);
+            public static Vector128<float> UnitZ => Vector128.Create(0f, 0f, 1f, 0f);
+            public static Vector128<float> UnitW => Vector128.Create(0f, 0f, 0f, 1f);
 
-            public static readonly Vector128<float> OneDivPi = Vector128.Create(ScalarSingleConstants.OneDivPi);
-            public static readonly Vector128<float> OneDiv2Pi = Vector128.Create(ScalarSingleConstants.OneDiv2Pi);
-            public static readonly Vector128<float> Pi2 = Vector128.Create(ScalarSingleConstants.Pi2);
-            public static readonly Vector128<float> Pi = Vector128.Create(ScalarSingleConstants.Pi);
-            public static readonly Vector128<float> PiDiv2 = Vector128.Create(ScalarSingleConstants.PiDiv2);
-            public static readonly Vector128<float> PiDiv4 = Vector128.Create(ScalarSingleConstants.PiDiv4);
-            public static readonly Vector128<float> ThreePiDiv4 = Vector128.Create(ScalarSingleConstants.ThreePiDiv4);
+            public static Vector128<float> OneDivPi => Vector128.Create(ScalarSingleConstants.OneDivPi);
+            public static Vector128<float> OneDiv2Pi => Vector128.Create(ScalarSingleConstants.OneDiv2Pi);
+            public static Vector128<float> Pi2 => Vector128.Create(ScalarSingleConstants.Pi2);
+            public static Vector128<float> Pi => Vector128.Create(ScalarSingleConstants.Pi);
+            public static Vector128<float> PiDiv2 => Vector128.Create(ScalarSingleConstants.PiDiv2);
+            public static Vector128<float> PiDiv4 => Vector128.Create(ScalarSingleConstants.PiDiv4);
+            public static Vector128<float> ThreePiDiv4 => Vector128.Create(ScalarSingleConstants.ThreePiDiv4);
         }
 
         public static class SingleConstants256

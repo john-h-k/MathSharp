@@ -31,7 +31,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.VectorOperations
                         {
                             var v1 = (Vector256<double>)set[0];
                             var v2 = (Vector256<double>)set[1];
-                            set[3] = TestHelpers.ByValToSlowVector2d(SoftwareFallbacks.CrossProduct2D_Software(v1, v2));
+                            set[3] = TestHelpers.ByValToSlowVector2d(SoftwareFallbacks.Cross2D_Software(v1, v2));
                             break;
                         }
 
@@ -39,7 +39,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.VectorOperations
                         {
                             var v1 = (Vector256<double>)set[0];
                             var v2 = (Vector256<double>)set[1];
-                            set[3] = TestHelpers.ByValToSlowVector3d(SoftwareFallbacks.CrossProduct3D_Software(v1, v2));
+                            set[3] = TestHelpers.ByValToSlowVector3d(SoftwareFallbacks.Cross3D_Software(v1, v2));
                             break;
                         }
 
@@ -48,7 +48,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.VectorOperations
                             var v1 = (Vector256<double>)set[0];
                             var v2 = (Vector256<double>)set[1];
                             var v3 = (Vector256<double>)set[2];
-                            set[3] = TestHelpers.ByValToSlowVector4d(SoftwareFallbacks.CrossProduct4D_Software(v1, v2, v3));
+                            set[3] = TestHelpers.ByValToSlowVector4d(SoftwareFallbacks.Cross4D_Software(v1, v2, v3));
                             break;
                         }
 
@@ -64,18 +64,18 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.VectorOperations
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V2D)]
-        public static void CrossProduct2D_Theory(Vector256<double> left, Vector256<double> right, Vector256<double> discard, Vector2d expected)
+        public static void Cross2D_Theory(Vector256<double> left, Vector256<double> right, Vector256<double> discard, Vector2d expected)
         {
-            Vector256<double> result = Vector.CrossProduct2D(left, right);
+            Vector256<double> result = Vector.Cross2D(left, right);
 
             Assert.True(TestHelpers.AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V3D)]
-        public static void CrossProduct3D_Theory(Vector256<double> left, Vector256<double> right, Vector256<double> discard, Vector3d expected)
+        public static void Cross3D_Theory(Vector256<double> left, Vector256<double> right, Vector256<double> discard, Vector3d expected)
         {
-            Vector256<double> result = Vector.CrossProduct3D(left, right);
+            Vector256<double> result = Vector.Cross3D(left, right);
 
             Assert.True(TestHelpers.AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
@@ -84,9 +84,9 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.VectorOperations
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V4D)]
-        public static void CrossProduct4D_Theory(Vector256<double> left, Vector256<double> right, Vector256<double> third, Vector4d expected)
+        public static void Cross4D_Theory(Vector256<double> left, Vector256<double> right, Vector256<double> third, Vector4d expected)
         {
-            Vector256<double> result = Vector.CrossProduct4D(left, right, third);
+            Vector256<double> result = Vector.Cross4D(left, right, third);
 
             Assert.True(TestHelpers.AreEqual(expected, result), $"Expected {expected}, got {result}");
         }

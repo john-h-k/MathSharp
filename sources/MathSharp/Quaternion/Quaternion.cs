@@ -30,7 +30,7 @@ namespace MathSharp.Quaternion
         }
 
         public static Vector128<float> DotProduct(Vector128<float> left, Vector128<float> right)
-            => Vector.DotProduct4D(left, right);
+            => Vector.Dot4D(left, right);
 
         public static Vector128<float> Add(Vector128<float> left, Vector128<float> right)
             => Vector.Add(left, right);
@@ -69,7 +69,7 @@ namespace MathSharp.Quaternion
             var cosOmega = DotProduct(left, right);
 
             var control = Vector.CompareLessThan(cosOmega, Vector128<float>.Zero);
-            var sign = Vector.Select(Vector.SingleConstants.One, Vector.SingleConstants.NegativeOne, control);
+            var sign = Vector.Select(control, Vector.SingleConstants.NegativeOne, Vector.SingleConstants.One);
 
             cosOmega = Vector.Multiply(cosOmega, sign);
 
@@ -90,7 +90,7 @@ namespace MathSharp.Quaternion
             s0 = Vector.Sin(s0);
             s0 = Vector.Divide(s0, sinOmega);
 
-            s0 = Vector.Select(v01, s0, control);
+            s0 = Vector.Select(control, s0, v01);
 
             var s1 = Vector.FillWithY(s0);
             s0 = Vector.FillWithX(s0);

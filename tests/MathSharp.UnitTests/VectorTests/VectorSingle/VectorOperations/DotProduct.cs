@@ -66,27 +66,27 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V2D)]
-        public static void DotProduct2D_Theory(Vector128<float> left, Vector128<float> right, Vector2 expected)
+        public static void Dot2D_Theory(Vector128<float> left, Vector128<float> right, Vector2 expected)
         {
-            Vector128<float> result = Vector.DotProduct2D(left, right);
+            Vector128<float> result = Vector.Dot2D(left, right);
 
             Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V3D)]
-        public static void DotProduct3D_Theory(Vector128<float> left, Vector128<float> right, Vector3 expected)
+        public static void Dot3D_Theory(Vector128<float> left, Vector128<float> right, Vector3 expected)
         {
-            Vector128<float> result = Vector.DotProduct3D(left, right);
+            Vector128<float> result = Vector.Dot3D(left, right);
 
             Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V4D)]
-        public static void DotProduct4D_Theory(Vector128<float> left, Vector128<float> right, Vector4 expected)
+        public static void Dot4D_Theory(Vector128<float> left, Vector128<float> right, Vector4 expected)
         {
-            Vector128<float> result = Vector.DotProduct4D(left, right);
+            Vector128<float> result = Vector.Dot4D(left, right);
 
             Assert.True(AreEqual(expected, result), $"Expected {expected}, got {result}");
         }

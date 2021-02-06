@@ -17,6 +17,11 @@ namespace MathSharp
         private static readonly Vector256<double> SinCoefficient1D = Vector256.Create(-2.3889859e-08d, -0.16665852d, +0.0083139502d, -0.00018524670d);
         private const double SinCoefficient1DScalar = -2.3889859e-08d;
 
+        /// <summary>
+        /// Returns the sine of the specified angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <returns>The sine of the given angle.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Sin(Vector256<double> vector)
         {
@@ -71,6 +76,11 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Returns the approximate sine of the specified angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <returns>The approximate sine of the given angle.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> SinApprox(Vector256<double> vector)
         {
@@ -113,6 +123,11 @@ namespace MathSharp
         private static readonly Vector256<double> CosCoefficient1D = Vector256.Create(-2.6051615e-07d, -0.49992746d, +0.041493919d, -0.0012712436d);
         private const double CosCoefficient1DScalar = -2.6051615e-07d;
 
+        /// <summary>
+        /// Returns the cosine of the specified angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <returns>The cosine of the given angle.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Cos(Vector256<double> vector)
         {
@@ -170,6 +185,11 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Returns the approximate cosine of the specified angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <returns>The approximate cosine of the given angle.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> CosApprox(Vector256<double> vector)
         {
@@ -215,6 +235,11 @@ namespace MathSharp
         private static readonly Vector256<double> TanCoefficients1D = Vector256.Create(4.981943399e-7d, -1.333835001e-1d, 3.424887824e-3d, -1.786170734e-5d);
         private static readonly Vector256<double> TanConstantsD = Vector256.Create(1.570796371d, 6.077100628e-11d, 0.000244140625d, 0.63661977228d);
 
+        /// <summary>
+        /// Returns the tangent of the specified angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <returns>The tangent of the given angle.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Tan(Vector256<double> vector)
         {
@@ -249,7 +274,7 @@ namespace MathSharp
                 var t0 = FillWithX(TanCoefficients0D);
 
                 var vbIsEven = And(vb, DoubleConstants.Epsilon).AsInt64();
-                vbIsEven = CompareBit64Equal(vbIsEven, Vector256<long>.Zero);
+                vbIsEven = CompareEqual(vbIsEven, Vector256<long>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
@@ -294,6 +319,11 @@ namespace MathSharp
 
         private static readonly Vector256<double> TanEstCoefficientsD = Vector256.Create(2.484d, -1.954923183e-1d, 2.467401101d, ScalarDoubleConstants.OneDivPi);        
 
+        /// <summary>
+        /// Returns the approximate tangent of the specified angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <returns>The approximate tangent of the given angle.</returns>
         [MethodImpl(MaxOpt)]
         public static Vector256<double> TanApprox(Vector256<double> vector)
         {
@@ -324,6 +354,12 @@ namespace MathSharp
             return Tan(vector);
         }
 
+        /// <summary>
+        /// Calculates both the sine and cosine of the given angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <param name="sin">The sine of the angle.</param>
+        /// <param name="cos">The cosine of the angle.</param>
         [MethodImpl(MaxOpt)]
         public static void SinCos(Vector256<double> vector, out Vector256<double> sin, out Vector256<double> cos)
         {
@@ -400,7 +436,12 @@ namespace MathSharp
                 cos = Cos(vector);
             }
         }
-
+        /// <summary>
+        /// Calculates both the approximate sine and cosine of the given angle.
+        /// </summary>
+        /// <param name="vector">The angle.</param>
+        /// <param name="sin">The approximate sine of the angle.</param>
+        /// <param name="cos">The approximate cosine of the angle.</param>
         [MethodImpl(MaxOpt)]
         public static void SinCosApprox(Vector256<double> vector, out Vector256<double> sin, out Vector256<double> cos)
         {

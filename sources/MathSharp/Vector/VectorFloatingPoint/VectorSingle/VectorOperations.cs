@@ -70,15 +70,15 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Length2D(Vector128<float> vector)
-            => Sqrt(DotProduct2D(vector, vector));
+            => Sqrt(Dot2D(vector, vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Length3D(Vector128<float> vector)
-            => Sqrt(DotProduct3D(vector, vector));
+            => Sqrt(Dot3D(vector, vector));
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Length4D(Vector128<float> vector)
-            => Sqrt(DotProduct4D(vector, vector));
+            => Sqrt(Dot4D(vector, vector));
 
         #endregion
 
@@ -86,15 +86,15 @@ namespace MathSharp
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> LengthSquared2D(Vector128<float> vector)
-            => DotProduct2D(vector, vector);
+            => Dot2D(vector, vector);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> LengthSquared3D(Vector128<float> vector)
-            => DotProduct3D(vector, vector);
+            => Dot3D(vector, vector);
 
         [MethodImpl(MaxOpt)]
         public static Vector128<float> LengthSquared4D(Vector128<float> vector)
-            => DotProduct4D(vector, vector);
+            => Dot4D(vector, vector);
 
         #endregion
 
@@ -102,7 +102,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct2D(Vector128<float> left, Vector128<float> right)
+        public static Vector128<float> Dot2D(Vector128<float> left, Vector128<float> right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -140,12 +140,12 @@ namespace MathSharp
                 return mul;
             }
 
-            return DotProduct2D_Software(left, right);
+            return Dot2D_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct3D(Vector128<float> left, Vector128<float> right)
+        public static Vector128<float> Dot3D(Vector128<float> left, Vector128<float> right)
         {
             // SSE4.1 has a native dot product instruction, dpps
             if (Sse41.IsSupported)
@@ -185,12 +185,12 @@ namespace MathSharp
                 return Sse.Shuffle(mul, mul, ShuffleValues.XXXX);
             }
 
-            return DotProduct3D_Software(left, right);
+            return Dot3D_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> DotProduct4D(Vector128<float> left, Vector128<float> right)
+        public static Vector128<float> Dot4D(Vector128<float> left, Vector128<float> right)
         {
             if (Sse41.IsSupported)
             {
@@ -221,7 +221,7 @@ namespace MathSharp
                 return Sse.Shuffle(mul, mul, ShuffleValues.ZZZZ);
             }
 
-            return DotProduct4D_Software(left, right);
+            return Dot4D_Software(left, right);
         }
 
         #endregion
@@ -230,7 +230,7 @@ namespace MathSharp
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct2D(Vector128<float> left, Vector128<float> right)
+        public static Vector128<float> Cross2D(Vector128<float> left, Vector128<float> right)
         {
             /* Cross product of A(x, y, _, _) and B(x, y, _, _) is
              * 'E = (Ax * By) - (Ay * Bx)'
@@ -256,12 +256,12 @@ namespace MathSharp
                 return Sse.Shuffle(permute, permute, ShuffleValues.XXXX);
             }
 
-            return CrossProduct2D_Software(left, right);
+            return Cross2D_Software(left, right);
         }
 
         
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct3D(Vector128<float> left, Vector128<float> right)
+        public static Vector128<float> Cross3D(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
             {
@@ -308,12 +308,12 @@ namespace MathSharp
                 // TODO reuse vectors (minimal register usage) - potentially prevent any stack spilling
             }
 
-            return CrossProduct3D_Software(left, right);
+            return Cross3D_Software(left, right);
         }
 
         // TODO 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct4D(Vector128<float> one, Vector128<float> two, Vector128<float> three)
+        public static Vector128<float> Cross4D(Vector128<float> one, Vector128<float> two, Vector128<float> three)
         {
             if (Sse.IsSupported)
             {
@@ -366,12 +366,12 @@ namespace MathSharp
                 return Multiply(result, Shuffle(one, ShuffleValues.WWWZ));
             }
 
-            return CrossProduct4D_Software(one, two, three);
+            return Cross4D_Software(one, two, three);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct4D_Software(Vector128<float> one, Vector128<float> two, Vector128<float> three) 
-            => SoftwareFallbacks.CrossProduct4D_Software(one, two, three);
+        public static Vector128<float> Cross4D_Software(Vector128<float> one, Vector128<float> two, Vector128<float> three) 
+            => SoftwareFallbacks.Cross4D_Software(one, two, three);
 
         #endregion
 
@@ -444,7 +444,7 @@ namespace MathSharp
         public static Vector128<float> Reflect2D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector128<float> tmp = DotProduct2D(incident, normal);
+            Vector128<float> tmp = Dot2D(incident, normal);
             tmp = Add(tmp, tmp);
             tmp = Multiply(tmp, normal);
             return Subtract(incident, tmp);
@@ -453,7 +453,7 @@ namespace MathSharp
         public static Vector128<float> Reflect3D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector128<float> tmp = DotProduct3D(incident, normal);
+            Vector128<float> tmp = Dot3D(incident, normal);
             tmp = Add(tmp, tmp);
             tmp = Multiply(tmp, normal);
             return Subtract(incident, tmp);
@@ -462,7 +462,7 @@ namespace MathSharp
         public static Vector128<float> Reflect4D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
-            Vector128<float> tmp = DotProduct4D(incident, normal);
+            Vector128<float> tmp = Dot4D(incident, normal);
             tmp = Add(tmp, tmp);
             tmp = Multiply(tmp, normal);
             return Subtract(incident, tmp);

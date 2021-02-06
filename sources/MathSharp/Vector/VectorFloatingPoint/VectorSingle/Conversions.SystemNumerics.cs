@@ -7,21 +7,21 @@ namespace MathSharp
     public static unsafe partial class Vector
     {
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load(this Vector4 vector)
+        public static Vector128<float> Load(this in Vector4 vector)
         {
-            return FromVector4D(&vector.X);
+            return FromVector4D(in vector.X);
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load(this Vector3 vector)
+        public static Vector128<float> Load(this in Vector3 vector)
         {
-            return FromVector3DAligned(&vector.X); // Vector3 is special cased to be 16 bytes on the stack to allow this
+            return FromVector3DAligned(in vector.X); // Vector3 is special cased to be 16 bytes on the stack to allow this
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> Load(this Vector2 vector)
+        public static Vector128<float> Load(this in Vector2 vector)
         {
-            return FromVector2D(&vector.X);
+            return FromVector2D(in vector.X);
         }
 
         public static void Store(this Vector128<float> vector, out Vector4 destination)

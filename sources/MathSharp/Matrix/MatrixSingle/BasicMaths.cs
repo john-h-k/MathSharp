@@ -9,6 +9,12 @@ namespace MathSharp
         private const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
 
+        /// <summary>
+        /// Performs an element-wise matrix addition on the 2 <see cref="MatrixSingle"/>s
+        /// </summary>
+        /// <param name="left">The left matrix to add</param>
+        /// <param name="right">The right matrix to add</param>
+        /// <returns>A <see cref="MatrixSingle"/> with its components added</returns>
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Add(in MatrixSingle left, in MatrixSingle right) =>
             new MatrixSingle(
@@ -18,6 +24,12 @@ namespace MathSharp
                 Vector.Add(left._v3, right._v3)
             );
 
+        /// <summary>
+        /// Performs an element-wise matrix addition on the 2 <see cref="MatrixSingle"/>s
+        /// </summary>
+        /// <param name="left">The left matrix to add</param>
+        /// <param name="right">The right matrix to add</param>
+        /// <returns>A <see cref="MatrixSingle"/> with its components added</returns>
         [MethodImpl(MaxOpt)]
         public static unsafe MatrixSingle Add(MatrixSingle* left, MatrixSingle* right) =>
             new MatrixSingle(
@@ -27,7 +39,12 @@ namespace MathSharp
                 Vector.Add(left->_v3, right->_v3)
             );
 
-
+        /// <summary>
+        /// Performs an element-wise matrix subtraction on the 2 <see cref="MatrixSingle"/>s
+        /// </summary>
+        /// <param name="left">The left matrix to subtract</param>
+        /// <param name="right">The right matrix to subtract</param>
+        /// <returns>A <see cref="MatrixSingle"/> with its components subtracted</returns>
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Subtract(in MatrixSingle left, in MatrixSingle right) =>
             new MatrixSingle(
@@ -38,6 +55,11 @@ namespace MathSharp
             );
 
 
+        /// <summary>
+        /// Performs an element-wise negation on a <see cref="MatrixSingle"/>s
+        /// </summary>
+        /// <param name="matrix">The matrix to negate</param>
+        /// <returns>A <see cref="MatrixSingle"/> with its components negated</returns>
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Negate(in MatrixSingle matrix) =>
             new MatrixSingle(
@@ -47,6 +69,12 @@ namespace MathSharp
                 Vector.Negate(matrix._v3)
             );
 
+        /// <summary>
+        /// Performs an element-wise matrix multiplication on the 2 <see cref="MatrixSingle"/>s
+        /// </summary>
+        /// <param name="left">The left matrix to multiply</param>
+        /// <param name="right">The right matrix to multiply</param>
+        /// <returns>A <see cref="MatrixSingle"/> with its components multiplied</returns>
         [MethodImpl(MaxOpt)]
         public static MatrixSingle ScalarMultiply(in MatrixSingle left, Vector128<float> vectorOfScalar) =>
             new MatrixSingle(
@@ -57,11 +85,21 @@ namespace MathSharp
             );
 
 
+        /// <summary>
+        /// Performs an element-wise matrix multiplication on a <see cref="MatrixSingle"/> and a <see cref="float"/>
+        /// </summary>
+        /// <param name="left">The left matrix to multiply</param>
+        /// <param name="scalar">The scalar to multiply it by</param>
+        /// <returns>A new <see cref="MatrixSingle"/> with its components added</returns>
         [MethodImpl(MaxOpt)]
         public static MatrixSingle ScalarMultiply(in MatrixSingle left, float scalar)
             => ScalarMultiply(left, Vector128.Create(scalar));
 
-
+        /// <summary>
+        /// Transposes a <see cref="MatrixSingle"/>
+        /// </summary>
+        /// <param name="matrix">The matrix to transpose</param>
+        /// <returns>A new <see cref="MatrixSingle"/>, transposed</returns>
         [MethodImpl(MaxOpt)]
         public static MatrixSingle Transpose(in MatrixSingle matrix)
         {

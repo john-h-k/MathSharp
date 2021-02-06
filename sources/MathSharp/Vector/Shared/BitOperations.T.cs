@@ -13,29 +13,30 @@ namespace MathSharp
         /// </summary>
         /// <typeparam name="T">The type of each element in <paramref name="left"/> and <paramref name="right"/></typeparam>
         /// <typeparam name="U">The type of each element in <paramref name="selector"/></typeparam>
-        /// <param name="left">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is false</param>
-        /// <param name="right">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is true</param>
         /// <param name="selector">The selector used to select elements from <paramref name="left"/> and <paramref name="right"/></param>
+        /// <param name="left">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is <see langword="true"/></param>
+        /// <param name="right">The vector where elements are chosen from if the equivalent element in <paramref name="selector"/> is <see langword="false"/></param>
         /// <returns>A new <see cref="Vector128{T}"/> with the elements selected by <paramref name="selector"/></returns>
         [MethodImpl(MaxOpt)]
-        public static Vector128<T> Select<T, U>(Vector128<T> left, Vector128<T> right, Vector128<U> selector)
+        public static Vector128<T> Select<T, U>(Vector128<U> selector, Vector128<T> left, Vector128<T> right)
             where T : struct where U : struct
         {
             if (Sse41.IsSupported)
             {
+                // BlendVariable takes what to insert if false, then if true
                 if (typeof(T) == typeof(float))
                 {
-                    return Sse41.BlendVariable(left.AsSingle(), right.AsSingle(), selector.AsSingle()).As<float, T>();
+                    return Sse41.BlendVariable(right.AsSingle(), left.AsSingle(), selector.AsSingle()).As<float, T>();
                 }
                 else if (typeof(T) == typeof(double))
                 {
-                    return Sse41.BlendVariable(left.AsDouble(), right.AsDouble(), selector.AsDouble()).As<double, T>();
+                    return Sse41.BlendVariable(right.AsDouble(), left.AsDouble(), selector.AsDouble()).As<double, T>();
                 }
 
-                return Sse41.BlendVariable(left.AsByte(), right.AsByte(), selector.AsByte()).As<byte, T>();
+                return Sse41.BlendVariable(right.AsByte(), left.AsByte(), selector.AsByte()).As<byte, T>();
             }
 
-            return Or(And(selector.As<U, T>(), right), AndNot(selector.As<U, T>(), left));
+            return Or(And(selector.As<U, T>(), left), AndNot(selector.As<U, T>(), right));
         }
 
         /// <summary>
@@ -44,11 +45,11 @@ namespace MathSharp
         /// </summary>
         /// <typeparam name="T">The type of each element in <paramref name="vector"/></typeparam>
         /// <typeparam name="U">The type of each element in <paramref name="selector"/></typeparam>
-        /// <param name="vector">The vector to select elements from</param>
         /// <param name="selector">The vector to use to select elements from <paramref name="vector"/></param>
+        /// <param name="vector">The vector to select elements from</param>
         /// <returns>A new <see cref="Vector128{T}"/> with the elements selected by <paramref name="selector"/> retained and the others zeroed</returns>
         [MethodImpl(MaxOpt)]
-        public static Vector128<T> SelectWhereTrue<T, U>(Vector128<T> vector, Vector128<U> selector)
+        public static Vector128<T> SelectWhereTrue<T, U>(Vector128<U> selector, Vector128<T> vector)
             where T : struct where U : struct
             => And(selector.As<U, T>(), vector);
 
@@ -58,11 +59,11 @@ namespace MathSharp
         /// </summary>
         /// <typeparam name="T">The type of each element in <paramref name="vector"/></typeparam>
         /// <typeparam name="U">The type of each element in <paramref name="selector"/></typeparam>
-        /// <param name="vector">The vector to select elements from</param>
         /// <param name="selector">The vector to use to select elements from <paramref name="vector"/></param>
+        /// <param name="vector">The vector to select elements from</param>
         /// <returns>A new <see cref="Vector128{T}"/> with the elements selected by <paramref name="selector"/> retained and the others zeroed</returns>
         [MethodImpl(MaxOpt)]
-        public static Vector128<T> SelectWhereFalse<T, U>(Vector128<T> vector, Vector128<U> selector)
+        public static Vector128<T> SelectWhereFalse<T, U>(Vector128<U> selector, Vector128<T> vector)
             where T : struct where U : struct
             => AndNot(selector.As<U, T>(), vector);
 

@@ -34,7 +34,7 @@ namespace MathSharp
                 Vector128<float> neg = Subtract(tmp, vec);
 
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
-                vec = Select(neg, vec, comp);
+                vec = Select(comp, vec, neg);
 
                 Vector128<float> vectorSquared = Square(vec);
 
@@ -87,7 +87,7 @@ namespace MathSharp
                 Vector128<float> neg = Subtract(tmp, vec);
 
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
-                vec = Select(neg, vec, comp);
+                vec = Select(comp, vec, neg);
 
                 Vector128<float> vectorSquared = Square(vec);
 
@@ -131,11 +131,11 @@ namespace MathSharp
 
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
-                vec = Select(neg, vec, comp);
+                vec = Select(comp, vec, neg);
 
                 Vector128<float> vectorSquared = Square(vec);
 
-                vec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
+                vec = Select(comp, SingleConstants.One, SingleConstants.NegativeOne);
 
                 // Polynomial approx
                 Vector128<float> cc0 = CosCoefficient0;
@@ -188,11 +188,11 @@ namespace MathSharp
 
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
-                vec = Select(neg, vec, comp);
+                vec = Select(comp, vec, neg);
 
                 Vector128<float> vectorSquared = Square(vec);
 
-                vec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
+                vec = Select(comp, SingleConstants.One, SingleConstants.NegativeOne);
 
                 // Fast polynomial approx
                 var cc1 = CosCoefficient1;
@@ -250,7 +250,7 @@ namespace MathSharp
                 var t0 = FillWithX(TanCoefficients0);
 
                 var vbIsEven = And(vb, SingleConstants.Epsilon).AsInt32();
-                vbIsEven = CompareBit32Equal(vbIsEven, Vector128<int>.Zero);
+                vbIsEven = CompareEqual(vbIsEven, Vector128<int>.Zero);
 
                 var n = FastMultiplyAdd(vc2, t7, t6);
                 var d = FastMultiplyAdd(vc2, t4, t3);
@@ -264,8 +264,8 @@ namespace MathSharp
 
                 d = FastMultiplyAdd(vc2, d, t0);
 
-                n = Select(n, vc, nearZero);
-                d = Select(d, SingleConstants.One, nearZero);
+                n = Select(nearZero, vc, n);
+                d = Select(nearZero, SingleConstants.One, d);
 
                 var r0 = Negate(n);
                 var r1 = Divide(n, d);
@@ -273,9 +273,9 @@ namespace MathSharp
 
                 var isZero = CompareEqual(vector, Vector128<float>.Zero);
 
-                var result = Select(r0, r1, vbIsEven);
+                var result = Select(vbIsEven, r1, r0);
 
-                result = Select(result, Vector128<float>.Zero, isZero);
+                result = Select(isZero, Vector128<float>.Zero, result);
 
                 return result;
             }
@@ -342,11 +342,11 @@ namespace MathSharp
 
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
-                vec = Select(neg, vec, comp);
+                vec = Select(comp, vec, neg);
 
                 Vector128<float> vectorSquared = Square(vec);
 
-                var cosVec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
+                var cosVec = Select(comp, SingleConstants.One, SingleConstants.NegativeOne);
 
 
                 // Polynomial approx
@@ -419,10 +419,10 @@ namespace MathSharp
 
                 Vector128<float> comp = CompareLessThanOrEqual(abs, SingleConstants.PiDiv2);
 
-                vec = Select(neg, vec, comp);
+                vec = Select(comp, vec, neg);
                 Vector128<float> vectorSquared = Square(vec);
 
-                var cosVec = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
+                var cosVec = Select(comp, SingleConstants.One, SingleConstants.NegativeOne);
 
 
                 // Fast polynomial approx
@@ -482,7 +482,7 @@ namespace MathSharp
                 var yEqualsZero = CompareEqual(left, SingleConstants.Zero);
                 var xEqualsZero = CompareEqual(right, SingleConstants.Zero);
                 var rightIsPositive = ExtractSign(right);
-                rightIsPositive = CompareBit32Equal(rightIsPositive.AsInt32(), Vector128<int>.Zero).AsSingle();
+                rightIsPositive = CompareEqual(rightIsPositive.AsInt32(), Vector128<int>.Zero).AsSingle();
                 var yEqualsInfinity = IsInfinite(left);
                 var xEqualsInfinity = IsInfinite(right);
 
@@ -492,22 +492,22 @@ namespace MathSharp
                 piDiv4 = Or(piDiv4, ySign);
                 threePiDiv4 = Or(threePiDiv4, ySign);
 
-                var r1 = Select(pi, ySign, rightIsPositive);
-                var r2 = Select(aTanResultValid, piDiv2, xEqualsZero);
-                var r3 = Select(r2, r1, yEqualsZero);
-                var r4 = Select(threePiDiv4, piDiv4, rightIsPositive);
-                var r5 = Select(piDiv2, r4, xEqualsInfinity);
-                var result = Select(r3, r5, yEqualsInfinity);
-                aTanResultValid = CompareBit32Equal(result.AsInt32(), aTanResultValid.AsInt32()).AsSingle();
+                var r1 = Select(rightIsPositive, ySign, pi);
+                var r2 = Select(xEqualsZero, piDiv2, aTanResultValid);
+                var r3 = Select(yEqualsZero, r1, r2);
+                var r4 = Select(rightIsPositive, piDiv4, threePiDiv4);
+                var r5 = Select(xEqualsInfinity, r4, piDiv2);
+                var result = Select(yEqualsInfinity, r5, r3);
+                aTanResultValid = CompareEqual(result.AsInt32(), aTanResultValid.AsInt32()).AsSingle();
 
                 var v = Divide(left, right);
 
                 var r0 = ATan(v);
 
-                r1 = Select(pi, SingleConstants.NegativeZero, rightIsPositive);
+                r1 = Select(rightIsPositive, SingleConstants.NegativeZero, pi);
                 r2 = Add(r0, r1);
 
-                return Select(result, r2, aTanResultValid);
+                return Select(aTanResultValid, r2, result);
             }
 
             return SoftwareFallback(left, right);
@@ -530,13 +530,13 @@ namespace MathSharp
             var abs = Abs(vector);
             var inv = Divide(SingleConstants.One, vector);
             var comp = CompareGreaterThan(vector, SingleConstants.One);
-            var sign = Select(SingleConstants.NegativeOne, SingleConstants.One, comp);
+            var sign = Select(comp, SingleConstants.One, SingleConstants.NegativeOne);
 
             comp = CompareLessThanOrEqual(abs, SingleConstants.One);
 
-            sign = Select(sign, SingleConstants.Zero, comp);
+            sign = Select(comp, SingleConstants.Zero, sign);
 
-            var vec = Select(inv, vector, comp);
+            var vec = Select(comp, vector, inv);
 
             var vecSquared = Square(vec);
 
@@ -578,7 +578,7 @@ namespace MathSharp
             var result1 = FastMultiplySubtract(sign, SingleConstants.PiDiv2, result);
 
             comp = CompareEqual(sign, SingleConstants.Zero);
-            result = Select(result1, result, comp);
+            result = Select(comp, result, result1);
             return result;
         }
     }

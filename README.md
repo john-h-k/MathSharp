@@ -5,8 +5,6 @@
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/john-h-k/MathSharp/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/john-h-k/MathSharp.svg)](https://GitHub.com/john-h-k/MathSharp/issues/)
-[![GitHub stars](https://img.shields.io/github/stars/john-h-k/MathSharp.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/john-h-k/MathSharp/stargazers/)
-
 
 
 |Configuration|Windows x86|Windows x64|Ubuntu 1604 x64|Mac OS x64|
@@ -122,7 +120,8 @@ Vector4 + Vector4;
 
 ### Results (within margin of error between MathSharp and System.Numerics)
 
-![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)
+<!--![Vector Addition Benchmark](assets/Benchmarks/VectorAdditionBenchmark-barplot.png)-->
+<img src="assets/Benchmarks/VectorAdditionBenchmark-barplot.png" width="500" height="500">
 
 |         Method |      Mean |     Error |    StdDev |
 |--------------- |----------:|----------:|----------:|
