@@ -21,14 +21,29 @@ namespace MathSharp
         // which can be estimated as
         // vector * ReciprocalSqrt(Length(vector))
 
+        /// <summary>
+        /// Normalizes the first 2 elements of <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to normalize</param>
+        /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 2 elements normalized</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Normalize2D(Vector128<float> vector)
             => Divide(vector, Length2D(vector));
 
+        /// <summary>
+        /// Normalizes the first 3 elements of <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to normalize</param>
+        /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 3 elements normalized</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Normalize3D(Vector128<float> vector)
             => Divide(vector, Length3D(vector));
 
+        /// <summary>
+        /// Normalizes the first 4 elements of <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to normalize</param>
+        /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 4 elements normalized</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Normalize4D(Vector128<float> vector)
             => Divide(vector, Length4D(vector));

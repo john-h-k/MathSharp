@@ -11,9 +11,14 @@ using static System.Runtime.CompilerServices.Unsafe;
 using static MathSharp.Vector.ComparisonMask;
 
 namespace MathSharp
-{
+{///
     public static partial class Vector
     {
+        /// <summary>
+        /// An enum used to compare masks returned by comparison functions and extracted with
+        /// <see cref="Vector.MoveMask(Vector128{byte})"/>, <see cref="Vector.MoveMask(Vector128{float})"/>, <see cref="Vector.MoveMask(Vector256{double})"/>.
+        /// Each element is represented by a single bit
+        /// </summary>
         [Flags]
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         public enum ComparisonMask : int
@@ -115,6 +120,13 @@ namespace MathSharp
             return default;
         }
 
+        /// <summary>
+        /// Returns <see langword="true"></see> if all elements of <paramref name="vector"/> are a true comparison, after applying a <see cref="ComparisonMask"/>
+        /// of <paramref name="mask"/> to the comparison vector
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="mask"></param>
+        /// <returns></returns>
         [MethodImpl(MaxOpt)]
         public static bool AllTrue(this Vector128<float> vector, ComparisonMask mask)
             => (MoveMask(vector) & (int)mask) == (0b_1111 & (int)mask);

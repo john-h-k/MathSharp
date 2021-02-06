@@ -4,4 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="obj\Debug\netcoreapp3.0\" />
+  </ItemGroup>
 </Project>

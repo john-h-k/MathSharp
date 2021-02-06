@@ -7,9 +7,6 @@ using static MathSharp.Vector;
 
 namespace MathSharp
 {
-    
-    
-
     public static partial class Matrix
     {
         public static MatrixSingle Identity { get; } = new MatrixSingle(
