@@ -22,7 +22,7 @@ namespace MathSharp
         // vector * ReciprocalSqrt(Length(vector))
 
         /// <summary>
-        /// Normalizes the first 2 elements of <paramref name="vector"/>
+        /// Normalizes a 2D vector
         /// </summary>
         /// <param name="vector">The vector to normalize</param>
         /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 2 elements normalized</returns>
@@ -31,7 +31,7 @@ namespace MathSharp
             => Divide(vector, Length2D(vector));
 
         /// <summary>
-        /// Normalizes the first 3 elements of <paramref name="vector"/>
+        /// Normalizes a 3D vector
         /// </summary>
         /// <param name="vector">The vector to normalize</param>
         /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 3 elements normalized</returns>
@@ -40,7 +40,7 @@ namespace MathSharp
             => Divide(vector, Length3D(vector));
 
         /// <summary>
-        /// Normalizes the first 4 elements of <paramref name="vector"/>
+        /// Normalizes a 4D vector
         /// </summary>
         /// <param name="vector">The vector to normalize</param>
         /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 4 elements normalized</returns>
@@ -52,14 +52,29 @@ namespace MathSharp
 
         #region NormalizeApprox
 
+        /// <summary>
+        /// Normalizes a 2D vector, with potentially less accuracy but better performance than <see cref="Normalize2D(Vector128{float})"/>
+        /// </summary>
+        /// <param name="vector">The vector to normalize</param>
+        /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 4 elements normalized</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> NormalizeApprox2D(Vector128<float> vector)
             => Multiply(vector, ReciprocalSqrtApprox(LengthSquared2D(vector)));
 
+        /// <summary>
+        /// Normalizes a 3D vector, with potentially less accuracy but better performance than <see cref="Normalize3D(Vector128{float})"/>
+        /// </summary>
+        /// <param name="vector">The vector to normalize</param>
+        /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 4 elements normalized</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> NormalizeApprox3D(Vector128<float> vector)
             => Multiply(vector, ReciprocalSqrtApprox(LengthSquared3D(vector)));
 
+        /// <summary>
+        /// Normalizes a 4D vector, with potentially less accuracy but better performance than <see cref="Normalize4D(Vector128{float})"/>
+        /// </summary>
+        /// <param name="vector">The vector to normalize</param>
+        /// <returns><paramref name="vector"/><paramref name="vector"/> with the first 4 elements normalized</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> NormalizeApprox4D(Vector128<float> vector)
             => Multiply(vector, ReciprocalSqrtApprox(LengthSquared4D(vector)));
@@ -68,14 +83,29 @@ namespace MathSharp
 
         #region Length
 
+        /// <summary>
+        /// Calculates the length of a 2D Vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the length of</param>
+        /// <returns>A new vector with the length of <paramref name="vector"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Length2D(Vector128<float> vector)
             => Sqrt(DotProduct2D(vector, vector));
 
+        /// <summary>
+        /// Calculates the length of a 3D Vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the length of</param>
+        /// <returns>A new vector with the length of <paramref name="vector"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Length3D(Vector128<float> vector)
             => Sqrt(DotProduct3D(vector, vector));
 
+        /// <summary>
+        /// Calculates the length of a 4D Vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the length of</param>
+        /// <returns>A new vector with the length of <paramref name="vector"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Length4D(Vector128<float> vector)
             => Sqrt(DotProduct4D(vector, vector));
@@ -84,14 +114,29 @@ namespace MathSharp
 
         #region LengthSquared
 
+        /// <summary>
+        /// Calculates the squared length of a 2D Vector. This is more efficient than manually squaring the length
+        /// </summary>
+        /// <param name="vector">The vector to calculate the squared length of</param>
+        /// <returns>A new vector with the squared length of <paramref name="vector"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> LengthSquared2D(Vector128<float> vector)
             => DotProduct2D(vector, vector);
 
+        /// <summary>
+        /// Calculates the squared length of a 3D Vector. This is more efficient than manually squaring the length
+        /// </summary>
+        /// <param name="vector">The vector to calculate the squared length of</param>
+        /// <returns>A new vector with the squared length of <paramref name="vector"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> LengthSquared3D(Vector128<float> vector)
             => DotProduct3D(vector, vector);
 
+        /// <summary>
+        /// Calculates the squared length of a 4D Vector. This is more efficient than manually squaring the length
+        /// </summary>
+        /// <param name="vector">The vector to calculate the squared length of</param>
+        /// <returns>A new vector with the squared length of <paramref name="vector"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> LengthSquared4D(Vector128<float> vector)
             => DotProduct4D(vector, vector);
@@ -100,7 +145,13 @@ namespace MathSharp
 
         #region DotProduct
 
-        
+
+        /// <summary>
+        /// Calculates the dot of 2 2D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate the dot of</param>
+        /// <param name="right">The right vector to calculate the dot of</param>
+        /// <returns>A new vector with the dot product of <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> DotProduct2D(Vector128<float> left, Vector128<float> right)
         {
@@ -143,7 +194,13 @@ namespace MathSharp
             return DotProduct2D_Software(left, right);
         }
 
-        
+
+        /// <summary>
+        /// Calculates the dot of 2 3D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate the dot of</param>
+        /// <param name="right">The right vector to calculate the dot of</param>
+        /// <returns>A new vector with the dot product of <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> DotProduct3D(Vector128<float> left, Vector128<float> right)
         {
@@ -188,7 +245,13 @@ namespace MathSharp
             return DotProduct3D_Software(left, right);
         }
 
-        
+
+        /// <summary>
+        /// Calculates the dot of 2 4D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate the dot of</param>
+        /// <param name="right">The right vector to calculate the dot of</param>
+        /// <returns>A new vector with the dot product of <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> DotProduct4D(Vector128<float> left, Vector128<float> right)
         {
@@ -228,7 +291,12 @@ namespace MathSharp
 
         #region CrossProduct
 
-        
+        /// <summary>
+        /// Calculates the cross product of 2 2D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate the cross of</param>
+        /// <param name="right">The right vector to calculate the cross of</param>
+        /// <returns>A new vector with the cross product of <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> CrossProduct2D(Vector128<float> left, Vector128<float> right)
         {
@@ -259,7 +327,13 @@ namespace MathSharp
             return CrossProduct2D_Software(left, right);
         }
 
-        
+
+        /// <summary>
+        /// Calculates the cross product of 2 3D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate the cross of</param>
+        /// <param name="right">The right vector to calculate the cross of</param>
+        /// <returns>A new vector with the cross product of <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> CrossProduct3D(Vector128<float> left, Vector128<float> right)
         {
@@ -311,7 +385,12 @@ namespace MathSharp
             return CrossProduct3D_Software(left, right);
         }
 
-        // TODO 
+        /// <summary>
+        /// Calculates the cross product of 3 4D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate the cross of</param>
+        /// <param name="right">The right vector to calculate the cross of</param>
+        /// <returns>A new vector with the cross product of <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> CrossProduct4D(Vector128<float> one, Vector128<float> two, Vector128<float> three)
         {
@@ -370,24 +449,42 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
-        public static Vector128<float> CrossProduct4D_Software(Vector128<float> one, Vector128<float> two, Vector128<float> three) 
+        private static Vector128<float> CrossProduct4D_Software(Vector128<float> one, Vector128<float> two, Vector128<float> three) 
             => SoftwareFallbacks.CrossProduct4D_Software(one, two, three);
 
         #endregion
 
         #region Distance
 
+        /// <summary>
+        /// Calculates the distance between 2 2D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate distance with</param>
+        /// <param name="right">The right vector to calculate the distance with</param>
+        /// <returns>A new vector with the distance between <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Distance2D(Vector128<float> left, Vector128<float> right)
             => Length2D(Subtract(left, right));
 
-        
+
+        /// <summary>
+        /// Calculates the distance between 2 3D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate distance with</param>
+        /// <param name="right">The right vector to calculate the distance with</param>
+        /// <returns>A new vector with the distance between <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Distance3D(Vector128<float> left, Vector128<float> right)
             => Length3D(Subtract(left, right));
 
 
-        
+
+        /// <summary>
+        /// Calculates the distance between 2 4D Vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate distance with</param>
+        /// <param name="right">The right vector to calculate distance with</param>
+        /// <returns>A new vector with the distance between <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Distance4D(Vector128<float> left, Vector128<float> right)
             => Length4D(Subtract(left, right));
@@ -396,14 +493,32 @@ namespace MathSharp
 
         #region DistanceSquared
 
+        /// <summary>
+        /// Calculates the distance between 2 2D Vectors. This is more efficient than manually squaring the length
+        /// </summary>
+        /// <param name="left">The left vector to calculate squared distance with</param>
+        /// <param name="right">The right vector to calculate squared distance with</param>
+        /// <returns>A new vector with the squared distance between <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> DistanceSquared2D(Vector128<float> left, Vector128<float> right)
             => LengthSquared2D(Subtract(left, right));
 
+        /// <summary>
+        /// Calculates the distance between 2 3D Vectors. This is more efficient than manually squaring the length
+        /// </summary>
+        /// <param name="left">The left vector to calculate squared distance with</param>
+        /// <param name="right">The right vector to calculate squared distance with</param>
+        /// <returns>A new vector with the squared distance between <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> DistanceSquared3D(Vector128<float> left, Vector128<float> right)
             => LengthSquared3D(Subtract(left, right));
 
+        /// <summary>
+        /// Calculates the distance between 2 4D Vectors. This is more efficient than manually squaring the length
+        /// </summary>
+        /// <param name="left">The left vector to calculate squared distance with</param>
+        /// <param name="right">The right vector to calculate squared distance with</param>
+        /// <returns>A new vector with the squared distance between <paramref name="left"/> and <paramref name="right"/> in all 4 elements</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> DistanceSquared4D(Vector128<float> left, Vector128<float> right)
             => LengthSquared4D(Subtract(left, right));
@@ -412,6 +527,13 @@ namespace MathSharp
 
         #region Lerp
 
+        /// <summary>
+        /// Linearly interpolates between 2 values by a given weight
+        /// </summary>
+        /// <param name="from">The vector to interpolate from. A weight of 0 will use this value</param>
+        /// <param name="to">The vector to interpolate to. A weight of 1 will use this value</param>
+        /// <param name="weight">The per-element weights to use for interpolation</param>
+        /// <returns>A new vector where each element has been linearly interpolated</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Lerp(Vector128<float> from, Vector128<float> to, Vector128<float> weight)
         {
@@ -425,6 +547,13 @@ namespace MathSharp
             return Add(from, offset);
         }
 
+        /// <summary>
+        /// Linearly interpolates between 2 values by a given weight
+        /// </summary>
+        /// <param name="from">The vector to interpolate from. A weight of 0 will use this value</param>
+        /// <param name="to">The vector to interpolate to. A weight of 1 will use this value</param>
+        /// <param name="weight">The weight to use for interpolation</param>
+        /// <returns>A new vector where each element has been linearly interpolated</returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Lerp(Vector128<float> from, Vector128<float> to, float weight)
         {
@@ -441,6 +570,12 @@ namespace MathSharp
 
         #region Reflect
 
+        /// <summary>
+        /// Reflects a 2D Vector
+        /// </summary>
+        /// <param name="incident">The vector indicating the incident ray</param>
+        /// <param name="normal">The normal to reflect by</param>
+        /// <returns>A new vector, reflected by <paramref name="normal"/></returns>
         public static Vector128<float> Reflect2D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
@@ -450,6 +585,12 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
+        /// <summary>
+        /// Reflects a 3D Vector
+        /// </summary>
+        /// <param name="incident">The vector indicating the incident ray</param>
+        /// <param name="normal">The normal to reflect by</param>
+        /// <returns>A new vector, reflected by <paramref name="normal"/></returns>
         public static Vector128<float> Reflect3D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal
@@ -459,6 +600,12 @@ namespace MathSharp
             return Subtract(incident, tmp);
         }
 
+        /// <summary>
+        /// Reflects a 4D Vector
+        /// </summary>
+        /// <param name="incident">The vector indicating the incident ray</param>
+        /// <param name="normal">The normal to reflect by</param>
+        /// <returns>A new vector, reflected by <paramref name="normal"/></returns>
         public static Vector128<float> Reflect4D(Vector128<float> incident, Vector128<float> normal)
         {
             // reflection = incident - (2 * DotProduct(incident, normal)) * normal

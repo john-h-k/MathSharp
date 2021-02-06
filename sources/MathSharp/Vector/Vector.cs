@@ -4,7 +4,7 @@ namespace MathSharp
 {
     public static partial class Vector
     {
-        private const MethodImplOptions MaxOpt =
+        internal const MethodImplOptions MaxOpt =
             MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
     }
 }

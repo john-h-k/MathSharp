@@ -32,9 +32,29 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
+        public static Vector128<double> Add_Software(Vector128<double> left, Vector128<double> right)
+        {
+            return Vector128.Create(
+                X(left) + X(right),
+                Y(left) + Y(right)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
         public static Vector256<double> Add_Software(Vector256<double> left, Vector256<double> right)
         {
             return Vector256.Create(
+                X(left) + X(right),
+                Y(left) + Y(right),
+                Z(left) + Z(right),
+                W(left) + W(right)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<int> Add_Software(Vector128<int> left, Vector128<int> right)
+        {
+            return Vector128.Create(
                 X(left) + X(right),
                 Y(left) + Y(right),
                 Z(left) + Z(right),
@@ -65,6 +85,26 @@ namespace MathSharp
         }
 
         [MethodImpl(MaxOpt)]
+        public static Vector128<int> Subtract_Software(Vector128<int> left, Vector128<int> right)
+        {
+            return Vector128.Create(
+                X(left) - X(right),
+                Y(left) - Y(right),
+                Z(left) - Z(right),
+                W(left) - W(right)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Subtract_Software(Vector128<double> left, Vector128<double> right)
+        {
+            return Vector128.Create(
+                X(left) - X(right),
+                Y(left) - Y(right)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
         public static Vector256<double> Subtract_Software(Vector256<double> vector, double scalar)
         {
             return Vector256.Create(
@@ -72,6 +112,15 @@ namespace MathSharp
                 Y(vector) - scalar,
                 Z(vector) - scalar,
                 W(vector) - scalar
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Multiply_Software(Vector128<double> left, Vector128<double> right)
+        {
+            return Vector128.Create(
+                X(left) * X(right),
+                Y(left) * Y(right)
             );
         }
 
@@ -105,6 +154,15 @@ namespace MathSharp
                 Y(dividend) / Y(divisor),
                 Z(dividend) / Z(divisor),
                 W(dividend) / W(divisor)
+            );
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Divide_Software(Vector128<double> dividend, Vector128<double> divisor)
+        {
+            return Vector128.Create(
+                X(dividend) / X(divisor),
+                Y(dividend) / Y(divisor)
             );
         }
 

@@ -5,6 +5,8 @@ using System.Runtime.Intrinsics;
 using Xunit;
 using static MathSharp.UnitTests.TestHelpers;
 
+using SysVector2 = System.Numerics.Vector2;
+
 namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 {
     public class CrossProduct
@@ -68,7 +70,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorSingle.VectorOperations
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V2D)]
-        public static void CrossProduct2D_Theory(Vector128<float> left, Vector128<float> right, Vector128<float> discard, Vector2 expected)
+        public static void CrossProduct2D_Theory(Vector128<float> left, Vector128<float> right, Vector128<float> discard, SysVector2 expected)
         {
             Vector128<float> result = Vector.CrossProduct2D(left, right);
 

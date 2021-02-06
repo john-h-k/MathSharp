@@ -140,6 +140,23 @@ namespace MathSharp
         /// <param name="right">The right vector to be subtracted from <paramref name="left"/></param>
         /// <returns>The per-element subtraction of <paramref name="right"/> from <paramref name="left"/></returns>
         [MethodImpl(MaxOpt)]
+        public static Vector128<int> Subtract(Vector128<int> left, Vector128<int> right)
+        {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.Subtract(left, right);
+            }
+
+            return Subtract_Software(left, right);
+        }
+
+        /// <summary>
+        /// Subtracts each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to have <paramref name="right"/>subtracted from</param>
+        /// <param name="right">The right vector to be subtracted from <paramref name="left"/></param>
+        /// <returns>The per-element subtraction of <paramref name="right"/> from <paramref name="left"/></returns>
+        [MethodImpl(MaxOpt)]
         public static Vector256<float> Subtract(Vector256<float> left, Vector256<float> right)
         {
             if (Avx.IsSupported)

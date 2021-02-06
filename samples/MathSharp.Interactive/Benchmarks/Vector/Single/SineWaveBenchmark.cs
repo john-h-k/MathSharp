@@ -70,7 +70,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
                     vector = Multiply(vector, sine);
 
                     vector = Sin(vector);
-                    vector.ToVector4D(&ptr[i]);
+                    vector.Store(out ptr[i]);
 
                     i += 4;
                     samplePoints = Add(samplePoints, sampleIterator);

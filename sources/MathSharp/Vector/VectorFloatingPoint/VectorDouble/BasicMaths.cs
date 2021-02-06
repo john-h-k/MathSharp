@@ -53,6 +53,40 @@ namespace MathSharp
         }
 
         /// <summary>
+        /// Adds each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be added</param>
+        /// <param name="right">The right vector to be added</param>
+        /// <returns>The per-element addition of <paramref name="left"/> and <paramref name="right"/></returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Add(Vector128<double> left, Vector128<double> right)
+        {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.Add(left, right);
+            }
+
+            return Add_Software(left, right);
+        }
+
+        /// <summary>
+        /// Adds each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be added</param>
+        /// <param name="right">The right vector to be added</param>
+        /// <returns>The per-element addition of <paramref name="left"/> and <paramref name="right"/></returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector128<int> Add(Vector128<int> left, Vector128<int> right)
+        {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.Add(left, right);
+            }
+
+            return Add_Software(left, right);
+        }
+
+        /// <summary>
         /// Adds a scalar to each element of a vector
         /// </summary>
         /// <param name="vector">The vector to be added</param>
@@ -74,6 +108,23 @@ namespace MathSharp
             if (Avx.IsSupported)
             {
                 return Avx.Subtract(left, right);
+            }
+
+            return Subtract_Software(left, right);
+        }
+
+        /// <summary>
+        /// Subtracts each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to have <paramref name="right"/>subtracted from</param>
+        /// <param name="right">The right vector to be subtracted from <paramref name="left"/></param>
+        /// <returns>The per-element subtraction of <paramref name="right"/> from <paramref name="left"/></returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Subtract(Vector128<double> left, Vector128<double> right)
+        {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.Subtract(left, right);
             }
 
             return Subtract_Software(left, right);
@@ -106,6 +157,34 @@ namespace MathSharp
             return Multiply_Software(left, right);
         }
 
+        /// <summary>
+        /// Multiplies each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be multiplied</param>
+        /// <param name="right">The right vector to be multiplied</param>
+        /// <returns>The per-element multiplication of <paramref name="left"/> and <paramref name="right"/></returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Multiply(Vector128<double> left, Vector128<double> right)
+        {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.Multiply(left, right);
+            }
+
+            return Multiply_Software(left, right);
+        }
+
+        /// <summary>
+        /// Multiplies each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to be multiplied</param>
+        /// <param name="right">The right vector to be multiplied</param>
+        /// <returns>The per-element multiplication of <paramref name="left"/> and <paramref name="right"/></returns>
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Multiply(Vector128<double> left, double right)
+            => Multiply(left, Vector128.Create(right));
+
+
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Square(Vector256<double> vector)
         {
@@ -131,6 +210,22 @@ namespace MathSharp
 
             return Divide_Software(dividend, divisor);
         }
+
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Divide(Vector128<double> dividend, Vector128<double> divisor)
+        {
+            if (Sse2.IsSupported)
+            {
+                return Sse2.Divide(dividend, divisor);
+            }
+
+            return Divide_Software(dividend, divisor);
+        }
+
+        [MethodImpl(MaxOpt)]
+        public static Vector128<double> Divide(Vector128<double> dividend, double scalarDivisor)
+            => Subtract(dividend, Vector128.Create(scalarDivisor));
 
         [MethodImpl(MaxOpt)]
         public static Vector256<double> Divide(Vector256<double> dividend, double scalarDivisor)

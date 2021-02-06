@@ -9,6 +9,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 {
     using Vector = MathSharp.Vector;
     using SysVector2 = System.Numerics.Vector2;
+    using TkVector2 = OpenTK.Vector2;
 
     [CoreJob]
     [RPlotExporter]
@@ -16,10 +17,10 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
     [Orderer]
     public class AnchoredScaleBenchmark
     {
-        private Vector2 _openTkTranslation;
-        private Vector2 _openTkAnchor;
-        private Vector2 _openTkScale;
-        private Vector2 _openTkAmount;
+        private TkVector2 _openTkTranslation;
+        private TkVector2 _openTkAnchor;
+        private TkVector2 _openTkScale;
+        private TkVector2 _openTkAmount;
 
         private SysVector2 _sysTranslation;
         private SysVector2 _sysAnchor;
@@ -38,16 +39,16 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 
         private Vector2F _mathSharpResult;
 
-        private Vector2 _result;
+        private TkVector2 _result;
         private SysVector2 _sysResult;
 
         [GlobalSetup]
         public void Setup()
         {
-            _openTkTranslation = new Vector2(1.7f, 2.3f);
-            _openTkAnchor = new Vector2(1.0f, 0.0f);
-            _openTkScale = new Vector2(7.0f, 3.6f);
-            _openTkAmount = new Vector2(0.5f, 0.25f);
+            _openTkTranslation = new TkVector2(1.7f, 2.3f);
+            _openTkAnchor = new TkVector2(1.0f, 0.0f);
+            _openTkScale = new TkVector2(7.0f, 3.6f);
+            _openTkAmount = new TkVector2(0.5f, 0.25f);
 
             _sysTranslation = new SysVector2(1.7f, 2.3f);
             _sysAnchor = new SysVector2(1.0f, 0.0f);
@@ -110,8 +111,8 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         [Benchmark]
         public void OpenTk()
         {
-            Vector2 newScale = _openTkScale * _openTkAmount;
-            Vector2 deltaT = _openTkScale * (Vector2.One - _openTkAmount);
+            TkVector2 newScale = _openTkScale * _openTkAmount;
+            TkVector2 deltaT = _openTkScale * (TkVector2.One - _openTkAmount);
             deltaT *= _openTkAnchor;
             _result = (_openTkTranslation + deltaT) * newScale;
         }
@@ -121,7 +122,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Store(this Vector128<float> hwVector, out Vector2 vector)
+        public static void Store(this Vector128<float> hwVector, out TkVector2 vector)
         {
             if (Sse.IsSupported)
             {
@@ -137,14 +138,14 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Store_Software(this Vector128<float> hwVector, out Vector2 vector)
+        public static void Store_Software(this Vector128<float> hwVector, out TkVector2 vector)
         {
             // JIT naturally uses SSE to store here so we are good :yay:
-            vector = Unsafe.As<Vector128<float>, Vector2>(ref hwVector);
+            vector = Unsafe.As<Vector128<float>, TkVector2>(ref hwVector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector128<float> Load(this Vector2 vector)
+        public static Vector128<float> Load(this TkVector2 vector)
         {
             if (Sse.IsSupported)
             {
@@ -159,7 +160,7 @@ namespace MathSharp.Interactive.Benchmarks.Vector.Single
 
             return SoftwareFallback(vector);
 
-            static Vector128<float> SoftwareFallback(Vector2 vector)
+            static Vector128<float> SoftwareFallback(TkVector2 vector)
             {
                 return Vector128.Create(vector.X, vector.Y, 0, 0);
             }

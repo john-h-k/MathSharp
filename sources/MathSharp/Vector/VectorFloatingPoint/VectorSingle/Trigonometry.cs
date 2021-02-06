@@ -18,7 +18,11 @@ namespace MathSharp
         private const float SinCoefficient1Scalar = -2.3889859e-08f;
         private static readonly Vector128<float> SinCoefficient1Broadcast = Vector128.Create(SinCoefficient1Scalar);
 
-
+        /// <summary>
+        /// Calculates sine for each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the sine of</param>
+        /// <returns>A new vector, where each element is the sine of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Sin(Vector128<float> vector)
         {
@@ -72,6 +76,12 @@ namespace MathSharp
                 );
             }
         }
+
+        /// <summary>
+        /// Calculates sine for each element of a vector, with potentially reduced accuracy but better performance
+        /// </summary>
+        /// <param name="vector">The vector to calculate the sine of</param>
+        /// <returns>A new vector, where each element is the sine of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> SinApprox(Vector128<float> vector)
         {
@@ -115,6 +125,11 @@ namespace MathSharp
         private static readonly Vector128<float> CosCoefficient1 = Vector128.Create(-2.6051615e-07f, -0.49992746f, +0.041493919f, -0.0012712436f);
         private const float CosCoefficient1Scalar = -2.6051615e-07f;
 
+        /// <summary>
+        /// Calculates cosine for each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the cosine of</param>
+        /// <returns>A new vector, where each element is the cosine of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Cos(Vector128<float> vector)
         {
@@ -172,6 +187,11 @@ namespace MathSharp
             }
         }
 
+        /// <summary>
+        /// Calculates cosine for each element of a vector, with potentially reduced accuracy but better performance
+        /// </summary>
+        /// <param name="vector">The vector to calculate the cosine of</param>
+        /// <returns>A new vector, where each element is the cosine of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> CosApprox(Vector128<float> vector)
         {
@@ -216,6 +236,13 @@ namespace MathSharp
         private static readonly Vector128<float> TanCoefficients0 = Vector128.Create(1.0f, -4.667168334e-1f, 2.566383229e-2f, -3.118153191e-4f);
         private static readonly Vector128<float> TanCoefficients1 = Vector128.Create(4.981943399e-7f, -1.333835001e-1f, 3.424887824e-3f, -1.786170734e-5f);
         private static readonly Vector128<float> TanConstants = Vector128.Create(1.570796371f, 6.077100628e-11f, 0.000244140625f, 0.63661977228f);
+
+
+        /// <summary>
+        /// Calculates tangent of each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the tangent of</param>
+        /// <returns>A new vector, where each element is the tangent of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> Tan(Vector128<float> vector)
         {
@@ -296,6 +323,13 @@ namespace MathSharp
         
 
         private static readonly Vector128<float> TanEstCoefficients = Vector128.Create(2.484f, -1.954923183e-1f, 2.467401101f, ScalarSingleConstants.OneDivPi);
+
+
+        /// <summary>
+        /// Calculates tangent for each element of a vector, with potentially reduced accuracy but better performance
+        /// </summary>
+        /// <param name="vector">The vector to calculate the tangent of</param>
+        /// <returns>A new vector, where each element is the tangent of <paramref name="vector"/></returns>
         [MethodImpl(MaxOpt)]
         public static Vector128<float> TanApprox(Vector128<float> vector)
         {
@@ -326,6 +360,13 @@ namespace MathSharp
             return Tan(vector);
         }
 
+
+        /// <summary>
+        /// Calculates sine and cosine for each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the sine and cosine of</param>
+        /// <param name="sin">A new vector, where each element is the sine of <paramref name="vector"/></param>
+        /// <param name="cos">A new vector, where each element is the cosine of <paramref name="vector"/></param>
         [MethodImpl(MaxOpt)]
         public static void SinCos(Vector128<float> vector, out Vector128<float> sin, out Vector128<float> cos)
         {
@@ -403,7 +444,13 @@ namespace MathSharp
             }
         }
 
-        [MethodImpl(MaxOpt)]
+
+        /// <summary>
+        /// Calculates sine and cosine for each element of a vector, with potentially reduced accuracy but better performance
+        /// </summary>
+        /// <param name="vector">The vector to calculate the sine and cosine of</param>
+        /// <param name="sin">A new vector, where each element is the sine of <paramref name="vector"/></param>
+        /// <param name="cos">A new vector, where each element is the cosine of <paramref name="vector"/></param>
         public static void SinCosApprox(Vector128<float> vector, out Vector128<float> sin, out Vector128<float> cos)
         {
             if (Sse.IsSupported)
@@ -468,6 +515,13 @@ namespace MathSharp
                 ScalarSingleConstants.Pi * 3.0f / 4.0f
         );
 
+
+        /// <summary>
+        /// Calculates atan2 for each element of 2 vectors
+        /// </summary>
+        /// <param name="left">The left vector to calculate atan2 with</param>
+        /// <param name="right">The right vector to calculate atan2 with</param>
+        /// <returns>A new vector, where each element is the atan2 of <paramref name="left"/> with <paramref name="right"/></returns>
         public static Vector128<float> ATan2(Vector128<float> left, Vector128<float> right)
         {
             if (Sse.IsSupported)
@@ -525,6 +579,12 @@ namespace MathSharp
 
         public static readonly Vector128<float> ATanCoefficients0 = Vector128.Create(-0.3333314528f, +0.1999355085f, -0.1420889944f, +0.1065626393f);
         public static readonly Vector128<float> ATanCoefficients1 = Vector128.Create(-0.0752896400f, +0.0429096138f, -0.0161657367f, +0.0028662257f);
+
+        /// <summary>
+        /// Calculates atan for each element of a vector
+        /// </summary>
+        /// <param name="vector">The vector to calculate the atan of</param>
+        /// <returns>A new vector, where each element is the atan of <paramref name="vector"/></returns>
         public static Vector128<float> ATan(Vector128<float> vector)
         {
             var abs = Abs(vector);

@@ -231,15 +231,15 @@ namespace MathSharp.StorageTypes
 
     public static unsafe partial class VectorExtensions
     {
-        public static Vector256<double> ToVector256(Vector2D* p) => Vector.FromVector2D((double*)p);
-        public static Vector256<double> ToVector256(Vector3D* p) => Vector.FromVector3D((double*)p);
-        public static Vector256<double> ToVector256(Vector4D* p) => Vector.FromVector4D((double*)p);
+        public static Vector256<double> ToVector256(Vector2D* p) => Vector.Load2((double*)p);
+        public static Vector256<double> ToVector256(Vector3D* p) => Vector.Load3((double*)p);
+        public static Vector256<double> ToVector256(Vector4D* p) => Vector.Load4((double*)p);
 
-        public static Vector256<double> ToVector256(Vector2DAligned* vector) => Vector.FromVector2DAligned((double*)vector);
-        public static Vector256<double> ToVector256(Vector3DAligned* vector) => Vector.FromVector3DAligned((double*)vector);
-        public static Vector256<double> ToVector256(Vector4DAligned* vector) => Vector.FromVector4DAligned((double*)vector);
+        public static Vector256<double> ToVector256(Vector2DAligned* vector) => Vector.Load2Aligned((double*)vector);
+        public static Vector256<double> ToVector256(Vector3DAligned* vector) => Vector.Load3Aligned((double*)vector);
+        public static Vector256<double> ToVector256(Vector4DAligned* vector) => Vector.Load4Aligned((double*)vector);
 
-        public static void StoreToVector(this Vector256<double> vector, Vector2D* destination) => vector.ToVector2D(&destination->X);
+        public static void StoreToVector(this Vector256<double> vector, Vector2D* destination) => vector.Store2(&destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector2D destination)
         {
             fixed (Vector2D* p = &destination)
@@ -248,7 +248,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector3D* destination) => vector.ToVector3D(&destination->X);
+        public static void StoreToVector(this Vector256<double> vector, Vector3D* destination) => vector.Store3(&destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector3D destination)
         {
             fixed (Vector3D* p = &destination)
@@ -257,7 +257,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector4D* destination) => vector.ToVector4D(&destination->X);
+        public static void StoreToVector(this Vector256<double> vector, Vector4D* destination) => vector.Store4(&destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector4D destination)
         {
             fixed (Vector4D* p = &destination)
@@ -266,7 +266,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector2DAligned* destination) => Vector.ToVector2DAligned(vector, &destination->X);
+        public static void StoreToVector(this Vector256<double> vector, Vector2DAligned* destination) => Vector.Store2Aligned(vector, &destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector2DAligned destination)
         {
             fixed (Vector2DAligned* p = &destination)
@@ -275,7 +275,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector3DAligned* destination) => Vector.ToVector3DAligned(vector, &destination->X);
+        public static void StoreToVector(this Vector256<double> vector, Vector3DAligned* destination) => Vector.Store3Aligned(vector, &destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector3DAligned destination)
         {
             fixed (Vector3DAligned* p = &destination)
@@ -284,7 +284,7 @@ namespace MathSharp.StorageTypes
             }
         }
 
-        public static void StoreToVector(this Vector256<double> vector, Vector4DAligned* destination) => Vector.ToVector4DAligned(vector, &destination->X);
+        public static void StoreToVector(this Vector256<double> vector, Vector4DAligned* destination) => Vector.Store4Aligned(vector, &destination->X);
         public static void StoreToVector(this Vector256<double> vector, out Vector4DAligned destination)
         {
             fixed (Vector4DAligned* p = &destination)

@@ -44,9 +44,9 @@ namespace MathSharp.Quaternion
 
     public static unsafe partial class QuaternionExtensions
     {
-        public static Vector128<float> ToVector128(QuaternionF* p) => Vector.FromVector4D((float*)p);
+        public static Vector128<float> ToVector128(QuaternionF* p) => Vector.Load4((float*)p);
 
-        public static void StoreToQuaternion(Vector128<float> quaternion, QuaternionF* destination) => Vector.ToVector4D(quaternion, &destination->X);
+        public static void StoreToQuaternion(Vector128<float> quaternion, QuaternionF* destination) => Vector.Store4(quaternion, &destination->X);
 
         public static void StoreToQuaternion(Vector128<float> quaternion, out QuaternionF destination)
         {

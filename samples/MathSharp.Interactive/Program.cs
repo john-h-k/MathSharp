@@ -10,6 +10,9 @@ using MathSharp;
 using BenchmarkDotNet.Attributes;
 using System.Reflection;
 using BenchmarkDotNet.Running;
+using MathSharp.Interactive.Benchmarks.Vector.Single;
+
+[module: SkipLocalsInit]
 
 namespace MathSharp.Interactive
 {
@@ -17,25 +20,12 @@ namespace MathSharp.Interactive
     {
         public static void Main(string[] args)
         {
-            var rand = new Random();
-            var inside = 0;
-
-            const int sampleSize = 1_000_000_000;
-
-            for (var i = 0; i < sampleSize; i++)
-            {
-                if (IsInCircle(0.25, rand.NextDouble() - 0.5, rand.NextDouble() - 0.5)) inside++;
-            }
-
-            Avx2.LoadV
-
-            Console.WriteLine(4 * (double)inside / sampleSize);
-
-            static bool IsInCircle(double radiusSquared, double x, double y)
-            {
-                return x * x + y * y < radiusSquared;
-            }
+            BenchmarkRunner.Run<VectorArithmeticBenchmark>();
         }
+
+
+        public static Vector2<float> Add(in Vector2<float> left, in Vector2<float> right)
+            => left + right;
 
         public static Vector128<float> IsInCircle(Vector128<float> radius, Vector128<float> x, Vector128<float> y)
         {

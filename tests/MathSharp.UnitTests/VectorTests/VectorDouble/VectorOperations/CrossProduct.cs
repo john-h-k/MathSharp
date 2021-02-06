@@ -80,7 +80,7 @@ namespace MathSharp.UnitTests.VectorTests.VectorDouble.VectorOperations
             Assert.True(TestHelpers.AreEqual(expected, result), $"Expected {expected}, got {result}");
         }
 
-#pragma warning enable xUnit1026
+#pragma warning restore xUnit1026
 
         [Theory]
         [MemberData(nameof(Data), VectorDimensions.V4D)]

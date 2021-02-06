@@ -3,8 +3,7 @@
   <PropertyGroup>
     <NoWarn>1573;1591;NU1701;CS0649;CS1591;</NoWarn>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>preview</LangVersion>
+    <TargetFramework>net5.0</TargetFramework>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
@@ -13,11 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="obj\Debug\netcoreapp3.0\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
     <PackageReference Include="OpenTK" Version="3.0.1" />
   </ItemGroup>
 

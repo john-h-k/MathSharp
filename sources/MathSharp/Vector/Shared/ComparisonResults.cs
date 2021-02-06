@@ -121,36 +121,68 @@ namespace MathSharp
         }
 
         /// <summary>
-        /// Returns <see langword="true"></see> if all elements of <paramref name="vector"/> are a true comparison, after applying a <see cref="ComparisonMask"/>
+        /// Determines whether a vector contains only <see langword="true"/> values, comparing only elements specified in a comparison mask
         /// of <paramref name="mask"/> to the comparison vector
         /// </summary>
-        /// <param name="vector"></param>
-        /// <param name="mask"></param>
-        /// <returns></returns>
+        /// <param name="vector">The vector to check</param>
+        /// <param name="mask">The <see cref="ComparisonMask"/> to determine which elements of <paramref name="vector"/> are to be checked</param>
+        /// <returns><see langword="true"/> if the masked elements in the vector contains only <see langword="true"/> values, else <see langword="false"/></returns>
         [MethodImpl(MaxOpt)]
         public static bool AllTrue(this Vector128<float> vector, ComparisonMask mask)
             => (MoveMask(vector) & (int)mask) == (0b_1111 & (int)mask);
 
+        /// <summary>
+        /// Determines whether a vector contains only <see langword="false"/> values, comparing only elements specified in a comparison mask
+        /// </summary>
+        /// <param name="vector">The vector to check</param>
+        /// <param name="mask">The <see cref="ComparisonMask"/> to determine which elements of <paramref name="vector"/> are to be checked</param>
+        /// <returns><see langword="true"/> if the masked elements in the vector contains only <see langword="false"/> values, else <see langword="false"/></returns>
         [MethodImpl(MaxOpt)]
         public static bool AllFalse(this Vector128<float> vector, ComparisonMask mask)
             => (MoveMask(vector) & (int)mask) == 0b_0000;
 
+        /// <summary>
+        /// Determines whether a vector contains only <see langword="true"/> values
+        /// </summary>
+        /// <param name="vector">The vector to check</param>
+        /// <returns><see langword="true"/> if the vector contains only <see langword="true"/> values, else <see langword="false"/></returns>
         [MethodImpl(MaxOpt)]
         public static bool AllTrue(this Vector128<float> vector)
             => MoveMask(vector) == 0b_1111;
 
+        /// <summary>
+        /// Determines whether a vector contains any <see langword="true"/> values
+        /// </summary>
+        /// <param name="vector">The vector to check</param>
+        /// <returns><see langword="true"/> if the vector contains any <see langword="true"/> values, else <see langword="false"/></returns>
         [MethodImpl(MaxOpt)]
         public static bool AnyTrue(this Vector128<float> vector)
             => MoveMask(vector) != 0b_0000;
 
+
+        /// <summary>
+        /// Determines whether a vector contains only <see langword="false"/> values
+        /// </summary>
+        /// <param name="vector">The vector to check</param>
+        /// <returns><see langword="true"/> if the vector contains only <see langword="false"/> values, else <see langword="false"/></returns>
         [MethodImpl(MaxOpt)]
         public static bool AllFalse(this Vector128<float> vector)
             => MoveMask(vector) == 0b_0000;
 
+        /// <summary>
+        /// Determines whether a vector contains any <see langword="false"/> values
+        /// </summary>
+        /// <param name="vector">The vector to check</param>
+        /// <returns><see langword="true"/> if the vector contains any <see langword="false"/> values, else <see langword="false"/></returns>
         [MethodImpl(MaxOpt)]
         public static bool AnyFalse(this Vector128<float> vector)
             => MoveMask(vector) != 0b_1111;
 
+        /// <summary>
+        /// Determines whether a vector contains both <see langword="true"/> and <see langword="false"/> values
+        /// </summary>
+        /// <param name="vector">The vector to check</param>
+        /// <returns><see langword="true"/> if the vector contains both <see langword="true"/> and <see langword="false"/> values, else <see langword="false"/></returns>
         [MethodImpl(MaxOpt)]
         public static bool AreMixed(this Vector128<float> vector)
         {

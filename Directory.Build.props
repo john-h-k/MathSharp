@@ -53,7 +53,6 @@
     <Features>strict</Features>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <HighEntropyVA>true</HighEntropyVA>
-    <LangVersion>preview</LangVersion>
     <MathSharpPublicKey>00240000048000009400000006020000002400005253413100040000010001000586cd22205c2991de00dea27c3455744874d5b9c4532ccee2bf8fa9b55752af42fa6170f641c20d1501cd3b9e6d22a1327cdaf19eb8eba23e8ed350a60930e7286417916e3a3a39798e69d8d521ac3af4c720cbcca2f2fbf5cee2c0b1c6be08ebba9051399148c663c3408513be9a2ff96e7816bb1b3713d1f30e13fa2e66a9</MathSharpPublicKey>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <OverwriteReadOnlyFiles>true</OverwriteReadOnlyFiles>
@@ -71,7 +70,7 @@
 
   <!-- Package references which are consumed by all projects -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" IsImplicitlyDefined="true" />
+    <!-- <PackageReference Include="Microsoft.Net.Compilers.Toolset" IsImplicitlyDefined="true" /> -->
   </ItemGroup>
 
 </Project>
