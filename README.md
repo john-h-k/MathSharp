@@ -1,5 +1,8 @@
 # MathSharp
 
+# Note: As of 2022 MathSharp is not recommended for general use
+# Since its inception, the .NET intrinsics and vectors have increased in performance and functionality massively, and they are recommended for any new projects
+
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/johnhk)
 [![Buy Me A Coffee](/assets/buymecoffee.png)](https://www.buymeacoffee.com/johnhk) 
 
